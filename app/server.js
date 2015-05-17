@@ -8,9 +8,10 @@ new WebpackDevServer(webpack(config), {
   contentBase: DEV_ROOT,
   publicPath: config.output.publicPath,
   hot: true,
-  historyApiFallback: true,      stats: {
-        colors: true
-      }
+  historyApiFallback: true,
+  stats: {
+    colors: true
+  }
 
 }).listen(3000, 'localhost', function (err, result) {
   if (err) {
