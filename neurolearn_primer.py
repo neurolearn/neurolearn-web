@@ -19,7 +19,6 @@
 
 # Function Definitions
 
-# In[37]:
 
 """ Code to grab a private collection from NeuroVault, and compute
     an SVM discriminating between negative and neutral images
@@ -27,6 +26,7 @@
 # Authors: Luke Chang, Chris Filo Gorgolewski, Gael Varoquaux
 # License: BSD
 
+import sys
 import errno
 import json
 import os
@@ -46,7 +46,7 @@ from joblib import Memory
 from nilearn.image import mean_img, resample_img
 from nilearn.input_data import NiftiMasker
 from nilearn.masking import _extrapolate_out_mask, compute_background_mask
-from nilearn.plotting import *
+from nilearn.plotting import plot_roi, plot_stat_map
 from nipype.utils.filemanip import split_filename
 from scipy import interp
 from sklearn.cross_validation import KFold, LeaveOneLabelOut, StratifiedKFold
@@ -302,6 +302,7 @@ def run_ml_analysis(basedir, dest_dir):
     mean_fpr = np.linspace(0, 1, 100)
     yfit = np.array([0] * nSub * 2)
     xval_dist_from_hyperplane = np.array([0] * nSub * 2)
+
     for train, test in cv:
         svc.fit(dat_masked[train], Y[train])
         yfit[test] = svc.predict(dat_masked[test])
@@ -336,14 +337,55 @@ def run_ml_analysis(basedir, dest_dir):
     fig1 = plot_roi(nifti_masker.mask_img_, mn_img, title="Mask",
                     cut_coords=range(-40, 40, 10), display_mode='z')
     fig1.savefig(dest_dir + '/Neg_vs_Neu_SVM_mask.png')
+
     fig2 = plot_stat_map(coef_img, mn_img, title="SVM weights",
                          cut_coords=range(-40, 40, 10), display_mode='z')
+
     fig2.savefig(dest_dir + '/Neg_vs_Neu_SVM_weightmap.png')
+
     fig4 = dist_from_hyperplane_plot(stats_out)
     fig4.savefig(
         dest_dir + '/Neg_vs_Neu_SVM_xVal_Distance_from_Hyperplane.png')
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)
+
+
+def run_ml_analysis_nltools(basedir, dest_dir):
+    """
+    From:
+      https://github.com/ljchang/neurolearn/blob/master/scripts%2FTest_Predict.ipynb
+    """
+    sys.path.append('../neurolearn')
+
+    from nltools.analysis import Predict
+
+    tic = time.time()  # Start Timer
+
+    combined_df = pd.read_csv('%s/metadata.csv' % dest_dir, encoding='utf8')
+    neg_list = combined_df.ix[
+        combined_df.name_image.str.contains('Neg'), ].sort(columns='name_image')
+    neu_list = combined_df.ix[
+        combined_df.name_image.str.contains('Neu'), ].sort(columns='name_image')
+
+    # Load data using nibabel
+    neg_file_list = [
+        dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neg_list.image_id]
+    neu_file_list = [
+        dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neu_list.image_id]
+    dat = nb.funcs.concat_images(neg_file_list + neu_file_list)
+
+    # [Mask missing ...]
+
+    Y = np.array([1] * len(neg_file_list) + [0] * len(neu_file_list))
+
+    sublist = np.array([x[:-7].split('/')[-1] for x in neg_file_list] * 2)
+
+    # Test SVM with kfold xVal
+    negvneu = Predict(dat, Y, algorithm='svm', subject_id=sublist,
+                      output_dir=dest_dir, cv_dict={'kfolds': 5}, **{'kernel': "linear"})
+    negvneu.predict()
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic) #Stop timer
 
 
 def get_weight_map():
@@ -439,8 +481,8 @@ def main(collection_key, basedir, dest_dir, canonical):
 
     combined_df.to_csv('%s/metadata.csv' % dest_dir, encoding='utf8')
 
-    run_ml_analysis(basedir, dest_dir)
-
+    # run_ml_analysis(basedir, dest_dir)
+    run_ml_analysis_nltools(basedir, dest_dir)
     # Get Weight Map
     # get_weight_map()
 
