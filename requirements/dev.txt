@@ -9,3 +9,5 @@ factory-boy==2.5.1
 # Management script
 Flask-Script
 Flask-Failsafe==0.2
+
+ipdb

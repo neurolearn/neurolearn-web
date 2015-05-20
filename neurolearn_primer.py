@@ -1,30 +1,35 @@
 
-# coding: utf-8
+# This notebook downloads a private collection from neurovault and runs an SVM.
 
-# <h1>Neurolearn</h1>
-# <h3>This notebook downloads a private collection from neurovault and runs an SVM.</h3>
-# <br>
-# <h3>To Do:</h3>
-# <p>
-#     <ol>
-#         <li>Need to figure out how to tag single subject data with meta-data in neurovault</li>
-#         <li>Need to validate Python results on Matlab</li>
-#         <li>Need to recreate ROC and accuracy from Matlab in Python</li>
-#         <li>Need to create analysis class</li>
-#     </ol>
-# </p>
-#
-#
-#
+# One of the notebooks basically just queries and downloads data locally.
+# The other notebook is a bunch of tests for various functionality
+# of the machine learning prediction and applying the weight map.
+# The prediction code is a little kludgy.  I was hoping to just
+# be able to pass dictionaries into scikit-learn, but each algorithm
+# has a slightly different API and it didn't work very well.
+# All of the graphs we will eventually convert to D3.
 
-# Function Definitions
+# TODO:
+# Task 1.
+# You could try working with the new pain dataset on
+# neurovault http://neurovault.org/collections/504/
+# Since we don't have the meta-data implemented yet, you can parse
+# the file name to try and classify high vs low pain.  The best
+# cross-validation is leave one subject out and you would need
+# to input a vector of unique subject IDs.  K-fold cross-validation
+# is much faster though.  I usually use 5-fold.
+#
+# Task 2.
+# In the meantime I'll try to run analysis using a metadata from a file
+# Chang_Aggregated_Trial_Data.csv ("Pain" Dataset) and corresponding
+# "Single Subject Thermal Pain" collection from NeuroVault.
+# The target column for model fitting will be "Rating".
+# http://neurovault.org/collections/504/
 
 
 """ Code to grab a private collection from NeuroVault, and compute
     an SVM discriminating between negative and neutral images
 """
-# Authors: Luke Chang, Chris Filo Gorgolewski, Gael Varoquaux
-# License: BSD
 
 import sys
 import errno
@@ -76,15 +81,13 @@ def get_collection_json(collection_id=None, private_key=None):
     return r.json()
 
 
-def get_collections_df(key=None):
+def get_collections_df(key):
     """Downloads metadata about collections/papers stored in NeuroVault and
     return it as a pandas DataFrame"""
 
-    if key is None:
-        request = Request('%s/api/collections/?format=json' % BASE_NV_URL)
-    else:
-        request = Request(
+    request = Request(
             '%s/api/collections/%s?format=json' % (BASE_NV_URL, key))
+
     response = urlopen(request)
     elevations = response.read()
     data = json.loads(elevations)
@@ -95,26 +98,7 @@ def get_collections_df(key=None):
     return collections_df
 
 
-def get_images_df():
-    """Downloads metadata about images/statistical maps stored in NeuroVault and
-    return it as a pandas DataFrame"""
-
-    request = Request('%s/api/images/?format=json' % BASE_NV_URL)
-    response = urlopen(request)
-    elevations = response.read()
-    data = json.loads(elevations)
-    # <-- this gives us a (6042, 22) dataframe
-    images_df = json_normalize(data)
-
-    images_df['collection'] = images_df[
-        'collection'].apply(lambda x: int(x.split("/")[-2]))
-    images_df['image_id'] = images_df['url'].apply(
-        lambda x: int(x.split("/")[-2]))
-    images_df.rename(columns={'collection': 'collection_id'}, inplace=True)
-    return images_df
-
-
-def get_private_collection_images_df(key):
+def get_collection_images_df(key):
     url = "%s/api/collections/%s/images/?format=json"
 
     request = Request(url % (BASE_NV_URL, key))
@@ -134,31 +118,15 @@ def get_private_collection_images_df(key):
     return images_df
 
 
-def get_images_with_private_collections_df(key=None):
+def get_images_with_collection_df(key):
     """Downloads metadata about images/statistical maps stored in NeuroVault and
     and enriches it with metadata of the corresponding collections. The result
     is returned as a pandas DataFrame"""
-    collections_df = get_collections_df(key=key)
 
-    if key:
-        images_df = get_private_collection_images_df(key)
-    else:
-        images_df = get_images_df()
+    collections_df = get_collections_df(key)
+    images_df = get_collection_images_df(key)
 
     combined_df = pd.merge(images_df, collections_df, how='inner', on='collection_id',
-                           suffixes=('_image', '_collection'))
-    return combined_df
-
-
-def get_images_with_collections_df():
-    """Downloads metadata about images/statistical maps stored in NeuroVault and
-    and enriches it with metadata of the corresponding collections. The result
-    is returned as a pandas DataFrame"""
-
-    collections_df = get_collections_df()
-    images_df = get_images_df()
-
-    combined_df = pd.merge(images_df, collections_df, how='left', on='collection_id',
                            suffixes=('_image', '_collection'))
     return combined_df
 
@@ -361,31 +329,47 @@ def run_ml_analysis_nltools(basedir, dest_dir):
 
     tic = time.time()  # Start Timer
 
+    # Read images metadata
     combined_df = pd.read_csv('%s/metadata.csv' % dest_dir, encoding='utf8')
-    neg_list = combined_df.ix[
-        combined_df.name_image.str.contains('Neg'), ].sort(columns='name_image')
-    neu_list = combined_df.ix[
-        combined_df.name_image.str.contains('Neu'), ].sort(columns='name_image')
+    # neg_list = combined_df.ix[
+    #     combined_df.name_image.str.contains('Neg'), ].sort(columns='name_image')
+    # neu_list = combined_df.ix[
+    #     combined_df.name_image.str.contains('Neu'), ].sort(columns='name_image')
 
     # Load data using nibabel
-    neg_file_list = [
-        dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neg_list.image_id]
-    neu_file_list = [
-        dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neu_list.image_id]
-    dat = nb.funcs.concat_images(neg_file_list + neu_file_list)
+    # neg_file_list = [
+    #     dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neg_list.image_id]
+    # neu_file_list = [
+    #     dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in neu_list.image_id]
 
-    # [Mask missing ...]
+    file_list = [
+        dest_dir + '/resampled/00' + str(x) + '.nii.gz' for x in combined_df.image_id]
 
-    Y = np.array([1] * len(neg_file_list) + [0] * len(neu_file_list))
+    # dat = nb.funcs.concat_images(neg_file_list + neu_file_list)
+    # get concat w/o splitting like this:
+    dat = nb.funcs.concat_images(file_list)
 
-    sublist = np.array([x[:-7].split('/')[-1] for x in neg_file_list] * 2)
+    def to_int(s):
+        return s.find('Neg') + 1
+    # def to_int(s):
+    #     if s.find('Low') > -1:
+    #         return 0
+    #     if s.find('Medium') > -1:
+    #         return 1
+    #     if s.find('High') > -1:
+    #         return 2
+
+    Y = np.array([to_int(s) for s in combined_df.name_image])
+    import ipdb; ipdb.set_trace()
+
+    sublist = np.array([x[:-7].split('/')[-1] for x in file_list])
+    sublist = range(0, len(file_list))
 
     # Test SVM with kfold xVal
     negvneu = Predict(dat, Y, algorithm='svm', subject_id=sublist,
                       output_dir=dest_dir, cv_dict={'kfolds': 5}, **{'kernel': "linear"})
     negvneu.predict()
-
-    print 'Elapsed: %.2f seconds' % (time.time() - tic) #Stop timer
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 
 
 def get_weight_map():
@@ -393,7 +377,7 @@ def get_weight_map():
     # Get Meta-Data associated with private key
     k = 'TMTKHDFM'  # Private Key
     coll_pines = get_collections_df(key=k)
-    pines_df = get_images_with_private_collections_df(k)
+    pines_df = get_images_with_collection_df(k)
 
     # Download and resample
     dest_dir = "/Users/lukechang/Dropbox/NEPA/Test_Analysis"
@@ -469,11 +453,18 @@ def extra_code():
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 
 
-def main(collection_key, basedir, dest_dir, canonical):
+def main(collection_key):
     # Use a joblib memory, to avoid depending on an Internet connection
+
+    # Set Paths
+    dest_dir = "/Users/burnash/projects/neuro/neurolearn/Test_Analysis/%s" % k
+    basedir = os.path.abspath(
+        '/Users/burnash/projects/neuro/neurolearn/nltools/')
+    canonical = os.path.join(basedir, "resources/MNI152_T1_2mm.nii.gz")
+
     mem = Memory(cachedir='/tmp/neurovault_analysis/cache')
 
-    combined_df = get_images_with_private_collections_df(collection_key)
+    combined_df = get_images_with_collection_df(collection_key)
 
     # Download and resample
     combined_df = mem.cache(download_and_resample)(
@@ -483,6 +474,7 @@ def main(collection_key, basedir, dest_dir, canonical):
 
     # run_ml_analysis(basedir, dest_dir)
     run_ml_analysis_nltools(basedir, dest_dir)
+
     # Get Weight Map
     # get_weight_map()
 
@@ -492,14 +484,8 @@ def main(collection_key, basedir, dest_dir, canonical):
     # Extra Code
     # extra_code()
 
-
 if __name__ == '__main__':
     k = 'NNGSIZTQ'  # Private Key
+#    k = 504
 
-    # Set Paths
-    dest_dir = "/Users/burnash/projects/neuro/neurolearn/Test_Analysis"
-    basedir = os.path.abspath(
-        '/Users/burnash/projects/neuro/neurolearn/nltools/')
-    canonical = os.path.join(basedir, "resources/MNI152_T1_2mm.nii.gz")
-
-    main(k, basedir, dest_dir, canonical)
+    main(k)

@@ -6,7 +6,7 @@ from flask import Flask, render_template
 
 from nlweb.settings import ProdConfig
 from nlweb.assets import assets
-from nlweb.extensions import (bcrypt, cache, db, migrate, debug_toolbar)
+from nlweb.extensions import (db, migrate)
 
 
 def configure_app(app):
@@ -39,10 +39,7 @@ def create_app(config_object=ProdConfig):
 
 def init_extensions(app):
     assets.init_app(app)
-    bcrypt.init_app(app)
-    cache.init_app(app)
     db.init_app(app)
-    debug_toolbar.init_app(app)
     migrate.init_app(app, db)
 
 
