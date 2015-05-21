@@ -7,9 +7,8 @@ var RunAnalysisForm = React.createClass({
         this.props.onRunAnalysis();
     },
     render: function() {
-        console.log(this);
         return (
-          <button onClick={this.handleRun}>Run Analysis</button>
+          <button className="btn btn-primary" onClick={this.handleRun}>Run Analysis</button>
         );
     }
 });

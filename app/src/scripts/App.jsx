@@ -26,7 +26,6 @@ export default class App extends React.Component {
 
     request.get(path)
       .end(function(err, res) {
-        console.log(res.body);
         if (res.ok) {
           _this.setState({
             collection: res.body
@@ -52,6 +51,7 @@ export default class App extends React.Component {
         />
         {collectionInfo}
         <SelectTrainingLabel />
+        <br />
         <RunAnalysisForm
           onRunAnalysis={this.handleRunAnalysis}
         />

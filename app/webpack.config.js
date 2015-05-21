@@ -25,14 +25,19 @@ module.exports = {
       'src/scripts',
       'src/styles'
     ],
-    alias: {},
+    alias: {
+      'handsontable': 'handsontable.full.js'
+    },
     extensions: ['', '.js', '.jsx']
   },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'src/scripts')
-    }]
+    loaders: [
+      { test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src/scripts') },
+      { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
+      { test: /\.css$/, loader: 'style-loader!css-loader'}
+    ],
+    noParse: [
+        /[\/\\]vendor_modules[\/\\]handsontable.full\.js$/
+    ]
   }
 };

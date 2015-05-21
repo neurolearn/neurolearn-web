@@ -3,7 +3,8 @@
 import React from 'react';
 
 export default class SelectCollection extends React.Component {
-  handleSelectCollection() {
+  handleSubmit(e) {
+    e.preventDefault();
     this.props.onUserInput(
       this.refs.collectionIdInput.getDOMNode().value
     );
@@ -11,17 +12,18 @@ export default class SelectCollection extends React.Component {
 
   render() {
     return (
-      <div className="selectCollection">
-        <p>Select a NeuroVault collection:</p>
+      <form className="form-inline" style={{marginBottom: 30}} onSubmit={this.handleSubmit.bind(this)}>
+        <p>Select a NeuroVault collection</p>
         <input
           type="text"
+          className="form-control"
           ref="collectionIdInput"
           placeholder="Collection Id"
           autoFocus={true}
           onChange={this.handleInputChange}
         />
-        <button onClick={this.handleSelectCollection.bind(this)}> Select </button>
-      </div>
+        <button type="submit" className="btn btn-default"> Select </button>
+      </form>
     );
   }
 }
