@@ -26,9 +26,10 @@ export default class SelectTrainingLabel extends React.Component {
       <div className="selectTrainingLabel">
         <p>Select training label</p>
         <FilePicker onLoad={this.handleFileLoad.bind(this)}/>
-
-        <DataGrid data={this.state.imagesMetadata} />
-
+        <br/>
+        {this.state.imagesMetadata &&
+          <DataGrid data={this.state.imagesMetadata} />
+        }
       </div>
     );
   }
