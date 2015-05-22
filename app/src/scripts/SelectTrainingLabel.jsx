@@ -24,7 +24,7 @@ export default class SelectTrainingLabel extends React.Component {
   render() {
     return (
       <div className="selectTrainingLabel">
-        <p>Select training label</p>
+        <p>Select filenames and training labels</p>
         <FilePicker onLoad={this.handleFileLoad.bind(this)}/>
         <br/>
         {this.state.imagesMetadata &&
