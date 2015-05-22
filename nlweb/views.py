@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template
-from flask import Response
+from flask import request, Response
+from flask import jsonify
 
 import requests
+
+from nlweb.tasks import run_analysis
 
 frontend = Blueprint('frontend', __name__)
 
@@ -31,4 +34,13 @@ def neurovault_proxy(path):
 
 @frontend.route('/analysis/<algorithm>', methods=['POST'])
 def analysis(algorithm):
-    return algorithm
+    job = run_analysis.delay(1)
+
+    return jsonify({'jobid': job.id})
+
+
+@frontend.route('/analysis/status')
+def analysis_status():
+    jobid = request.values.get('jid')
+
+    return jsonify({'jobid': jobid})

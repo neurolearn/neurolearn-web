@@ -4,7 +4,6 @@ import os
 
 from flask import Flask, render_template
 
-from nlweb.settings import ProdConfig
 from nlweb.assets import assets
 from nlweb.extensions import (db, migrate, celery)
 
@@ -41,7 +40,7 @@ def configure_app(app):
             pass
 
 
-def create_app(config_object=ProdConfig):
+def create_app():
     app = Flask(__name__)
 
     configure_app(app)
