@@ -15,6 +15,7 @@ export default class SelectTrainingLabel extends React.Component {
 
   handleFileLoad(file) {
     Papa.parse(file, {
+      skipEmptyLines: true,
       complete: result => this.setState({
         imagesMetadata: result.data
       })
@@ -28,7 +29,7 @@ export default class SelectTrainingLabel extends React.Component {
         <FilePicker onLoad={this.handleFileLoad.bind(this)}/>
         <br/>
         {this.state.imagesMetadata &&
-          <DataGrid data={this.state.imagesMetadata} />
+          <DataGrid onSelectTarget={this.props.onSelectTarget} data={this.state.imagesMetadata} />
         }
       </div>
     );

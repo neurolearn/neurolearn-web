@@ -16,7 +16,8 @@ export default class App extends React.Component {
     this.state = {
       collection: null,
       loaded: true,
-      finishedJobId: null
+      finishedJobId: null,
+      targetData: null
     };
   }
 
@@ -58,11 +59,7 @@ export default class App extends React.Component {
     this.setState({finishedJobId: null});
 
     var payload = {
-      data: [
-        {filename: 'Pain_Subject_6_Image_Low.nii.gz', target: 1},
-        {filename: 'Pain_Subject_7_Image_Medium.nii.gz', target: 2},
-        {filename: 'Pain_Subject_8_Image_Low.nii.gz', target: 1}
-      ]
+      data: this.targetData
     };
 
     this.setState({loaded: false});
@@ -82,8 +79,6 @@ export default class App extends React.Component {
       });
   }
 
-
-
   handleUserInput(collectionId) {
     var path = `/nvproxy/api/collections/${collectionId}`,
         _this = this;
@@ -100,6 +95,11 @@ export default class App extends React.Component {
       });
   }
 
+  handleTargetSelection(targetData) {
+    console.log(targetData);
+    this.targetData = targetData;
+  }
+
   render() {
     var collectionInfo = '';
 
@@ -114,19 +114,19 @@ export default class App extends React.Component {
           onUserInput={this.handleUserInput.bind(this)}
         />
         {collectionInfo}
-        <SelectTrainingLabel />
+        <SelectTrainingLabel
+          onSelectTarget={this.handleTargetSelection.bind(this)}
+        />
         <br />
         <RunAnalysisForm
           onRunAnalysis={this.handleRunAnalysis.bind(this)}
         />
         <br />
-        <div>
         <Loader loaded={this.state.loaded} top="80%" left="50%" className="spinner">
           {this.state.finishedJobId &&
             <WeightMap jobid={this.state.finishedJobId} />
           }
         </Loader>
-        </div>
       </div>
     );
   }

@@ -6,11 +6,11 @@ require('handsontable');
 
 export default class DataGrid extends React.Component {
   initHandsontableInstance(data) {
-    var container = this.refs.hot.getDOMNode();
+    var container = this.refs.hot.getDOMNode(),
+        _this = this;
 
     var hot = new window.Handsontable(container, {
       data: data,
-      minSpareRows: 1,
       rowHeaders: true,
       colHeaders: true
     });
@@ -44,8 +44,21 @@ export default class DataGrid extends React.Component {
       makeBackground(col, td);
     }
 
+    function getTargetData(columnIndex) {
+      var tableData = hot.getData();
+      return tableData.slice(1).map(function (row) {
+        return {filename: row[columnIndex.fileName], target: row[columnIndex.trainingLabel]};
+      });
+    }
+
     function useColumnAs(name, col) {
       selectedColumns[name] = col;
+
+      if (selectedColumns.fileName &&
+          selectedColumns.trainingLabel) {
+        _this.props.onSelectTarget(getTargetData(selectedColumns));
+      }
+
       hot.render();
     }
 
