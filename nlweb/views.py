@@ -1,10 +1,14 @@
+from __future__ import absolute_import
+
+from celery.result import AsyncResult
+
 from flask import Blueprint, render_template
 from flask import request, Response
 from flask import jsonify
 
 import requests
 
-from nlweb.tasks import run_analysis
+from nlweb.tasks import run_analysis, celery
 
 frontend = Blueprint('frontend', __name__)
 
@@ -39,8 +43,23 @@ def analysis(algorithm):
     return jsonify({'jobid': job.id})
 
 
-@frontend.route('/analysis/status')
+@frontend.route('/analysis-status')
 def analysis_status():
-    jobid = request.values.get('jid')
+    jobid = request.args.get('jobid')
+    if jobid:
+
+        job = AsyncResult(jobid, app=celery)
+        print job.state
+        print job.result
+        if job.state == 'PROGRESS':
+            return jsonify(dict(
+                state=job.state,
+                progress=job.result['current']*1.0/job.result['total'],
+            ))
+        elif job.state == 'SUCCESS':
+            return jsonify(dict(
+                state=job.state,
+                progress=1.0,
+            ))
 
     return jsonify({'jobid': jobid})
