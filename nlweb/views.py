@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from flask import Response, stream_with_context
+from flask import Response
 
 import requests
 
@@ -27,3 +27,8 @@ def neurovault_proxy(path):
 
     return Response(req.text,
                     content_type=req.headers['content-type'])
+
+
+@frontend.route('/analysis/<algorithm>', methods=['POST'])
+def analysis(algorithm):
+    return algorithm

@@ -20,6 +20,8 @@ export default class App extends React.Component {
     var path = `http://localhost:3000/analysis/${algorithm}`,
         _this = this;
 
+    console.log(path);
+
     // sending [{filename -> label}]
     // this should return ticketID
     // run task in celery
