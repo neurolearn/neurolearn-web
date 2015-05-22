@@ -49,6 +49,7 @@
     "papaparse": "^4.1.1",
     "promise.prototype.finally": "^1.0.1",
     "react": "0.13.3",
+    "react-loader": "^1.2.0",
     "superagent": "^1.2.0"
   },
   "optionalDependencies": {

@@ -7,13 +7,15 @@ import SelectTrainingLabel from './SelectTrainingLabel';
 import RunAnalysisForm from './RunAnalysisForm';
 import WeightMap from './WeightMap';
 import request from 'superagent';
+import Loader from 'react-loader';
 
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collection: null
+      collection: null,
+      loaded: true
     };
   }
 
@@ -28,11 +30,20 @@ export default class App extends React.Component {
         .end(function(err, res) {
           if(res.ok) {
             console.log(res.body);
+            if (res.body.state == 'SUCCESS') {
+              _this.requestResult(jobid);
+              return;
+            }
           } else {
             alert('Error while polling result' + res.text);
           }
           setTimeout(() => _this.poll(jobid), 2000.0);
         });
+  }
+
+  requestResult(jobid) {
+    // upon completion
+    this.setState({loaded: true});
   }
 
   handleRunAnalysis(algorithm) {
@@ -52,6 +63,8 @@ export default class App extends React.Component {
         {filename: 'Pain_Subject_8_Image_Low.nii.gz', target: 1}
       ]
     };
+
+    this.setState({loaded: false});
 
     request.post(path)
       .type('json')
@@ -106,7 +119,10 @@ export default class App extends React.Component {
           onRunAnalysis={this.handleRunAnalysis.bind(this)}
         />
         <br />
+        <Loader loaded={this.state.loaded} className="spinner">
         <WeightMap />
+        </Loader>
+
       </div>
     );
   }
