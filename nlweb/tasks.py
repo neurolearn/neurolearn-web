@@ -6,7 +6,6 @@ import random
 from nlweb.app import celery
 from analysis import run_analysis
 
-
 @celery.task
 def run_analysis(data):
     NTOTAL = 20

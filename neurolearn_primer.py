@@ -349,26 +349,30 @@ def run_ml_analysis_nltools(basedir, dest_dir):
     # get concat w/o splitting like this:
     dat = nb.funcs.concat_images(file_list)
 
-    def to_int(s):
-        return s.find('Neg') + 1
     # def to_int(s):
-    #     if s.find('Low') > -1:
-    #         return 0
-    #     if s.find('Medium') > -1:
-    #         return 1
-    #     if s.find('High') > -1:
-    #         return 2
+    #     return s.find('Neg') + 1
+    def to_int(s):
+        if s.find('Low') > -1:
+            return 0
+        if s.find('Medium') > -1:
+            return 1
+        if s.find('High') > -1:
+            return 2
 
     Y = np.array([to_int(s) for s in combined_df.name_image])
-    import ipdb; ipdb.set_trace()
 
     sublist = np.array([x[:-7].split('/')[-1] for x in file_list])
     sublist = range(0, len(file_list))
 
-    # Test SVM with kfold xVal
-    negvneu = Predict(dat, Y, algorithm='svm', subject_id=sublist,
-                      output_dir=dest_dir, cv_dict={'kfolds': 5}, **{'kernel': "linear"})
+    # # Test SVM with kfold xVal
+    # negvneu = Predict(dat, Y, algorithm='svm', subject_id=sublist,
+    #                   output_dir=dest_dir, cv_dict={'kfolds': 5}, **{'kernel': "linear"})
+
+    negvneu = Predict(dat, Y, algorithm='ridge', subject_id=sublist,
+                      output_dir=dest_dir, cv_dict={'kfolds': 5})
+
     negvneu.predict()
+
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 
 
@@ -485,7 +489,7 @@ def main(collection_key):
     # extra_code()
 
 if __name__ == '__main__':
-    k = 'NNGSIZTQ'  # Private Key
-#    k = 504
+    # k = 'NNGSIZTQ'  # Private Key
+    k = 504
 
     main(k)
