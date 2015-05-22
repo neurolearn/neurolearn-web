@@ -16,8 +16,33 @@ export default class App extends React.Component {
     };
   }
 
-  handleRunAnalysis() {
-    console.log('sending a request to the server');
+  handleRunAnalysis(algorithm) {
+    var path = `http://localhost:3000/analysis/${algorithm}`,
+        _this = this;
+
+    // sending [{filename -> label}]
+    // this should return ticketID
+    // run task in celery
+    // return a job.id
+    var payload = {
+      data: [
+        {filename: 'Pain_Subject_6_Image_Low.nii.gz', target: 1},
+        {filename: 'Pain_Subject_7_Image_Medium.nii.gz', target: 2},
+        {filename: 'Pain_Subject_8_Image_Low.nii.gz', target: 1}
+      ]
+    };
+
+    request.post(path)
+      .type('json')
+      .accept('json')
+      .send(payload)
+      .end(function(err, res) {
+        if (res.ok) {
+
+        } else {
+          alert('Error while fetching result' + res.text);
+        }
+      });
   }
 
   handleUserInput(collectionId) {
@@ -55,6 +80,7 @@ export default class App extends React.Component {
         <RunAnalysisForm
           onRunAnalysis={this.handleRunAnalysis}
         />
+        <br />
         <WeightMap />
       </div>
     );

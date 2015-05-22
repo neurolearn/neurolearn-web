@@ -21,6 +21,7 @@ export default class SelectCollection extends React.Component {
           placeholder="Collection Id"
           autoFocus={true}
           onChange={this.handleInputChange}
+          style={{marginRight: 10}}
         />
         <button type="submit" className="btn btn-default"> Select </button>
       </form>

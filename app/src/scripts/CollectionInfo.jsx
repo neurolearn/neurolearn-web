@@ -10,6 +10,7 @@ export default class CollectionInfo extends React.Component {
         <div className="col-md-6 well">
         <h3>{collection.name}</h3>
         <p>{collection.description}</p>
+        <p><a href={"http://neurovault.org/collections/" + collection.id}>neurovault.org/collections/{collection.id}</a></p>
         </div>
       </div>
     );
