@@ -51,11 +51,6 @@ export default class App extends React.Component {
   handleRunAnalysis(algorithm) {
     var _this = this;
 
-    // sending [{filename -> label}]
-    // this should return ticketID
-    // run task in celery
-    // return a job.id
-
     this.setState({finishedJobId: null});
 
     var payload = {

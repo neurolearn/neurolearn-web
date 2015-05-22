@@ -30,7 +30,6 @@ def neurovault_proxy(path):
     proxy_url = "http://neurovault.org/%s" % path
 
     req = requests.get(proxy_url)
-    # import ipdb; ipdb.set_trace()
 
     return Response(req.text,
                     content_type=req.headers['content-type'])
@@ -38,7 +37,9 @@ def neurovault_proxy(path):
 
 @frontend.route('/analysis/<algorithm>', methods=['POST'])
 def analysis(algorithm):
-    job = run_analysis.delay(1)
+    data = request.json()
+    print "Received", data
+    job = run_analysis.delay(data)
 
     return jsonify({'jobid': job.id})
 
