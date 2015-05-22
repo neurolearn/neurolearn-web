@@ -3,6 +3,7 @@
 
 celerybeat-schedule.db
 celerydb.sqlite
+celeryresults.sqlite
 
 # C extensions
 *.so
