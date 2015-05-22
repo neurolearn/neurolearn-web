@@ -8,6 +8,7 @@ import RunAnalysisForm from './RunAnalysisForm';
 import WeightMap from './WeightMap';
 import request from 'superagent';
 
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +17,26 @@ export default class App extends React.Component {
     };
   }
 
+  poll(jobid) {
+      var _this = this;
+      console.log('polling', jobid);
+
+      request.get('/analysis-status')
+        .type('json')
+        .accept('json')
+        .query({ jobid: jobid })
+        .end(function(err, res) {
+          if(res.ok) {
+            console.log(res.body);
+          } else {
+            alert('Error while polling result' + res.text);
+          }
+          setTimeout(() => _this.poll(jobid), 2000.0);
+        });
+  }
+
   handleRunAnalysis(algorithm) {
-    var path = `http://localhost:3000/analysis/${algorithm}`,
+    var path = `/analysis/${algorithm}`,
         _this = this;
 
     console.log(path);
@@ -40,15 +59,19 @@ export default class App extends React.Component {
       .send(payload)
       .end(function(err, res) {
         if (res.ok) {
-
+          var jobid = res.body.jobid;
+          // start polling, display spinner
+          _this.poll(jobid);
         } else {
           alert('Error while fetching result' + res.text);
         }
       });
   }
 
+
+
   handleUserInput(collectionId) {
-    var path = `http://localhost:3000/nvproxy/api/collections/${collectionId}`,
+    var path = `/nvproxy/api/collections/${collectionId}`,
         _this = this;
 
     request.get(path)
@@ -80,7 +103,7 @@ export default class App extends React.Component {
         <SelectTrainingLabel />
         <br />
         <RunAnalysisForm
-          onRunAnalysis={this.handleRunAnalysis}
+          onRunAnalysis={this.handleRunAnalysis.bind(this)}
         />
         <br />
         <WeightMap />
