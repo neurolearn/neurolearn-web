@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Extensions module. Each extension is initialized in the app factory located
-in app.py
-"""
+
+from __future__ import absolute_import
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
@@ -11,3 +10,6 @@ migrate = Migrate()
 
 from flask_debugtoolbar import DebugToolbarExtension
 debug_toolbar = DebugToolbarExtension()
+
+from celery import Celery
+celery = Celery()

@@ -1,4 +1,8 @@
 *.py[cod]
+*.cfgc
+
+celerybeat-schedule.db
+celerydb.sqlite
 
 # C extensions
 *.so

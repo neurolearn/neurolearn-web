@@ -6,7 +6,22 @@ from flask import Flask, render_template
 
 from nlweb.settings import ProdConfig
 from nlweb.assets import assets
-from nlweb.extensions import (db, migrate)
+from nlweb.extensions import (db, migrate, celery)
+
+
+def load_celery_config(celery_obj):
+    import imp
+
+    environment = os.environ.get('ENV', 'development')
+
+    if os.path.exists('./config/local.cfg'):
+        celeryconfig = imp.load_source('celeryconfig',
+                                       './config/local.cfg')
+    else:
+        celeryconfig = imp.load_source('celeryconfig',
+                                       './config/%s.cfg' % environment)
+
+    celery_obj.config_from_object(celeryconfig)
 
 
 def configure_app(app):
@@ -41,6 +56,8 @@ def init_extensions(app):
     assets.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+
+    load_celery_config(celery)
 
 
 def register_blueprints(app):
