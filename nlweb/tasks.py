@@ -13,5 +13,5 @@ def run_analysis(params):
     for i in range(NTOTAL):
         time.sleep(random.random())
         celery.current_task.update_state(state='PROGRESS',
-                                  meta={'current': i, 'total': NTOTAL})
+                                         meta={'current': i, 'total': NTOTAL})
     return 999
