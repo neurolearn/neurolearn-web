@@ -48,15 +48,15 @@ export default class App extends React.Component {
   }
 
   handleRunAnalysis(algorithm) {
-    var path = `/analysis/${algorithm}`,
-        _this = this;
-
-    console.log(path);
+    var _this = this;
 
     // sending [{filename -> label}]
     // this should return ticketID
     // run task in celery
     // return a job.id
+
+    this.setState({finishedJobId: null});
+
     var payload = {
       data: [
         {filename: 'Pain_Subject_6_Image_Low.nii.gz', target: 1},
@@ -67,7 +67,7 @@ export default class App extends React.Component {
 
     this.setState({loaded: false});
 
-    request.post(path)
+    request.post(`/analysis/${algorithm}`)
       .type('json')
       .accept('json')
       .send(payload)
@@ -120,12 +120,13 @@ export default class App extends React.Component {
           onRunAnalysis={this.handleRunAnalysis.bind(this)}
         />
         <br />
-        <Loader loaded={this.state.loaded} className="spinner">
+        <div>
+        <Loader loaded={this.state.loaded} top="80%" left="50%" className="spinner">
           {this.state.finishedJobId &&
             <WeightMap jobid={this.state.finishedJobId} />
           }
         </Loader>
-
+        </div>
       </div>
     );
   }
