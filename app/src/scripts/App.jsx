@@ -15,7 +15,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       collection: null,
-      loaded: true
+      loaded: true,
+      finishedJobId: null
     };
   }
 
@@ -43,7 +44,7 @@ export default class App extends React.Component {
 
   requestResult(jobid) {
     // upon completion
-    this.setState({loaded: true});
+    this.setState({loaded: true, finishedJobId: jobid});
   }
 
   handleRunAnalysis(algorithm) {
@@ -120,7 +121,9 @@ export default class App extends React.Component {
         />
         <br />
         <Loader loaded={this.state.loaded} className="spinner">
-        <WeightMap />
+          {this.state.finishedJobId &&
+            <WeightMap jobid={this.state.finishedJobId} />
+          }
         </Loader>
 
       </div>

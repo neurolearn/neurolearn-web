@@ -8,7 +8,7 @@ from nlweb.app import celery
 
 @celery.task
 def run_analysis(params):
-    NTOTAL = 50
+    NTOTAL = 20
     print celery.current_task, "got task"
     for i in range(NTOTAL):
         time.sleep(random.random())
