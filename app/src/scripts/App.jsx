@@ -25,7 +25,7 @@ export default class App extends React.Component {
       var _this = this;
       console.log('polling', jobid);
 
-      request.get('/analysis-status')
+      request.get('/analysis/status')
         .type('json')
         .accept('json')
         .query({ jobid: jobid })
@@ -44,7 +44,6 @@ export default class App extends React.Component {
   }
 
   requestResult(jobid) {
-    // upon completion
     this.setState({loaded: true, finishedJobId: jobid});
   }
 
@@ -54,12 +53,14 @@ export default class App extends React.Component {
     this.setState({finishedJobId: null});
 
     var payload = {
-      data: this.targetData
+      'data': this.targetData,
+      'collection_id': this.state.collection.id,
+      'algorithm': algorithm
     };
 
     this.setState({loaded: false});
 
-    request.post(`/analysis/${algorithm}`)
+    request.post('/analysis/')
       .type('json')
       .accept('json')
       .send(payload)

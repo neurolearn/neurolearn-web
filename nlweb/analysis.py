@@ -1,11 +1,10 @@
-from pyneurovault import api
 import os
 import time
 import nibabel as nb
 import numpy as np
-# import sklearn
 from nltools.analysis import Predict
 from joblib import Memory
+from pyneurovault import api
 
 
 def download(collection_id, outfolder):
@@ -33,8 +32,7 @@ def to_filename_dict(rows):
     return di
 
 
-def run_analysis(data, collection_id=504, algorithm='ridge',
-                 outfolder='./nv_tmp/'):
+def run_ml_analysis(data, collection_id, algorithm, outfolder):
     print data
 
     tic = time.time()  # Start Timer
@@ -89,4 +87,5 @@ def run_analysis(data, collection_id=504, algorithm='ridge',
 if __name__ == '__main__':
     from nlweb_test_data import data
 
-    run_analysis(data['data'])
+    run_ml_analysis(data['data'], collection_id=504, algorithm='ridge',
+                 outfolder='./nv_tmp/')

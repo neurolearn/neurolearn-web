@@ -35,16 +35,19 @@ def neurovault_proxy(path):
                     content_type=req.headers['content-type'])
 
 
-@frontend.route('/analysis/<algorithm>', methods=['POST'])
-def analysis(algorithm):
-    data = request.json()
-    print "Received", data
-    job = run_analysis.delay(data)
+@frontend.route('/analysis', methods=['POST'])
+def analysis():
+    args = request.json()
+    print "Received", args
+
+    job = run_analysis.delay(args['data'],
+                             args['collection_id'],
+                             args['algorithm'])
 
     return jsonify({'jobid': job.id})
 
 
-@frontend.route('/analysis-status')
+@frontend.route('/analysis/status')
 def analysis_status():
     jobid = request.args.get('jobid')
     if jobid:

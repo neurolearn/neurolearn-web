@@ -4,14 +4,17 @@ import time
 import random
 
 from nlweb.app import celery
-from analysis import run_analysis
+from analysis import run_ml_analysis
+
 
 @celery.task
-def run_analysis(data):
+def run_analysis(data, collection_id, algorithm):
     NTOTAL = 20
     print celery.current_task, "got task"
 
-    run_analysis(data)
+    print celery.conf
+
+    run_ml_analysis(data['data'], collection_id, algorithm, output_dir)
 
     for i in range(NTOTAL):
         time.sleep(random.random())
