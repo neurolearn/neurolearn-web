@@ -26,7 +26,8 @@ server.listen(3000, 'localhost', function (err) {
 
 server.app.use(function apiHook(req, res, next) {
   if (req.url.indexOf('/nvproxy') === 0 ||
-      req.url.indexOf('/analysis') === 0
+      req.url.indexOf('/analysis') === 0 ||
+      req.url.indexOf('/media') === 0
     ) {
 
     var proxiedRequest = request('http://' + apiHost + req.url);

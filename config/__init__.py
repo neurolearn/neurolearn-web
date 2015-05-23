@@ -6,5 +6,3 @@ class Configuration(object):
 
     import logging
     LOGGING_LEVEL = logging.WARNING
-
-    STATIC_ROOT = ''

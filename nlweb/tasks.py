@@ -16,7 +16,7 @@ from analysis import run_ml_analysis
 @celery.task(bind=True)
 def run_analysis(self, data, collection_id, algorithm):
 
-    output_dir = os.path.join('./nv_tmp', self.request.id)
+    output_dir = os.path.join(celery.conf.MEDIA_ROOT, self.request.id)
     run_ml_analysis(data, collection_id, algorithm, output_dir)
 
     return 999

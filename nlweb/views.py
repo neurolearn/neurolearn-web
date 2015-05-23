@@ -1,9 +1,11 @@
 from __future__ import absolute_import
 
+import os
+
 from celery.result import AsyncResult
 
-from flask import Blueprint, render_template
-from flask import request, Response
+from flask import Blueprint, render_template, current_app
+from flask import request, Response, send_from_directory
 from flask import jsonify
 
 import requests
@@ -70,5 +72,9 @@ def analysis_status():
                 state=job.state
             ))
 
-
     return jsonify({'jobid': jobid})
+
+
+@frontend.route('/media/<path:path>')
+def static_file(path):
+    return send_from_directory(current_app.config['MEDIA_ROOT'], path)
