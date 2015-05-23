@@ -5,7 +5,7 @@ import SelectCollection from './SelectCollection';
 import CollectionInfo from './CollectionInfo';
 import SelectTrainingLabel from './SelectTrainingLabel';
 import RunAnalysisForm from './RunAnalysisForm';
-import WeightMap from './WeightMap';
+import Results from './Results';
 import request from 'superagent';
 import Loader from 'react-loader';
 
@@ -17,6 +17,7 @@ export default class App extends React.Component {
       collection: null,
       loaded: true,
       finishedJobId: null,
+      algorithm: null,
       targetData: null
     };
   }
@@ -71,7 +72,8 @@ export default class App extends React.Component {
         return;
     }
 
-    this.setState({finishedJobId: null});
+    this.setState({finishedJobId: null,
+                   algorithm: algorithm});
 
     var payload = {
       'data': this.targetData,
@@ -141,7 +143,8 @@ export default class App extends React.Component {
         <br />
         <Loader loaded={this.state.loaded} top="80%" left="50%" className="spinner">
           {this.state.finishedJobId &&
-            <WeightMap jobid={this.state.finishedJobId} />
+            <Results jobid={this.state.finishedJobId}
+                     algorithm={this.state.algorithm} />
           }
         </Loader>
       </div>
