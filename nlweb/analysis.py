@@ -5,18 +5,6 @@ import numpy as np
 from nltools.analysis import Predict
 from joblib import Memory
 
-"""
-[2015-05-23 20:33:51,493: WARNING/Worker-3] Elapsed: 449.95 seconds
-The process has forked and you cannot use this CoreFoundation functionality safely. You MUST exec().
-Break on __THE_PROCESS_HAS_FORKED_AND_YOU_CANNOT_USE_THIS_COREFOUNDATION_FUNCTIONALITY___YOU_MUST_EXEC__() to debug.
-[2015-05-23 20:34:23,849: ERROR/MainProcess] Process 'Worker-3' pid:58908 exited with 'signal 11 (SIGSEGV)'
-[2015-05-23 20:34:34,320: ERROR/MainProcess] Task nlweb.tasks.run_analysis[c8a36bce-94a7-4a85-b9cc-93daed9225e3] raised unexpected: WorkerLostError('Worker exited prematurely: signal 11 (SIGSEGV).',)
-Traceback (most recent call last):
-  File "/Users/burnash/projects/neuro/nlweb/env/lib/python2.7/site-packages/billiard/pool.py", line 1171, in mark_as_worker_lost
-    human_status(exitcode)),
-WorkerLostError: Worker exited prematurely: signal 11 (SIGSEGV).
-
-"""
 
 def download(collection_id, outfolder):
     from pyneurovault import api
@@ -95,10 +83,3 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     negvneu.predict()
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
-
-
-if __name__ == '__main__':
-    from nlweb_test_data import data
-
-    run_ml_analysis(data['data'], collection_id=504, algorithm='ridge',
-                 outfolder='./nv_tmp/')

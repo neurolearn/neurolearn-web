@@ -53,9 +53,8 @@ export default class DataGrid extends React.Component {
 
     function useColumnAs(name, col) {
       selectedColumns[name] = col;
-
-      if (selectedColumns.fileName &&
-          selectedColumns.trainingLabel) {
+      if (selectedColumns.fileName !== null &&
+          selectedColumns.trainingLabel !== null ) {
         _this.props.onSelectTarget(getTargetData(selectedColumns));
       }
 
