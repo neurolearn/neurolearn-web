@@ -92,7 +92,7 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     # Ridge
     negvneu = Predict(dat, Y, algorithm=algorithm, subject_id=holdout,
                       output_dir=outfolder, cv_dict={'kfolds': 5})
-    negvneu.predict(save_plot=False)
+    negvneu.predict()
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 

@@ -10,7 +10,7 @@ from flask import jsonify
 
 import requests
 
-from nlweb.tasks import run_analysis, celery
+from nlweb.tasks import run_analysis, run_test_analysis, celery
 
 frontend = Blueprint('frontend', __name__)
 
@@ -45,6 +45,13 @@ def analysis():
     job = run_analysis.delay(args['data'],
                              args['collection_id'],
                              args['algorithm'])
+
+    return jsonify({'jobid': job.id})
+
+
+@frontend.route('/test-analysis', methods=['POST'])
+def test_analysis():
+    job = run_test_analysis.delay()
 
     return jsonify({'jobid': job.id})
 
