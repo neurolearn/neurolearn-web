@@ -37,7 +37,7 @@ def neurovault_proxy(path):
 
 @frontend.route('/analysis', methods=['POST'])
 def analysis():
-    args = request.json()
+    args = request.json
     print "Received", args
 
     job = run_analysis.delay(args['data'],
@@ -65,5 +65,10 @@ def analysis_status():
                 state=job.state,
                 progress=1.0,
             ))
+        elif job.state == 'FAILURE':
+            return jsonify(dict(
+                state=job.state
+            ))
+
 
     return jsonify({'jobid': jobid})

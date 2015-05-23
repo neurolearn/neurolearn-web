@@ -13,12 +13,13 @@ def load_celery_config(celery_obj):
 
     environment = os.environ.get('ENV', 'development')
 
-    if os.path.exists('./config/local.cfg'):
-        celeryconfig = imp.load_source('celeryconfig',
-                                       './config/local.cfg')
-    else:
-        celeryconfig = imp.load_source('celeryconfig',
-                                       './config/%s.cfg' % environment)
+    # if os.path.exists('./config/local.cfg'):
+    # celeryconfig = imp.load_source('celeryconfig',
+    #                                    './config/local.cfg')
+    # else:
+
+    celeryconfig = imp.load_source('celeryconfig',
+                                   './config/%s.cfg' % environment)
 
     celery_obj.config_from_object(celeryconfig)
 

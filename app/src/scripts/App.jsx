@@ -36,6 +36,11 @@ export default class App extends React.Component {
               _this.requestResult(jobid);
               return;
             }
+            if (res.body.state == 'FAILURE') {
+              window.alert('Failed to process the analysis. Please contact the developer.');
+              _this.setState({loaded: true});
+              return;
+            }
           } else {
             alert('Error while polling result' + res.text);
           }
@@ -50,6 +55,16 @@ export default class App extends React.Component {
   handleRunAnalysis(algorithm) {
     var _this = this;
 
+    if (!this.state.collection) {
+        window.alert('Select a NeuroVault collection.');
+        return;
+    }
+
+    if (!this.targetData) {
+        window.alert('Select filenames and training labels.');
+        return;
+    }
+
     this.setState({finishedJobId: null});
 
     var payload = {
@@ -60,7 +75,7 @@ export default class App extends React.Component {
 
     this.setState({loaded: false});
 
-    request.post('/analysis/')
+    request.post('/analysis')
       .type('json')
       .accept('json')
       .send(payload)

@@ -11,6 +11,7 @@ from analysis import run_ml_analysis
 def run_analysis(data, collection_id, algorithm):
     NTOTAL = 20
     print celery.current_task, "got task"
+    # import ipdb; ipdb.set_trace()
 
     print celery.conf
 
