@@ -4,10 +4,11 @@ import nibabel as nb
 import numpy as np
 from nltools.analysis import Predict
 from joblib import Memory
-from pyneurovault import api
 
 
 def download(collection_id, outfolder):
+    from pyneurovault import api
+
     # Will extract all collections and images in one query to work from
     nv = api.NeuroVault()
 
