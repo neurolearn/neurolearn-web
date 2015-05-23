@@ -76,7 +76,8 @@ def analysis_status():
             ))
         elif job.state == 'FAILURE':
             return jsonify(dict(
-                state=job.state
+                state=job.state,
+                message=str(job.result)
             ))
 
     return jsonify({'jobid': jobid})

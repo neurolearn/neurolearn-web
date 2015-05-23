@@ -32,12 +32,18 @@ export default class App extends React.Component {
         .end(function(err, res) {
           if(res.ok) {
             console.log(res.body);
-            if (res.body.state == 'SUCCESS') {
+            if (res.body.state === 'SUCCESS') {
               _this.requestResult(jobid);
               return;
             }
-            if (res.body.state == 'FAILURE') {
-              window.alert('Failed to process the analysis. Please contact the developer.');
+            if (res.body.state === 'FAILURE') {
+              var msg = 'Failed to process the analysis.\n';
+              if (res.body.message) {
+                msg += res.body.message;
+              } else {
+                msg += 'Please contact the developer.';
+              }
+              window.alert(msg);
               _this.setState({loaded: true});
               return;
             }
