@@ -38,6 +38,11 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
 
     tic = time.time()  # Start Timer
 
+    # Cache 504 for test
+    outfolder_old = outfolder
+    if collection_id == 504:
+        outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
+
     mem = Memory(cachedir='/tmp/nlweb_analysis/cache')
 
     collection_data = mem.cache(download)(collection_id, outfolder)
@@ -52,6 +57,9 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
 
     dat = nb.funcs.concat_images([os.path.join(outfolder, 'original', str(
         x) + '.nii.gz') for x in collection_data.image_id[index]])
+
+    # Return back
+    outfolder = outfolder_old
 
     # holdout = [int(x.split('_')[-2]) for x in img_file]
     # XXX: use index as subject_id for a while:
@@ -77,9 +85,18 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     # negvneu.predict()
     # print 'Elapsed: %.2f seconds' % (time.time() - tic) #Stop timer
 
-    # Ridge
-    negvneu = Predict(dat, Y, algorithm=algorithm, subject_id=holdout,
-                      output_dir=outfolder, cv_dict={'kfolds': 5})
+    kfolds = 5 if 5 < len(Y) else len(Y)
+
+    extra = {}
+    if algorithm in ('svr', 'svm'):
+        extra = {'kernel': 'linear'}
+
+    negvneu = Predict(dat, Y, algorithm=algorithm,
+                      subject_id=holdout,
+                      output_dir=outfolder,
+                      cv_dict={'kfolds': kfolds},
+                      **extra)
+
     negvneu.predict()
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
