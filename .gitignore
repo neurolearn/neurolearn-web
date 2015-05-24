@@ -7,6 +7,10 @@ celeryresults.sqlite
 media
 nv_tmp
 
+nlweb/static/app
+nlweb/templates/index.html
+
+
 # C extensions
 *.so
 
