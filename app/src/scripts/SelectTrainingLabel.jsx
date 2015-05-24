@@ -29,8 +29,10 @@ export default class SelectTrainingLabel extends React.Component {
   render() {
     return (
       <div className="selectTrainingLabel">
-        <p>Select filenames and training labels. Right click a corresponding column for each.</p>
+        <p>2. Upload a CSV file with metadata for this collection. <em>Try using <a href="">example metadata</a> for collection #504</em>.</p>
         <FilePicker onLoad={this.handleFileLoad.bind(this)}/>
+        <br/>
+        <p>3. Select image filenames and training labels. Right click a corresponding column for each.</p>
         <br/>
         {this.state.imagesMetadata &&
           <DataGrid onSelectTarget={this.props.onSelectTarget} data={this.state.imagesMetadata} />

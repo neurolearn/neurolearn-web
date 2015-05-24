@@ -36,7 +36,7 @@ export default class RunAnalysisForm extends React.Component {
       <div className="RunAnalysisForm">
         <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-group">
-            <p>Select the type of algorithm.</p>
+            <p>4. Select the type of algorithm.</p>
             <select className="form-control"
                     ref="algorithmInput"
                     onChange={this.handleInputChange.bind(this)}
