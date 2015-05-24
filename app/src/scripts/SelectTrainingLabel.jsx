@@ -22,6 +22,10 @@ export default class SelectTrainingLabel extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.imagesMetadata !== this.state.imagesMetadata;
+  }
+
   render() {
     return (
       <div className="selectTrainingLabel">
