@@ -12,7 +12,7 @@ module.exports = {
     // path: path.join(__dirname, 'build'),
     // filename: 'bundle.js',
     // publicPath: '/scripts/'
-   library: 'require',
+    library: 'require',
     libraryTarget: 'this'
   },
   externals: {},
