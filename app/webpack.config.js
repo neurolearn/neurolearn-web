@@ -32,7 +32,8 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src/scripts') },
+      // { test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src/scripts') },
+      { test: /\.jsx?$/, loader: 'babel', include: path.join(__dirname, 'src/scripts') },
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
       { test: /\.css$/, loader: 'style-loader!css-loader'}
     ],
