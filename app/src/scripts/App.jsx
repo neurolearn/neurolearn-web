@@ -15,6 +15,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       collection: null,
+      collectionId: null,
       loaded: true,
       finishedJobId: null,
       algorithm: null,
@@ -106,7 +107,8 @@ export default class App extends React.Component {
       .end(function(err, res) {
         if (res.ok) {
           _this.setState({
-            collection: res.body
+            collection: res.body,
+            collectionId: collectionId
           });
         } else {
           alert('Error while fetching collection' + res.text);
@@ -123,7 +125,7 @@ export default class App extends React.Component {
     var collectionInfo = '';
 
     if (this.state.collection) {
-      collectionInfo = <CollectionInfo collection={this.state.collection} />;
+      collectionInfo = <CollectionInfo collectionId={this.state.collectionId} collection={this.state.collection} />;
     }
 
     return (
