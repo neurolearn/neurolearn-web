@@ -40,8 +40,8 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
 
     # Cache 504 for test
     outfolder_old = outfolder
-    # if collection_id == 504:
-    #     outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
+    if collection_id == 504:
+        outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
 
     mem = Memory(cachedir='/tmp/nlweb_analysis/cache')
 
