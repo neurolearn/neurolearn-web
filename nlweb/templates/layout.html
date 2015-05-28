@@ -18,10 +18,6 @@
 
 
   <link rel="stylesheet" href="{{ url_for('static', filename='libs/font-awesome4/css/font-awesome.min.css') }}">
-  {% assets "css_all" %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-  {% endassets %}
-
   {% block css %}{% endblock %}
 
 </head>
@@ -59,9 +55,6 @@
 {% include "footer.html" %}
 
 <!-- JavaScript at the bottom for fast page loading -->
-{% assets "js_all" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
 {% block js %}{% endblock %}
 <!-- end scripts -->
 {% endblock %}

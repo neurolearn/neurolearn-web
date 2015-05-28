@@ -4,7 +4,6 @@ import os
 
 from flask import Flask, render_template
 
-from nlweb.assets import assets
 from nlweb.extensions import (db, migrate, celery)
 
 
@@ -53,7 +52,6 @@ def create_app():
 
 
 def init_extensions(app):
-    assets.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
 
