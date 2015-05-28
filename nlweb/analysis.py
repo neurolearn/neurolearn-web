@@ -2,6 +2,7 @@ import os
 import time
 import nibabel as nb
 import numpy as np
+import nltools
 from nltools.analysis import Predict
 from joblib import Memory
 
@@ -13,11 +14,14 @@ def download(collection_id, outfolder):
     nv = api.NeuroVault()
 
     # Download all images to file
+    # standard = os.path.join(
+    #     os.path.dirname(api.__file__), 'data', 'MNI152_T1_2mm_brain_mask_dil.nii.gz')
+
     standard = os.path.join(
-        os.path.dirname(api.__file__), 'data', 'MNI152_T1_2mm_brain.nii.gz')
+        os.path.dirname(nltools.__file__), 'resources', 'MNI152_T1_2mm_brain_mask_dil.nii.gz')
 
     nv.download_images(dest_dir=outfolder, target=standard,
-                       collection_ids=[collection_id], resample=False)
+                       collection_ids=[collection_id], resample=True)
 
     # Create Variables
     collection_data = nv.get_images_df(
@@ -39,13 +43,14 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     tic = time.time()  # Start Timer
 
     # Cache 504 for test
-    outfolder_old = outfolder
-    if collection_id == 504:
-        outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
+    # outfolder_old = outfolder
+    # if collection_id == 504:
+    #     outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
 
-    mem = Memory(cachedir='/tmp/nlweb_analysis/cache')
+    # mem = Memory(cachedir='/tmp/nlweb_analysis/cache')
 
-    collection_data = mem.cache(download)(collection_id, outfolder)
+    # collection_data = mem.cache(download)(collection_id, outfolder)
+    collection_data = download(collection_id, outfolder)
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
     tic = time.time()  # Start Timer
@@ -55,11 +60,11 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     index = [x[1] for x in img_index]
     img_file = [x[0] for x in img_index]
 
-    dat = nb.funcs.concat_images([os.path.join(outfolder, 'original', str(
+    dat = nb.funcs.concat_images([os.path.join(outfolder, 'resampled', '00' + str(
         x) + '.nii.gz') for x in collection_data.image_id[index]])
 
     # Return back
-    outfolder = outfolder_old
+    # outfolder = outfolder_old
 
     # holdout = [int(x.split('_')[-2]) for x in img_file]
     # XXX: use index as subject_id for a while:

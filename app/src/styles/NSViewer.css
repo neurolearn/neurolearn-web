@@ -1,0 +1,169 @@
+body {
+	margin: 20px auto 0px auto;
+}
+
+#views_left {
+	width: 265px;
+	float: left;
+}
+
+#views_right {
+	width: 280px;
+	float: left;
+}
+
+#view_axial {
+  width: 280px;
+  height: 260px; }
+
+#view_coronal {
+  width: 280px;
+  height: 220px;
+  margin-bottom: 20px; }
+
+#view_sagittal {
+  width: 264px;
+  height: 260px; }
+
+.view {
+  float: left; }
+
+.nav-slider-vertical {
+  height: 100%;
+  margin-left: 5px;
+  float: left; }
+
+.nav-slider-horizontal {
+  width: 100%;
+  margin-top: 5px;
+  float: left; }
+
+canvas {
+  float: left; }
+
+#layer_panel {
+	width: 240px;
+	float: left;
+	margin-left: 10px;
+}
+
+#layer_settings_panel {
+	font-size: 14px;
+	clear: left;
+	width: 215px;
+	margin-top: 10px;
+	float: left;
+}
+
+#layer_list_panel {
+	/*width: 215px;*/
+	float: left;
+}
+
+#layer_list {
+	/*width: 150px;*/
+	float: left;
+}
+
+#layer_visible_list {
+	width: 25px;
+	float: left;
+}
+
+
+#color_palette {
+	width: 180px;
+}
+
+.visibility_icon {
+	width: 20px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	padding: 3px;
+	/*padding-left: 5px;*/
+	background: white;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.download_icon {
+	width: 20px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	padding: 3px;
+	background: white;
+	border-left: 1px solid #999;
+}
+
+.deletion_icon {
+	width: 20px;
+	height: 20px;
+	float: left;
+	text-align: center;
+	padding: 3px;
+	background: white;
+	border-left: 1px solid #999;
+}
+
+#data_panel {
+	margin-top: 20px;
+	float: left;
+	font: 12px;
+}
+
+.data_display_row {
+	float: left;
+	width: 126px;
+	text-align: center;
+	padding: 7px 12px 7px 0px;
+}
+
+#data_current_coords {
+	font-size: 22px;
+	float: left;
+	width: 100%;
+	text-align: center;
+	background: #ccc;
+	border: 1px #aaa;
+	line-height: 1.5em;
+}
+
+#data_current_value {
+	font-size: 22px;
+	line-height: 1.5em;
+	background: #ccc;
+	border: 1px #eee;
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+
+ul#layer_list li {
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddb #999 #999 #ddb;
+	font-size: 12px;
+	background: white;
+	/*padding: 3px;*/
+	margin: 0px;
+	float: left;
+}
+
+.layer_label {
+	float: left;
+	width: 150px;
+	background: #ccc;
+	padding: 3px;
+}
+
+ul#layer_list {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+.selected {
+	background: #cff;
+}

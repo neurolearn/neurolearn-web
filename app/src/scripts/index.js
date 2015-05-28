@@ -3,6 +3,7 @@
 require('console-shim');
 require('promise.prototype.finally');
 
+require('index.css');
 require('handsontable.full.css');
 
 var React = require('react');

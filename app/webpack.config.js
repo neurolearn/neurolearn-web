@@ -42,7 +42,8 @@ module.exports = {
       // { test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src/scripts') },
       { test: /\.jsx?$/, loader: 'babel', include: path.join(__dirname, 'src/scripts'), exclude: /node_modules|vendor_modules/ },
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
-      { test: /\.css$/, loader: 'style-loader!css-loader' }
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
+      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
     ],
     noParse: [
         /[\/\\]vendor_modules[\/\\]handsontable.full\.js$/,

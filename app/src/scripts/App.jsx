@@ -21,6 +21,11 @@ export default class App extends React.Component {
       algorithm: null,
       targetData: null
     };
+
+    if (true) {
+      this.state.finishedJobId = '90889587-3dad-45cb-a642-39b1c655462f';
+      this.state.algorithm = 'ridge';
+    }
   }
 
   poll(jobid) {
