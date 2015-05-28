@@ -6,19 +6,22 @@ import NSViewer from './NSViewer';
 export default class Results extends React.Component {
   render() {
     var images = [
-    {
-      'url': 'data/MNI152.nii.gz',
-      'name': 'MNI152 2mm',
-      'colorPalette': 'grayscale',
-      'cache': false,
-      'intent': 'Intensity:'
-    },
-    {
-      'url': 'data/ridge_weightmap3.nii.gz',
-      'name': 'reward meta-analysis',
-      'colorPalette': 'green',
-      'intent': 'z-score:'
-    }];
+      {
+        id: 'anatomical',
+        json: false,
+        name: 'anatomical',
+        colorPalette: 'grayscale',
+        cache: true,
+        download: '/static/data/anatomical.nii.gz',
+        url: '/static/data/anatomical.nii.gz'
+      },
+      {
+        'url': `/media/${this.props.jobid}/ridge_weightmap.nii.gz`,
+        'name': `${this.props.algorithm} weight map`,
+        'colorPalette': 'green',
+        'intent': 'z-score:'
+      }
+    ];
 
     return (
       <div className="Results">
@@ -28,7 +31,7 @@ export default class Results extends React.Component {
           <NSViewer images={images} />
         </div>
 
-        <div className='WeightMapPlot'>
+        <div className='WeightMapPlot' style={{marginTop: 20}}>
           <img style={{width: 80 + '%'}} src={'/media/' + this.props.jobid + '/' + this.props.algorithm + '_weightmap_axial.png'}/>
         </div>
 

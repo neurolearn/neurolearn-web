@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-// var Viewer = require('nsviewer.js');
-// require('imports?$=jquery!nsviewer.js');
 require('nsviewer.js');
-
 
 export default class NSViewer extends React.Component {
   componentDidMount() {
@@ -27,15 +24,7 @@ export default class NSViewer extends React.Component {
     viewer.addDataField('currentCoords', '#data_current_coords');
     viewer.addTextField('image-intent', '#image_intent');
     viewer.clear();
-    var images = [
-        {
-            'url': '/media/90889587-3dad-45cb-a642-39b1c655462f/ridge_weightmap.nii.gz',
-            'name': 'reward meta-analysis',
-            'colorPalette': 'green',
-            'intent': 'z-score:'
-        }
-    ];
-    viewer.loadImages(images);
+    viewer.loadImages(this.props.images);
   }
 
   render() {

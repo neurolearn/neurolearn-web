@@ -22,7 +22,7 @@ export default class App extends React.Component {
       targetData: null
     };
 
-    if (true) {
+    if (false) {
       this.state.finishedJobId = '90889587-3dad-45cb-a642-39b1c655462f';
       this.state.algorithm = 'ridge';
     }
