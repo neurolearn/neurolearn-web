@@ -3,8 +3,13 @@ import time
 import nibabel as nb
 import numpy as np
 import nltools
+import requests
 from nltools.analysis import Predict
-from joblib import Memory
+
+from .httpclient import HTTPClient, FileCache
+
+BASE_NV_URL = 'http://neurovault.org'
+
 
 
 def download(collection_id, outfolder):
@@ -37,19 +42,52 @@ def to_filename_dict(rows):
     return di
 
 
+def get_collection_images(collection_id):
+    url = "%s/api/collections/%s/images/"
+
+    r = requests.get(url % (BASE_NV_URL, collection_id))
+
+    return r.json()
+
+
+def image_id(url):
+    return int(url.split("/")[-2])
+
+
+def download_images(client, image_list, output_dir):
+    dirname = os.path.join(output_dir, 'original')
+    try:
+        os.makedirs(dirname)
+    except (IOError, OSError):
+        pass
+
+    image_file_list = []
+
+    for image in image_list:
+        filename = os.path.join(dirname, str(image_id(image['url'])))
+        print "Retrieving ", image['file']
+        image_file_list.append(
+            client.retrieve(image['file'], filename, force_cache=True))
+
+
+def run_ml_analysis2(data, collection_id, algorithm, output_dir):
+    tic = time.time()  # Start Timer
+
+    client = HTTPClient(cache=FileCache('cache'))
+
+    image_list = get_collection_images(collection_id)
+    download_images(client, image_list['results'], output_dir)
+    resample_images()
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    tic = time.time()  # Start Timer
+
+
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
     print data
 
     tic = time.time()  # Start Timer
 
-    # Cache 504 for test
-    # outfolder_old = outfolder
-    # if collection_id == 504:
-    #     outfolder = '/Users/burnash/projects/neuro/nlweb/media/test_ridge'
-
-    # mem = Memory(cachedir='/tmp/nlweb_analysis/cache')
-
-    # collection_data = mem.cache(download)(collection_id, outfolder)
     collection_data = download(collection_id, outfolder)
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
@@ -62,9 +100,6 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
 
     dat = nb.funcs.concat_images([os.path.join(outfolder, 'resampled', '00' + str(
         x) + '.nii.gz') for x in collection_data.image_id[index]])
-
-    # Return back
-    # outfolder = outfolder_old
 
     # holdout = [int(x.split('_')[-2]) for x in img_file]
     # XXX: use index as subject_id for a while:
@@ -105,3 +140,5 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     negvneu.predict()
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+
+
