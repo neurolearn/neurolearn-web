@@ -7,7 +7,7 @@ import ujson
 from lockfile.mkdirlockfile import MkdirLockFile
 
 
-CachedResponse = namedtuple('CachedResponse', 'headers, data')
+CachedObject = namedtuple('CachedObject', 'headers, data')
 
 
 CASED_HEADERS = {
@@ -23,14 +23,22 @@ class FileCache(object):
         self.dirmode = dirmode
 
     def get(self, key):
+        dirname = self.get_dirpath(key)
+
+        if not dirname:
+            return None
+
+        return CachedObject(
+            headers=ujson.loads(self.read(os.path.join(dirname, 'headers'))),
+            data=self.read(os.path.join(dirname, 'data')))
+
+    def get_dirpath(self, key):
         dirname = self.gen_directory_name(key)
 
         if not os.path.exists(dirname):
             return None
 
-        return CachedResponse(
-            headers=ujson.loads(self.read(os.path.join(dirname, 'headers'))),
-            data=self.read(os.path.join(dirname, 'data')))
+        return dirname
 
     def normalize_headers(self, headers):
         def _normalize(name, value):
