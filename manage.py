@@ -38,6 +38,13 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
+def start_celery():
+    import subprocess
+
+    subprocess.call(['celery', 'worker', '-B', '--app', 'nlweb'])
+
+
+@manager.command
 def test():
     """Run the tests."""
     import pytest
