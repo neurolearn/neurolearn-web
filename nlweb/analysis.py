@@ -105,6 +105,7 @@ class ImageResampler(object):
             self.cache.set(cache_key, CachedObject(
                 headers={},
                 data=f.read()))
+        return resampled
 
     def _resample_image(self, image_file, output_file, target_nii):
         # Compute the background and extrapolate outside of the mask
@@ -166,6 +167,7 @@ def resample_images(image_list, output_dir):
     except (IOError, OSError):
         pass
 
+    image_items = []
     resampler = ImageResampler(cache=FileCache('cache'))
 
     for item in image_list:
@@ -174,10 +176,19 @@ def resample_images(image_list, output_dir):
             image_id=item['id'],
             target_nii=target_nii_filename
         )
+
         print "Getting Resampled Image for ", filename
 
-        resampler.process(item['file'], filename, target_nii=target_nii,
-                          cache_key=key)
+        image_items.append({
+            'id': item['id'],
+            'obj': item['obj'],
+            'file': resampler.process(item['file'],
+                                      filename,
+                                      target_nii=target_nii,
+                                      cache_key=key)
+        })
+
+    return image_items
 
 
 def run_ml_analysis2(data, collection_id, algorithm, output_dir):
@@ -188,10 +199,42 @@ def run_ml_analysis2(data, collection_id, algorithm, output_dir):
     image_list = fetch_collection_images(collection_id)
     image_list = download_images(client, image_list['results'],
                                  output_dir)
-    resample_images(image_list, output_dir)
+    image_list = resample_images(image_list, output_dir)
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
     tic = time.time()  # Start Timer
+
+    dat = nb.funcs.concat_images([item['file'] for item in image_list])
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    tic = time.time()  # Start Timer
+
+    holdout = range(len(image_list))
+
+    filename_dict = to_filename_dict(data)
+
+    Y_list = []
+    for item in image_list:
+        basename = os.path.basename(item['obj']['file'])
+        Y_list.append(int(filename_dict[basename]['target']))
+
+    Y = np.array(Y_list)
+
+    kfolds = 5 if 5 < len(Y) else len(Y)
+
+    extra = {}
+    if algorithm in ('svr', 'svm'):
+        extra = {'kernel': 'linear'}
+
+    negvneu = Predict(dat, Y, algorithm=algorithm,
+                      subject_id=holdout,
+                      output_dir=output_dir,
+                      cv_dict={'kfolds': kfolds},
+                      **extra)
+
+    negvneu.predict()
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 
 
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
