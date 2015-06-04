@@ -6,13 +6,37 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
     <title>{% block extrahead %}Neurolearn{% endblock %}</title>
-    <style>
-        div#root {
-            margin: 20px 20px 20px 20px;
+    <script>
+        function activateNav(element) {
+          var children = element.parentElement.parentElement.children,
+              i;
+
+          for (i = 0; i < children.length; i++) {
+            children[i].className = '';
+          }
+          element.parentElement.className = 'active';
         }
-    </style>
+    </script>
   </head>
   <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Neurolearn</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#" onclick="activateNav(this);">Train Model</a></li>
+            <li><a href="#test-pattern-map" onclick="activateNav(this);">Test Pattern Map</a></li>
+          </ul>
+      </div>
+    </nav>
     <div id='root'>
     </div>
     {% block scripts %}

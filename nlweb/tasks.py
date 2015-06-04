@@ -3,7 +3,7 @@
 import os
 
 from nlweb.app import celery
-from analysis import run_ml_analysis2 as run_ml_analysis
+from analysis import run_ml_analysis as run_ml_analysis
 
 # NTOTAL = 20
 # for i in range(NTOTAL):

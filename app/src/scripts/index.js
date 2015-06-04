@@ -9,5 +9,12 @@ require('handsontable.full.css');
 var React = require('react');
 var App = require('./App');
 
-React.render(<App/>,
+function render () {
+  var route = window.location.hash.substr(1);
+  React.render(<App route={route} />,
     document.getElementById('root'));
+
+}
+
+window.addEventListener('hashchange', render);
+render();

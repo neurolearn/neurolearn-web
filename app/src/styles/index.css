@@ -1,6 +1,6 @@
 @import 'vendor/jquery-ui.css';
 @import 'NSViewer.css';
 
-body {
-    margin: 10px;
+div#root {
+    margin: 20px 20px 20px 20px;
 }

@@ -15,7 +15,7 @@ def test_analysis(tmpdir):
     algorithm = 'ridge'
     output_dir = str(tmpdir)
 
-    analysis.run_ml_analysis2(DATA, COLLECTION_ID, algorithm, output_dir)
+    analysis.run_ml_analysis(DATA, COLLECTION_ID, algorithm, output_dir)
 
     filename = '%s_weightmap.nii.gz' % algorithm
     sample_img = nib.load(os.path.join(os.path.dirname(__file__), filename))
