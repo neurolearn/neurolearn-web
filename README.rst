@@ -17,7 +17,13 @@ Then run the following commands to bootstrap your environment.
     cd nlweb
     pip install -r requirements/dev.txt
     python manage.py server -h 3001
-    cd app
+
+
+And in different terminal session:
+
+.. code-block:: bash
+
+    cd nlweb/app
     gulp
 
 
