@@ -5,7 +5,7 @@ import React from 'react';
 export default class TestPatternMapResults extends React.Component {
   render() {
     return (
-      <div className="TestPatternMapResults">
+      <div className="TestPatternMapResults" style={{marginTop: 20}}>
         <p>Results for test pattern id {this.props.jobid}</p>
 
         <div className='WeightMapPlot' style={{marginTop: 20}}>

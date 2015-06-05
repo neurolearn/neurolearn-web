@@ -5,6 +5,7 @@ import SelectCollection from './SelectCollection';
 import CollectionInfo from './CollectionInfo';
 import TestPatternMapResults from './TestPatternMapResults';
 import FilePicker from './FilePicker';
+import Loader from 'react-loader';
 import request from 'superagent';
 
 export default class TestPatternMap extends React.Component {
@@ -47,6 +48,8 @@ export default class TestPatternMap extends React.Component {
         _this = this;
 
     if (file) {
+      this.setState({loaded: false});
+
       request.post('/applymask')
         .accept('json')
         .field('collection_id', this.state.collectionId)
@@ -123,6 +126,9 @@ export default class TestPatternMap extends React.Component {
         <form onSubmit={this.handleSubmit.bind(this)}>
           <button type="submit" className="btn btn-primary">Apply Weight Map</button>
         </form>
+        <Loader loaded={this.state.loaded} top="80%" left="50%" className="spinner">
+        </Loader>
+
         {this.state.finishedJobId &&
           <TestPatternMapResults jobid={this.state.finishedJobId} />
         }
