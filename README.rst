@@ -23,7 +23,7 @@ Then run the following commands to bootstrap your environment.
 
 Deployment
 ----------
-
+::
     fab deploy
 
 
