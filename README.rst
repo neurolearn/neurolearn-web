@@ -23,7 +23,9 @@ Then run the following commands to bootstrap your environment.
 
 Deployment
 ----------
-::
+
+.. code-block:: bash
+
     fab deploy
 
 
