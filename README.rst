@@ -8,40 +8,23 @@ A web platform for analyzing neuroimaging data using machine-learning tools.
 Quickstart
 ----------
 
-First, set your app's secret key as an environment variable. For example, example add the following to ``.bashrc`` or ``.bash_profile``.
-
-.. code-block:: bash
-
-    export NLWEB_SECRET='something-really-secret'
-
-
 Then run the following commands to bootstrap your environment.
 
 
-::
+.. code-block:: bash
 
     git clone https://github.com/burnash/nlweb
     cd nlweb
     pip install -r requirements/dev.txt
-    python manage.py server
-
-You will see a pretty welcome screen.
-
-Once you have installed your DBMS, run the following to create your app's database tables and perform the initial migration:
-
-::
-
-    python manage.py db init
-    python manage.py db migrate
-    python manage.py db upgrade
-    python manage.py server
-
+    python manage.py server -h 3001
+    cd app
+    gulp
 
 
 Deployment
 ----------
 
-In your production environment, make sure the ``NLWEB_ENV`` environment variable is set to ``"prod"``.
+    fab deploy
 
 
 Shell
@@ -50,8 +33,6 @@ Shell
 To open the interactive shell, run ::
 
     python manage.py shell
-
-By default, you will have access to ``app``, ``db``, and the ``User`` model.
 
 
 Running Tests
