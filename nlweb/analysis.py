@@ -193,7 +193,7 @@ def resample_images(image_list, output_dir):
     return image_items
 
 
-def run_ml_analysis2(data, collection_id, algorithm, output_dir):
+def train_model(data, collection_id, algorithm, output_dir):
     tic = time.time()  # Start Timer
 
     client = HTTPClient(cache=FileCache('cache'))
@@ -240,6 +240,9 @@ def run_ml_analysis2(data, collection_id, algorithm, output_dir):
 
 
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
+    """
+    Original function translated from iPython Notebook
+    """
     print data
 
     tic = time.time()  # Start Timer

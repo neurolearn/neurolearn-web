@@ -17,7 +17,7 @@ from nlweb import analysis
 def train_model(self, data, collection_id, algorithm):
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, self.request.id)
-    analysis.run_ml_analysis(data, collection_id, algorithm, output_dir)
+    analysis.train_model(data, collection_id, algorithm, output_dir)
 
     return 999
 
