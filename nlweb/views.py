@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import os
+import uuid
 
 from celery.result import AsyncResult
 
@@ -10,7 +10,9 @@ from flask import jsonify
 
 import requests
 
-from nlweb.tasks import run_analysis, run_test_analysis, celery
+from nlweb import tasks
+from nlweb.tasks import celery
+from nlweb.extensions import uploaded_media
 
 frontend = Blueprint('frontend', __name__)
 
@@ -40,24 +42,29 @@ def neurovault_proxy(path):
 @frontend.route('/analysis', methods=['POST'])
 def analysis():
     args = request.json
-    print "Received", args
-
-    job = run_analysis.delay(args['data'],
-                             args['collection_id'],
-                             args['algorithm'])
+    job = tasks.train_model.delay(args['data'],
+                                  args['collection_id'],
+                                  args['algorithm'])
 
     return jsonify({'jobid': job.id})
 
 
-@frontend.route('/test-analysis', methods=['POST'])
-def test_analysis():
-    job = run_test_analysis.delay()
+@frontend.route('/applymask', methods=['POST'])
+def applymask():
+    collection_id = request.form['collection_id']
+    fs = request.files.values()[0]
+    subfolder = str(uuid.uuid4())
+
+    saved_filename = uploaded_media.save(fs, subfolder, name=fs.name)
+
+    job = tasks.apply_mask.delay(
+        collection_id, uploaded_media.path(saved_filename))
 
     return jsonify({'jobid': job.id})
 
 
-@frontend.route('/analysis/status')
-def analysis_status():
+@frontend.route('/status')
+def task_status():
     jobid = request.args.get('jobid')
     if jobid:
 

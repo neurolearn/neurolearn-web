@@ -9,7 +9,8 @@ from nibabel.filename_parser import splitext_addext
 from nilearn.masking import compute_background_mask, _extrapolate_out_mask
 from nilearn.image import resample_img
 import nltools
-from nltools.analysis import Predict
+from nltools import analysis
+import matplotlib.pyplot as plt
 
 from .httpclient import HTTPClient, FileCache, CachedObject
 
@@ -88,6 +89,7 @@ def download_images(client, image_list, output_dir):
 
 
 class ImageResampler(object):
+
     def __init__(self, cache):
         self.cache = cache
 
@@ -226,11 +228,11 @@ def run_ml_analysis2(data, collection_id, algorithm, output_dir):
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
-    negvneu = Predict(dat, Y, algorithm=algorithm,
-                      subject_id=holdout,
-                      output_dir=output_dir,
-                      cv_dict={'kfolds': kfolds},
-                      **extra)
+    negvneu = analysis.Predict(dat, Y, algorithm=algorithm,
+                               subject_id=holdout,
+                               output_dir=output_dir,
+                               cv_dict={'kfolds': kfolds},
+                               **extra)
 
     negvneu.predict()
 
@@ -285,12 +287,60 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
-    negvneu = Predict(dat, Y, algorithm=algorithm,
-                      subject_id=holdout,
-                      output_dir=outfolder,
-                      cv_dict={'kfolds': kfolds},
-                      **extra)
+    negvneu = analysis.Predict(dat, Y, algorithm=algorithm,
+                               subject_id=holdout,
+                               output_dir=outfolder,
+                               cv_dict={'kfolds': kfolds},
+                               **extra)
 
     negvneu.predict()
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+
+
+def apply_mask(collection_id, weight_map_filename, output_dir):
+    tic = time.time()  # Start Timer
+
+    client = HTTPClient(cache=FileCache('cache'))
+
+    image_list = fetch_collection_images(collection_id)
+
+    image_list = download_images(client, image_list['results'],
+                                 output_dir)
+
+    # XXX: Better to check for weightmap shap and image shape
+    # and adjust weightmap if needed
+    image_list = resample_images(image_list, output_dir)
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    tic = time.time()  # Start Timer
+
+    dat = nb.funcs.concat_images([item['file'] for item in image_list])
+
+    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    tic = time.time()  # Start Timer
+
+    weight_map = nb.load(weight_map_filename)
+    pexpd = analysis.apply_mask(data=dat, weight_map=weight_map,
+                                output_dir=output_dir,
+                                method='dot_product',
+                                save_output=True)
+
+    pexpc = analysis.apply_mask(data=dat, weight_map=weight_map,
+                                output_dir=output_dir,
+                                method='correlation',
+                                save_output=True)
+
+    plt.subplot(2, 1, 1)
+    plt.plot(pexpd)
+    plt.title('Pattern Expression')
+    plt.ylabel('Dot Product')
+
+    plt.subplot(2, 1, 2)
+    plt.plot(pexpc)
+    plt.xlabel('Subject')
+    plt.ylabel('Correlation')
+
+    plt.savefig(os.path.join(output_dir, 'test_pattern_mask_plot.png'))
 
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer

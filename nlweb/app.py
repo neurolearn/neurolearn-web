@@ -3,8 +3,9 @@
 import os
 
 from flask import Flask, render_template
+from flaskext.uploads import configure_uploads
 
-from nlweb.extensions import (db, migrate, celery)
+from nlweb.extensions import (db, migrate, celery, uploaded_media)
 
 
 def load_celery_config(celery_obj):
@@ -54,6 +55,8 @@ def create_app():
 def init_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db)
+
+    configure_uploads(app, uploaded_media)
 
     load_celery_config(celery)
 

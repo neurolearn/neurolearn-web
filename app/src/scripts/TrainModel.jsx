@@ -32,7 +32,7 @@ export default class TrainModel extends React.Component {
       var _this = this;
       console.log('polling', jobid);
 
-      request.get('/analysis/status')
+      request.get('/status')
         .type('json')
         .accept('json')
         .query({ jobid: jobid })
@@ -83,7 +83,7 @@ export default class TrainModel extends React.Component {
 
     var payload = {
       'data': this.targetData,
-      'collection_id': this.state.collection.id,
+      'collection_id': this.state.collectionId,
       'algorithm': algorithm
     };
 
@@ -135,6 +135,7 @@ export default class TrainModel extends React.Component {
 
     return (
       <div className = "TrainModel">
+        <p>1. Select a NeuroVault collection. <em>For example, 504.</em></p>
         <SelectCollection
           onUserInput={this.handleUserInput.bind(this)}
         />

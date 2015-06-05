@@ -13,7 +13,6 @@ export default class SelectCollection extends React.Component {
   render() {
     return (
       <form className="form-inline" style={{marginBottom: 30}} onSubmit={this.handleSubmit.bind(this)}>
-        <p>1. Select a NeuroVault collection. <em>For example, 504.</em></p>
         <input
           type="text"
           className="form-control"
