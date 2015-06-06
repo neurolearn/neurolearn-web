@@ -1,12 +1,12 @@
 'use strict';
 
 import React from 'react';
+import request from 'superagent';
 import SelectCollection from './SelectCollection';
 import CollectionInfo from './CollectionInfo';
 import SelectTrainingLabel from './SelectTrainingLabel';
 import RunAnalysisForm from './RunAnalysisForm';
 import Results from './Results';
-import request from 'superagent';
 import Loader from 'react-loader';
 
 
