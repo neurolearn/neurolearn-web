@@ -311,7 +311,7 @@ def apply_mask(collection_id, weight_map_filename, output_dir):
     image_list = download_images(client, image_list['results'],
                                  output_dir)
 
-    # XXX: Better to check for weightmap shap and image shape
+    # XXX: Better to check for weightmap shape and image shape
     # and adjust weightmap if needed
     image_list = resample_images(image_list, output_dir)
 
