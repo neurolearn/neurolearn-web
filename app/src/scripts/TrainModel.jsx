@@ -8,6 +8,7 @@ import SelectTrainingLabel from './SelectTrainingLabel';
 import RunAnalysisForm from './RunAnalysisForm';
 import Results from './Results';
 import Loader from 'react-loader';
+import DataGrid from './DataGrid';
 
 
 export default class TrainModel extends React.Component {
@@ -19,7 +20,14 @@ export default class TrainModel extends React.Component {
       loaded: true,
       finishedJobId: null,
       algorithm: null,
-      targetData: null
+      targetData: null,
+      testData:  [
+                  ['=$B$2', "Maserati", "Mazda", "Mercedes", "Mini", "=A$1"],
+                  [2009, 0, 2941, 4303, 354, 5814],
+                  [2010, 5, 2905, 2867, '=SUM(A4,2,3)', '=$B1'],
+                  [2011, 4, 2517, 4822, 552, 6127],
+                  [2012, '=SUM(A2:A5)', '=SUM(B5,E3)', '=A2/B2', 12, 4151]
+                ]
     };
 
     if (false) {
@@ -136,6 +144,8 @@ export default class TrainModel extends React.Component {
     return (
       <div className = "TrainModel">
         <p>1. Select a NeuroVault collection. <em>For example, 504.</em></p>
+          <DataGrid data={this.state.testData} />
+
         <SelectCollection
           onUserInput={this.handleUserInput.bind(this)}
         />

@@ -3,6 +3,8 @@
 import React from 'react';
 
 require('handsontable');
+require('ruleJS.js');
+require('handsontable.formula.js');
 
 export default class DataGrid extends React.Component {
   initHandsontableInstance(data) {
@@ -12,7 +14,8 @@ export default class DataGrid extends React.Component {
     var hot = new window.Handsontable(container, {
       data: data,
       rowHeaders: true,
-      colHeaders: true
+      colHeaders: true,
+      formulas: true
     });
 
     var selectedColumns = {
