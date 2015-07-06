@@ -3,6 +3,8 @@
 import React from 'react';
 
 require('handsontable');
+require('formula.js');
+require('parser.js');
 require('ruleJS.js');
 require('handsontable.formula.js');
 

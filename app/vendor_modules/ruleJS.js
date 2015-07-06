@@ -1,4 +1,4 @@
-var ruleJS = (function (root) {
+window.ruleJS = (function (root) {
   'use strict';
 
   /**
