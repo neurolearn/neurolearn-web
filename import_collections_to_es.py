@@ -9,6 +9,7 @@ import requests
 import requests_cache
 
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import streaming_bulk
 
 
 BASE_URL = "http://neurovault.org/api"
@@ -93,9 +94,15 @@ def add_images(collection):
     return collection
 
 
-def append_collection_images(iterator):
+def add_collection_images(iterator):
     for collection in iterator:
         yield add_images(collection)
+
+
+def add_es_doc_type_id(iterator):
+    for collection in iterator:
+        collection['_id'] =  int(collection['id'])
+        yield collection
 
 
 def add_to_es_index(iterator):
@@ -111,13 +118,14 @@ def get_collections(url=COLLECTIONS_URL):
     pipeline = (fetch_collection_batches,
                 join_batches,
                 filter_temporary_collections,
-                append_collection_images)
+                add_collection_images,
+                add_es_doc_type_id)
 
     return reduce(lambda x, y: y(x), pipeline, url)
 
 
 def create_es_index(client, index):
-    client.indices.create(index)
+    client.indices.create(index=index, ignore=400)
     client.indices.put_mapping(
         index=index, doc_type='collection', body=ES_COLLECTION_MAPPING)
 
