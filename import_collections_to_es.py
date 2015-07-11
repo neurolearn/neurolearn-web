@@ -4,6 +4,7 @@ import time
 import codecs
 import itertools
 import json
+import math
 
 import requests
 import requests_cache
@@ -88,8 +89,14 @@ def filter_temporary_collections(iterator):
     return itertools.ifilter(predicate, iterator)
 
 
+def replace_nan_with_none(di):
+    return dict((k, None if isinstance(v, float) and math.isnan(v) else v)
+                    for k, v in di.items())
+
+
 def add_images(collection):
-    collection['images'] = fetch_collection_images(collection['id'])
+    collection['images'] = map(
+        replace_nan_with_none, fetch_collection_images(collection['id']))
     collection['number_of_images'] = len(collection['images'])
     return collection
 
@@ -101,7 +108,7 @@ def add_collection_images(iterator):
 
 def add_es_doc_type_id(iterator):
     for collection in iterator:
-        collection['_id'] =  int(collection['id'])
+        collection['_id'] = int(collection['id'])
         yield collection
 
 
@@ -110,7 +117,7 @@ def add_to_es_index(iterator):
 
 
 def output_collection(collections, collection_id):
-    c504 = [x for x in collections if x['id'] == 504][0]
+    c504 = [x for x in collections if x['id'] == collection_id][0]
     print json.dumps(c504, indent=4, separators=(',', ': '))
 
 
