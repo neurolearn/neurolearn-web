@@ -3,7 +3,7 @@
 import React from 'react';
 
 require('handsontable');
-require('formula.js');
+window.Formula = require('formula.js');
 require('parser.js');
 require('ruleJS.js');
 require('handsontable.formula.js');
@@ -101,7 +101,7 @@ export default class DataGrid extends React.Component {
         if (row === 0) {
           cellProperties.renderer = firstRowRenderer;
         } else {
-          cellProperties.renderer = columnSelectorRenderer;
+          // cellProperties.renderer = columnSelectorRenderer;
         }
         return cellProperties;
       }

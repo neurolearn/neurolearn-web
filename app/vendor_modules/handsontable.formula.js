@@ -340,7 +340,7 @@
     this.init = function () {
       var instance = this;
       instance.formulasEnabled = !!instance.getSettings().formulas;
-
+      debugger;
       if (instance.formulasEnabled) {
 
         var custom = {
