@@ -35,7 +35,6 @@ export default class DataGrid extends React.Component {
     }
 
     function firstRowRenderer (instance, td, row, col) {
-
       window.Handsontable.renderers.TextRenderer.apply(this, arguments);
       td.style.fontWeight = 'bold';
 
