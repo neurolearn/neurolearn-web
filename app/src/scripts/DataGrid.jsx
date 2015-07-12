@@ -43,9 +43,7 @@ export default class DataGrid extends React.Component {
     }
 
     function columnSelectorRenderer (instance, td, row, col) {
-
-      window.Handsontable.renderers.TextRenderer.apply(this, arguments);
-
+      window.Handsontable.TextCell.renderer.apply(this, arguments);
       makeBackground(col, td);
     }
 
@@ -101,7 +99,7 @@ export default class DataGrid extends React.Component {
         if (row === 0) {
           cellProperties.renderer = firstRowRenderer;
         } else {
-          // cellProperties.renderer = columnSelectorRenderer;
+          cellProperties.renderer = columnSelectorRenderer;
         }
         return cellProperties;
       }
