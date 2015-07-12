@@ -35,17 +35,6 @@
   var root = this;
 
   var Formula = root.Formula = {};
-  /*
-
-  var _ = root._;
-  var numeric = root.numeric;
-  var numeral = root.numeral;
-  var jStat = root.jStat;
-  var moment = root.moment;
-  var lodash = _;
-  var md5 = root.md5;
-  var _s = _.str;
-  */
 
   if (typeof exports !== "undefined") {
     module.exports = exportModule(
