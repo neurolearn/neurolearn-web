@@ -1,6 +1,6 @@
 'use strict';
 
-import styles from './SearchResult.css';
+import styles from './SearchResult.scss';
 
 import React from 'react';
 
