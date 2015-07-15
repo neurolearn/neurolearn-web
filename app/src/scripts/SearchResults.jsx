@@ -8,12 +8,11 @@ export default class SearchResults extends React.Component {
   render() {
     var { results } = this.props;
     return results ? (
-      <div className="row" style={{border: '1px solid gray'}}>
-        SearchResults
+      <div className="row">
         {results.hits.hits.map(hit => <SearchResult hit={hit} />)}
       </div>
     ) : (
-      <div className="row" style={{border: '1px solid gray'}}>
+      <div className="row">
         <p>No results found</p>
       </div>
     );

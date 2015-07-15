@@ -135,7 +135,7 @@ export default class TrainModel extends React.Component {
 
     return (
       <div className = "TrainModel">
-        <p>1. Select a NeuroVault collection. <em>For example, 504.</em></p>
+        <p>1. Search NeuroVault's collections and select images to create a training dataset.</p>
 
         <SelectCollection
           onUserInput={this.handleUserInput.bind(this)}
