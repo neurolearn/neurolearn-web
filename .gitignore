@@ -6,6 +6,8 @@ celerydb.sqlite
 celeryresults.sqlite
 media
 nv_tmp
+activate-venv.sh
+nv_cache.sqlite
 
 nlweb/static/app
 nlweb/templates/index.html
