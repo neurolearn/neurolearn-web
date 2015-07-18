@@ -43,8 +43,6 @@ export default class SearchContainer extends React.Component {
   }
 
   loadSearchResults() {
-    console.log('search');
-
     const _this = this;
 
     const query = this.state.searchQuery ?
@@ -59,13 +57,46 @@ export default class SearchContainer extends React.Component {
         } :
         undefined;
 
+    const aggs = {
+      'nested_aggs': {
+        'nested': {
+          'path': 'images'
+        },
+        'aggs': {
+          'modality': {
+            'terms': {
+              'field': 'images.modality'
+            },
+            'aggs': {
+              'blabla': {
+                'reverse_nested': {},
+                'aggs': {
+                  'top_tags_per_comment': {
+                    'terms': {
+                      'field': 'images'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          'map_type': {
+            'terms': {
+              'field': 'images.map_type'
+            }
+          }
+        }
+      }
+    };
+
     request.post('/search')
       .send({
         query: query,
 
         size: RESULTS_PER_PAGE,
         from: _this.state.searchFrom,
-        sort: sortOption(_this.state.searchSort)
+        sort: sortOption(_this.state.searchSort),
+        aggs: aggs
       })
       .type('json')
       .accept('json')
@@ -99,7 +130,6 @@ export default class SearchContainer extends React.Component {
   }
 
   handleSortSelect(sortType) {
-    console.log(sortType);
     this.setState({
       searchSort: sortType,
       searchFrom: 0
@@ -133,7 +163,7 @@ export default class SearchContainer extends React.Component {
               : false }
           </div>
           <div className="col-md-3">
-            <RefineSearchResults />
+            <RefineSearchResults results={this.state.searchResults} />
           </div>
         </div>
       </div>
