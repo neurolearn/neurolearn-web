@@ -12,17 +12,32 @@ import RefineSearchResults from './RefineSearchResults';
 
 import styles from './SearchContainer.scss';
 
+
+const RESULTS_PER_PAGE = 5;
+
+
+function totalPages(totalResults, resultsPerPage) {
+  return Math.ceil(totalResults / resultsPerPage);
+}
+
+function activePage(searchFrom, resultsPerPage) {
+  return Math.ceil(searchFrom / resultsPerPage) + 1;
+}
+
 export default class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchResults: null,
-      searchQuery: ''
+      searchQuery: '',
+      searchFrom: 0
     };
   }
 
   loadSearchResults() {
     console.log('search');
+
+    const _this = this;
 
     const query = this.state.searchQuery ?
         {
@@ -37,7 +52,8 @@ export default class SearchContainer extends React.Component {
       .send({
         query: query,
 
-        size: 5,
+        size: RESULTS_PER_PAGE,
+        from: _this.state.searchFrom,
         sort: { 'modify_date': { 'order': 'desc'}}
       })
       .type('json')
@@ -60,6 +76,17 @@ export default class SearchContainer extends React.Component {
     this.debouncedLoadSearchResults();
   }
 
+  handlePageSelect(page) {
+    console.log('changed page to', page);
+    if (page < 1) {
+      return;
+    }
+    this.setState({
+      searchFrom: (page - 1) * RESULTS_PER_PAGE
+    });
+    this.debouncedLoadSearchResults();
+  }
+
   totalHits(searchResults) {
     return searchResults ? searchResults.hits.total : 0;
   }
@@ -77,7 +104,12 @@ export default class SearchContainer extends React.Component {
               </div>
             </div>
             <SearchResults results={this.state.searchResults} />
-            <SearchPagination total/>
+            {this.state.searchResults && this.state.searchResults.hits.total
+              ? <SearchPagination
+                  totalPages={totalPages(this.totalHits(this.state.searchResults), RESULTS_PER_PAGE)}
+                  activePage={activePage(this.state.searchFrom, RESULTS_PER_PAGE)}
+                  onSelect={this.handlePageSelect.bind(this)} />
+              : false }
           </div>
           <div className="col-md-3">
             <RefineSearchResults />

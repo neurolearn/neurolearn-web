@@ -4,17 +4,8 @@ import React from 'react';
 import { Pagination } from 'react-bootstrap';
 
 export default class SearchPagination extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activePage: 1
-    };
-  }
-
   handleSelect(event, selectedEvent) {
-    this.setState({
-      activePage: selectedEvent.eventKey
-    });
+    this.props.onSelect(selectedEvent.eventKey);
   }
 
   render() {
@@ -25,10 +16,10 @@ export default class SearchPagination extends React.Component {
         first={true}
         last={true}
         ellipsis={true}
-        items={20}
+        items={this.props.totalPages}
         maxButtons={5}
-        activePage={this.state.activePage}
-        onSelect={this.handleSelect} />
+        activePage={this.props.activePage}
+        onSelect={this.handleSelect.bind(this)} />
     );
   }
 }

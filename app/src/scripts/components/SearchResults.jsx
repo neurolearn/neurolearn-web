@@ -9,7 +9,7 @@ export default class SearchResults extends React.Component {
 
   render() {
     var { results } = this.props;
-    return results ? (
+    return results && results.hits.total ? (
       <div className={styles.root}>
         {results.hits.hits.map(hit => <SearchResult hit={hit} />)}
       </div>
