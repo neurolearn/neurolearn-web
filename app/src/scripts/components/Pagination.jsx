@@ -8,6 +8,10 @@ export default class SearchPagination extends React.Component {
     this.props.onSelect(selectedEvent.eventKey);
   }
 
+  maxButtons(totalPages) {
+    return totalPages > 5 ? 5 : totalPages;
+  }
+
   render() {
     return (
       <Pagination
@@ -17,7 +21,7 @@ export default class SearchPagination extends React.Component {
         last={true}
         ellipsis={true}
         items={this.props.totalPages}
-        maxButtons={5}
+        maxButtons={this.maxButtons(this.props.totalPages)}
         activePage={this.props.activePage}
         onSelect={this.handleSelect.bind(this)} />
     );

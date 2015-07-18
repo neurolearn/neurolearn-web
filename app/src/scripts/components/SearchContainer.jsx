@@ -81,7 +81,6 @@ export default class SearchContainer extends React.Component {
   }
 
   handlePageSelect(page) {
-    console.log('changed page to', page);
     if (page < 1) {
       return;
     }
@@ -108,7 +107,7 @@ export default class SearchContainer extends React.Component {
               </div>
             </div>
             <SearchResults results={this.state.searchResults} />
-            {this.state.searchResults && this.state.searchResults.hits.total
+            { this.totalHits(this.state.searchResults) > RESULTS_PER_PAGE
               ? <SearchPagination
                   totalPages={totalPages(this.totalHits(this.state.searchResults), RESULTS_PER_PAGE)}
                   activePage={activePage(this.state.searchFrom, RESULTS_PER_PAGE)}
