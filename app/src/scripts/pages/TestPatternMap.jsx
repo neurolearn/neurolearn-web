@@ -1,10 +1,10 @@
 'use strict';
 
 import React from 'react';
-import SelectCollection from './SelectCollection';
-import CollectionInfo from './CollectionInfo';
-import TestPatternMapResults from './TestPatternMapResults';
-import FilePicker from './FilePicker';
+import SelectCollection from '../components/SelectCollection';
+import CollectionInfo from '../components/CollectionInfo';
+import TestPatternMapResults from '../components/TestPatternMapResults';
+import FilePicker from '../components/FilePicker';
 import Loader from 'react-loader';
 import request from 'superagent';
 

@@ -2,10 +2,10 @@
 
 import React from 'react';
 import request from 'superagent';
-import InputDataPanel from './InputDataPanel';
-import TrainingLabelPanel from './TrainingLabelPanel';
-import ModelPreferencesPanel from './ModelPreferencesPanel';
-import ResultPanel from './ResultPanel';
+import InputDataPanel from '../components/InputDataPanel';
+import TrainingLabelPanel from '../components/TrainingLabelPanel';
+import ModelPreferencesPanel from '../components/ModelPreferencesPanel';
+import ResultPanel from '../components/ResultPanel';
 
 export default class TrainModel extends React.Component {
   constructor(props) {

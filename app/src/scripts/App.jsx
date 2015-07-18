@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import TrainModel from './TrainModel';
-import TestPatternMap from './TestPatternMap';
+import TrainModel from './pages/TrainModel';
+import TestPatternMap from './pages/TestPatternMap';
 
 export default class App extends React.Component {
   render () {
