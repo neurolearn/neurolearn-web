@@ -1,23 +1,38 @@
 :local(.root) {
+
   h3 {
     font-size: 18px;
-  }
-
-  img {
-    float: left;
-    padding: 5px 20px;
-  }
-
-  p {
-    marging: 10px;
+    margin-top: 0;
   }
 
   button {
-    margin-top: 54px;
+    margin: 0;
   }
 
-  .number-of-images h3 {
-    font-size: 26px;
-    margin-bottom: 0px;
+  .title {
+    float: left;
+    width: 50%;
+    margin: 5px;
   }
+
+  .images {
+    float: left;
+    width: 27%;
+    margin: 5px;
+  }
+
+  .button {
+    float: left;
+    width: 18%;
+    margin: 5px;
+  }
+}
+
+:local(.root) {
+  border-top: 1px solid rgb(204, 204, 204);
+  padding: 10px;
+}
+
+:local(.root:first-child) {
+  border-top: none;
 }

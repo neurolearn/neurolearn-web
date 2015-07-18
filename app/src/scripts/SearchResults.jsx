@@ -8,12 +8,12 @@ export default class SearchResults extends React.Component {
   render() {
     var { results } = this.props;
     return results ? (
-      <div className="row">
+      <div>
         {results.hits.hits.map(hit => <SearchResult hit={hit} />)}
       </div>
     ) : (
-      <div className="row">
-        <p>No results found</p>
+      <div>
+        <h3>No collections found</h3>
       </div>
     );
   }

@@ -87,6 +87,10 @@ export default class ResultPanel extends React.Component {
       });
   }
 
+  requestResult(jobid) {
+    this.setState({loaded: true, finishedJobId: jobid});
+  }
+
   render() {
     return (
       <div className="panel panel-default">

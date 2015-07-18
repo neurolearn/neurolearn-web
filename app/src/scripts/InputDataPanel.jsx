@@ -1,9 +1,17 @@
 'use strict';
 
 import React from 'react';
+import SelectImagesModal from './SelectImagesModal';
 import { Button } from 'react-bootstrap';
 
 export default class InputDataPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false
+    };
+  }
+
   render() {
     return (
       <div className="panel panel-default">
@@ -15,6 +23,7 @@ export default class InputDataPanel extends React.Component {
 
             <Button bsStyle='primary' onClick={()=>this.setState({showModal: true})}>Select Images</Button>
         </div>
+        <SelectImagesModal show={this.state.showModal} onHide={()=>this.setState({showModal: false})}/>
       </div>
     );
   }

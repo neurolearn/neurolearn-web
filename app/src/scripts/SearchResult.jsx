@@ -18,17 +18,16 @@ export default class SearchResult extends React.Component {
     return (
       <div className={styles.root}>
         <div className="row">
-          <div className="col-md-9">
+          <div className="title">
             <h3>{name}</h3>
-            <div className="row">
-              <img src={thumbnail} />
-              <p>{authors}</p>
-            </div>
+            <p>{authors}</p>
           </div>
-          <div className="col-md-3">
-            <div className="number-of-images"><h3>{number_of_images}</h3></div>
-            <div>images</div>
-            <button className="btn btn-default">Select Images</button>
+          <div className="images">
+            <img src={thumbnail} className="img-responsive" />
+            <div className="number-of-images">{number_of_images} images</div>
+          </div>
+          <div className="button">
+            <button className="btn btn-primary btn-block">Select Images</button>
           </div>
         </div>
       </div>
