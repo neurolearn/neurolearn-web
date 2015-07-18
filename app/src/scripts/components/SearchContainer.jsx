@@ -1,12 +1,13 @@
 'use strict';
 
 import request from 'superagent';
+import { debounce } from 'lodash';
 
 import React from 'react';
 import SearchInput from './SearchInput';
 import SortSearchResults from './SortSearchResults';
 import SearchResults from './SearchResults';
-import Pagination from './Pagination';
+import SearchPagination from './Pagination';
 import RefineSearchResults from './RefineSearchResults';
 
 import styles from './SearchContainer.scss';
@@ -15,13 +16,22 @@ export default class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: null
+      searchResults: null,
+      searchQuery: ''
     };
   }
 
   loadSearchResults() {
+    console.log('search');
     request.post('/search')
       .send({
+        query: {
+          'multi_match': {
+            query: this.state.searchQuery,
+            fields: ['name', 'authors']
+          }
+        },
+        size: 5,
         sort: { 'modify_date': { 'order': 'desc'}}
       })
       .type('json')
@@ -33,7 +43,15 @@ export default class SearchContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.debouncedLoadSearchResults = debounce(this.loadSearchResults, 700);
     this.loadSearchResults();
+  }
+
+  handleSearchInputChange(newValue) {
+    this.setState({
+      searchQuery: newValue
+    });
+    this.debouncedLoadSearchResults();
   }
 
   render() {
@@ -41,7 +59,7 @@ export default class SearchContainer extends React.Component {
       <div className={styles.root}>
         <div className="row">
           <div className="col-md-9">
-            <SearchInput />
+            <SearchInput value={this.state.searchQuery} onChange={this.handleSearchInputChange.bind(this)} />
             <div className="search-meta clearfix">
               <div className="pull-left HitsCount">Found 0 collections</div>
               <div className="pull-right">
@@ -49,7 +67,7 @@ export default class SearchContainer extends React.Component {
               </div>
             </div>
             <SearchResults results={this.state.searchResults} />
-            <Pagination />
+            <SearchPagination />
           </div>
           <div className="col-md-3">
             <RefineSearchResults />
