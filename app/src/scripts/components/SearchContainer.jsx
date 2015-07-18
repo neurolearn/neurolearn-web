@@ -42,8 +42,11 @@ export default class SearchContainer extends React.Component {
     const query = this.state.searchQuery ?
         {
           'multi_match': {
-            query: this.state.searchQuery,
-            fields: ['name', 'authors']
+            'type': 'phrase_prefix',
+            'query': this.state.searchQuery,
+            'max_expansions': 50,
+            'slop': 10,
+            'fields': ['name', 'authors']
           }
         } :
         undefined;
@@ -71,7 +74,8 @@ export default class SearchContainer extends React.Component {
 
   handleSearchInputChange(newValue) {
     this.setState({
-      searchQuery: newValue
+      searchQuery: newValue,
+      searchFrom: 0
     });
     this.debouncedLoadSearchResults();
   }
