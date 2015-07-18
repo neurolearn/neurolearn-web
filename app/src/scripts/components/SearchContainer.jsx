@@ -9,11 +9,14 @@ import SortSearchResults from './SortSearchResults';
 import SearchResults from './SearchResults';
 import SearchPagination from './Pagination';
 import RefineSearchResults from './RefineSearchResults';
+import SearchSortTypes from '../constants/SearchSortTypes';
+
 
 import styles from './SearchContainer.scss';
 
 
 const RESULTS_PER_PAGE = 5;
+const DEFAULT_SEARCH_SORT = 'RECENTLY_UPDATED';
 
 
 function totalPages(totalResults, resultsPerPage) {
@@ -24,13 +27,18 @@ function activePage(searchFrom, resultsPerPage) {
   return Math.ceil(searchFrom / resultsPerPage) + 1;
 }
 
+function sortOption(sortType) {
+  return SearchSortTypes[sortType].option;
+}
+
 export default class SearchContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchResults: null,
       searchQuery: '',
-      searchFrom: 0
+      searchFrom: 0,
+      searchSort: DEFAULT_SEARCH_SORT
     };
   }
 
@@ -57,7 +65,7 @@ export default class SearchContainer extends React.Component {
 
         size: RESULTS_PER_PAGE,
         from: _this.state.searchFrom,
-        sort: { 'modify_date': { 'order': 'desc'}}
+        sort: sortOption(_this.state.searchSort)
       })
       .type('json')
       .accept('json')
@@ -90,6 +98,15 @@ export default class SearchContainer extends React.Component {
     this.debouncedLoadSearchResults();
   }
 
+  handleSortSelect(sortType) {
+    console.log(sortType);
+    this.setState({
+      searchSort: sortType,
+      searchFrom: 0
+    });
+    this.debouncedLoadSearchResults();
+  }
+
   totalHits(searchResults) {
     return searchResults ? searchResults.hits.total : 0;
   }
@@ -103,7 +120,8 @@ export default class SearchContainer extends React.Component {
             <div className="search-meta clearfix">
               <div className="pull-left HitsCount">Found {this.totalHits(this.state.searchResults)} collections</div>
               <div className="pull-right">
-                <SortSearchResults/>
+                <SortSearchResults sortType={this.state.searchSort}
+                  onSelect={this.handleSortSelect.bind(this)} />
               </div>
             </div>
             <SearchResults results={this.state.searchResults} />
