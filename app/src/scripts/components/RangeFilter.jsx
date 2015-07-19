@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Input, Row, Col } from 'react-bootstrap';
+import { Input } from 'react-bootstrap';
 
 import styles from './RangeFilter.scss';
 
-export default class RefineSearchResults extends React.Component {
+export default class RangeFilter extends React.Component {
   static propTypes = {
     label: React.PropTypes.string,
     valuesFrom: React.PropTypes.number,
@@ -16,10 +16,6 @@ export default class RefineSearchResults extends React.Component {
       this.refs.inputFrom.getDOMNode().value,
       this.refs.inputTo.getDOMNode().value
     );
-  }
-
-  renderBuckets(buckets) {
-    return buckets.map(bucket => <div>{bucket.key}: {bucket.doc_count}</div>);
   }
 
   render() {

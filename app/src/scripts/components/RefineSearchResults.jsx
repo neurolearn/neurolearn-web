@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import RangeFilter from './RangeFilter';
+import TermsFilter from './TermsFilter';
 
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
@@ -17,6 +18,10 @@ export default class RefineSearchResults extends React.Component {
       ? this.props.results.aggregations.number_of_images_stats :
       {max: 0, min: 0};
 
+    const handedness = this.props.results
+      ? this.props.results.aggregations.handedness.buckets :
+      []
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
@@ -29,11 +34,13 @@ export default class RefineSearchResults extends React.Component {
             valuesTo={imagesStats.max}
             onChange={this.props.onChange} />
 
-          <h5>Handedness</h5>
-          { this.props.results
-              ? this.renderBuckets(this.props.results.aggregations.handedness.buckets)
-              : false
+          { handedness
+            ? <TermsFilter
+              label="Handedness"
+              terms={handedness} />
+            : false
           }
+
           <h5>Map Type</h5>
           { this.props.results
               ? this.renderBuckets(this.props.results.aggregations.nested_aggs.map_type.buckets)
