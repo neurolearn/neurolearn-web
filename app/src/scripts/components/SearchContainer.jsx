@@ -58,6 +58,16 @@ export default class SearchContainer extends React.Component {
         undefined;
 
     const aggs = {
+      'number_of_images_stats': {
+        'stats': {
+          'field': 'number_of_images'
+        }
+      },
+      'handedness': {
+        'terms': {
+            'field': 'handedness'
+        }
+      },
       'nested_aggs': {
         'nested': {
           'path': 'images'
@@ -66,18 +76,6 @@ export default class SearchContainer extends React.Component {
           'modality': {
             'terms': {
               'field': 'images.modality'
-            },
-            'aggs': {
-              'blabla': {
-                'reverse_nested': {},
-                'aggs': {
-                  'top_tags_per_comment': {
-                    'terms': {
-                      'field': 'images'
-                    }
-                  }
-                }
-              }
             }
           },
           'map_type': {
