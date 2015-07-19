@@ -35,6 +35,7 @@ export default class SearchContainer extends React.Component {
     this.state = {
       searchResults: null,
       searchQuery: '',
+      searchFilter: null,
       searchFrom: 0,
       searchSort: DEFAULT_SEARCH_SORT
     };
@@ -43,17 +44,21 @@ export default class SearchContainer extends React.Component {
   loadSearchResults() {
     const _this = this;
 
-    const query = this.state.searchQuery ?
-        {
-          'multi_match': {
-            'type': 'phrase_prefix',
-            'query': this.state.searchQuery,
-            'max_expansions': 50,
-            'slop': 10,
-            'fields': ['name', 'authors']
-          }
-        } :
-        undefined;
+    const query = this.state.searchQuery
+      ? {
+        'multi_match': {
+          'type': 'phrase_prefix',
+          'query': this.state.searchQuery,
+          'max_expansions': 50,
+          'slop': 10,
+          'fields': ['name', 'authors']
+        }
+      }
+      : undefined;
+
+    const filter = this.state.searchFilter
+      ? this.state.searchFilter
+      : undefined;
 
     const aggs = {
       'number_of_images_stats': {
@@ -87,8 +92,12 @@ export default class SearchContainer extends React.Component {
 
     request.post('/search')
       .send({
-        query: query,
-
+        query: {
+          filtered: {
+            query: query,
+            filter: filter
+          }
+        },
         size: RESULTS_PER_PAGE,
         from: _this.state.searchFrom,
         sort: sortOption(_this.state.searchSort),
@@ -133,6 +142,26 @@ export default class SearchContainer extends React.Component {
     this.debouncedLoadSearchResults();
   }
 
+  handleFilterChange(rangeFrom, rangeTo) {
+    console.log('got it', rangeFrom, rangeTo);
+    const toState = function() {
+      return {
+        'range': {
+          'number_of_images': {
+            'gte': parseInt(rangeFrom),
+            'lte': parseInt(rangeTo)
+          }
+        }
+      };
+    };
+
+    this.setState({
+      searchFilter: toState()
+    });
+
+    this.debouncedLoadSearchResults();
+  }
+
   totalHits(searchResults) {
     return searchResults ? searchResults.hits.total : 0;
   }
@@ -151,6 +180,7 @@ export default class SearchContainer extends React.Component {
               </div>
             </div>
             <SearchResults results={this.state.searchResults} />
+
             { this.totalHits(this.state.searchResults) > RESULTS_PER_PAGE
               ? <SearchPagination
                   totalPages={totalPages(this.totalHits(this.state.searchResults), RESULTS_PER_PAGE)}
@@ -159,7 +189,9 @@ export default class SearchContainer extends React.Component {
               : false }
           </div>
           <div className="col-md-3">
-            <RefineSearchResults results={this.state.searchResults} />
+            <RefineSearchResults
+              results={this.state.searchResults}
+              onChange={this.handleFilterChange.bind(this)} />
           </div>
         </div>
       </div>

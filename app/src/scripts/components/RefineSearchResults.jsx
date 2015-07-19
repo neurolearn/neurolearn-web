@@ -3,7 +3,8 @@ import RangeFilter from './RangeFilter';
 
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
-    results: PropTypes.object.isRequired
+    results: PropTypes.object.isRequired,
+    onChange: PropTypes.func
   }
 
   renderBuckets(buckets) {
@@ -12,14 +13,21 @@ export default class RefineSearchResults extends React.Component {
 
   render() {
 
+    const imagesStats = this.props.results
+      ? this.props.results.aggregations.number_of_images_stats :
+      {max: 0, min: 0};
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
           <h3 className="panel-title">Refine</h3>
         </div>
         <div className="panel-body">
-          <h5>Number of images</h5>
-          <RangeFilter />
+          <RangeFilter
+            label="Number of images"
+            valuesFrom={imagesStats.min}
+            valuesTo={imagesStats.max}
+            onChange={this.props.onChange} />
 
           <h5>Handedness</h5>
           { this.props.results
