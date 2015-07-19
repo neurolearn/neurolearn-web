@@ -1,6 +1,9 @@
+import isEmpty from 'lodash/lang/isEmpty';
+
 import React, { PropTypes } from 'react';
 import RangeFilter from './RangeFilter';
 import TermsFilter from './TermsFilter';
+
 
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
@@ -13,14 +16,23 @@ export default class RefineSearchResults extends React.Component {
   }
 
   render() {
+    const { results } = this.props;
 
-    const imagesStats = this.props.results
-      ? this.props.results.aggregations.number_of_images_stats :
+    const imagesStats = results
+      ? results.aggregations.number_of_images_stats :
       {max: 0, min: 0};
 
-    const handedness = this.props.results
-      ? this.props.results.aggregations.handedness.buckets :
-      []
+    const handedness = results
+      ? results.aggregations.handedness.buckets :
+      [];
+
+    const mapType = results
+      ? results.aggregations.nested_aggs.map_type.buckets :
+      [];
+
+    const modality = results
+      ? results.aggregations.nested_aggs.modality.buckets :
+      [];
 
     return (
       <div className="panel panel-default">
@@ -34,22 +46,25 @@ export default class RefineSearchResults extends React.Component {
             valuesTo={imagesStats.max}
             onChange={this.props.onChange} />
 
-          { handedness
+          { !isEmpty(handedness)
             ? <TermsFilter
               label="Handedness"
               terms={handedness} />
             : false
           }
 
-          <h5>Map Type</h5>
-          { this.props.results
-              ? this.renderBuckets(this.props.results.aggregations.nested_aggs.map_type.buckets)
-              : false
+          { !isEmpty(mapType)
+            ? <TermsFilter
+              label="Map Type"
+              terms={mapType} />
+            : false
           }
-          <h5>Modality</h5>
-          { this.props.results
-              ? this.renderBuckets(this.props.results.aggregations.nested_aggs.modality.buckets)
-              : false
+
+          { !isEmpty(modality)
+            ? <TermsFilter
+              label="Modality"
+              terms={modality} />
+            : false
           }
         </div>
       </div>

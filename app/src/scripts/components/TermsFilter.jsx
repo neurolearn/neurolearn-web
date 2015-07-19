@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
 
+import styles from './TermsFilter.scss';
+
 export default class TermsFilter extends React.Component {
   static propTypes = {
     label: PropTypes.string,
@@ -25,7 +27,7 @@ export default class TermsFilter extends React.Component {
     const { label, terms } = this.props;
 
     return (
-      <div className="form-group">
+      <div className={styles.root}>
         <label className="control-label">{label}</label>
         { this.renderCheckboxes(terms) }
       </div>
