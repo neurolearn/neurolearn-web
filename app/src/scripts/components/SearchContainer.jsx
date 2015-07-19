@@ -1,5 +1,3 @@
-'use strict';
-
 import request from 'superagent';
 import debounce from 'lodash/function/debounce';
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import SelectCollection from '../components/SelectCollection';
 import CollectionInfo from '../components/CollectionInfo';

@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import TrainModel from './pages/TrainModel';
 import TestPatternMap from './pages/TestPatternMap';

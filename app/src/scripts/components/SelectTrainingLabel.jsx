@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import Papa from 'papaparse';
 import FilePicker from './FilePicker';

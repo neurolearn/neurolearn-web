@@ -1,5 +1,3 @@
-'use strict';
-
 require('console-shim');
 require('promise.prototype.finally');
 
