@@ -7,7 +7,8 @@ export default class TermsFilter extends React.Component {
   static propTypes = {
     label: PropTypes.string,
     terms: PropTypes.array,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool
   }
 
   handleChange() {
@@ -17,19 +18,19 @@ export default class TermsFilter extends React.Component {
     );
   }
 
-  renderCheckboxes(terms) {
+  renderCheckboxes(terms, disabled) {
     return terms.map(term =>
-      <Input type='checkbox' label={`${term.key} (${term.doc_count})`} key={term.key} />
+      <Input type='checkbox' disabled={disabled} label={`${term.key} (${term.doc_count})`} key={term.key} />
     );
   }
 
   render() {
-    const { label, terms } = this.props;
+    const { label, terms, disabled } = this.props;
 
     return (
       <div className={styles.root}>
         <label className="control-label">{label}</label>
-        { this.renderCheckboxes(terms) }
+        { this.renderCheckboxes(terms, disabled) }
       </div>
     );
   }

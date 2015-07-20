@@ -36,9 +36,6 @@ export default class RefineSearchResults extends React.Component {
 
     return (
       <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title">Refine</h3>
-        </div>
         <div className="panel-body">
           <RangeFilter
             label="Number of images"
@@ -56,6 +53,7 @@ export default class RefineSearchResults extends React.Component {
           { !isEmpty(mapType)
             ? <TermsFilter
               label="Map Type"
+              disabled={true}
               terms={mapType} />
             : false
           }
@@ -63,6 +61,7 @@ export default class RefineSearchResults extends React.Component {
           { !isEmpty(modality)
             ? <TermsFilter
               label="Modality"
+              disabled={true}
               terms={modality} />
             : false
           }
