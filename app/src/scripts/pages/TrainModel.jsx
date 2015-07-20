@@ -30,7 +30,7 @@ export default class TrainModel extends React.Component {
         </ul>
 
         <h1 className="page-header">Input Data</h1>
-        <p className="lead">Search NeuroVault's collections and select images to create a training dataset.</p>
+        <p className="lead">Search NeuroVault collections and select images to create a training dataset.</p>
 
         <div className="row">
           <div className="col-md-9">
