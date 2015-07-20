@@ -1,5 +1,5 @@
 import React from 'react';
-import Step from './Step.jsx';
+import Step from './Step';
 
 export default class Steps extends React.Component {
   static propTypes = {

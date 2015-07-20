@@ -1,5 +1,5 @@
 import React from 'react';
-import Steps from '../components/Steps.jsx';
+import Steps from '../components/Steps';
 
 export default class TrainModel extends React.Component {
   static propTypes = {
