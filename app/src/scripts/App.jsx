@@ -1,18 +1,14 @@
 import React from 'react';
-import TrainModel from './pages/TrainModel';
-import TestPatternMap from './pages/TestPatternMap';
 
 export default class App extends React.Component {
-  render () {
-    var Child;
-    switch (this.props.route) {
-      case 'test-pattern-map': Child = TestPatternMap; break;
-      default: Child = TrainModel;
-    }
+  static propTypes = {
+    children: React.PropTypes.object
+  };
 
+  render () {
     return (
       <div className="App">
-        <Child/>
+        {this.props.children}
       </div>
     );
   }

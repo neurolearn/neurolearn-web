@@ -1,11 +1,11 @@
 import React from 'react';
-import InputDataPanel from '../components/InputDataPanel';
-import TrainingLabelPanel from '../components/TrainingLabelPanel';
-import ModelPreferencesPanel from '../components/ModelPreferencesPanel';
-import ResultPanel from '../components/ResultPanel';
-import SearchContainer from '../components/SearchContainer';
+import { Link } from 'react-router';
 
 export default class TrainModel extends React.Component {
+  static propTypes = {
+    children: React.PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,37 +20,15 @@ export default class TrainModel extends React.Component {
 
   render() {
     return (
-      <div className = "TrainModel">
-
+      <div>
         <ul className="nav nav-wizard">
-          <li className="active"><a href="#">Input Data</a></li>
-          <li><a href="#">Training Label</a></li>
-          <li><a href="#">Model Preferences</a></li>
-          <li><a href="#">Review</a></li>
+          <li className="active"><Link to="/train-model/input-data">1. Input Data</Link></li>
+          <li><Link to="/train-model/training-label">2. Training Label</Link></li>
+          <li><a href="#">3. Model Preferences</a></li>
+          <li><a href="#">4. Review</a></li>
         </ul>
 
-        <h1 className="page-header">Input Data</h1>
-        <p className="lead">Search NeuroVault collections and select images to create a training dataset.</p>
-
-        <div className="row">
-          <div className="col-md-9">
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <SearchContainer />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-3">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <h3 className="panel-title">Selected Images</h3>
-              </div>
-              <div className="panel-body">
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.props.children}
       </div>
     );
   }

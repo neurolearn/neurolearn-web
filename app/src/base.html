@@ -6,26 +6,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
     <title>{% block extrahead %}Neurolearn{% endblock %}</title>
-    <script>
-        function activateNav(element) {
-          var children = element.parentElement.parentElement.children,
-              i;
-
-          for (i = 0; i < children.length; i++) {
-            children[i].className = '';
-          }
-          element.parentElement.className = 'active';
-        }
-        document.addEventListener('DOMContentLoaded', function(event) {
-            var route = window.location.hash.substr(1),
-                element;
-            switch (route) {
-              case 'test-pattern-map': element = document.getElementById('navLinkTestPatternMap'); break;
-              default: element = document.getElementById('navLinkHome');
-            }
-            activateNav(element);
-        });
-    </script>
   </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
@@ -41,8 +21,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a id="navLinkHome" href="#" onclick="activateNav(this);">Train Model</a></li>
-            <li><a id="navLinkTestPatternMap" href="#test-pattern-map" onclick="activateNav(this);">Test Pattern Map</a></li>
+            <li><a id="navLinkHome" href="#">Train Model</a></li>
+            <li><a id="navLinkTestPatternMap" href="#/test-pattern-map">Test Pattern Map</a></li>
           </ul>
       </div>
     </nav>

@@ -4,15 +4,25 @@ require('promise.prototype.finally');
 require('index.css');
 require('handsontable.full.css');
 
-var React = require('react');
-var App = require('./App');
+import React from 'react';
+import App from './App';
+import TrainModel from './pages/TrainModel';
+import InputData from './components/InputData';
+import TrainingLabel from './components/TrainingLabel';
+import TestPatternMap from './pages/TestPatternMap';
+import { Router, Route, Redirect } from 'react-router';
+import { history } from 'react-router/lib/HashHistory';
 
-function render () {
-  var route = window.location.hash.substr(1);
-  React.render(<App route={route} />,
-    document.getElementById('root'));
 
-}
-
-window.addEventListener('hashchange', render);
-render();
+React.render((
+  <Router history={history}>
+    <Route component={App}>
+      <Route path="train-model" component={TrainModel}>
+        <Route path="input-data" component={InputData}/>
+        <Route path="training-label" component={TrainingLabel}/>
+      </Route>
+      <Route path="test-pattern-map" component={TestPatternMap}/>
+    </Route>
+    <Redirect from="/" to="train-model/input-data" />
+  </Router>
+), document.getElementById('root'));
