@@ -170,6 +170,12 @@ export default class SearchContainer extends React.Component {
     return (
       <div className={styles.root}>
         <div className="row">
+          <div className="col-md-3">
+            <RefineSearchResults
+              results={this.state.searchResults}
+              onChange={this.handleFilterChange.bind(this)} />
+          </div>
+
           <div className="col-md-9">
             <SearchInput value={this.state.searchQuery} onChange={this.handleSearchInputChange.bind(this)} />
             <div className="search-meta clearfix">
@@ -187,11 +193,6 @@ export default class SearchContainer extends React.Component {
                   activePage={activePage(this.state.searchFrom, RESULTS_PER_PAGE)}
                   onSelect={this.handlePageSelect.bind(this)} />
               : false }
-          </div>
-          <div className="col-md-3">
-            <RefineSearchResults
-              results={this.state.searchResults}
-              onChange={this.handleFilterChange.bind(this)} />
           </div>
         </div>
       </div>
