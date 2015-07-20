@@ -1,6 +1,8 @@
 import React from 'react';
 import SearchContainer from '../components/SearchContainer';
 
+import styles from './InputData.scss';
+
 export default class InputData extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +13,7 @@ export default class InputData extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.root}>
         <h1 className="page-header">Input Data</h1>
         <p className="lead">Search NeuroVault collections and select images to create a training dataset.</p>
 
@@ -29,7 +31,8 @@ export default class InputData extends React.Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Selected Images</h3>
               </div>
-              <div className="panel-body">
+              <div className="panel-body empty-dataset">
+                <p>Training dataset is empty.</p>
               </div>
             </div>
           </div>
