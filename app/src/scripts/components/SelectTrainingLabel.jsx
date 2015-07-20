@@ -4,6 +4,10 @@ import FilePicker from './FilePicker';
 import DataGrid from './DataGrid';
 
 export default class SelectTrainingLabel extends React.Component {
+  static propTypes = {
+    onSelectTarget: React.PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.state = {

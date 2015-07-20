@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import Steps from '../components/Steps.jsx';
 
 export default class TrainModel extends React.Component {
   static propTypes = {
@@ -21,12 +21,7 @@ export default class TrainModel extends React.Component {
   render() {
     return (
       <div>
-        <ul className="nav nav-wizard">
-          <li className="active"><Link to="/train-model/input-data">1. Input Data</Link></li>
-          <li><Link to="/train-model/training-label">2. Training Label</Link></li>
-          <li><a href="#">3. Model Preferences</a></li>
-          <li><a href="#">4. Review</a></li>
-        </ul>
+        <Steps />
 
         {this.props.children}
       </div>
