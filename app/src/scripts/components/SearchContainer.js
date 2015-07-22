@@ -142,14 +142,14 @@ export default class SearchContainer extends React.Component {
     this.debouncedLoadSearchResults();
   }
 
-  handleFilterChange(rangeFrom, rangeTo) {
-    console.log('got it', rangeFrom, rangeTo);
+  handleFilterChange(value) {
+    console.log('got it', value);
     const toState = function() {
       return {
         'range': {
           'number_of_images': {
-            'gte': parseInt(rangeFrom),
-            'lte': parseInt(rangeTo)
+            'gte': parseInt(value[0]),
+            'lte': parseInt(value[1])
           }
         }
       };

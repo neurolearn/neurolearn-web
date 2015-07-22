@@ -1,7 +1,7 @@
 :local(.from) {
   width: 38%;
   float: left;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 :local(.sep) {
@@ -12,17 +12,23 @@
 :local(.to) {
   width: 38%;
   float: left;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 :local(.root) {
   margin-bottom: 2px;
 
+  .stats {
+    font-size: 10px;
+    margin-top: 5px;
+  }
+
   .slider {
     width: 100%;
     max-width: 500px;
-    height: 50px;
+    height: 38px;
   }
+
   .handle {
     font-size: 0.9em;
     text-align: center;
@@ -35,7 +41,6 @@
   }
   .bar {
     position: relative;
-    position: absolute;
     cursor: pointer;
     background-color: #f7f7f7;
     background-image: -moz-linear-gradient(top, #f0f0f0, #f9f9f9);
@@ -52,12 +57,15 @@
   .bar.bar-1 {
     background: #428bca;
   }
+
+  $slider-handle: 4px;
+
   .slider .bar {
-    top: 20px;
+    top: $slider-handle + 7px;
     height: 5px;
   }
   .slider .handle {
-    top: 13px;
+    top: $slider-handle;
     width: 5px;
     height: 20px;
     border-radius: 2px;

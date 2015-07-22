@@ -3,27 +3,42 @@ import ReactSlider from 'react-slider';
 
 import styles from './RangeFilter.scss';
 
+const RANGE_MIN = 0;
+const RANGE_MAX = 100;
+
 export default class RangeFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null
+    };
+  }
+
   static propTypes = {
     label: React.PropTypes.string,
-    valuesFrom: React.PropTypes.number,
-    valuesTo: React.PropTypes.number,
+    value: React.PropTypes.arrayOf(React.PropTypes.number),
     onChange: PropTypes.func
   }
 
-  handleChange() {
-    this.props.onChange(
-      this.refs.inputFrom.getDOMNode().value,
-      this.refs.inputTo.getDOMNode().value
-    );
+  triggerOnChange() {
+    this.props.onChange(this.state.value);
+  }
+
+  inputOnChange() {
+    this.setState({
+      value: [
+        this.refs.inputFrom.getDOMNode().value,
+        this.refs.inputTo.getDOMNode().value
+      ]
+    }, this.triggerOnChange);
   }
 
   sliderOnChange(e) {
-    console.log('slider onChange', e);
+    this.setState({value: e});
   }
 
-  sliderOnAfterChange(e) {
-    console.log('slider onAfterChange', e);
+  sliderOnAfterChange() {
+    this.triggerOnChange();
   }
 
   render() {
@@ -36,9 +51,9 @@ export default class RangeFilter extends React.Component {
               <input
                   type='text'
                   className='form-control'
-                  placeholder={this.props.valuesFrom}
+                  value={this.state.value ? this.state.value[0] : ''}
                   ref='inputFrom'
-                  onChange={this.handleChange.bind(this)} />
+                  onChange={this.inputOnChange.bind(this)} />
             </div>
             <span className={styles.sep}>—</span>
             <div className={styles.to}>
@@ -46,13 +61,20 @@ export default class RangeFilter extends React.Component {
                   type='text'
                   className='form-control'
                   ref='inputTo'
-                  placeholder={this.props.valuesTo}
-                  onChange={this.handleChange.bind(this)} />
+                  value={this.state.value ? this.state.value[1] : ''}
+                  onChange={this.inputOnChange.bind(this)} />
             </div>
         </div>
-        <ReactSlider defaultValue={[0, 100]}
+        <div className="stats">
+          <span className="min">{ RANGE_MIN }</span>
+          <span className="max pull-right">{ RANGE_MAX }</span>
+        </div>
+        <ReactSlider
+          min={RANGE_MIN}
+          max={RANGE_MAX}
+          value={this.state.value ? this.state.value : [RANGE_MIN, RANGE_MAX]}
           orientation="horizontal"
-          withBars={true}
+          withBars
           onChange={this.sliderOnChange.bind(this)}
           onAfterChange={this.sliderOnAfterChange.bind(this)}
           />
