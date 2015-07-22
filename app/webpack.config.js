@@ -35,9 +35,9 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loader: 'babel', include: path.join(__dirname, 'src/scripts'), exclude: /node_modules|vendor_modules/ },
+      { test: /\.js$/, loader: 'babel', include: path.join(__dirname, 'src/scripts'), exclude: /node_modules|vendor_modules/ },
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
-      { test: /\.scss$/, loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!sass' },
+      { test: /\.scss$/, loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
     ],
@@ -48,5 +48,8 @@ module.exports = {
       'ruleJS.js',
       'handsontable.formula.js'
     ].map(vendorRegExpPath)
-  }
+  },
+  postcss: [
+    require('autoprefixer-core')
+  ]
 };
