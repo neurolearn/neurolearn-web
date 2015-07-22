@@ -62,6 +62,7 @@
     "react-bootstrap": "^0.23.7",
     "react-loader": "^1.2.0",
     "react-router": "^1.0.0-beta3",
+    "react-slider": "^0.5.1",
     "superagent": "^1.2.0",
     "underscore.string": "^3.1.1"
   },

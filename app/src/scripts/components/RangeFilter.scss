@@ -4,7 +4,7 @@
   margin-bottom: 15px;
 }
 
-:local(.sep){
+:local(.sep) {
   float: left;
   padding: 6px;
 }
@@ -13,4 +13,51 @@
   width: 38%;
   float: left;
   margin-bottom: 15px;
+}
+
+:local(.root) {
+  .slider {
+    width: 100%;
+    max-width: 500px;
+    height: 50px;
+  }
+  .handle {
+    font-size: 0.9em;
+    text-align: center;
+    background-color: rgb(94, 94, 94);
+    color: white;
+    cursor: pointer;
+  }
+  .handle.active {
+    background-color: grey;
+  }
+  .bar {
+    position: relative;
+    position: absolute;
+    cursor: pointer;
+    background-color: #f7f7f7;
+    background-image: -moz-linear-gradient(top, #f0f0f0, #f9f9f9);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f0f0f0), to(#f9f9f9));
+    background-image: -webkit-linear-gradient(top, #f0f0f0, #f9f9f9);
+    background-image: -o-linear-gradient(top, #f0f0f0, #f9f9f9);
+    background-image: linear-gradient(to bottom, #f0f0f0, #f9f9f9);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff0f0f0', endColorstr='#fff9f9f9', GradientType=0);
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  .bar.bar-1 {
+    background: #428bca;
+  }
+  .slider .bar {
+    top: 20px;
+    height: 5px;
+  }
+  .slider .handle {
+    top: 13px;
+    width: 5px;
+    height: 20px;
+    border-radius: 2px;
+  }
 }

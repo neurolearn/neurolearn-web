@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Input } from 'react-bootstrap';
+import ReactSlider from 'react-slider';
 
 import styles from './RangeFilter.scss';
 
@@ -20,25 +20,32 @@ export default class RangeFilter extends React.Component {
 
   render() {
     return (
-      <div className="clearfix">
-          <label>{this.props.label}</label>
-          <div className={styles.from}>
-            <input
-                type='text'
-                className='form-control'
-                placeholder={this.props.valuesFrom}
-                ref='inputFrom'
-                onChange={this.handleChange.bind(this)} />
-          </div>
-          <span className={styles.sep}>—</span>
-          <div className={styles.to}>
-            <input
-                type='text'
-                className='form-control'
-                ref='inputTo'
-                placeholder={this.props.valuesTo}
-                onChange={this.handleChange.bind(this)} />
-          </div>
+
+      <div className={styles.root}>
+        <label>{this.props.label}</label>
+
+        <div className="clearfix">
+            <div className={styles.from}>
+              <input
+                  type='text'
+                  className='form-control'
+                  placeholder={this.props.valuesFrom}
+                  ref='inputFrom'
+                  onChange={this.handleChange.bind(this)} />
+            </div>
+            <span className={styles.sep}>—</span>
+            <div className={styles.to}>
+              <input
+                  type='text'
+                  className='form-control'
+                  ref='inputTo'
+                  placeholder={this.props.valuesTo}
+                  onChange={this.handleChange.bind(this)} />
+            </div>
+        </div>
+        <ReactSlider defaultValue={[0, 100]}
+          orientation="horizontal"
+          withBars={true} />
       </div>
     );
   }
