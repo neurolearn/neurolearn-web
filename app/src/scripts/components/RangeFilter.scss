@@ -1,34 +1,36 @@
-:local(.from) {
+.from {
   width: 38%;
   float: left;
   margin-bottom: 6px;
 }
 
-:local(.sep) {
+.sep {
   float: left;
   padding: 6px;
 }
 
-:local(.to) {
+.to {
   width: 38%;
   float: left;
   margin-bottom: 6px;
 }
 
-:local(.root) {
+.stats {
+  composes: small-text from "shared/typography.css";
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.root {
   margin-bottom: 2px;
+}
 
-  .stats {
-    font-size: 10px;
-    margin-top: 5px;
-  }
-
+.root :global {
   .slider {
     width: 100%;
     max-width: 500px;
     height: 38px;
   }
-
   .handle {
     font-size: 0.9em;
     text-align: center;
@@ -57,9 +59,7 @@
   .bar.bar-1 {
     background: #428bca;
   }
-
   $slider-handle: 4px;
-
   .slider .bar {
     top: $slider-handle + 7px;
     height: 5px;

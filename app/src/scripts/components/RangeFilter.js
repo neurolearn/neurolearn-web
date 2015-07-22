@@ -65,7 +65,7 @@ export default class RangeFilter extends React.Component {
                   onChange={this.inputOnChange.bind(this)} />
             </div>
         </div>
-        <div className="stats">
+        <div className={ styles.stats }>
           <span className="min">{ RANGE_MIN }</span>
           <span className="max pull-right">{ RANGE_MAX }</span>
         </div>

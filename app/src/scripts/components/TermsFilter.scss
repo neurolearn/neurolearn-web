@@ -1,12 +1,12 @@
-:local(.root) {
+.root {
   margin-bottom: 10px;
 
-  .checkbox {
+  :global .checkbox {
     margin-bottom: 0;
     margin-top: 0;
   }
 
-  .form-group {
+  :global .form-group {
     margin-bottom: 2px;
   }
 }

@@ -1,5 +1,5 @@
-:local(.root) {
-    .HitsCount {
+.root {
+    :global .HitsCount {
         color: gray;
     }
 }

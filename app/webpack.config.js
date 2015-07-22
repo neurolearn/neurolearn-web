@@ -48,7 +48,7 @@ module.exports = {
       { test: /\.jsx?$/, loader: 'babel', include: path.join(__dirname, 'src/scripts'), exclude: /node_modules|vendor_modules/ },
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
       // { test: /vendor_modules\/formula.js$/, loader: 'imports?this=>window' },
-      { test: /\.scss$/, loader: 'style-loader!css-loader?localIdentName=[name]__[local]___[hash:base64:5]!sass' },
+      { test: /\.scss$/, loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!sass' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
     ],

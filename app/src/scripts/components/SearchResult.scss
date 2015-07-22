@@ -1,4 +1,4 @@
-:local(.root) {
+.root :global {
 
   h3 {
     font-size: 18px;
@@ -34,11 +34,11 @@
   }
 }
 
-:local(.root) {
+.root {
   border-top: 1px solid rgb(204, 204, 204);
   padding: 10px;
 }
 
-:local(.root:first-child) {
+.root:first-child {
   border-top: none;
 }
