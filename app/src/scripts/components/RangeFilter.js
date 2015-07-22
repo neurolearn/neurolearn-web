@@ -18,9 +18,16 @@ export default class RangeFilter extends React.Component {
     );
   }
 
+  sliderOnChange(e) {
+    console.log('slider onChange', e);
+  }
+
+  sliderOnAfterChange(e) {
+    console.log('slider onAfterChange', e);
+  }
+
   render() {
     return (
-
       <div className={styles.root}>
         <label>{this.props.label}</label>
 
@@ -45,7 +52,10 @@ export default class RangeFilter extends React.Component {
         </div>
         <ReactSlider defaultValue={[0, 100]}
           orientation="horizontal"
-          withBars={true} />
+          withBars={true}
+          onChange={this.sliderOnChange.bind(this)}
+          onAfterChange={this.sliderOnAfterChange.bind(this)}
+          />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 :local(.from) {
   width: 38%;
   float: left;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 :local(.sep) {
@@ -12,10 +12,12 @@
 :local(.to) {
   width: 38%;
   float: left;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 :local(.root) {
+  margin-bottom: 2px;
+
   .slider {
     width: 100%;
     max-width: 500px;
