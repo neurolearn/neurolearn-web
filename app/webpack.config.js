@@ -12,24 +12,15 @@ function vendorRegExpPath(filename) {
 }
 
 module.exports = {
-  // devtool: 'eval',
   entry: [
-    // 'webpack-dev-server/client?http://localhost:3000',
-    // 'webpack/hot/only-dev-server',
     './src/scripts/index'
   ],
   output: {
-    // path: path.join(__dirname, 'build'),
-    // filename: 'bundle.js',
-    // publicPath: '/scripts/'
     library: 'require',
     libraryTarget: 'this'
   },
   externals: {},
-  plugins: [
-    // new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NoErrorsPlugin()
-  ],
+  plugins: [],
   resolve: {
     modulesDirectories: [
       'node_modules',
@@ -44,10 +35,8 @@ module.exports = {
   },
   module: {
     loaders: [
-      // { test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src/scripts') },
       { test: /\.jsx?$/, loader: 'babel', include: path.join(__dirname, 'src/scripts'), exclude: /node_modules|vendor_modules/ },
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
-      // { test: /vendor_modules\/formula.js$/, loader: 'imports?this=>window' },
       { test: /\.scss$/, loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!sass' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
@@ -55,8 +44,6 @@ module.exports = {
     noParse: [
       'handsontable.full.js',
       'nsviewer.js',
-      // 'lodash.js',
-      // 'formula.js',
       'parser.js',
       'ruleJS.js',
       'handsontable.formula.js'
