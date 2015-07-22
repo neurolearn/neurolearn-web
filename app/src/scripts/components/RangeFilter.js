@@ -20,8 +20,8 @@ export default class RangeFilter extends React.Component {
 
   render() {
     return (
-      <Input label={this.props.label} wrapperClassName='wrapper'>
-        <div className="clearfix">
+      <div className="clearfix">
+          <label>{this.props.label}</label>
           <div className={styles.from}>
             <input
                 type='text'
@@ -30,6 +30,7 @@ export default class RangeFilter extends React.Component {
                 ref='inputFrom'
                 onChange={this.handleChange.bind(this)} />
           </div>
+          <span className={styles.sep}>—</span>
           <div className={styles.to}>
             <input
                 type='text'
@@ -38,8 +39,7 @@ export default class RangeFilter extends React.Component {
                 placeholder={this.props.valuesTo}
                 onChange={this.handleChange.bind(this)} />
           </div>
-        </div>
-      </Input>
+      </div>
     );
   }
 }

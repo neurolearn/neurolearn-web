@@ -1,11 +1,16 @@
 :local(.from) {
-  width: 46%;
+  width: 38%;
   float: left;
-  margin-right: 5px;
+  margin-bottom: 15px;
+}
+
+:local(.sep){
+  float: left;
+  padding: 6px;
 }
 
 :local(.to) {
-  width: 46%;
+  width: 38%;
   float: left;
-  margin-right: 5px;
+  margin-bottom: 15px;
 }
