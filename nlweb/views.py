@@ -8,6 +8,8 @@ from flask import Blueprint, render_template, current_app
 from flask import request, Response, send_from_directory
 from flask import jsonify
 
+from flask.ext.security import login_required, current_user
+
 import requests
 
 from nlweb import tasks
@@ -17,9 +19,28 @@ from nlweb.extensions import uploaded_media
 frontend = Blueprint('frontend', __name__)
 
 
+def _render_index_template(**kwargs):
+    import copy
+    env = copy.copy(current_app.jinja_env)
+
+    env.line_statement_prefix = '//#'
+    env.line_comment_prefix = '//**'
+    env.variable_start_string = 'JINJA_VALUE(/*'
+    env.variable_end_string = '*/)'
+    env.comment_start_string = '//{#'
+    env.comment_end_string = '//#}'
+
+    template = env.get_template('index.html')
+    return template.render(**kwargs)
+
+
 @frontend.route('/')
+@login_required
 def home():
-    return render_template('index.html')
+    context = {
+        'user': {'id': current_user.id}
+    }
+    return _render_index_template(**context)
 
 
 @frontend.route('/about')

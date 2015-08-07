@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
 
 
 class MLModel(db.Model):
-    __tablename__ = 'models'
+    __tablename__ = 'mlmodels'
 
     STATUS_DRAFT = 'draft'
     STATUS_PUBLIC = 'public'

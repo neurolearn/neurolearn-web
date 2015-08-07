@@ -77,7 +77,6 @@ def init_extensions(app):
         )
 
 
-
 def register_blueprints(app):
     from nlweb.views import frontend
     app.register_blueprint(frontend)
