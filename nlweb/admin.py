@@ -109,6 +109,8 @@ class ModelView(sqla.ModelView):
 
 
 class UserAdmin(ModelView):
+    column_list = ('id', 'email', 'created', 'active')
+
     column_formatters = {
         'id': _user_id_formatter,
         'created': _date_formatter
