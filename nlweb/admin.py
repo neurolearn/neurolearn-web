@@ -16,7 +16,6 @@ from jinja2 import filters, Markup
 
 from nlweb import db
 from nlweb.models import User, Role
-from nlweb.extensions import security
 
 from nlweb.utils import friendly_time
 
