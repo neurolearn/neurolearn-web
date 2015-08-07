@@ -8,6 +8,7 @@ from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 from flask.ext.failsafe import failsafe
 
+from sqlalchemy.schema import CreateTable
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
@@ -42,6 +43,13 @@ def start_celery():
     import subprocess
 
     subprocess.call(['celery', 'worker', '-B', '--app', 'nlweb'])
+
+
+@manager.command
+def sql(model_name):
+    from rime import models, db
+
+    print CreateTable(getattr(models, model_name).__table__).compile(db.engine)
 
 
 @manager.command

@@ -4,8 +4,12 @@ import os
 
 from flask import Flask, render_template
 from flaskext.uploads import configure_uploads
+from flask_admin import helpers as admin_helpers
 
-from nlweb.extensions import (db, migrate, celery, uploaded_media)
+from .admin import admin
+
+from .extensions import (db, migrate, celery, uploaded_media,
+                         security, mail)
 
 
 def load_celery_config(celery_obj):
@@ -56,9 +60,22 @@ def init_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    mail.init_app(app)
+    security.init_app(app)
+    admin.init_app(app)
     configure_uploads(app, uploaded_media)
 
     load_celery_config(celery)
+
+    security2 = app.extensions['security']
+    @security2.context_processor
+    def security_context_processor():
+        return dict(
+            admin_base_template=admin.base_template,
+            admin_view=admin.index_view,
+            h=admin_helpers,
+        )
+
 
 
 def register_blueprints(app):
