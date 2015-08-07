@@ -22,6 +22,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    def __unicode__(self):
+        return self.name
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -44,6 +47,9 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.email
+
+    def __unicode__(self):
+        return self.email
 
 
 class MLModel(db.Model):
