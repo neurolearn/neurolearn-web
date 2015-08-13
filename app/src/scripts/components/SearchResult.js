@@ -1,8 +1,13 @@
 import styles from './SearchResult.scss';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { Button } from 'react-bootstrap';
 
 export default class SearchResult extends React.Component {
+  static propTypes = {
+    hit: PropTypes.object,
+    onClick: PropTypes.func.isRequired
+  }
 
   render() {
     var { name, number_of_images, images, authors } = this.props.hit._source;
@@ -25,7 +30,7 @@ export default class SearchResult extends React.Component {
             <div className="number-of-images">{number_of_images} images</div>
           </div>
           <div className="button">
-            <button className="btn btn-primary btn-block">Select Images</button>
+            <Button bsStyle='primary' onClick={this.props.onClick}>Select Images</Button>
           </div>
         </div>
       </div>

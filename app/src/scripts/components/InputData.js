@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchContainer from '../components/SearchContainer';
+import SelectImagesModal from '../components/SelectImagesModal';
 
 import styles from './InputData.scss';
 
@@ -7,7 +8,8 @@ export default class InputData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false
+      showModal: false,
+      collectionId: null
     };
   }
 
@@ -21,7 +23,7 @@ export default class InputData extends React.Component {
           <div className="col-md-9">
             <div className="panel panel-default">
               <div className="panel-body">
-                <SearchContainer />
+                <SearchContainer onSearchResultClick={id => this.setState({showModal: true, collectionId: id})} />
               </div>
             </div>
           </div>
@@ -37,6 +39,7 @@ export default class InputData extends React.Component {
             </div>
           </div>
         </div>
+        <SelectImagesModal show={this.state.showModal} onHide={()=>this.setState({showModal: false})}/>
       </div>
     );
   }

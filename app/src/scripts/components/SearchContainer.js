@@ -1,7 +1,7 @@
 import request from 'superagent';
 import debounce from 'lodash/function/debounce';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import SearchInput from './SearchInput';
 import SortSearchResults from './SortSearchResults';
 import SearchResults from './SearchResults';
@@ -30,6 +30,10 @@ function sortOption(sortType) {
 }
 
 export default class SearchContainer extends React.Component {
+  static propTypes = {
+    onSearchResultClick: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -185,7 +189,7 @@ export default class SearchContainer extends React.Component {
                   onSelect={this.handleSortSelect.bind(this)} />
               </div>
             </div>
-            <SearchResults results={this.state.searchResults} />
+            <SearchResults results={this.state.searchResults} onSearchResultClick={this.props.onSearchResultClick}/>
 
             { this.totalHits(this.state.searchResults) > RESULTS_PER_PAGE
               ? <SearchPagination
