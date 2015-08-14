@@ -2,6 +2,7 @@ import request from 'superagent';
 import debounce from 'lodash/function/debounce';
 
 import React from 'react';
+import update from 'react/lib/update';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SearchSortTypes from '../constants/SearchSortTypes';
@@ -20,6 +21,8 @@ export default class InputData extends React.Component {
     this.state = {
       showModal: false,
       collectionId: null,
+
+      selectedImages: {},
 
       searchResults: null,
       searchQuery: '',
@@ -149,6 +152,44 @@ export default class InputData extends React.Component {
     this.debouncedLoadSearchResults();
   }
 
+  handleImageToggle(collectionId, imageId) {
+    const toggle = function(x) {
+      if (x) {
+        if (x[imageId]) {
+          x[imageId] = false;
+        } else {
+          x[imageId] = true;
+        }
+        return x;
+      } else {
+        return {[imageId]: true};
+      }
+    };
+
+    let selectedImages = update(this.state.selectedImages,
+      {[collectionId]: {$apply: toggle}}
+    );
+
+    this.setState({ selectedImages });
+  }
+
+  handleToggleAll(collectionId) {
+
+  }
+
+  getCollection(searchResults, collectionId) {
+    if (!searchResults) {
+      return null;
+    }
+    return searchResults.hits.hits.filter(function (item) {
+      return item._id === collectionId;
+    })[0];
+  }
+
+  getSelectedImages(selectedImages, collectionId) {
+    return selectedImages[collectionId];
+  }
+
   render() {
     console.log(this.state.search);
     return (
@@ -181,7 +222,17 @@ export default class InputData extends React.Component {
             </div>
           </div>
         </div>
-        <SelectImagesModal show={this.state.showModal} onHide={()=>this.setState({showModal: false})}/>
+        <SelectImagesModal
+          show={this.state.showModal}
+          onToggle={(collectionId, imageId) =>
+                      this.handleImageToggle(collectionId, imageId)}
+          onToggleAll={(collectionId) =>
+                      this.handleToggleAll(collectionId)}
+          collection={this.getCollection(this.state.searchResults,
+                                         this.state.collectionId)}
+          selectedImages={this.getSelectedImages(this.state.selectedImages,
+                                                 this.state.collectionId)}
+          onHide={()=>this.setState({showModal: false})} />
       </div>
     );
   }
