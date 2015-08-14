@@ -5,7 +5,7 @@ import ImageItem from './ImageItem';
 export default class SelectImagesModal extends React.Component {
   static propTypes = {
     collection: PropTypes.object.isRequired,
-    selectedImages: PropTypes.array.isRequired,
+    selectedImages: PropTypes.object.isRequired,
     onToggle: PropTypes.func.isRequired,
     onToggleAll: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired

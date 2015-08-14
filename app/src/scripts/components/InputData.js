@@ -3,6 +3,7 @@ import debounce from 'lodash/function/debounce';
 
 import React from 'react';
 import update from 'react/lib/update';
+import classNames from 'classnames';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import ImageList from '../components/ImageList';
@@ -201,8 +202,22 @@ export default class InputData extends React.Component {
     return selectedImages[collectionId];
   }
 
+  countSelectedImages(selectedImages) {
+    const countInCollection = function(collection) {
+      return collection && Object.keys(collection).reduce((accum, key) =>
+        collection[key] ? accum + 1 : accum,
+      0);
+    };
+
+    return Object.keys(selectedImages).reduce((accum, key) =>
+        countInCollection(selectedImages[key]) + accum,
+      0);
+  }
+
   render() {
     console.log(this.state.search);
+    const anySelected = this.countSelectedImages(this.state.selectedImages) === 0;
+
     return (
       <div className={styles.root}>
         <h1 className="page-header">Input Data</h1>
@@ -227,8 +242,11 @@ export default class InputData extends React.Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Selected Images</h3>
               </div>
-              <div className="panel-body empty-dataset">
-                <ImageList selectedImages={this.state.selectedImages}/>
+              <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
+                { anySelected
+                  ? <p>Training dataset is empty.</p>
+                  : <ImageList selectedImages={this.state.selectedImages}/>
+                }
               </div>
             </div>
           </div>
