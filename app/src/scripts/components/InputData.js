@@ -5,6 +5,7 @@ import React from 'react';
 import update from 'react/lib/update';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
+import ImageList from '../components/ImageList';
 import SearchSortTypes from '../constants/SearchSortTypes';
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -173,8 +174,18 @@ export default class InputData extends React.Component {
     this.setState({ selectedImages });
   }
 
-  handleToggleAll(collectionId) {
+  handleToggleAll(collectionId, checked) {
+    const collection = this.getCollection(this.state.searchResults, collectionId);
+    const imageList = collection._source.images.reduce(function(accum, image) {
+      accum[image.url] = checked;
+      return accum;
+    }, {});
 
+    let selectedImages = update(this.state.selectedImages,
+      {[collectionId]: {$set: imageList}}
+    );
+
+    this.setState({ selectedImages });
   }
 
   getCollection(searchResults, collectionId) {
@@ -186,7 +197,7 @@ export default class InputData extends React.Component {
     })[0];
   }
 
-  getSelectedImages(selectedImages, collectionId) {
+  getSelectedImagesInCollection(selectedImages, collectionId) {
     return selectedImages[collectionId];
   }
 
@@ -217,22 +228,24 @@ export default class InputData extends React.Component {
                 <h3 className="panel-title">Selected Images</h3>
               </div>
               <div className="panel-body empty-dataset">
-                <p>Training dataset is empty.</p>
+                <ImageList selectedImages={this.state.selectedImages}/>
               </div>
             </div>
           </div>
         </div>
-        <SelectImagesModal
-          show={this.state.showModal}
-          onToggle={(collectionId, imageId) =>
-                      this.handleImageToggle(collectionId, imageId)}
-          onToggleAll={(collectionId) =>
-                      this.handleToggleAll(collectionId)}
-          collection={this.getCollection(this.state.searchResults,
-                                         this.state.collectionId)}
-          selectedImages={this.getSelectedImages(this.state.selectedImages,
-                                                 this.state.collectionId)}
-          onHide={()=>this.setState({showModal: false})} />
+        {this.state.collectionId &&
+          <SelectImagesModal
+            show={this.state.showModal}
+            onToggle={(collectionId, imageId) =>
+                        this.handleImageToggle(collectionId, imageId)}
+            onToggleAll={(collectionId, checked) =>
+                        this.handleToggleAll(collectionId, checked)}
+            collection={this.getCollection(this.state.searchResults,
+                                           this.state.collectionId)}
+            selectedImages={this.getSelectedImagesInCollection(this.state.selectedImages,
+                                                               this.state.collectionId)}
+            onHide={()=>this.setState({showModal: false})} />
+        }
       </div>
     );
   }

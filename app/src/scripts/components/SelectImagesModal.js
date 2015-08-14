@@ -19,6 +19,10 @@ export default class SelectImagesModal extends React.Component {
     return false;
   }
 
+  toggleAll(e) {
+    this.props.onToggleAll(this.props.collection._id, e.target.checked);
+  }
+
   renderImages(images) {
     const collectionId = this.props.collection._id;
     return (
@@ -34,7 +38,13 @@ export default class SelectImagesModal extends React.Component {
   }
 
   render() {
-    let collection = this.props.collection && this.props.collection._source;
+    const { collection, selectedImages } = this.props;
+    const selectedCount = selectedImages && Object.keys(selectedImages).reduce(function (accum, key) {
+      return selectedImages[key] ? accum + 1 : accum;
+    }, 0);
+
+    const isAllSelected = collection
+                        && (collection._source.images.length === selectedCount);
 
     return (
       <Modal {...this.props} bsSize='large' aria-labelledby='contained-modal-title-lg'>
@@ -42,9 +52,12 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id='contained-modal-title-lg'>Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Input type='checkbox' label='Select All Images' onChange={this.props.onToggleAll} />
+        <Input type='checkbox'
+               label='Select All Images'
+               onChange={this.toggleAll.bind(this)}
+               checked={isAllSelected} />
 
-        {collection && this.renderImages(collection.images)}
+        {collection && this.renderImages(collection._source.images)}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
