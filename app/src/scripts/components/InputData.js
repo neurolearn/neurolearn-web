@@ -216,21 +216,27 @@ export default class InputData extends React.Component {
   }
 
   getSelectedCollections(selectedImages) {
-    return Object.keys(selectedImages).map((collectionId) =>
+    const collections = Object.keys(selectedImages).map((collectionId) =>
       this.getCollection(collectionId)
     );
+
+    return collections.filter((collection) =>
+      this.countSelectedInCollection(selectedImages[collection._id]) > 0);
+  }
+
+  countSelectedInCollection(collection) {
+    if (!collection) {
+      return 0;
+    }
+    return Object.keys(collection).reduce((accum, key) =>
+      collection[key] ? accum + 1 : accum,
+    0);
   }
 
   countSelectedImages(selectedImages) {
-    const countInCollection = function(collection) {
-      return collection && Object.keys(collection).reduce((accum, key) =>
-        collection[key] ? accum + 1 : accum,
-      0);
-    };
-
     return Object.keys(selectedImages).reduce((accum, key) =>
-        countInCollection(selectedImages[key]) + accum,
-      0);
+      this.countSelectedInCollection(selectedImages[key]) + accum,
+    0);
   }
 
   render() {

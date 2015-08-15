@@ -14,12 +14,15 @@ export default class ImageList extends React.Component {
   }
 
   renderCollection(collection, selectedImages) {
+    const countSelected = Object.keys(selectedImages).reduce((accum, key) =>
+      selectedImages[key] ? accum + 1 : accum,
+    0);
+
     return (
-      <div>
+      <p>
         <a href="#" onClick={(e) =>this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
-        <ul>
-        </ul>
-      </div>
+        &nbsp;({countSelected})
+      </p>
     );
   }
 
