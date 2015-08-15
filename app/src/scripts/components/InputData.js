@@ -12,7 +12,6 @@ import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
 
 import styles from './InputData.scss';
 
-
 function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
 }
@@ -32,6 +31,8 @@ export default class InputData extends React.Component {
       searchFrom: 0,
       searchSort: DEFAULT_SEARCH_SORT
     };
+
+    this.collectionStore = {};
   }
 
   loadSearchResults() {
@@ -176,7 +177,7 @@ export default class InputData extends React.Component {
   }
 
   handleToggleAll(collectionId, checked) {
-    const collection = this.getCollection(this.state.searchResults, collectionId);
+    const collection = this.getCollection(collectionId);
     const imageList = collection._source.images.reduce(function(accum, image) {
       accum[image.url] = checked;
       return accum;
@@ -189,17 +190,35 @@ export default class InputData extends React.Component {
     this.setState({ selectedImages });
   }
 
-  getCollection(searchResults, collectionId) {
+  getCollection(collectionId) {
+    const { searchResults } = this.state;
+    var collection;
+
+    if (this.collectionStore[collectionId]) {
+      return this.collectionStore[collectionId];
+    }
+
     if (!searchResults) {
       return null;
     }
-    return searchResults.hits.hits.filter(function (item) {
+
+    collection = searchResults.hits.hits.filter(function (item) {
       return item._id === collectionId;
     })[0];
+
+    this.collectionStore[collectionId] = collection;
+
+    return collection;
   }
 
   getSelectedImagesInCollection(selectedImages, collectionId) {
     return selectedImages[collectionId];
+  }
+
+  getSelectedCollections(selectedImages) {
+    return Object.keys(selectedImages).map((collectionId) =>
+      this.getCollection(collectionId)
+    );
   }
 
   countSelectedImages(selectedImages) {
@@ -232,7 +251,7 @@ export default class InputData extends React.Component {
                                  onSearchInputChange={this.handleSearchInputChange.bind(this)}
                                  onSortSelect={this.handleSortSelect.bind(this)}
                                  onPageSelect={this.handlePageSelect.bind(this)}
-                                 onSearchResultClick={id => this.setState({showModal: true, collectionId: id})} />
+                                 onSearchResultClick={(id) => this.setState({showModal: true, collectionId: id})} />
               </div>
             </div>
           </div>
@@ -245,7 +264,9 @@ export default class InputData extends React.Component {
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
                 { anySelected
                   ? <p>Training dataset is empty.</p>
-                  : <ImageList selectedImages={this.state.selectedImages}/>
+                  : <ImageList selectedImages={this.state.selectedImages}
+                               onItemClick={(id) => this.setState({showModal: true, collectionId: id})}
+                               selectedCollections={this.getSelectedCollections(this.state.selectedImages)} />
                 }
               </div>
             </div>
@@ -258,8 +279,7 @@ export default class InputData extends React.Component {
                         this.handleImageToggle(collectionId, imageId)}
             onToggleAll={(collectionId, checked) =>
                         this.handleToggleAll(collectionId, checked)}
-            collection={this.getCollection(this.state.searchResults,
-                                           this.state.collectionId)}
+            collection={this.getCollection(this.state.collectionId)}
             selectedImages={this.getSelectedImagesInCollection(this.state.selectedImages,
                                                                this.state.collectionId)}
             onHide={()=>this.setState({showModal: false})} />

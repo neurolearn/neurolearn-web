@@ -2,27 +2,34 @@ import React, { PropTypes } from 'react';
 
 export default class ImageList extends React.Component {
   static propTypes = {
-    selectedImages: PropTypes.object
+    selectedImages: PropTypes.object,
+    selectedCollections: PropTypes.array,
+    onItemClick: PropTypes.func
   }
 
-  renderCollection(id, collection) {
+  handleItemClick(e, collectionId) {
+    e.preventDefault();
+    this.props.onItemClick(collectionId);
+    return false;
+  }
+
+  renderCollection(collection, selectedImages) {
     return (
       <div>
-        <strong>{id}</strong>
+        <a href="#" onClick={(e) =>this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
         <ul>
-          {Object.keys(collection).map((image) => <li>{image}</li>)}
         </ul>
       </div>
     );
   }
 
   render() {
-    const { selectedImages } = this.props;
+    const { selectedCollections, selectedImages } = this.props;
 
     return (
       <div>
-        {Object.keys(selectedImages).map((collection) =>
-          this.renderCollection(collection, selectedImages[collection]))}
+        {selectedCollections.map((collection) =>
+          this.renderCollection(collection, selectedImages[collection._id]))}
       </div>
     );
   }
