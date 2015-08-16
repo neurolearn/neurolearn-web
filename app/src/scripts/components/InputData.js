@@ -10,7 +10,10 @@ import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 import SearchSortTypes from '../constants/SearchSortTypes';
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
-import { showSelectImagesModal, hideSelectImagesModal } from '../actions';
+import { showSelectImagesModal,
+         hideSelectImagesModal,
+         toggleImage,
+         toggleAllImages } from '../actions';
 
 import styles from './InputData.scss';
 
@@ -27,8 +30,6 @@ class InputData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedImages: {},
-
       searchResults: null,
       searchQuery: '',
       searchFilter: null,
@@ -160,38 +161,13 @@ class InputData extends React.Component {
   }
 
   handleImageToggle(collectionId, imageId) {
-    const toggle = function(x) {
-      if (x) {
-        if (x[imageId]) {
-          x[imageId] = false;
-        } else {
-          x[imageId] = true;
-        }
-        return x;
-      } else {
-        return {[imageId]: true};
-      }
-    };
-
-    let selectedImages = update(this.state.selectedImages,
-      {[collectionId]: {$apply: toggle}}
-    );
-
-    this.setState({ selectedImages });
+    this.props.dispatch(toggleImage(collectionId, imageId));
   }
 
   handleToggleAll(collectionId, checked) {
     const collection = this.getCollection(collectionId);
-    const SelectedCollectionList = collection._source.images.reduce(function(accum, image) {
-      accum[image.url] = checked;
-      return accum;
-    }, {});
-
-    let selectedImages = update(this.state.selectedImages,
-      {[collectionId]: {$set: SelectedCollectionList}}
-    );
-
-    this.setState({ selectedImages });
+    const imageList = collection._source.images.map((image) => image.url);
+    this.props.dispatch(toggleAllImages(collectionId, imageList, checked));
   }
 
   getCollection(collectionId) {
@@ -248,7 +224,7 @@ class InputData extends React.Component {
   }
 
   render() {
-    const anySelected = this.countSelectedImages(this.state.selectedImages) === 0;
+    const anySelected = this.countSelectedImages(this.props.selectedImages) === 0;
     const { selectImagesModal, dispatch } = this.props;
 
     return (
@@ -278,9 +254,9 @@ class InputData extends React.Component {
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
                 { anySelected
                   ? <p>Training dataset is empty.</p>
-                  : <SelectedCollectionList selectedImages={this.state.selectedImages}
+                  : <SelectedCollectionList selectedImages={this.props.selectedImages}
                                onItemClick={(id) => this.handleCollectionClick(id)}
-                               selectedCollections={this.getSelectedCollections(this.state.selectedImages)} />
+                               selectedCollections={this.getSelectedCollections(this.props.selectedImages)} />
                 }
               </div>
             </div>
@@ -294,7 +270,7 @@ class InputData extends React.Component {
             onToggleAll={(collectionId, checked) =>
                         this.handleToggleAll(collectionId, checked)}
             collection={this.getCollection(selectImagesModal.collectionId)}
-            selectedImages={this.getSelectedImagesInCollection(this.state.selectedImages,
+            selectedImages={this.getSelectedImagesInCollection(this.props.selectedImages,
                                                                selectImagesModal.collectionId)}
             onHide={() => dispatch(hideSelectImagesModal())} />
         }
