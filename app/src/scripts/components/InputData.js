@@ -1,7 +1,7 @@
 import request from 'superagent';
 import debounce from 'lodash/function/debounce';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import update from 'react/lib/update';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ import SelectImagesModal from '../components/SelectImagesModal';
 import ImageList from '../components/ImageList';
 import SearchSortTypes from '../constants/SearchSortTypes';
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
-import { showModal } from '../actions';
+import { showSelectImagesModal, hideSelectImagesModal } from '../actions';
 
 import styles from './InputData.scss';
 
@@ -19,10 +19,14 @@ function sortOption(sortType) {
 }
 
 class InputData extends React.Component {
+  static propTypes = {
+    selectImagesModal: PropTypes.object,
+    dispatch: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
       collectionId: null,
 
       selectedImages: {},
@@ -242,13 +246,13 @@ class InputData extends React.Component {
   }
 
   handleSearchResultClick(id) {
-    this.props.dispatch(showModal(true));
-    this.setState({showModal: true, collectionId: id});
+    this.props.dispatch(showSelectImagesModal(id));
   }
 
   render() {
     console.log(this.state.search);
     const anySelected = this.countSelectedImages(this.state.selectedImages) === 0;
+    const { dispatch } = this.props;
 
     return (
       <div className={styles.root}>
@@ -285,17 +289,17 @@ class InputData extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.collectionId &&
+        {this.props.selectImagesModal.collectionId &&
           <SelectImagesModal
-            show={this.state.showModal}
+            show={this.props.selectImagesModal.display}
             onToggle={(collectionId, imageId) =>
                         this.handleImageToggle(collectionId, imageId)}
             onToggleAll={(collectionId, checked) =>
                         this.handleToggleAll(collectionId, checked)}
-            collection={this.getCollection(this.state.collectionId)}
+            collection={this.getCollection(this.props.selectImagesModal.collectionId)}
             selectedImages={this.getSelectedImagesInCollection(this.state.selectedImages,
                                                                this.state.collectionId)}
-            onHide={()=>this.setState({showModal: false})} />
+            onHide={() => dispatch(hideSelectImagesModal())} />
         }
       </div>
     );
