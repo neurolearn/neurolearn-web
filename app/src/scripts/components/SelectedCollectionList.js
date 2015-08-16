@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-export default class ImageList extends React.Component {
+export default class SelectedCollectionList extends React.Component {
   static propTypes = {
     selectedImages: PropTypes.object,
     selectedCollections: PropTypes.array,

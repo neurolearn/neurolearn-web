@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
-import ImageList from '../components/ImageList';
+import SelectedCollectionList from '../components/SelectedCollectionList';
 import SearchSortTypes from '../constants/SearchSortTypes';
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
 import { showSelectImagesModal, hideSelectImagesModal } from '../actions';
@@ -27,8 +27,6 @@ class InputData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collectionId: null,
-
       selectedImages: {},
 
       searchResults: null,
@@ -184,13 +182,13 @@ class InputData extends React.Component {
 
   handleToggleAll(collectionId, checked) {
     const collection = this.getCollection(collectionId);
-    const imageList = collection._source.images.reduce(function(accum, image) {
+    const SelectedCollectionList = collection._source.images.reduce(function(accum, image) {
       accum[image.url] = checked;
       return accum;
     }, {});
 
     let selectedImages = update(this.state.selectedImages,
-      {[collectionId]: {$set: imageList}}
+      {[collectionId]: {$set: SelectedCollectionList}}
     );
 
     this.setState({ selectedImages });
@@ -245,14 +243,13 @@ class InputData extends React.Component {
     0);
   }
 
-  handleSearchResultClick(id) {
+  handleCollectionClick(id) {
     this.props.dispatch(showSelectImagesModal(id));
   }
 
   render() {
-    console.log(this.state.search);
     const anySelected = this.countSelectedImages(this.state.selectedImages) === 0;
-    const { dispatch } = this.props;
+    const { selectImagesModal, dispatch } = this.props;
 
     return (
       <div className={styles.root}>
@@ -268,7 +265,7 @@ class InputData extends React.Component {
                                  onSearchInputChange={this.handleSearchInputChange.bind(this)}
                                  onSortSelect={this.handleSortSelect.bind(this)}
                                  onPageSelect={this.handlePageSelect.bind(this)}
-                                 onSearchResultClick={this.handleSearchResultClick.bind(this)} />
+                                 onSearchResultClick={this.handleCollectionClick.bind(this)} />
               </div>
             </div>
           </div>
@@ -281,24 +278,24 @@ class InputData extends React.Component {
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
                 { anySelected
                   ? <p>Training dataset is empty.</p>
-                  : <ImageList selectedImages={this.state.selectedImages}
-                               onItemClick={(id) => this.setState({showModal: true, collectionId: id})}
+                  : <SelectedCollectionList selectedImages={this.state.selectedImages}
+                               onItemClick={(id) => this.handleCollectionClick(id)}
                                selectedCollections={this.getSelectedCollections(this.state.selectedImages)} />
                 }
               </div>
             </div>
           </div>
         </div>
-        {this.props.selectImagesModal.collectionId &&
+        {selectImagesModal.collectionId &&
           <SelectImagesModal
-            show={this.props.selectImagesModal.display}
+            show={selectImagesModal.display}
             onToggle={(collectionId, imageId) =>
                         this.handleImageToggle(collectionId, imageId)}
             onToggleAll={(collectionId, checked) =>
                         this.handleToggleAll(collectionId, checked)}
-            collection={this.getCollection(this.props.selectImagesModal.collectionId)}
+            collection={this.getCollection(selectImagesModal.collectionId)}
             selectedImages={this.getSelectedImagesInCollection(this.state.selectedImages,
-                                                               this.state.collectionId)}
+                                                               selectImagesModal.collectionId)}
             onHide={() => dispatch(hideSelectImagesModal())} />
         }
       </div>
