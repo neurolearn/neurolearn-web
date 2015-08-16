@@ -3,12 +3,14 @@ import debounce from 'lodash/function/debounce';
 
 import React from 'react';
 import update from 'react/lib/update';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import ImageList from '../components/ImageList';
 import SearchSortTypes from '../constants/SearchSortTypes';
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
+import { showModal } from '../actions';
 
 import styles from './InputData.scss';
 
@@ -16,7 +18,7 @@ function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
 }
 
-export default class InputData extends React.Component {
+class InputData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -239,6 +241,11 @@ export default class InputData extends React.Component {
     0);
   }
 
+  handleSearchResultClick(id) {
+    this.props.dispatch(showModal(true));
+    this.setState({showModal: true, collectionId: id});
+  }
+
   render() {
     console.log(this.state.search);
     const anySelected = this.countSelectedImages(this.state.selectedImages) === 0;
@@ -257,7 +264,7 @@ export default class InputData extends React.Component {
                                  onSearchInputChange={this.handleSearchInputChange.bind(this)}
                                  onSortSelect={this.handleSortSelect.bind(this)}
                                  onPageSelect={this.handlePageSelect.bind(this)}
-                                 onSearchResultClick={(id) => this.setState({showModal: true, collectionId: id})} />
+                                 onSearchResultClick={this.handleSearchResultClick.bind(this)} />
               </div>
             </div>
           </div>
@@ -294,3 +301,9 @@ export default class InputData extends React.Component {
     );
   }
 }
+
+function select(state) {
+  return state;
+}
+
+export default connect(select)(InputData);

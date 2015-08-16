@@ -10,7 +10,6 @@ export default class ImageList extends React.Component {
   handleItemClick(e, collectionId) {
     e.preventDefault();
     this.props.onItemClick(collectionId);
-    return false;
   }
 
   renderCollection(collection, selectedImages) {
