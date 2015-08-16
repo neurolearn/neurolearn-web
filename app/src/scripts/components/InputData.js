@@ -1,163 +1,65 @@
-import request from 'superagent';
-import debounce from 'lodash/function/debounce';
-
 import React, { PropTypes } from 'react';
-import update from 'react/lib/update';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
-import SearchSortTypes from '../constants/SearchSortTypes';
-import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
+import { RESULTS_PER_PAGE } from '../constants/Search';
 import { showSelectImagesModal,
          hideSelectImagesModal,
          toggleImage,
-         toggleAllImages } from '../actions';
+         toggleAllImages,
+         loadSearchResults,
+         inputSearchQuery,
+         selectSearchOffset,
+         selectSortType,
+         changeFilter } from '../actions';
 
 import styles from './InputData.scss';
 
-function sortOption(sortType) {
-  return SearchSortTypes[sortType].option;
-}
-
 class InputData extends React.Component {
   static propTypes = {
+    search: PropTypes.object,
     selectImagesModal: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
 
   constructor(props) {
-    super(props);
-    this.state = {
-      searchResults: null,
-      searchQuery: '',
-      searchFilter: null,
-      searchFrom: 0,
-      searchSort: DEFAULT_SEARCH_SORT
-    };
-
     this.collectionStore = {};
   }
 
-  loadSearchResults() {
-    const _this = this;
-
-    const query = this.state.searchQuery
-      ? {
-        'multi_match': {
-          'type': 'phrase_prefix',
-          'query': this.state.searchQuery,
-          'max_expansions': 50,
-          'slop': 10,
-          'fields': ['name', 'authors']
-        }
-      }
-      : undefined;
-
-    const filter = this.state.searchFilter
-      ? this.state.searchFilter
-      : undefined;
-
-    const aggs = {
-      'number_of_images_stats': {
-        'stats': {
-          'field': 'number_of_images'
-        }
-      },
-      'handedness': {
-        'terms': {
-            'field': 'handedness'
-        }
-      },
-      'nested_aggs': {
-        'nested': {
-          'path': 'images'
-        },
-        'aggs': {
-          'modality': {
-            'terms': {
-              'field': 'images.modality'
-            }
-          },
-          'map_type': {
-            'terms': {
-              'field': 'images.map_type'
-            }
-          }
-        }
-      }
-    };
-
-    request.post('/search')
-      .send({
-        query: {
-          filtered: {
-            query: query,
-            filter: filter
-          }
-        },
-        size: RESULTS_PER_PAGE,
-        from: _this.state.searchFrom,
-        sort: sortOption(_this.state.searchSort),
-        aggs: aggs
-      })
-      .type('json')
-      .accept('json')
-      .end(function(err, res) {
-        console.log(res.body);
-        this.setState({searchResults: res.body});
-      }.bind(this));
-  }
-
   componentDidMount() {
-    this.debouncedLoadSearchResults = debounce(this.loadSearchResults, 300);
-    this.loadSearchResults();
+    this.props.dispatch(loadSearchResults(inputSearchQuery('')));
   }
 
-  handleSearchInputChange(newValue) {
-    this.setState({
-      searchQuery: newValue,
-      searchFrom: 0
-    });
-    this.debouncedLoadSearchResults();
+  handleSearchInputChange(query) {
+    this.props.dispatch(loadSearchResults(inputSearchQuery(query)));
   }
 
   handlePageSelect(page) {
     if (page < 1) {
       return;
     }
-    this.setState({
-      searchFrom: (page - 1) * RESULTS_PER_PAGE
-    });
-    this.debouncedLoadSearchResults();
+
+    this.props.dispatch(loadSearchResults(selectSearchOffset(
+      (page - 1) * RESULTS_PER_PAGE)));
   }
 
   handleSortSelect(sortType) {
-    this.setState({
-      searchSort: sortType,
-      searchFrom: 0
-    });
-    this.debouncedLoadSearchResults();
+    this.props.dispatch(loadSearchResults(selectSortType(sortType)));
   }
 
   handleFilterChange(value) {
-    const toState = function() {
-      return {
+    const filter = {
         'range': {
           'number_of_images': {
             'gte': parseInt(value[0]),
             'lte': parseInt(value[1])
           }
         }
-      };
     };
 
-    this.setState({
-      searchFilter: toState()
-    });
-
-    this.debouncedLoadSearchResults();
+    this.props.dispatch(loadSearchResults(changeFilter(filter)));
   }
 
   handleImageToggle(collectionId, imageId) {
@@ -236,7 +138,7 @@ class InputData extends React.Component {
           <div className="col-md-9">
             <div className="panel panel-default">
               <div className="panel-body">
-                <SearchContainer {...this.state}
+                <SearchContainer {...this.props.search}
                                  onFilterChange={this.handleFilterChange.bind(this)}
                                  onSearchInputChange={this.handleSearchInputChange.bind(this)}
                                  onSortSelect={this.handleSortSelect.bind(this)}

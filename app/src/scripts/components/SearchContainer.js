@@ -18,7 +18,14 @@ function activePage(searchFrom, resultsPerPage) {
 
 export default class SearchContainer extends React.Component {
   static propTypes = {
-    onSearchResultClick: PropTypes.func.isRequired
+    query: PropTypes.string,
+    results: PropTypes.object,
+    sort: PropTypes.string,
+    onSearchResultClick: PropTypes.func.isRequired,
+    onFilterChange: PropTypes.func.isRequired,
+    onSearchInputChange: PropTypes.func.isRequired,
+    onSortSelect: PropTypes.func.isRequired,
+    onPageSelect: PropTypes.func.isRequired
   }
 
   totalHits(searchResults) {
@@ -30,27 +37,27 @@ export default class SearchContainer extends React.Component {
       <div className={styles.root}>
         <div className="row">
           <div className="col-md-3">
-            <RefineSearchResults results={this.props.searchResults}
+            <RefineSearchResults results={this.props.results}
                                  onChange={this.props.onFilterChange} />
           </div>
 
           <div className="col-md-9">
-            <SearchInput value={this.props.searchQuery}
+            <SearchInput value={this.props.query}
                          onChange={this.props.onSearchInputChange} />
             <div className="search-meta clearfix">
-              <div className="pull-left HitsCount">Found {this.totalHits(this.props.searchResults)} collections</div>
+              <div className="pull-left HitsCount">Found {this.totalHits(this.props.results)} collections</div>
               <div className="pull-right">
-                <SortSearchResults sortType={this.props.searchSort}
+                <SortSearchResults sortType={this.props.sort}
                                    onSelect={this.props.onSortSelect} />
               </div>
             </div>
-            <SearchResults results={this.props.searchResults}
+            <SearchResults results={this.props.results}
                            onSearchResultClick={this.props.onSearchResultClick}/>
 
-            { this.totalHits(this.props.searchResults) > RESULTS_PER_PAGE
+            { this.totalHits(this.props.results) > RESULTS_PER_PAGE
               ? <SearchPagination
-                  totalPages={totalPages(this.totalHits(this.props.searchResults), RESULTS_PER_PAGE)}
-                  activePage={activePage(this.props.searchFrom, RESULTS_PER_PAGE)}
+                  totalPages={totalPages(this.totalHits(this.props.results), RESULTS_PER_PAGE)}
+                  activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
                   onSelect={this.props.onPageSelect} />
               : false }
           </div>
