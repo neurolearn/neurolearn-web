@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux';
+
 import { SHOW_SELECT_IMAGES_MODAL,
          HIDE_SELECT_IMAGES_MODAL,
          TOGGLE_IMAGE,
@@ -63,9 +65,9 @@ function selectedImages(state = {}, action) {
   }
 }
 
-export default function rootReducer(state = {}, action) {
-  return {
-    selectImagesModal: selectImagesModal(state.selectImagesModal, action),
-    selectedImages: selectedImages(state.selectedImages, action)
-  };
-}
+const rootReducer = combineReducers({
+  selectImagesModal,
+  selectedImages
+});
+
+export default rootReducer;
