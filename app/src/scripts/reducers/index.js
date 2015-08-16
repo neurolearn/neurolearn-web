@@ -5,17 +5,7 @@ import { SHOW_SELECT_IMAGES_MODAL,
 
 import update from 'react/lib/update';
 
-const initialState = {
-  selectImagesModal: {
-    display: false,
-    collectionId: null
-  },
-  selectedImages: {
-
-  }
-};
-
-function imageToggle(selectedImages, collectionId, imageId) {
+function imageToggle(state, collectionId, imageId) {
   const toggle = function(x) {
     if (x) {
       if (x[imageId]) {
@@ -29,56 +19,53 @@ function imageToggle(selectedImages, collectionId, imageId) {
     }
   };
 
-  return update(selectedImages,
+  return update(state,
     {[collectionId]: {$apply: toggle}}
   );
 }
 
-function toggleAllImages(selectedImages, collectionId, imageList, checked) {
+function toggleAllImages(state, collectionId, imageList, checked) {
   const images = imageList.reduce(function(accum, image) {
     accum[image] = checked;
     return accum;
   }, {});
 
-  return update(selectedImages,
+  return update(state,
     {[collectionId]: {$set: images}}
   );
 }
 
-export default function rootReducer(state = initialState, action = {}) {
+function selectImagesModal(state = { display: false, collectionId: null },
+                           action) {
   switch (action.type) {
     case SHOW_SELECT_IMAGES_MODAL:
-      return Object.assign({}, state, {
-        selectImagesModal: {
-          display: true,
-          collectionId: action.collectionId
-        }
-      });
+      return { display: true, collectionId: action.collectionId };
 
     case HIDE_SELECT_IMAGES_MODAL:
-      return Object.assign({}, state, {
-        selectImagesModal: {
-          display: false,
-          collectionId: null
-        }
-      });
-
-    case TOGGLE_IMAGE:
-      return Object.assign({}, state, {
-        selectedImages: imageToggle(state.selectedImages,
-                                    action.collectionId,
-                                    action.imageId)
-      });
-
-    case TOGGLE_ALL_IMAGES:
-      return Object.assign({}, state, {
-        selectedImages: toggleAllImages(state.selectedImages,
-                                    action.collectionId,
-                                    action.imageList,
-                                    action.checked)
-      });
+      return { display: false, collectionId: null };
 
     default:
       return state;
   }
+}
+
+function selectedImages(state = {}, action) {
+  switch (action.type) {
+    case TOGGLE_IMAGE:
+      return imageToggle(state, action.collectionId, action.imageId);
+
+    case TOGGLE_ALL_IMAGES:
+      return toggleAllImages(state, action.collectionId, action.imageList,
+                             action.checked);
+
+    default:
+      return state;
+  }
+}
+
+export default function rootReducer(state = {}, action) {
+  return {
+    selectImagesModal: selectImagesModal(state.selectImagesModal, action),
+    selectedImages: selectedImages(state.selectedImages, action)
+  };
 }
