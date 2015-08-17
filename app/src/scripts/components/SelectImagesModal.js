@@ -20,18 +20,18 @@ export default class SelectImagesModal extends React.Component {
   }
 
   toggleAll(e) {
-    this.props.onToggleAll(this.props.collection._id, e.target.checked);
+    this.props.onToggleAll(this.props.collection, e.target.checked);
   }
 
   renderImages(images) {
-    const collectionId = this.props.collection._id;
+    const { collection } = this.props;
     return (
       <ul>
         {images.map((image) =>
           <ImageItem {...image}
                      key={image.url}
                      checked={this.isImageSelected(image.url)}
-                     onChange={() => this.props.onToggle(collectionId, image.url)} />
+                     onChange={() => this.props.onToggle(collection, image.url)} />
         )}
       </ul>
     );

@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 export default class SelectedCollectionList extends React.Component {
   static propTypes = {
     selectedImages: PropTypes.object,
-    selectedCollections: PropTypes.array,
     onItemClick: PropTypes.func
   }
 
@@ -26,12 +25,12 @@ export default class SelectedCollectionList extends React.Component {
   }
 
   render() {
-    const { selectedCollections, selectedImages } = this.props;
+    const { images, collectionsById } = this.props.selectedImages;
 
     return (
       <div>
-        {selectedCollections.map((collection) =>
-          this.renderCollection(collection, selectedImages[collection._id]))}
+        {Object.keys(images).map((collectionId) =>
+          this.renderCollection(collectionsById[collectionId], images[collectionId]))}
       </div>
     );
   }

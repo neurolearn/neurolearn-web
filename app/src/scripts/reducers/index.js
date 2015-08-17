@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/lang/cloneDeep';
 import { combineReducers } from 'redux';
 
 import {
@@ -16,7 +17,7 @@ import { DEFAULT_SEARCH_SORT } from '../constants/Search';
 
 import update from 'react/lib/update';
 
-function imageToggle(state, collectionId, imageId) {
+function imageToggle(state, collection, imageId) {
   const toggle = function(x) {
     if (x) {
       if (x[imageId]) {
@@ -30,20 +31,22 @@ function imageToggle(state, collectionId, imageId) {
     }
   };
 
-  return update(state,
-    {[collectionId]: {$apply: toggle}}
-  );
+  return update(state, {
+    images: {[collection._id]: {$apply: toggle}},
+    collectionsById: {$merge: {[collection._id]: cloneDeep(collection)}}
+  });
 }
 
-function toggleAllImages(state, collectionId, imageList, checked) {
-  const images = imageList.reduce(function(accum, image) {
-    accum[image] = checked;
+function toggleAllImages(state, collection, checked) {
+  const images = collection._source.images.reduce(function(accum, image) {
+    accum[image.url] = checked;
     return accum;
   }, {});
 
-  return update(state,
-    {[collectionId]: {$set: images}}
-  );
+  return update(state, {
+    images: {[collection._id]: {$set: images}},
+    collectionsById: {$merge: {[collection._id]: cloneDeep(collection)}}
+  });
 }
 
 function selectImagesModal(state = { display: false, collectionId: null },
@@ -60,7 +63,7 @@ function selectImagesModal(state = { display: false, collectionId: null },
   }
 }
 
-function selectedImages(state = {}, action) {
+function selectedImages(state = { images: {}, collectionsById: {} }, action) {
   switch (action.type) {
     case TOGGLE_IMAGE:
       return imageToggle(state, action.collectionId, action.imageId);
