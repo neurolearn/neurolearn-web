@@ -11,7 +11,9 @@ import { SHOW_SELECT_IMAGES_MODAL,
          INPUT_SEARCH_QUERY,
          CHANGE_FILTER,
          SELECT_SEARCH_OFFSET,
-         SELECT_SORT_TYPE
+         SELECT_SORT_TYPE,
+         REQUEST_IMAGES_METADATA,
+         RECEIVE_IMAGES_METADATA
 } from './actionTypes';
 
 export function showSelectImagesModal(collectionId) {
@@ -48,7 +50,7 @@ function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
 }
 
-function _loadSearchResults(state) {
+function fetchSearchResults(state) {
   const query = state.query
     ? {
       'multi_match': {
@@ -122,7 +124,7 @@ function receiveSearchResults(results) {
 export function loadSearchResults(action) {
   return (dispatch, getState) => {
     dispatch(action);
-    return _loadSearchResults(getState().search)
+    return fetchSearchResults(getState().search)
       .end((err, res) => dispatch(receiveSearchResults(res.body)));
   };
 }
@@ -152,5 +154,34 @@ export function changeFilter(filter) {
   return {
     type: CHANGE_FILTER,
     filter
+  };
+}
+
+function requestImagesMetadata(collectionId) {
+  return {
+    type: REQUEST_IMAGES_METADATA,
+    collectionId
+  };
+}
+
+function receiveImagesMetadata(collectionId, results) {
+  return {
+    type: RECEIVE_IMAGES_METADATA,
+    collectionId,
+    results
+  };
+}
+
+function fetchImagesMetadata(collectionId) {
+  let url = `/nvproxy/api/collections/${collectionId}/images/`;
+
+  return request.get(url);
+}
+
+export function loadImagesMetadata(collectionId) {
+  return dispatch => {
+    dispatch(requestImagesMetadata);
+    return fetchImagesMetadata(collectionId)
+      .end((err, res) => dispatch(receiveImagesMetadata(collectionId, res.body.results)));
   };
 }

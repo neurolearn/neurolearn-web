@@ -1,13 +1,29 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import SelectTrainingLabel from './SelectTrainingLabel';
+
+import {
+  loadImagesMetadata
+} from '../actions';
 
 export default class TrainingLabel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
       targetData: null
     };
+  }
+
+  componentDidMount() {
+    /*
+      If only one collection is selected request NeuroVault for metadata
+      Else Let the user upload his own data
+    */
+    const collectionId = 504;
+
+    if (!this.props.imagesMetadata) {
+      this.props.dispatch(loadImagesMetadata(collectionId));
+    }
   }
 
   handleTargetSelection(targetData) {
@@ -28,3 +44,9 @@ export default class TrainingLabel extends React.Component {
     );
   }
 }
+
+function select(state) {
+  return state;
+}
+
+export default connect(select)(TrainingLabel);
