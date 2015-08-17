@@ -71,9 +71,13 @@ class InputData extends React.Component {
     this.props.dispatch(toggleAllImages(collection, checked));
   }
 
-  getCollection(collectionId) {
+  getCollection(collectionId, collectionsById) {
     const { results } = this.props.search;
-    var collection;
+    let collection = collectionsById[collectionId];
+
+    if (collection) {
+      return collection;
+    }
 
     if (!results) {
       return null;
@@ -154,7 +158,8 @@ class InputData extends React.Component {
                         this.handleImageToggle(collection, imageId)}
             onToggleAll={(collection, checked) =>
                         this.handleToggleAll(collection, checked)}
-            collection={this.getCollection(selectImagesModal.collectionId)}
+            collection={this.getCollection(selectImagesModal.collectionId,
+                                           selectedImages.collectionsById)}
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
                                                                selectImagesModal.collectionId)}
             onHide={() => dispatch(hideSelectImagesModal())} />
