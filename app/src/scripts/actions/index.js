@@ -180,7 +180,7 @@ function fetchImagesMetadata(collectionId) {
 
 export function loadImagesMetadata(collectionId) {
   return dispatch => {
-    dispatch(requestImagesMetadata);
+    dispatch(requestImagesMetadata(collectionId));
     return fetchImagesMetadata(collectionId)
       .end((err, res) => dispatch(receiveImagesMetadata(collectionId, res.body.results)));
   };

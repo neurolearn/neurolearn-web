@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash/lang/cloneDeep';
+import omit from 'lodash/object/omit';
 import { combineReducers } from 'redux';
 
 import {
@@ -11,7 +12,8 @@ import {
   INPUT_SEARCH_QUERY,
   CHANGE_FILTER,
   SELECT_SEARCH_OFFSET,
-  SELECT_SORT_TYPE
+  SELECT_SORT_TYPE,
+  RECEIVE_IMAGES_METADATA
 } from '../actions/actionTypes';
 import { DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -77,6 +79,20 @@ function selectedImages(state = { images: {}, collectionsById: {} }, action) {
   }
 }
 
+const propsToOmit = ['collection', 'cognitive_paradigm_cogatlas_id', 'description', 'add_date', 'is_thresholded',
+                     'perc_bad_voxels', 'perc_voxels_outside', 'reduced_representation', 'thumbnail', 'not_mni',
+                     'statistic_parameters', 'smoothness_fwhm', 'contrast_definition', 'contrast_definition_cogatlas',
+                     'figure', 'modify_date'];
+
+function imagesMetadata(state = [], action) {
+  switch (action.type) {
+    case RECEIVE_IMAGES_METADATA:
+      return action.results.map((item) => omit(item, propsToOmit));
+    default:
+      return state;
+  }
+}
+
 function search(state = {
     isFetching: false,
     query: '',
@@ -119,6 +135,7 @@ function search(state = {
 }
 
 const rootReducer = combineReducers({
+  imagesMetadata,
   selectImagesModal,
   selectedImages,
   search
