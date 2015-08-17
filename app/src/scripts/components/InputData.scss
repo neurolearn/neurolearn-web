@@ -1,9 +1,13 @@
 .root :global {
   .empty-dataset {
     text-align: center;
-    margin: 50px auto;
+    margin: 30px auto;
     p {
       color: #777;
     }
+  }
+
+  .continue-button {
+    margin-top: 45px;
   }
 }

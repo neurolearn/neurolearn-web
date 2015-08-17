@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import ImageItem from './ImageItem';
+import { Link } from 'react-router';
+
+import styles from './SelectImagesModal.scss';
 
 export default class SelectImagesModal extends React.Component {
   static propTypes = {
@@ -26,7 +29,7 @@ export default class SelectImagesModal extends React.Component {
   renderImages(images) {
     const { collection } = this.props;
     return (
-      <ul>
+      <ul className={styles.root}>
         {images.map((image) =>
           <ImageItem {...image}
                      key={image.url}
@@ -61,6 +64,7 @@ export default class SelectImagesModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
+          <Link className="btn btn-primary continue-button" to="/train-model/training-label">Continue to Training Label</Link>
         </Modal.Footer>
       </Modal>
     );

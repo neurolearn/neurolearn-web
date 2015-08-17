@@ -5,6 +5,8 @@ import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 import { RESULTS_PER_PAGE } from '../constants/Search';
+import { Link } from 'react-router';
+
 import {
   showSelectImagesModal,
   hideSelectImagesModal,
@@ -147,6 +149,7 @@ class InputData extends React.Component {
                   : <SelectedCollectionList selectedImages={selectedImages}
                                onItemClick={(id) => this.handleCollectionClick(id)} />
                 }
+                <Link disabled={anySelected} className="btn btn-primary btn-block continue-button" to="/train-model/training-label">Continue to Training Label</Link>
               </div>
             </div>
           </div>

@@ -11,26 +11,31 @@ export default class SelectedCollectionList extends React.Component {
     this.props.onItemClick(collectionId);
   }
 
-  renderCollection(collection, selectedImages) {
-    const countSelected = Object.keys(selectedImages).reduce((accum, key) =>
+  countSelectedImages(selectedImages) {
+    return Object.keys(selectedImages).reduce((accum, key) =>
       selectedImages[key] ? accum + 1 : accum,
     0);
+  }
 
+  renderCollection(collection, count) {
     return (
       <p>
         <a href="#" onClick={(e) =>this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
-        &nbsp;({countSelected})
+        &nbsp;({count})
       </p>
     );
   }
 
   render() {
     const { images, collectionsById } = this.props.selectedImages;
-
     return (
       <div>
-        {Object.keys(images).map((collectionId) =>
-          this.renderCollection(collectionsById[collectionId], images[collectionId]))}
+        {Object.keys(images).map((collectionId) => {
+          const count = this.countSelectedImages(images[collectionId]);
+          return count
+            ? this.renderCollection(collectionsById[collectionId], count)
+            : null;
+        })}
       </div>
     );
   }

@@ -30,7 +30,7 @@ export default class SearchResult extends React.Component {
             <div className="number-of-images">{number_of_images} images</div>
           </div>
           <div className="button">
-            <Button bsStyle='primary' onClick={this.props.onClick}>Select Images</Button>
+            <Button bsStyle='default' onClick={this.props.onClick}>Select Images</Button>
           </div>
         </div>
       </div>
