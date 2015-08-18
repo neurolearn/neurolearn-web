@@ -55,11 +55,19 @@ export default class TrainingLabel extends React.Component {
     return [firstRow].concat(data);
   }
 
+  convertToArrayOfArrays(data) {
+    console.log(data);
+    const keys = Object.keys(data[0]);
+
+    return [keys].concat(data.map(item => keys.map(key => item[key])));
+  }
+
   renderDataGrid(imagesMetadata) {
+    const data = this.convertToArrayOfArrays(imagesMetadata);
     return (
       <div>
         <p>Select image filenames and training labels. Right click a corresponding column for each.</p>
-        <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={this.prependRowWithColumnNames(imagesMetadata)} />
+        <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} />
       </div>
     );
   }
