@@ -14,7 +14,8 @@ import { SHOW_SELECT_IMAGES_MODAL,
          SELECT_SORT_TYPE,
          RESET_IMAGES_METADATA,
          REQUEST_IMAGES_METADATA,
-         RECEIVE_IMAGES_METADATA
+         RECEIVE_IMAGES_METADATA,
+         SET_TARGET_DATA
 } from './actionTypes';
 
 export function showSelectImagesModal(collectionId) {
@@ -190,5 +191,12 @@ export function loadImagesMetadata(collectionId) {
     dispatch(requestImagesMetadata(collectionId));
     return fetchImagesMetadata(collectionId)
       .end((err, res) => dispatch(receiveImagesMetadata(collectionId, res.body.results)));
+  };
+}
+
+export function setTargetData(targetData) {
+  return {
+    type: SET_TARGET_DATA,
+    targetData
   };
 }

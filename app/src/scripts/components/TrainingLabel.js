@@ -6,19 +6,18 @@ import SelectTrainingLabel from './SelectTrainingLabel';
 import DataGrid from './DataGrid';
 
 import {
-  loadImagesMetadata
+  loadImagesMetadata,
+  setTargetData
 } from '../actions';
 
 export default class TrainingLabel extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    selectedImages: PropTypes.object,
+    imagesMetadata: PropTypes.array
   };
 
   componentDidMount() {
-    /*
-      If only one collection is selected request NeuroVault for metadata
-      Else Let the user upload his own data
-    */
     const { images } = this.props.selectedImages;
     const selectedCollectionIds = Object.keys(images).filter((collectionId) =>
       this.countSelectedImages(images[collectionId])
@@ -36,8 +35,7 @@ export default class TrainingLabel extends React.Component {
   }
 
   handleTargetSelection(targetData) {
-    console.log(targetData);
-    this.targetData = targetData;
+    this.props.dispatch(setTargetData(targetData));
   }
 
   renderUploadAndSelect() {
@@ -70,6 +68,10 @@ export default class TrainingLabel extends React.Component {
         <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} />
       </div>
     );
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.imagesMetadata !== this.props.imagesMetadata;
   }
 
   render() {

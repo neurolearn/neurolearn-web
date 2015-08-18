@@ -15,7 +15,8 @@ import {
   SELECT_SORT_TYPE,
   REQUEST_IMAGES_METADATA,
   RECEIVE_IMAGES_METADATA,
-  RESET_IMAGES_METADATA
+  RESET_IMAGES_METADATA,
+  SET_TARGET_DATA
 } from '../actions/actionTypes';
 import { DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -98,6 +99,17 @@ function imagesMetadata(state = [], action) {
   }
 }
 
+
+function targetData(state = [], action) {
+  switch (action.type) {
+    case SET_TARGET_DATA:
+      return action.targetData;
+    default:
+      return state;
+  }
+}
+
+
 function search(state = {
     isFetching: false,
     query: '',
@@ -141,6 +153,7 @@ function search(state = {
 
 const rootReducer = combineReducers({
   imagesMetadata,
+  targetData,
   selectImagesModal,
   selectedImages,
   search
