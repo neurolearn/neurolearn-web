@@ -74,6 +74,7 @@ export default class TrainingLabel extends React.Component {
           : this.renderDataGrid(this.props.imagesMetadata)
         }
 
+        <hr/>
         <Link disabled={false} className="btn btn-primary continue-button" to="/train-model/model-preferences">Continue to Model Preferences</Link>
       </div>
     );
