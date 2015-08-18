@@ -13,7 +13,9 @@ import {
   CHANGE_FILTER,
   SELECT_SEARCH_OFFSET,
   SELECT_SORT_TYPE,
-  RECEIVE_IMAGES_METADATA
+  REQUEST_IMAGES_METADATA,
+  RECEIVE_IMAGES_METADATA,
+  RESET_IMAGES_METADATA
 } from '../actions/actionTypes';
 import { DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -86,6 +88,9 @@ const propsToOmit = ['collection', 'cognitive_paradigm_cogatlas_id', 'descriptio
 
 function imagesMetadata(state = [], action) {
   switch (action.type) {
+    case RESET_IMAGES_METADATA:
+    case REQUEST_IMAGES_METADATA:
+      return [];
     case RECEIVE_IMAGES_METADATA:
       return action.results.map((item) => omit(item, propsToOmit));
     default:

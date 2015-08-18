@@ -12,6 +12,7 @@ import { SHOW_SELECT_IMAGES_MODAL,
          CHANGE_FILTER,
          SELECT_SEARCH_OFFSET,
          SELECT_SORT_TYPE,
+         RESET_IMAGES_METADATA,
          REQUEST_IMAGES_METADATA,
          RECEIVE_IMAGES_METADATA
 } from './actionTypes';
@@ -154,6 +155,12 @@ export function changeFilter(filter) {
   return {
     type: CHANGE_FILTER,
     filter
+  };
+}
+
+export function resetImagesMetadata() {
+  return {
+    type: RESET_IMAGES_METADATA
   };
 }
 

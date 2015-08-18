@@ -16,7 +16,8 @@ import {
   inputSearchQuery,
   selectSearchOffset,
   selectSortType,
-  changeFilter
+  changeFilter,
+  resetImagesMetadata
 } from '../actions';
 
 import styles from './InputData.scss';
@@ -67,10 +68,12 @@ class InputData extends React.Component {
 
   handleImageToggle(collection, imageId) {
     this.props.dispatch(toggleImage(collection, imageId));
+    this.props.dispatch(resetImagesMetadata());
   }
 
   handleToggleAll(collection, checked) {
     this.props.dispatch(toggleAllImages(collection, checked));
+    this.props.dispatch(resetImagesMetadata());
   }
 
   getCollection(collectionId, collectionsById) {
