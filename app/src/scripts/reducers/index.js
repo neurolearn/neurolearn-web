@@ -99,7 +99,6 @@ function imagesMetadata(state = [], action) {
   }
 }
 
-
 function targetData(state = [], action) {
   switch (action.type) {
     case SET_TARGET_DATA:
@@ -108,7 +107,6 @@ function targetData(state = [], action) {
       return state;
   }
 }
-
 
 function search(state = {
     isFetching: false,

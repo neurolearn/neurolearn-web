@@ -15,7 +15,9 @@ import { SHOW_SELECT_IMAGES_MODAL,
          RESET_IMAGES_METADATA,
          REQUEST_IMAGES_METADATA,
          RECEIVE_IMAGES_METADATA,
-         SET_TARGET_DATA
+         SET_TARGET_DATA,
+         REQUEST_MODEL_TRAINING,
+         RECEIVE_JOB_ID
 } from './actionTypes';
 
 export function showSelectImagesModal(collectionId) {
@@ -198,5 +200,39 @@ export function setTargetData(targetData) {
   return {
     type: SET_TARGET_DATA,
     targetData
+  };
+}
+
+function requestModelTraining() {
+  return {
+    type: REQUEST_MODEL_TRAINING
+  };
+}
+
+function startModelTraining(targetData, algorithm) {
+  const payload = {
+    'data': targetData,
+    'collection_id': 504,
+    'algorithm': algorithm
+  };
+
+  return request.post('/analysis')
+    .type('json')
+    .accept('json')
+    .send(payload);
+}
+
+function receiveJobId(jobid) {
+  return {
+    type: RECEIVE_JOB_ID,
+    jobid
+  };
+}
+
+export function trainModel(targetData, algorithm) {
+  return dispatch => {
+    dispatch(requestModelTraining());
+    return startModelTraining(targetData, algorithm)
+      .end((err, res) => dispatch(receiveJobId(res.body.jobid)));
   };
 }
