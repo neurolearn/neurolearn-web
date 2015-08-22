@@ -2,7 +2,6 @@
 @import 'vendor/jquery-ui.css';
 @import 'NSViewer.css';
 
-div#root {
+.appcontent {
     margin: 20px 20px 20px 20px;
 }
-

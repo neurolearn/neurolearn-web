@@ -7,8 +7,31 @@ export default class App extends React.Component {
 
   render () {
     return (
-      <div className="App">
-        {this.props.children}
+      <div>
+        <nav className="navbar navbar-default navbar-static-top">
+          <div className="container-fluid">
+            <div className="navbar-header">
+              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span className="sr-only">Toggle navigation</span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+              </button>
+              <a className="navbar-brand" href="#">Neurolearn</a>
+            </div>
+            <div id="navbar" className="navbar-collapse collapse">
+              <ul className="nav navbar-nav">
+                <li className="active"><a id="navLinkHome"href="#">Train Model</a></li>
+              </ul>
+              <ul className="nav navbar-nav navbar-right navbar-user">
+                <li><a href="/admin/logout"><i className="fa fa-power-off"></i> <span translate>Log Out</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div className="appcontent">
+          {this.props.children}
+        </div>
       </div>
     );
   }
