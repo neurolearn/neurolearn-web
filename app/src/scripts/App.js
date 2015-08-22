@@ -24,7 +24,7 @@ export default class App extends React.Component {
                 <li className="active"><a id="navLinkHome"href="#">Train Model</a></li>
               </ul>
               <ul className="nav navbar-nav navbar-right navbar-user">
-                <li><a href="/admin/logout"><i className="fa fa-power-off"></i> <span translate>Log Out</span></a></li>
+                <li><a href="#"><i className="fa fa-power-off"></i> <span>Log In</span></a></li>
               </ul>
             </div>
           </div>
