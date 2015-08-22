@@ -1,6 +1,8 @@
 import cloneDeep from 'lodash/lang/cloneDeep';
 import omit from 'lodash/object/omit';
 import { combineReducers } from 'redux';
+import authModal from '../state/authModal';
+import auth from '../state/auth';
 
 import {
   SHOW_SELECT_IMAGES_MODAL,
@@ -150,6 +152,8 @@ function search(state = {
 }
 
 const rootReducer = combineReducers({
+  auth,
+  authModal,
   imagesMetadata,
   targetData,
   selectImagesModal,
