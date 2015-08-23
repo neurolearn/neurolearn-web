@@ -15,7 +15,7 @@ from flask_security import current_user
 from jinja2 import filters, Markup
 
 from nlweb import db
-from nlweb.models import User, Role
+from nlweb.models import User, Role, MLModel
 
 from nlweb.utils import friendly_time
 
@@ -137,5 +137,6 @@ admin = admin.Admin(name='Neurolearn',
                     base_template='admin/admin_base.html',
                     template_mode='bootstrap3')
 
+admin.add_view(ModelView(MLModel, db.session))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(RoleAdmin(Role, db.session))

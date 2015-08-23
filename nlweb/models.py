@@ -1,7 +1,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Column, orm, func
+from sqlalchemy import Column
 
 from flask.ext.security import UserMixin, RoleMixin
 
