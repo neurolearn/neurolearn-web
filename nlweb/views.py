@@ -8,8 +8,7 @@ from flask import Blueprint, render_template, current_app
 from flask import request, Response, send_from_directory
 from flask import jsonify
 
-from flask.ext.security import login_required, current_user
-from flask_jwt import jwt_required
+from flask_jwt import jwt_required, current_user
 
 import requests
 
@@ -17,31 +16,14 @@ from nlweb import tasks
 from nlweb.tasks import celery
 from nlweb.extensions import uploaded_media
 
+from .models import db, MLModel
+
 frontend = Blueprint('frontend', __name__)
 
 
-def _render_index_template(**kwargs):
-    import copy
-    env = copy.copy(current_app.jinja_env)
-
-    env.line_statement_prefix = '//#'
-    env.line_comment_prefix = '//**'
-    env.variable_start_string = 'JINJA_VALUE(/*'
-    env.variable_end_string = '*/)'
-    env.comment_start_string = '//{#'
-    env.comment_end_string = '//#}'
-
-    template = env.get_template('index.html')
-    return template.render(**kwargs)
-
-
 @frontend.route('/')
-@login_required
 def home():
-    context = {
-        'user': {'id': current_user.id}
-    }
-    return _render_index_template(**context)
+    return render_template('index.html')
 
 
 @frontend.route('/about')
@@ -68,6 +50,11 @@ def analysis():
     job = tasks.train_model.delay(args['data'],
                                   args['collection_id'],
                                   args['algorithm'])
+
+    mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
+                      user=current_user)
+    db.session.add(mlmodel)
+    db.session.commit()
 
     return jsonify({'jobid': job.id})
 
