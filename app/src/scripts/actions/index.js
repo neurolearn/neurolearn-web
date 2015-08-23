@@ -32,11 +32,14 @@ function receiveJobId(jobid) {
   };
 }
 
-export function trainModel(targetData, algorithm) {
+export function trainModel(targetData, algorithm, router) {
   return (dispatch, getState) => {
     dispatch(requestModelTraining());
 
     return startModelTraining(targetData, algorithm, getState().auth.token)
-      .end((err, res) => dispatch(receiveJobId(res.body.jobid)));
+      .end((err, res) => {
+        dispatch(receiveJobId(res.body.jobid));
+        router.transitionTo('/');
+      });
   };
 }

@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import RunAnalysisForm from './RunAnalysisForm';
 import { connect } from 'react-redux';
 import { trainModel } from '../actions';
 
 export default class ModelPreferences extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    targetData: PropTypes.array
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   handleRunAnalysis(algorithm) {
-    console.log(algorithm);
-    // dispatch sending data to the server
-    // redirect to a dashboard and show a task processing
-    //
-    this.props.dispatch(trainModel(this.props.targetData, algorithm));
+    const { router } = this.context;
+    this.props.dispatch(trainModel(this.props.targetData, algorithm, router));
   }
 
   render() {
