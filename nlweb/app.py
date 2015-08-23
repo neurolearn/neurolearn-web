@@ -97,6 +97,13 @@ def register_jwt_handlers(jwt):
     def load_user(payload):
         return User.query.get(payload['user_id'])
 
+    @jwt.payload_handler
+    def make_payload(user):
+        return {
+            'user_id': user.id,
+            'email': user.email
+        }
+
 
 def register_blueprints(app):
     from nlweb.views import frontend

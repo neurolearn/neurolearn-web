@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Navbar, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
 import AuthModal from './components/AuthModal';
 import { showAuthModal, hideAuthModal } from './state/authModal';
 import { login, logout } from './state/auth';
@@ -8,6 +9,7 @@ export default class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
     auth: PropTypes.object,
+    authModal: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -25,32 +27,33 @@ export default class App extends React.Component {
     this.props.dispatch(logout());
   }
 
+  renderLoginLink() {
+    return <NavItem onClick={this.handleShowAuthModal.bind(this)} href='#'>Log In</NavItem>;
+  }
+
+  renderUserDropdown(user) {
+    return (
+      <DropdownButton eventKey={1} title={user.email}>
+        <MenuItem eventKey='1' onClick={this.handleLogout.bind(this)}>Logout</MenuItem>
+      </DropdownButton>
+    );
+  }
+
   render () {
     const { auth, dispatch } = this.props;
     return (
       <div>
-        <nav className="navbar navbar-default navbar-static-top">
-          <div className="container-fluid">
-            <div className="navbar-header">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-              <a className="navbar-brand" href="#">Neurolearn</a>
-            </div>
-            <div id="navbar" className="navbar-collapse collapse">
-              <ul className="nav navbar-nav">
-                <li className="active"><a id="navLinkHome"href="#">Train Model</a></li>
-              </ul>
-              <ul className="nav navbar-nav navbar-right navbar-user">
-                {!auth.user && <li><a href="#" onClick={this.handleShowAuthModal.bind(this)}>Log In</a></li>}
-                {auth.user && <li><a href="#" onClick={this.handleLogout.bind(this)}>Logout</a></li>}
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <Navbar brand='Neurolearn' fluid>
+          <Nav navbar>
+            <NavItem eventKey={0} href='#'>Train Model</NavItem>
+          </Nav>
+          <Nav navbar right>
+            { auth.user
+              ? this.renderUserDropdown(auth.user)
+              : this.renderLoginLink() }
+          </Nav>
+        </Navbar>
+
         <div className="appcontent">
           {this.props.children}
         </div>
