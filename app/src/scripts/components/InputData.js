@@ -7,16 +7,26 @@ import SelectedCollectionList from '../components/SelectedCollectionList';
 import { RESULTS_PER_PAGE } from '../constants/Search';
 import { Link } from 'react-router';
 
+
 import {
   showSelectImagesModal,
   hideSelectImagesModal,
+} from '../state/selectImagesModal';
+
+import {
   toggleImage,
   toggleAllImages,
+} from '../state/selectedImages';
+
+import {
   loadSearchResults,
   inputSearchQuery,
   selectSearchOffset,
   selectSortType,
   changeFilter,
+} from '../state/search';
+
+import {
   resetImagesMetadata
 } from '../actions';
 

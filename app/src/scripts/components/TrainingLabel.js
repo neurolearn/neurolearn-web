@@ -5,10 +5,8 @@ import { Link } from 'react-router';
 import SelectTrainingLabel from './SelectTrainingLabel';
 import DataGrid from './DataGrid';
 
-import {
-  loadImagesMetadata,
-  setTargetData
-} from '../actions';
+import { loadImagesMetadata } from '../state/imagesMetadata';
+import { setTargetData } from '../state/targetData';
 
 export default class TrainingLabel extends React.Component {
   static propTypes = {
