@@ -43,7 +43,7 @@ export default class App extends React.Component {
     const { auth, dispatch } = this.props;
     return (
       <div>
-        <Navbar brand='Neurolearn' fluid>
+        <Navbar fluid brand={<a href="#">Neurolearn</a>}>
           <Nav navbar>
             <NavItem eventKey={0} href='#'>Train Model</NavItem>
           </Nav>
