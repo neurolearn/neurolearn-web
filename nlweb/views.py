@@ -9,6 +9,7 @@ from flask import request, Response, send_from_directory
 from flask import jsonify
 
 from flask.ext.security import login_required, current_user
+from flask_jwt import jwt_required
 
 import requests
 
@@ -61,6 +62,7 @@ def neurovault_proxy(path):
 
 
 @frontend.route('/analysis', methods=['POST'])
+@jwt_required()
 def analysis():
     args = request.json
     job = tasks.train_model.delay(args['data'],

@@ -11,7 +11,7 @@ function requestModelTraining() {
   };
 }
 
-function startModelTraining(targetData, algorithm) {
+function startModelTraining(targetData, algorithm, token) {
   const payload = {
     'data': targetData,
     'collection_id': 504,
@@ -21,6 +21,7 @@ function startModelTraining(targetData, algorithm) {
   return request.post('/analysis')
     .type('json')
     .accept('json')
+    .set('Authorization', 'Bearer ' + token)
     .send(payload);
 }
 
@@ -32,9 +33,10 @@ function receiveJobId(jobid) {
 }
 
 export function trainModel(targetData, algorithm) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(requestModelTraining());
-    return startModelTraining(targetData, algorithm)
+
+    return startModelTraining(targetData, algorithm, getState().auth.token)
       .end((err, res) => dispatch(receiveJobId(res.body.jobid)));
   };
 }

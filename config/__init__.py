@@ -33,3 +33,4 @@ class Configuration(object):
     SECURITY_SEND_REGISTER_EMAIL = False
 
     JWT_AUTH_USERNAME_KEY = 'email'
+    JWT_AUTH_HEADER_PREFIX = 'Bearer'
