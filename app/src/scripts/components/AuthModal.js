@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button, Input, Alert } from 'react-bootstrap';
+import { Modal, Button, ButtonInput, Input, Alert } from 'react-bootstrap';
 
 
 export default class SelectImagesModal extends React.Component {
@@ -9,7 +9,8 @@ export default class SelectImagesModal extends React.Component {
     onLogin: PropTypes.func.isRequired
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const email = this.refs.email.getValue(),
       password = this.refs.password.getValue();
     this.props.onLogin(email, password);
@@ -36,24 +37,24 @@ export default class SelectImagesModal extends React.Component {
         <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-lg'>Log In</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-         { loginError && loginError.message &&
-          <Alert bsStyle='danger'>{auth.loginError.message}</Alert>
-         }
-          <form onSubmit={this.handleSubmit.bind(this)}>
-            <Input {...this.errorProps('email', loginError)}
-                   type='email'
-                   ref='email'
-                   label='Email Address' />
-            <Input {...this.errorProps('password', loginError)}
-                   type='password'
-                   ref='password'
-                   label='Password' />
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>Log In</Button>
-        </Modal.Footer>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <Modal.Body>
+           { loginError && loginError.message &&
+            <Alert bsStyle='danger'>{auth.loginError.message}</Alert>
+           }
+              <Input {...this.errorProps('email', loginError)}
+                     type='email'
+                     ref='email'
+                     label='Email Address' />
+              <Input {...this.errorProps('password', loginError)}
+                     type='password'
+                     ref='password'
+                     label='Password' />
+          </Modal.Body>
+          <Modal.Footer>
+            <ButtonInput bsStyle="primary" type='submit' value='Log In' />
+          </Modal.Footer>
+        </form>
       </Modal>
     );
   }
