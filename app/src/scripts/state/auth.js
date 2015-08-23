@@ -1,11 +1,11 @@
 import request from 'superagent';
+import jwtDecode from 'jwt-decode';
+import { hideAuthModal } from './authModal';
 
 const REQUEST_LOGIN = 'REQUEST_LOGIN';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAIL = 'LOGIN_FAIL';
-const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
-const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
-const LOGOUT_FAIL = 'LOGOUT_FAIL';
+const LOGOUT = 'LOGOUT';
 
 export function requestLogin() {
   return {
@@ -13,16 +13,10 @@ export function requestLogin() {
   };
 }
 
-export function requestLogout() {
-  return {
-    type: REQUEST_LOGOUT
-  };
-}
-
-function loginSuccess(user) {
+function loginSuccess(token) {
   return {
     type: LOGIN_SUCCESS,
-    user
+    token
   };
 }
 
@@ -33,21 +27,14 @@ function loginFail(loginError) {
   };
 }
 
-function logoutSuccess() {
+export function logout() {
   return {
-    type: LOGOUT_SUCCESS
-  };
-}
-
-function logoutFail(logoutError) {
-  return {
-    type: LOGOUT_FAIL,
-    logoutError
+    type: LOGOUT
   };
 }
 
 function fetchAuthToken(email, password) {
-  return request.post('/login/')
+  return request.post('/auth')
     .type('json')
     .accept('json')
     .send({email, password});
@@ -61,25 +48,12 @@ export function login(email, password) {
         if (err) {
           dispatch(loginFail({message: err.message}));
         } else {
-          if (res.body.response.errors) {
-            dispatch(loginFail({fields: res.body.response.errors}));
+          if (res.body.errors) {
+            dispatch(loginFail({fields: res.body.errors}));
           } else {
-            dispatch(loginSuccess(res.body.response.user));
+            dispatch(loginSuccess(res.body.token));
+            dispatch(hideAuthModal());
           }
-        }
-      });
-  };
-}
-
-export function logout() {
-  return dispatch => {
-    dispatch(requestLogout());
-    return request.get('/logout/')
-      .end((err) => {
-        if (err) {
-          dispatch(logoutFail({message: err.message}));
-        } else {
-          dispatch(logoutSuccess());
         }
       });
   };
@@ -93,7 +67,7 @@ export default function reducer(state = { display: false }, action) {
       return {
         ...state,
         loggingIn: false,
-        user: null,
+        token: null,
         loginError: action.loginError
       };
     case LOGIN_SUCCESS:
@@ -101,16 +75,13 @@ export default function reducer(state = { display: false }, action) {
         ...state,
         loggingIn: false,
         loginError: null,
-        user: action.user
+        token: action.token,
+        user: jwtDecode(action.token)
       };
-    case LOGOUT_FAIL:
+    case LOGOUT:
       return {
         ...state,
-        logoutError: action.logoutError
-      };
-    case LOGOUT_SUCCESS:
-      return {
-        ...state,
+        token: null,
         user: null
       };
     default:
