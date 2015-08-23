@@ -13,6 +13,9 @@ from .models import User, Role
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(datastore=user_datastore)
 
+from flask_jwt import JWT
+jwt = JWT()
+
 from flaskext.uploads import UploadSet
 uploaded_media = UploadSet('media')
 

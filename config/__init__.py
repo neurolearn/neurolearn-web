@@ -32,4 +32,4 @@ class Configuration(object):
     SECURITY_REGISTERABLE = True
     SECURITY_SEND_REGISTER_EMAIL = False
 
-    WTF_CSRF_ENABLED = False
+    JWT_AUTH_USERNAME_KEY = 'email'

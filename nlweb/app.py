@@ -5,11 +5,14 @@ import os
 from flask import Flask, render_template
 from flaskext.uploads import configure_uploads
 from flask_admin import helpers as admin_helpers
+from flask.ext.security.utils import verify_and_update_password
 
 from .admin import admin
 
 from .extensions import (db, migrate, celery, uploaded_media,
-                         security, mail)
+                         jwt, security, mail)
+
+from .models import User
 
 
 def load_celery_config(celery_obj):
@@ -61,13 +64,17 @@ def init_extensions(app):
     migrate.init_app(app, db)
 
     mail.init_app(app)
+    jwt.init_app(app)
     security.init_app(app)
     admin.init_app(app)
     configure_uploads(app, uploaded_media)
 
     load_celery_config(celery)
 
+    register_jwt_handlers(jwt)
+
     security2 = app.extensions['security']
+
     @security2.context_processor
     def security_context_processor():
         return dict(
@@ -75,6 +82,20 @@ def init_extensions(app):
             admin_view=admin.index_view,
             h=admin_helpers,
         )
+
+
+def register_jwt_handlers(jwt):
+    @jwt.authentication_handler
+    def authenticate(email, password):
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return False
+        if verify_and_update_password(password, user):
+            return user
+
+    @jwt.user_handler
+    def load_user(payload):
+        return User.query.get(payload['user_id'])
 
 
 def register_blueprints(app):
