@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from datetime import timedelta
 
 
 class Configuration(object):
@@ -34,3 +35,4 @@ class Configuration(object):
 
     JWT_AUTH_USERNAME_KEY = 'email'
     JWT_AUTH_HEADER_PREFIX = 'Bearer'
+    JWT_EXPIRATION_DELTA = timedelta(hours=24)
