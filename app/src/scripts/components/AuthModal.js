@@ -4,6 +4,7 @@ import { Modal, Button, Input, Alert } from 'react-bootstrap';
 
 export default class SelectImagesModal extends React.Component {
   static propTypes = {
+    auth: PropTypes.object.isRequired,
     onHide: PropTypes.func.isRequired,
     onLogin: PropTypes.func.isRequired
   }

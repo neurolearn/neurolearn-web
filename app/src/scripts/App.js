@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import AuthModal from './components/AuthModal';
 import { showAuthModal, hideAuthModal } from './state/authModal';
-import { login } from './state/auth';
+import { login, logout } from './state/auth';
 
 export default class App extends React.Component {
   static propTypes = {
@@ -17,12 +17,12 @@ export default class App extends React.Component {
   }
 
   handleLogin(email, password) {
-    console.log(email, password);
     this.props.dispatch(login(email, password));
   }
 
-  handleLogOut(e) {
+  handleLogout(e) {
     e.preventDefault();
+    this.props.dispatch(logout());
   }
 
   render () {
