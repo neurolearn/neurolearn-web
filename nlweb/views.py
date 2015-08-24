@@ -18,6 +18,9 @@ from nlweb.extensions import uploaded_media
 
 from .models import db, MLModel
 
+from .marshal import (marshal_list, as_integer,
+                      as_string, as_iso_date)
+
 frontend = Blueprint('frontend', __name__)
 
 
@@ -41,6 +44,19 @@ def neurovault_proxy(path):
 
     return Response(req.text,
                     content_type=req.headers['content-type'])
+
+
+@frontend.route('/mlmodels')
+@jwt_required()
+def mlmodels():
+    mfields = {
+        'id': as_integer,
+        'name': as_string,
+        'created': as_iso_date
+    }
+
+    mlmodel_list = current_user.mlmodels.order_by('created desc')
+    return jsonify(marshal_list(mlmodel_list, mfields))
 
 
 @frontend.route('/analysis', methods=['POST'])

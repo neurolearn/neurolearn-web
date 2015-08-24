@@ -60,6 +60,7 @@ class MLModel(db.Model):
     STATUS_DELETED = 'deleted'
 
     id = Column(db.Integer, primary_key=True)
+    name = Column(db.String, nullable=False)
 
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)
@@ -67,7 +68,7 @@ class MLModel(db.Model):
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',
                            foreign_keys=[user_id],
-                           backref=db.backref('models', lazy='dynamic'))
+                           backref=db.backref('mlmodels', lazy='dynamic'))
 
     status = Column(db.Enum(STATUS_DRAFT, STATUS_PUBLIC, STATUS_DELETED,
                             name='status_types'),
