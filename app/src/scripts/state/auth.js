@@ -1,6 +1,7 @@
 import request from 'superagent';
 import jwtDecode from 'jwt-decode';
 import { hideAuthModal } from './authModal';
+import { JWT_KEY_NAME } from '../constants/auth';
 
 const REQUEST_LOGIN = 'REQUEST_LOGIN';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -13,7 +14,7 @@ export function requestLogin() {
   };
 }
 
-function loginSuccess(token) {
+export function loginSuccess(token) {
   return {
     type: LOGIN_SUCCESS,
     token
@@ -51,8 +52,10 @@ export function login(email, password) {
           if (res.body.errors) {
             dispatch(loginFail({fields: res.body.errors}));
           } else {
-            dispatch(loginSuccess(res.body.token));
+            const jwt = res.body.token;
+            dispatch(loginSuccess(jwt));
             dispatch(hideAuthModal());
+            localStorage.setItem(JWT_KEY_NAME, jwt);
           }
         }
       });

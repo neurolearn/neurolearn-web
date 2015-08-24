@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Navbar, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
 import AuthModal from './components/AuthModal';
 import { showAuthModal, hideAuthModal } from './state/authModal';
-import { login, logout } from './state/auth';
+import { login, logout, loginSuccess } from './state/auth';
+import { JWT_KEY_NAME } from './constants/auth';
 
 export default class App extends React.Component {
   static propTypes = {
@@ -12,6 +13,13 @@ export default class App extends React.Component {
     authModal: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    const jwt = localStorage.getItem(JWT_KEY_NAME);
+    if (jwt) {
+      this.props.dispatch(loginSuccess(jwt));
+    }
+  }
 
   handleShowAuthModal(e) {
     e.preventDefault();
@@ -24,6 +32,7 @@ export default class App extends React.Component {
 
   handleLogout(e) {
     e.preventDefault();
+    localStorage.removeItem(JWT_KEY_NAME);
     this.props.dispatch(logout());
   }
 
