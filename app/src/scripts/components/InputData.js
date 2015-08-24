@@ -7,6 +7,7 @@ import SelectedCollectionList from '../components/SelectedCollectionList';
 import { RESULTS_PER_PAGE } from '../constants/Search';
 import { Link } from 'react-router';
 
+import {resetImagesMetadata } from '../state/imagesMetadata';
 
 import {
   showSelectImagesModal,
@@ -25,10 +26,6 @@ import {
   selectSortType,
   changeFilter,
 } from '../state/search';
-
-import {
-  resetImagesMetadata
-} from '../actions';
 
 import styles from './InputData.scss';
 
