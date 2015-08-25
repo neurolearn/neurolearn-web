@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import { loadMLModels } from '../state/mlModels';
 import { connect } from 'react-redux';
 
+import styles from './Dashboard.scss';
+
 export default class Dashboard extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -17,9 +19,14 @@ export default class Dashboard extends React.Component {
   renderMLModels(mlModels) {
     const models = values(mlModels);
     return models.map(model =>
-      <Link to={`/model/${model.id}`}>
-        <h3>{model.name}</h3>
-      </Link>
+      <div className="row mlmodel-row">
+        <div className="col-md-9">
+          <Link to={`/model/${model.id}`}>{model.name}</Link>
+        </div>
+        <div className="col-md-3">
+          <span className="datetime">{model.created}</span>
+        </div>
+      </div>
     );
   }
 
@@ -35,7 +42,7 @@ export default class Dashboard extends React.Component {
     const { mlModels } = this.props;
 
     return (
-      <div>
+      <div className={styles.root}>
         <h1 className="page-header">Dashboard</h1>
         <div className="row">
           <div className="col-md-3">

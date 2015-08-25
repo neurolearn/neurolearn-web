@@ -1,0 +1,16 @@
+.root :global {
+  .mlmodel-row {
+    padding: 10px;
+  }
+
+  .mlmodel-row a {
+    font-size: 20px;
+    font-weight: 500;
+
+  }
+
+  .mlmodel-row .datetime {
+    color: gray;
+    font-size: 12px;
+  }
+}
