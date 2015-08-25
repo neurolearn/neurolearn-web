@@ -11,7 +11,7 @@ def as_string(value):
 
 
 def as_iso_date(dt):
-    return dt.isoformat()
+    return dt.isoformat() + 'Z'
 
 
 def marshal_obj(obj, fields):

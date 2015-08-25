@@ -1,6 +1,8 @@
+import { trim } from 'lodash';
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
-import RunAnalysisForm from './RunAnalysisForm';
+import classNames from 'classnames';
+
 import { connect } from 'react-redux';
 import { trainModel } from '../actions';
 
@@ -14,22 +16,73 @@ export default class ModelPreferences extends React.Component {
     router: PropTypes.object.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      modelName: '',
+      submitEnabled: false
+    };
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.handleRunAnalysis(
+      this.refs.algorithmInput.getDOMNode().value
+    );
+  }
+
+  handleInputChange() {
+    const modelName = trim(this.refs.modelName.getValue());
+    const algorithmInput = this.refs.algorithmInput.getDOMNode().value;
+
+    const enabled = algorithmInput !== '' && modelName !== '';
+
+    this.setState({
+      submitEnabled: enabled,
+      modelName: modelName
+    });
+  }
+
   handleRunAnalysis(algorithm) {
     const { router } = this.context;
-    const modelName = this.refs.modelName.getValue();
+    const modelName = this.state.modelName;
     this.props.dispatch(trainModel(this.props.targetData, algorithm, modelName, router));
   }
 
   render() {
+    var classes = classNames({
+      'btn': true,
+      'btn-primary': true,
+      'disabled': !this.state.submitEnabled
+    });
+
     return (
       <div>
         <h1 className="page-header">Model Preferences</h1>
         <div className="row">
           <div className="col-md-6">
-            <Input type='text'
-                   ref='modelName'
-                   label='Model Name'/>
-            <RunAnalysisForm onRunAnalysis={this.handleRunAnalysis.bind(this)}/>
+            <form onSubmit={this.handleSubmit.bind(this)}>
+              <div className="form-group">
+                <Input type='text'
+                       value={this.state.value}
+                       onChange={this.handleInputChange.bind(this)}
+                       ref='modelName'
+                       label='Model Name'/>
+              </div>
+              <div className="form-group">
+                <label>Select the type of an algorithm.</label>
+                <select className="form-control"
+                        ref="algorithmInput"
+                        onChange={this.handleInputChange.bind(this)}
+                        style={{marginRight: 10}}>
+                  <option value="">Select an Algorithm</option>
+                  <option value="svm">svm</option>
+                  <option value="svr">svr</option>
+                  <option value="ridge">ridge</option>
+                </select>
+              </div>
+              <button type="submit" className={classes}>Run Analysis</button>
+            </form>
           </div>
         </div>
       </div>
