@@ -11,11 +11,12 @@ function requestModelTraining() {
   };
 }
 
-function startModelTraining(targetData, algorithm, token) {
+function startModelTraining(targetData, algorithm, name, token) {
   const payload = {
     'data': targetData,
     'collection_id': 504,
-    'algorithm': algorithm
+    algorithm,
+    name
   };
 
   return request.post('/analysis')
@@ -25,20 +26,19 @@ function startModelTraining(targetData, algorithm, token) {
     .send(payload);
 }
 
-function receiveJobId(jobid) {
+function receiveJobId() {
   return {
-    type: RECEIVE_JOB_ID,
-    jobid
+    type: RECEIVE_JOB_ID
   };
 }
 
-export function trainModel(targetData, algorithm, router) {
+export function trainModel(targetData, algorithm, name, router) {
   return (dispatch, getState) => {
     dispatch(requestModelTraining());
 
-    return startModelTraining(targetData, algorithm, getState().auth.token)
+    return startModelTraining(targetData, algorithm, name, getState().auth.token)
       .end((err, res) => {
-        dispatch(receiveJobId(res.body.jobid));
+        dispatch(receiveJobId());
         router.transitionTo('/');
       });
   };

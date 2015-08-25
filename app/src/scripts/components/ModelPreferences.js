@@ -16,16 +16,22 @@ export default class ModelPreferences extends React.Component {
 
   handleRunAnalysis(algorithm) {
     const { router } = this.context;
-    this.props.dispatch(trainModel(this.props.targetData, algorithm, router));
+    const modelName = this.refs.modelName.getValue();
+    this.props.dispatch(trainModel(this.props.targetData, algorithm, modelName, router));
   }
 
   render() {
     return (
       <div>
         <h1 className="page-header">Model Preferences</h1>
-        <p className="lead">Select the type of algorithm.</p>
-
-        <RunAnalysisForm onRunAnalysis={this.handleRunAnalysis.bind(this)}/>
+        <div className="row">
+          <div className="col-md-6">
+            <Input type='text'
+                   ref='modelName'
+                   label='Model Name'/>
+            <RunAnalysisForm onRunAnalysis={this.handleRunAnalysis.bind(this)}/>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,8 +1,9 @@
-import { values, isEmpty } from 'lodash';
+import { values, sortByOrder, isEmpty } from 'lodash';
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { loadMLModels } from '../state/mlModels';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import styles from './Dashboard.scss';
 
@@ -17,14 +18,14 @@ export default class Dashboard extends React.Component {
   }
 
   renderMLModels(mlModels) {
-    const models = values(mlModels);
+    const models = sortByOrder(values(mlModels), 'created', 'desc');
     return models.map(model =>
       <div className="row mlmodel-row">
         <div className="col-md-9">
           <Link to={`/model/${model.id}`}>{model.name}</Link>
         </div>
         <div className="col-md-3">
-          <span className="datetime">{model.created}</span>
+          <span className="datetime">{moment(model.created).fromNow()}</span>
         </div>
       </div>
     );

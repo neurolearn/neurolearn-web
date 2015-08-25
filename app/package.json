@@ -55,7 +55,7 @@
     "jwt-decode": "^1.4.0",
     "legacy-loader": "0.0.2",
     "lodash": "^3.10.0",
-    "moment": "^2.10.3",
+    "moment": "^2.10.6",
     "numeral": "^1.5.3",
     "numeric": "^1.2.6",
     "papaparse": "^4.1.1",

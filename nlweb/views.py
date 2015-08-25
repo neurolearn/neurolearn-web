@@ -63,16 +63,18 @@ def mlmodels():
 @jwt_required()
 def analysis():
     args = request.json
-    job = tasks.train_model.delay(args['data'],
-                                  args['collection_id'],
-                                  args['algorithm'])
+    # job = tasks.train_model.delay(args['data'],
+    #                               args['collection_id'],
+    #                               args['algorithm'])
 
     mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
+                      name=args['name'],
                       user=current_user)
     db.session.add(mlmodel)
     db.session.commit()
 
-    return jsonify({'jobid': job.id})
+    # return jsonify({'jobid': job.id})
+    return 'Created', 201
 
 
 @frontend.route('/applymask', methods=['POST'])

@@ -31,9 +31,9 @@ export default class RunAnalysisForm extends React.Component {
     });
 
     return (
-      <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit.bind(this)}>
         <div className="form-group">
-          <p></p>
+          <label>Select the type of an algorithm.</label>
           <select className="form-control"
                   ref="algorithmInput"
                   onChange={this.handleInputChange.bind(this)}
@@ -43,8 +43,8 @@ export default class RunAnalysisForm extends React.Component {
             <option value="svr">svr</option>
             <option value="ridge">ridge</option>
           </select>
-          <button type="submit" className={classes}>Run Analysis</button>
         </div>
+        <button type="submit" className={classes}>Run Analysis</button>
       </form>
     );
   }
