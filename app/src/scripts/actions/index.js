@@ -19,7 +19,7 @@ function startModelTraining(targetData, algorithm, name, token) {
     name
   };
 
-  return request.post('/analysis')
+  return request.post('/mlmodels')
     .type('json')
     .accept('json')
     .set('Authorization', 'Bearer ' + token)

@@ -26,7 +26,7 @@ export default class ModelPreferences extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.handleRunAnalysis(
+    this.handleTrainModelClick(
       this.refs.algorithmInput.getDOMNode().value
     );
   }
@@ -43,7 +43,7 @@ export default class ModelPreferences extends React.Component {
     });
   }
 
-  handleRunAnalysis(algorithm) {
+  handleTrainModelClick(algorithm) {
     const { router } = this.context;
     const modelName = this.state.modelName;
     this.props.dispatch(trainModel(this.props.targetData, algorithm, modelName, router));
@@ -81,7 +81,7 @@ export default class ModelPreferences extends React.Component {
                   <option value="ridge">ridge</option>
                 </select>
               </div>
-              <button type="submit" className={classes}>Run Analysis</button>
+              <button type="submit" className={classes}>Train Model</button>
             </form>
           </div>
         </div>

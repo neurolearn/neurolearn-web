@@ -46,7 +46,7 @@ def neurovault_proxy(path):
                     content_type=req.headers['content-type'])
 
 
-@frontend.route('/mlmodels')
+@frontend.route('/mlmodels', methods=['GET'])
 @jwt_required()
 def mlmodels():
     mfields = {
@@ -59,7 +59,7 @@ def mlmodels():
     return jsonify(marshal_list(mlmodel_list, mfields))
 
 
-@frontend.route('/analysis', methods=['POST'])
+@frontend.route('/mlmodels', methods=['POST'])
 @jwt_required()
 def analysis():
     args = request.json
