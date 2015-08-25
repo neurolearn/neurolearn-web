@@ -59,6 +59,11 @@ class MLModel(db.Model):
     STATUS_PUBLIC = 'public'
     STATUS_DELETED = 'deleted'
 
+    TRAINING_QUEUED = 'queued'
+    TRAINING_PROGRESS = 'progress'
+    TRAINING_SUCCESS = 'success'
+    TRAINING_FAILURE = 'failure'
+
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
 
@@ -73,3 +78,16 @@ class MLModel(db.Model):
     status = Column(db.Enum(STATUS_DRAFT, STATUS_PUBLIC, STATUS_DELETED,
                             name='status_types'),
                     nullable=False)
+
+    training_state = Column(db.Enum(TRAINING_QUEUED,
+                                    TRAINING_PROGRESS,
+                                    TRAINING_SUCCESS,
+                                    TRAINING_FAILURE,
+                            name='training_state_types'),
+                            nullable=False)
+
+    data = db.Column(db.Text)
+
+    def __unicode__(self):
+        return self.name
+

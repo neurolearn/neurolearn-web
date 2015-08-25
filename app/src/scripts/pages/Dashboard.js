@@ -24,7 +24,7 @@ export default class Dashboard extends React.Component {
     return models.map(model =>
       <div className="row mlmodel-row">
         <div className="col-md-1" style={{height: 40}}>
-          <Spinner opts={{scale: 0.75}}/>
+          { model.training_state === 'queued' && <Spinner opts={{scale: 0.75}}/> }
         </div>
         <div className="col-md-9">
           <Link to={`/model/${model.id}`}>{model.name}</Link>

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import uuid
+import json
 
 from celery.result import AsyncResult
 
@@ -52,7 +53,8 @@ def mlmodels():
     mfields = {
         'id': as_integer,
         'name': as_string,
-        'created': as_iso_date
+        'created': as_iso_date,
+        'training_state': as_string
     }
 
     mlmodel_list = current_user.mlmodels.order_by('created desc').all()
@@ -68,6 +70,8 @@ def analysis():
     #                               args['algorithm'])
 
     mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
+                      training_state=MLModel.TRAINING_QUEUED,
+                      data=json.dumps({'target_data': args['data']}),
                       name=args['name'],
                       user=current_user)
     db.session.add(mlmodel)

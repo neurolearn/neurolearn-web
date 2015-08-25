@@ -47,9 +47,15 @@ def start_celery():
 
 @manager.command
 def sql(model_name):
-    from rime import models, db
+    from nlweb import models, db
 
     print CreateTable(getattr(models, model_name).__table__).compile(db.engine)
+
+
+@manager.command
+def db_create_all():
+    from nlweb import db
+    db.create_all()
 
 
 @manager.command
