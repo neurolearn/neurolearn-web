@@ -6,13 +6,14 @@ export default class ViewModel extends React.Component {
     params: PropTypes.object.isRequired
   }
 
-  componentDidMount() {
-    const { params } = this.props;
-  }
-
   render() {
+    const { mlModels, params } = this.props;
+    const model = mlModels[parseInt(params.id)];
+
     return (
-      <div>View Model { this.props.params.id }</div>
+      <div>
+        <h1 className="page-header">{model.name}</h1>
+      </div>
     );
   }
 }
