@@ -55,7 +55,7 @@ def mlmodels():
         'created': as_iso_date
     }
 
-    mlmodel_list = current_user.mlmodels.order_by('created desc')
+    mlmodel_list = current_user.mlmodels.order_by('created desc').all()
     return jsonify(marshal_list(mlmodel_list, mfields))
 
 

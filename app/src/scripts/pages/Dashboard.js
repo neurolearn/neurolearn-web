@@ -1,4 +1,4 @@
-import { values } from 'lodash';
+import { values, isEmpty } from 'lodash';
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { loadMLModels } from '../state/mlModels';
@@ -49,9 +49,9 @@ export default class Dashboard extends React.Component {
             <Link className="btn btn-primary btn-block" to="/train-model">Train Model</Link>
           </div>
           <div className="col-md-9">
-            { mlModels
-              ? this.renderMLModels(mlModels)
-              : this.renderEmptyState() }
+            { isEmpty(mlModels)
+              ? this.renderEmptyState()
+              : this.renderMLModels(mlModels) }
           </div>
         </div>
       </div>
