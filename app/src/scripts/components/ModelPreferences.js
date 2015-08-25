@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Input } from 'react-bootstrap';
 import RunAnalysisForm from './RunAnalysisForm';
 import { connect } from 'react-redux';
 import { trainModel } from '../actions';
@@ -23,6 +24,7 @@ export default class ModelPreferences extends React.Component {
       <div>
         <h1 className="page-header">Model Preferences</h1>
         <p className="lead">Select the type of algorithm.</p>
+
         <RunAnalysisForm onRunAnalysis={this.handleRunAnalysis.bind(this)}/>
       </div>
     );
