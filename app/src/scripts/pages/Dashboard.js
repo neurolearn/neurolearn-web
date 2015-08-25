@@ -1,10 +1,12 @@
 import { values, sortByOrder, isEmpty } from 'lodash';
-import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import { loadMLModels } from '../state/mlModels';
-import { connect } from 'react-redux';
 import moment from 'moment';
 
+import React, { PropTypes } from 'react';
+
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import Spinner from '../components/Spinner';
+import { loadMLModels } from '../state/mlModels';
 import styles from './Dashboard.scss';
 
 export default class Dashboard extends React.Component {
@@ -21,10 +23,13 @@ export default class Dashboard extends React.Component {
     const models = sortByOrder(values(mlModels), 'created', 'desc');
     return models.map(model =>
       <div className="row mlmodel-row">
+        <div className="col-md-1" style={{height: 40}}>
+          <Spinner opts={{scale: 0.75}}/>
+        </div>
         <div className="col-md-9">
           <Link to={`/model/${model.id}`}>{model.name}</Link>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <span className="datetime">{moment(model.created).fromNow()}</span>
         </div>
       </div>
