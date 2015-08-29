@@ -49,7 +49,7 @@ def neurovault_proxy(path):
 
 @frontend.route('/mlmodels', methods=['GET'])
 @jwt_required()
-def mlmodels():
+def list_mlmodels():
     mfields = {
         'id': as_integer,
         'name': as_string,
@@ -63,7 +63,7 @@ def mlmodels():
 
 @frontend.route('/mlmodels', methods=['POST'])
 @jwt_required()
-def analysis():
+def create_mlmodel():
     args = request.json
     # job = tasks.train_model.delay(args['data'],
     #                               args['collection_id'],

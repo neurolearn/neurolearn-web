@@ -129,6 +129,11 @@ class UserAdmin(ModelView):
         return flask.redirect('/')
 
 
+class MLModelAdmin(ModelView):
+    column_list = ('id', 'name', 'status', 'training_state',
+                   'created')
+
+
 class RoleAdmin(ModelView):
     column_default_sort = []
 
@@ -137,6 +142,6 @@ admin = admin.Admin(name='Neurolearn',
                     base_template='admin/admin_base.html',
                     template_mode='bootstrap3')
 
-admin.add_view(ModelView(MLModel, db.session, name="MLModel"))
+admin.add_view(MLModelAdmin(MLModel, db.session, name="MLModel"))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
