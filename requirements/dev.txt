@@ -2,9 +2,10 @@
 -r prod.txt
 
 # Testing
-pytest>=2.6.3
-webtest
-factory-boy==2.5.1
+pytest==2.7.2
+WebTest==2.0.18
+factory-boy==2.5.2
+fake-factory==0.5.2
 
 # Management script
 Flask-Script
