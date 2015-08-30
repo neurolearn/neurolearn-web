@@ -1,21 +1,15 @@
 import os
 import time
-import shutil
 import logging
 
-import requests
 import numpy as np
 import nibabel as nb
-from nibabel.filename_parser import splitext_addext
-from nilearn.masking import compute_background_mask, _extrapolate_out_mask
-from nilearn.image import resample_img
 import nltools
 from nltools import analysis
 import matplotlib.pyplot as plt
 
-from .httpclient import HTTPClient, FileCache, CachedObject
+from .httpclient import HTTPClient, FileCache
 
-BASE_NV_URL = 'http://neurovault.org'
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -52,161 +46,8 @@ def to_filename_dict(rows):
     return di
 
 
-def fetch_collection_images(collection_id):
-    url = "%s/api/collections/%s/images/"
-
-    r = requests.get(url % (BASE_NV_URL, collection_id))
-
-    return r.json()
-
-
-def image_id(url):
-    return int(url.split("/")[-2])
-
-
-def construct_local_filename(dirname, image_id, file_path):
-    filename_parts = splitext_addext(file_path)
-    return os.path.join(dirname,
-                        "%s%s" % (image_id, ''.join(filename_parts[1:])))
-
-
-def download_images(client, image_list, output_dir):
-    dirname = os.path.join(output_dir, 'original')
-    try:
-        os.makedirs(dirname)
-    except (IOError, OSError):
-        pass
-
-    image_items = []
-
-    for image in image_list:
-        imid = image_id(image['url'])
-        filename = construct_local_filename(dirname, imid, image['file'])
-        log.info("Retrieving %s", image['file'])
-        image_items.append({
-            'id': imid,
-            'obj': image,
-            'file': client.retrieve(image['file'], filename, force_cache=True)
-        })
-
-    return image_items
-
-
-class ImageResampler(object):
-
-    def __init__(self, cache):
-        self.cache = cache
-
-    def process(self, source_file, output_file, target_nii, cache_key):
-
-        # XXX: Cache direct access to speed things up during development
-        cached_dir = self.cache.get_dirpath(cache_key)
-
-        if cached_dir:
-            shutil.copyfile(os.path.join(cached_dir, 'data'), output_file)
-            return output_file
-
-        resampled = self._resample_image(source_file, output_file, target_nii)
-        with open(resampled, 'r') as f:
-            self.cache.set(cache_key, CachedObject(
-                headers={},
-                data=f.read()))
-        return resampled
-
-    def _resample_image(self, image_file, output_file, target_nii):
-        # Compute the background and extrapolate outside of the mask
-        log.info("Extrapolating %s", image_file)
-
-        niimg = nb.load(image_file)
-        affine = niimg.get_affine()
-        data = niimg.get_data().squeeze()
-        niimg = nb.Nifti1Image(data, affine, header=niimg.get_header())
-        bg_mask = compute_background_mask(niimg).get_data()
-
-        # Test if the image has been masked:
-        out_of_mask = data[np.logical_not(bg_mask)]
-        if np.all(np.isnan(out_of_mask)) or len(np.unique(out_of_mask)) == 1:
-            # Need to extrapolate
-            data = _extrapolate_out_mask(data.astype(np.float),
-                                         bg_mask, iterations=3)[0]
-        niimg = nb.Nifti1Image(data, affine, header=niimg.get_header())
-        del out_of_mask, bg_mask
-
-        log.info("Resampling %s", image_file)
-        resampled_nii = resample_img(
-            niimg, target_nii.get_affine(), target_nii.shape)
-        resampled_nii = nb.Nifti1Image(resampled_nii.get_data().squeeze(),
-                                       resampled_nii.get_affine(),
-                                       header=niimg.get_header())
-        if len(resampled_nii.shape) == 3:
-            resampled_nii.to_filename(output_file)
-        else:
-            # We have a 4D file
-            raise Exception('4D File.')
-            # assert len(resampled_nii.shape) == 4
-            # resampled_data = resampled_nii.get_data()
-            # affine = resampled_nii.get_affine()
-            # for index in range(resampled_nii.shape[-1]):
-            #     # First save the files separately
-            #     this_nii = nb.Nifti1Image(resampled_data[..., index], affine)
-            #     this_id = int("%i%i" % (-row[1]['image_id'], index))
-            #     this_file = os.path.join(output_dir, "%06d%s" % (this_id, ext))
-            #     this_nii.to_filename(this_file)
-            #     # Second, fix the dataframe
-            #     out_df = out_df[out_df.image_id != row[1]['image_id']]
-            #     this_row = row[1].copy()
-            #     this_row.image_id = this_id
-            #     out_df = out_df.append(this_row)
-        return output_file
-
-
-def resample_images(image_list, output_dir):
-    dirname = os.path.join(output_dir, 'resampled')
-    target_nii_filename = 'MNI152_T1_2mm_brain_mask_dil.nii.gz'
-    standard = os.path.join(
-        os.path.dirname(nltools.__file__), 'resources',
-        target_nii_filename)
-
-    target_nii = nb.load(standard)
-
-    try:
-        os.makedirs(dirname)
-    except (IOError, OSError):
-        pass
-
-    image_items = []
-    resampler = ImageResampler(cache=FileCache('cache'))
-
-    for item in image_list:
-        filename = os.path.join(dirname, os.path.basename(item['file']))
-        key = 'resample://images/{image_id}/?target={target_nii}'.format(
-            image_id=item['id'],
-            target_nii=target_nii_filename
-        )
-
-        log.info("Getting Resampled Image for %s", filename)
-
-        image_items.append({
-            'id': item['id'],
-            'obj': item['obj'],
-            'file': resampler.process(item['file'],
-                                      filename,
-                                      target_nii=target_nii,
-                                      cache_key=key)
-        })
-
-    return image_items
-
-
-def train_model(data, collection_id, algorithm, output_dir):
+def train_model(data, image_list, algorithm, output_dir):
     tic = time.time()  # Start Timer
-
-    client = HTTPClient(cache=FileCache('cache'))
-
-    image_list = fetch_collection_images(collection_id)
-    image_list = download_images(client, image_list['results'],
-                                 output_dir)
-    image_list = resample_images(image_list, output_dir)
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
@@ -240,6 +81,7 @@ def train_model(data, collection_id, algorithm, output_dir):
                                **extra)
 
     negvneu.predict()
+    # import ipdb; ipdb.set_trace()
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
