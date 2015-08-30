@@ -1,6 +1,7 @@
 import os
 import time
 import shutil
+import logging
 
 import requests
 import numpy as np
@@ -15,6 +16,9 @@ import matplotlib.pyplot as plt
 from .httpclient import HTTPClient, FileCache, CachedObject
 
 BASE_NV_URL = 'http://neurovault.org'
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 
 def download(collection_id, outfolder):
@@ -78,7 +82,7 @@ def download_images(client, image_list, output_dir):
     for image in image_list:
         imid = image_id(image['url'])
         filename = construct_local_filename(dirname, imid, image['file'])
-        print "Retrieving ", image['file']
+        log.info("Retrieving %s", image['file'])
         image_items.append({
             'id': imid,
             'obj': image,
@@ -111,7 +115,8 @@ class ImageResampler(object):
 
     def _resample_image(self, image_file, output_file, target_nii):
         # Compute the background and extrapolate outside of the mask
-        print "Extrapolating %s" % image_file
+        log.info("Extrapolating %s", image_file)
+
         niimg = nb.load(image_file)
         affine = niimg.get_affine()
         data = niimg.get_data().squeeze()
@@ -127,7 +132,7 @@ class ImageResampler(object):
         niimg = nb.Nifti1Image(data, affine, header=niimg.get_header())
         del out_of_mask, bg_mask
 
-        print "Resampling %s" % image_file
+        log.info("Resampling %s", image_file)
         resampled_nii = resample_img(
             niimg, target_nii.get_affine(), target_nii.shape)
         resampled_nii = nb.Nifti1Image(resampled_nii.get_data().squeeze(),
@@ -179,7 +184,7 @@ def resample_images(image_list, output_dir):
             target_nii=target_nii_filename
         )
 
-        print "Getting Resampled Image for ", filename
+        log.info("Getting Resampled Image for %s", filename)
 
         image_items.append({
             'id': item['id'],
@@ -203,12 +208,12 @@ def train_model(data, collection_id, algorithm, output_dir):
                                  output_dir)
     image_list = resample_images(image_list, output_dir)
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     dat = nb.funcs.concat_images([item['file'] for item in image_list])
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     holdout = range(len(image_list))
@@ -236,7 +241,7 @@ def train_model(data, collection_id, algorithm, output_dir):
 
     negvneu.predict()
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
 
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
@@ -315,12 +320,12 @@ def apply_mask(collection_id, weight_map_filename, output_dir):
     # and adjust weightmap if needed
     image_list = resample_images(image_list, output_dir)
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     dat = nb.funcs.concat_images([item['file'] for item in image_list])
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     weight_map = nb.load(weight_map_filename)
@@ -346,4 +351,4 @@ def apply_mask(collection_id, weight_map_filename, output_dir):
 
     plt.savefig(os.path.join(output_dir, 'test_pattern_mask_plot.png'))
 
-    print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
+    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
