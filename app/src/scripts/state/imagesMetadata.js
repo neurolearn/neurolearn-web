@@ -32,11 +32,16 @@ function fetchImagesMetadata(collectionId) {
   return request.get(url);
 }
 
-export function loadImagesMetadata(collectionId) {
+function filterImages(imageMap, imageList) {
+  return imageList.filter(image => imageMap[image.url]);
+}
+
+export function loadImagesMetadata(collectionId, imageMap) {
   return dispatch => {
     dispatch(requestImagesMetadata(collectionId));
     return fetchImagesMetadata(collectionId)
-      .end((err, res) => dispatch(receiveImagesMetadata(collectionId, res.body.results)));
+      .end((err, res) => dispatch(receiveImagesMetadata(collectionId,
+                                                        filterImages(imageMap, res.body.results))));
   };
 }
 

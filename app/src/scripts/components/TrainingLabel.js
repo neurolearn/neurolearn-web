@@ -23,7 +23,8 @@ export default class TrainingLabel extends React.Component {
     );
 
     if (selectedCollectionIds.length === 1 && isEmpty(this.props.imagesMetadata.items)) {
-      this.props.dispatch(loadImagesMetadata(selectedCollectionIds[0]));
+      const collectionId = selectedCollectionIds[0];
+      this.props.dispatch(loadImagesMetadata(collectionId, images[collectionId]));
     }
   }
 
