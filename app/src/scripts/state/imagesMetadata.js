@@ -45,13 +45,22 @@ const propsToOmit = ['collection', 'cognitive_paradigm_cogatlas_id', 'descriptio
                      'statistic_parameters', 'smoothness_fwhm', 'contrast_definition', 'contrast_definition_cogatlas',
                      'figure', 'modify_date'];
 
-export default function reducer(state = [], action) {
+export default function reducer(state = {
+  isFetching: false,
+  items: []
+}, action) {
   switch (action.type) {
     case RESET_IMAGES_METADATA:
     case REQUEST_IMAGES_METADATA:
-      return [];
+      return {
+        isFetching: true,
+        items: []
+      };
     case RECEIVE_IMAGES_METADATA:
-      return action.results.map((item) => omit(item, propsToOmit));
+      return {
+        isFetching: false,
+        items: action.results.map((item) => omit(item, propsToOmit))
+      };
     default:
       return state;
   }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import SelectTrainingLabel from './SelectTrainingLabel';
 import DataGrid from './DataGrid';
+import Spinner from './Spinner';
 
 import { loadImagesMetadata } from '../state/imagesMetadata';
 import { setTargetData } from '../state/targetData';
@@ -12,7 +13,7 @@ export default class TrainingLabel extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     selectedImages: PropTypes.object,
-    imagesMetadata: PropTypes.array
+    imagesMetadata: PropTypes.object
   };
 
   componentDidMount() {
@@ -21,7 +22,7 @@ export default class TrainingLabel extends React.Component {
       this.countSelectedImages(images[collectionId])
     );
 
-    if (selectedCollectionIds.length === 1 && isEmpty(this.props.imagesMetadata)) {
+    if (selectedCollectionIds.length === 1 && isEmpty(this.props.imagesMetadata.items)) {
       this.props.dispatch(loadImagesMetadata(selectedCollectionIds[0]));
     }
   }
@@ -72,14 +73,26 @@ export default class TrainingLabel extends React.Component {
     return nextProps.imagesMetadata !== this.props.imagesMetadata;
   }
 
+  renderLoading() {
+    return (
+      <div className="row">
+        <div className="col-md-12" >
+          <div style={{'padding-top': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
+          <div style={{'color': 'gray', 'margin': 40, 'text-align': 'center'}}>Loading image metadata…</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
+    const { imagesMetadata } = this.props;
     return (
       <div>
         <h1 className="page-header">Training Label</h1>
-
-        { isEmpty(this.props.imagesMetadata)
+        { imagesMetadata.isFetching && this.renderLoading() }
+        { isEmpty(this.props.imagesMetadata.items)
           ? this.renderUploadAndSelect()
-          : this.renderDataGrid(this.props.imagesMetadata)
+          : this.renderDataGrid(this.props.imagesMetadata.items)
         }
 
         <hr/>
