@@ -40,8 +40,11 @@ def test_train_model(tmpdir):
                                  output_dir)
     image_list = resample_images(image_list, output_dir)
 
-    analysis.train_model(DATA, image_list, algorithm, output_dir)
+    result = analysis.train_model(DATA, image_list, algorithm, output_dir)
     filename = '%s_weightmap.nii.gz' % algorithm
+
+    assert result['weightmap'] == filename
+
     sample_img = nib.load(os.path.join(os.path.dirname(__file__), filename))
     result_img = nib.load(os.path.join(output_dir, filename))
 

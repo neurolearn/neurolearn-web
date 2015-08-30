@@ -47,9 +47,7 @@ def to_filename_dict(rows):
 
 
 def train_model(data, image_list, algorithm, output_dir):
-    tic = time.time()  # Start Timer
-
-    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
+    log.info("Concatenating Images...")
     tic = time.time()  # Start Timer
 
     dat = nb.funcs.concat_images([item['file'] for item in image_list])
@@ -81,9 +79,10 @@ def train_model(data, image_list, algorithm, output_dir):
                                **extra)
 
     negvneu.predict()
-    # import ipdb; ipdb.set_trace()
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
+    return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
+            'scatterplot': '%s_scatterplot.png'}
 
 
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
