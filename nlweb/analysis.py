@@ -46,25 +46,29 @@ def to_filename_dict(rows):
     return di
 
 
-def train_model(data, image_list, algorithm, output_dir):
+def train_model(image_list, algorithm, output_dir):
+    """
+    :param image_list: A list of dictionaries of the form
+        {
+            'collection_id': '504',
+            'filename': 'Pain_Subject_1_Low.nii.gz',
+            'target': '1',
+            'resampled_file': 'path/to/the/resampled/file.nii.gz',
+            'original_file': 'path/to/the/original/file.nii.gz'
+        }
+    """
     log.info("Concatenating Images...")
     tic = time.time()  # Start Timer
 
-    dat = nb.funcs.concat_images([item['file'] for item in image_list])
+    dat = nb.funcs.concat_images([item['resampled_file']
+                                  for item in image_list])
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     holdout = range(len(image_list))
 
-    filename_dict = to_filename_dict(data)
-
-    Y_list = []
-    for item in image_list:
-        basename = os.path.basename(item['obj']['file'])
-        Y_list.append(int(filename_dict[basename]['target']))
-
-    Y = np.array(Y_list)
+    Y = np.array([int(item['target']) for item in image_list])
 
     kfolds = 5 if 5 < len(Y) else len(Y)
 

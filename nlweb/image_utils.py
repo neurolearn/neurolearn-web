@@ -93,10 +93,8 @@ def image_id(url):
     return int(url.split("/")[-2])
 
 
-def construct_local_filename(dirname, image_id, file_path):
-    filename_parts = splitext_addext(file_path)
-    return os.path.join(dirname,
-                        "%s%s" % (image_id, ''.join(filename_parts[1:])))
+def local_filepath(dirname, collection_id, filename):
+    return os.path.join(dirname, "%s_%s" % (collection_id, filename))
 
 
 def fetch_collection_images(collection_id):
@@ -107,7 +105,23 @@ def fetch_collection_images(collection_id):
     return r.json()
 
 
+def image_media_url(collection_id, filename):
+    return "%s/media/images/%s/%s" % (
+        BASE_NV_URL,
+        collection_id,
+        filename
+    )
+
+
 def download_images(client, image_list, output_dir):
+    """
+    :param client: An instance of nlweb.HTTPClient
+    :param image_list: A list of dictionaries of the form
+                       {
+                           'collection_id': '42',
+                           'filename': 'file.nii.gz'
+                       }
+    """
     dirname = os.path.join(output_dir, 'original')
     try:
         os.makedirs(dirname)
@@ -117,19 +131,33 @@ def download_images(client, image_list, output_dir):
     image_items = []
 
     for image in image_list:
-        imid = image_id(image['url'])
-        filename = construct_local_filename(dirname, imid, image['file'])
-        log.info("Retrieving %s", image['file'])
-        image_items.append({
-            'id': imid,
-            'obj': image,
-            'file': client.retrieve(image['file'], filename, force_cache=True)
-        })
+        media_url = image_media_url(image['collection_id'], image['filename'])
+
+        log.info("Retrieving %s from collection #%s",
+                 image['filename'],
+                 image['collection_id'])
+        image_items.append(dict(
+            original_file=client.retrieve(
+                media_url,
+                local_filepath(
+                    dirname,
+                    image['collection_id'],
+                    image['filename']),
+                force_cache=True),
+            **image))
 
     return image_items
 
 
 def resample_images(image_list, output_dir):
+    """
+    :param image_list: A list of dictionaries of the form
+                       {
+                           'collection_id': '42',
+                           'filename': 'file.nii.gz'
+                           'original_file': 'path/to/the/original/file.nii.gz'
+                       }
+    """
     dirname = os.path.join(output_dir, 'resampled')
     target_nii_filename = 'MNI152_T1_2mm_brain_mask_dil.nii.gz'
     standard = os.path.join(
@@ -146,22 +174,22 @@ def resample_images(image_list, output_dir):
     image_items = []
     resampler = ImageResampler(cache=FileCache('cache'))
 
-    for item in image_list:
-        filename = os.path.join(dirname, os.path.basename(item['file']))
-        key = 'resample://images/{image_id}/?target={target_nii}'.format(
-            image_id=item['id'],
-            target_nii=target_nii_filename
+    for image in image_list:
+        filename = os.path.join(dirname,
+                                os.path.basename(image['original_file']))
+        key = 'resample://images/{collection_id}/{filename}/?target={target_nii}'.format(
+            target_nii=target_nii_filename,
+            **image
         )
 
         log.info("Getting Resampled Image for %s", filename)
-
-        image_items.append({
-            'id': item['id'],
-            'obj': item['obj'],
-            'file': resampler.process(item['file'],
-                                      filename,
-                                      target_nii=target_nii,
-                                      cache_key=key)
-        })
+        image_items.append(dict(
+            resampled_file=resampler.process(
+                image['original_file'],
+                filename,
+                target_nii=target_nii,
+                cache_key=key
+            ),
+            **image))
 
     return image_items
