@@ -86,8 +86,8 @@ class MLModel(db.Model):
                             name='training_state_types'),
                             nullable=False)
 
-    data = db.Column(db.Text)
+    input_data = db.Column(db.Text)
+    output_data = db.Column(db.Text)
 
     def __unicode__(self):
         return self.name
-
