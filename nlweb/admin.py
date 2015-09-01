@@ -3,6 +3,7 @@
 import hashlib
 
 import flask
+import wtforms
 
 from flask import current_app, url_for, redirect, request, abort
 
@@ -132,6 +133,10 @@ class UserAdmin(ModelView):
 class MLModelAdmin(ModelView):
     column_list = ('id', 'name', 'status', 'training_state',
                    'created')
+    form_overrides = {
+        'input_data': wtforms.TextAreaField,
+        'output_data': wtforms.TextAreaField
+    }
 
 
 class RoleAdmin(ModelView):
