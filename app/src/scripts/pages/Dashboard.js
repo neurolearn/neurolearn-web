@@ -22,8 +22,9 @@ export default class Dashboard extends React.Component {
   renderState(state) {
     switch (state) {
       case 'queued':
+        return <span className="badge" style={{'background-color': 'gray'}}>Queued</span>;
       case 'progress':
-        return <Spinner opts={{scale: 0.75}}/>;
+        return <span className="badge" style={{'background-color': 'blue'}}>In Progress…</span>;
       case 'success':
         return <span className="badge" style={{'background-color': 'green'}}>Complete</span>;
       case 'failure':
@@ -33,18 +34,32 @@ export default class Dashboard extends React.Component {
 
   renderMLModels(mlModels) {
     const models = sortByOrder(values(mlModels), 'created', 'desc');
-    return models.map(model =>
-      <div className="row mlmodel-row">
-        <div className="col-md-1" style={{height: 40}}>
-          { this.renderState(model.training_state) }
-        </div>
-        <div className="col-md-9">
-          <Link to={`/model/${model.id}`}>{model.name}</Link>
-        </div>
-        <div className="col-md-2">
-          <span className="datetime">{moment(model.created).fromNow()}</span>
-        </div>
-      </div>
+    return (
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            models.map(model =>
+              <tr>
+                <td>
+                  <Link to={`/model/${model.id}`}>{model.name}</Link>
+                </td>
+                <td style={{height: 40}}>
+                  { this.renderState(model.training_state) }
+                </td>
+                <td>
+                  <span className="datetime">{moment(model.created).fromNow()}</span>
+                </td>
+              </tr>)
+          }
+        </tbody>
+      </table>
     );
   }
 

@@ -35,7 +35,8 @@ export default class ViewModel extends React.Component {
     return (
       <div className="col-md-12">
         <div className="alert alert-danger">
-          <strong>Training Failed</strong>. {model.output_data.error}
+          <h4>Training Failed</h4>
+          {model.output_data.error}
         </div>
       </div>
     );
@@ -75,7 +76,7 @@ export default class ViewModel extends React.Component {
         </div>
 
         <div className='download' style={{marginTop: 20}}>
-        <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
+          <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
         </div>
       </div>
     );
