@@ -86,7 +86,7 @@ def train_model(image_list, algorithm, output_dir):
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
-            'scatterplot': '%s_scatterplot.png'}
+            'scatterplot': '%s_scatterplot.png ' % algorithm}
 
 
 def run_ml_analysis(data, collection_id, algorithm, outfolder):
