@@ -44,7 +44,9 @@ export function loadMLModels() {
 export default function reducer(state = {}, action) {
   switch (action.type) {
     case RECEIVE_MLMODELS:
-      return action.objects.entities.MLModel;
+      return action.objects.entities
+        ? action.objects.entities.MLModel
+        : {};
     default:
       return state;
   }
