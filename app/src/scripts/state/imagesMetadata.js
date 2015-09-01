@@ -1,3 +1,4 @@
+import update from 'react/lib/update';
 import omit from 'lodash/object/omit';
 import request from 'superagent';
 
@@ -36,6 +37,10 @@ function filterImages(imageMap, imageList) {
   return imageList.filter(image => imageMap[image.url]);
 }
 
+function baseFilename(imageUrl) {
+  return imageUrl.replace(/.*?images\/\d+\//, '');
+}
+
 export function loadImagesMetadata(collectionId, imageMap) {
   return dispatch => {
     dispatch(requestImagesMetadata(collectionId));
@@ -64,7 +69,10 @@ export default function reducer(state = {
     case RECEIVE_IMAGES_METADATA:
       return {
         isFetching: false,
-        items: action.results.map((item) => omit(item, propsToOmit))
+        items: action.results.map((item) => update(omit(item, propsToOmit), {
+          file: {$apply: baseFilename},
+          'collection_id': {$set: action.collectionId}
+        }))
       };
     default:
       return state;

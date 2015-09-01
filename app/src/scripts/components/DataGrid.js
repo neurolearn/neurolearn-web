@@ -1,3 +1,4 @@
+import findIndex from 'lodash/array/findIndex';
 import React from 'react';
 
 require('handsontable');
@@ -44,10 +45,20 @@ export default class DataGrid extends React.Component {
       makeBackground(col, td);
     }
 
+    function findColumnIndex(tableData, colName) {
+      return findIndex(tableData[0], col => col === colName);
+    }
+
     function getTargetData(columnIndex) {
-      var tableData = hot.getData();
+      const tableData = hot.getData();
+      const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
+
       return tableData.slice(1).map(function (row) {
-        return {filename: row[columnIndex.fileName], target: row[columnIndex.trainingLabel]};
+        return {
+          filename: row[columnIndex.fileName],
+          target: row[columnIndex.trainingLabel],
+          'collection_id': row[collectionIdIndex]
+        };
       });
     }
 
