@@ -14,6 +14,10 @@ def as_iso_date(dt):
     return dt.isoformat() + 'Z'
 
 
+def as_is(value):
+    return value
+
+
 def marshal_obj(obj, fields):
     di = {}
 

@@ -19,12 +19,24 @@ export default class Dashboard extends React.Component {
     this.props.dispatch(loadMLModels());
   }
 
+  renderState(state) {
+    switch (state) {
+      case 'queued':
+      case 'progress':
+        return <Spinner opts={{scale: 0.75}}/>;
+      case 'success':
+        return <span className="badge" style={{'background-color': 'green'}}>Complete</span>;
+      case 'failure':
+        return <span className="badge" style={{'background-color': '#DC0000'}}>Failed</span>;
+    }
+  }
+
   renderMLModels(mlModels) {
     const models = sortByOrder(values(mlModels), 'created', 'desc');
     return models.map(model =>
       <div className="row mlmodel-row">
         <div className="col-md-1" style={{height: 40}}>
-          { model.training_state === 'queued' && <Spinner opts={{scale: 0.75}}/> }
+          { this.renderState(model.training_state) }
         </div>
         <div className="col-md-9">
           <Link to={`/model/${model.id}`}>{model.name}</Link>
@@ -49,12 +61,12 @@ export default class Dashboard extends React.Component {
 
     return (
       <div className={styles.root}>
-        <h1 className="page-header">Dashboard</h1>
+        <div className="page-header">
+          <Link className="btn btn-primary btn-lg pull-right" to="/train-model">Train Model</Link>
+          <h1>Dashboard</h1>
+        </div>
         <div className="row">
-          <div className="col-md-3">
-            <Link className="btn btn-primary btn-block" to="/train-model">Train Model</Link>
-          </div>
-          <div className="col-md-9">
+          <div className="col-md-12">
             { isEmpty(mlModels)
               ? this.renderEmptyState()
               : this.renderMLModels(mlModels) }

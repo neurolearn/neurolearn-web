@@ -8,6 +8,20 @@ export default class ViewModel extends React.Component {
     params: PropTypes.object.isRequired
   }
 
+  renderState(model) {
+    switch (model.training_state) {
+      case 'queued':
+      case 'progress':
+        return this.renderProgress();
+      case 'success':
+        return this.renderModel(model);
+      case 'failure':
+        return this.renderFailure(model);
+      default:
+        throw 'Unknown model state.';
+    }
+  }
+
   renderProgress() {
     return (
       <div className="col-md-12" >
@@ -17,8 +31,19 @@ export default class ViewModel extends React.Component {
     );
   }
 
+  renderFailure(model) {
+    return (
+      <div className="col-md-12">
+        <div className="alert alert-danger">
+          <strong>Training Failed</strong>. {model.output_data.error}
+        </div>
+      </div>
+    );
+  }
+
   renderModel(model) {
       const algorithm = 'svm';
+      const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
       const images = [
       {
         id: 'anatomical',
@@ -30,7 +55,7 @@ export default class ViewModel extends React.Component {
         url: '/static/data/anatomical.nii.gz'
       },
       {
-        'url': `/media/${model.id}/ridge_weightmap.nii.gz`,
+        'url': weightmapUrl,
         'name': `${algorithm} weight map`,
         'colorPalette': 'green',
         'intent': 'z-score:'
@@ -39,22 +64,18 @@ export default class ViewModel extends React.Component {
 
     return (
       <div className="col-md-12">
-        <p>Result weight map for {algorithm} analysis id {model.id}</p>
+        <p>Result weight map for {algorithm} analysis #{model.id}</p>
 
         <div className='NSViewer'>
           <NSViewer images={images} />
         </div>
 
-        <div className='WeightMapPlot' style={{marginTop: 20}}>
-          <img style={{width: 80 + '%'}} src={'/media/' + model.id + '/' + algorithm + '_weightmap_axial.png'}/>
-        </div>
-
         <div className='ScatterPlot' style={{marginTop: 20}}>
-          <img src={'/media/' + model.id + '/' + algorithm + '_scatterplot.png'}/>
+          <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
         </div>
 
         <div className='download' style={{marginTop: 20}}>
-        <a className="btn btn-default" href={'/media/' + model.id + '/' + algorithm + '_weightmap.nii.gz'}>Download the Weight Map</a>
+        <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
         </div>
       </div>
     );
@@ -68,10 +89,7 @@ export default class ViewModel extends React.Component {
       <div>
         <h1 className="page-header">{model.name}</h1>
         <div className="row">
-        { model.training_state === 'queued' || model.training_state === 'progress'
-          ? this.renderProgress()
-          : this.renderModel(model)
-        }
+        { this.renderState(model) }
         </div>
       </div>
     );

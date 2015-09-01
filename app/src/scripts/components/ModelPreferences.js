@@ -46,7 +46,8 @@ export default class ModelPreferences extends React.Component {
   handleTrainModelClick(algorithm) {
     const { router } = this.context;
     const modelName = this.state.modelName;
-    this.props.dispatch(trainModel(this.props.targetData, algorithm, modelName, router));
+    const cv = {'kfolds': 5};
+    this.props.dispatch(trainModel(modelName, algorithm, this.props.targetData, cv, router));
   }
 
   render() {

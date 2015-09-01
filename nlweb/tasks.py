@@ -27,15 +27,22 @@ def train_model(self, mlmodel_id):
 
     client = HTTPClient(cache=FileCache('cache'))
 
-    target_data = mlmodel.input_data['target_data']
+    target_data = mlmodel.input_data['data']
 
     image_list = download_images(client, target_data, output_dir)
     image_list = resample_images(image_list, output_dir)
 
-    result = analysis.train_model(image_list, mlmodel.input_data['algorithm'],
-                                  output_dir)
-    mlmodel.output_data = result
     mlmodel.training_state = MLModel.TRAINING_SUCCESS
+
+    try:
+        result = analysis.train_model(image_list,
+                                      mlmodel.input_data['algorithm'],
+                                      output_dir)
+    except Exception as e:
+        result = {'error': unicode(e)}
+        mlmodel.training_state = MLModel.TRAINING_FAILURE
+
+    mlmodel.output_data = result
     db.session.commit()
 
 

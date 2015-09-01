@@ -20,7 +20,7 @@ def test_create_mlmodel(testapp, user):
     name = 'Test %s' % uuid.uuid4()
 
     payload = {'algorithm': nv_test_data.ALGORITHM,
-               'target_data': nv_test_data.TARGET_DATA,
+               'data': nv_test_data.TARGET_DATA,
                'cv': {'kfolds': 5},
                'name': name}
 

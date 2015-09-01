@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 import uuid
-import json
 
 from celery.result import AsyncResult
 
@@ -19,7 +18,7 @@ from nlweb.extensions import uploaded_media
 
 from .models import db, MLModel
 
-from .marshal import (marshal_list, as_integer,
+from .marshal import (marshal_list, as_integer, as_is,
                       as_string, as_iso_date)
 
 frontend = Blueprint('frontend', __name__)
@@ -54,7 +53,8 @@ def list_mlmodels():
         'id': as_integer,
         'name': as_string,
         'created': as_iso_date,
-        'training_state': as_string
+        'training_state': as_string,
+        'output_data': as_is
     }
 
     mlmodel_list = current_user.mlmodels.order_by('created desc').all()
@@ -67,7 +67,7 @@ def create_mlmodel():
     args = request.json
     mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
                       training_state=MLModel.TRAINING_QUEUED,
-                      input_data={'target_data': args['target_data'],
+                      input_data={'data': args['data'],
                                   'algorithm': args['algorithm'],
                                   'cv': args['cv']},
                       name=args['name'],
