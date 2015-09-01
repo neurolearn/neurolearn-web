@@ -20,8 +20,8 @@ def test_create_mlmodel(testapp, user):
     name = 'Test %s' % uuid.uuid4()
 
     payload = {'algorithm': nv_test_data.ALGORITHM,
-               'data': nv_test_data.DATA,
-               'collection_id': nv_test_data.COLLECTION_ID,
+               'target_data': nv_test_data.TARGET_DATA,
+               'cv': {'kfolds': 5},
                'name': name}
 
     response = testapp.post_json('/mlmodels',

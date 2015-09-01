@@ -5,6 +5,12 @@ import os
 from nlweb.app import celery
 from nlweb import analysis
 
+from nlweb.httpclient import HTTPClient, FileCache
+from nlweb.image_utils import (download_images, resample_images,
+                               fetch_collection_images)
+
+from nlweb.models import MLModel, db
+
 # NTOTAL = 20
 # for i in range(NTOTAL):
 #     time.sleep(random.random())
@@ -14,12 +20,23 @@ from nlweb import analysis
 
 
 @celery.task(bind=True)
-def train_model(self, data, collection_id, algorithm):
+def train_model(self, mlmodel_id):
+    mlmodel = MLModel.query.get(mlmodel_id)
 
-    output_dir = os.path.join(celery.conf.MEDIA_ROOT, self.request.id)
-    analysis.train_model(data, collection_id, algorithm, output_dir)
+    output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
 
-    return 999
+    client = HTTPClient(cache=FileCache('cache'))
+
+    target_data = mlmodel.input_data['target_data']
+
+    image_list = download_images(client, target_data, output_dir)
+    image_list = resample_images(image_list, output_dir)
+
+    result = analysis.train_model(image_list, mlmodel.input_data['algorithm'],
+                                  output_dir)
+    mlmodel.output_data = result
+    mlmodel.training_state = MLModel.TRAINING_SUCCESS
+    db.session.commit()
 
 
 @celery.task(bind=True)
