@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from sqlalchemy import Column
+from sqlalchemy.dialects.postgresql import JSONB
 
 from flask.ext.security import UserMixin, RoleMixin
 
@@ -86,8 +87,8 @@ class MLModel(db.Model):
                             name='training_state_types'),
                             nullable=False)
 
-    input_data = db.Column(db.Text)
-    output_data = db.Column(db.Text)
+    input_data = db.Column(JSONB)
+    output_data = db.Column(JSONB)
 
     def __unicode__(self):
         return self.name
