@@ -65,19 +65,18 @@ def list_mlmodels():
 @jwt_required()
 def create_mlmodel():
     args = request.json
-    # job = tasks.train_model.delay(args['data'],
-    #                               args['collection_id'],
-    #                               args['algorithm'])
-
     mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
                       training_state=MLModel.TRAINING_QUEUED,
-                      data=json.dumps({'target_data': args['data']}),
+                      input_data={'target_data': args['target_data'],
+                                  'algorithm': args['algorithm'],
+                                  'cv': args['cv']},
                       name=args['name'],
                       user=current_user)
     db.session.add(mlmodel)
     db.session.commit()
 
-    # return jsonify({'jobid': job.id})
+    tasks.train_model.delay(mlmodel.id)
+
     return 'Created', 201
 
 
