@@ -51,7 +51,6 @@ export default class ViewModel extends React.Component {
   }
 
   renderModel(model) {
-      const algorithm = 'svm';
       const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
       const images = [
       {
@@ -65,7 +64,7 @@ export default class ViewModel extends React.Component {
       },
       {
         'url': weightmapUrl,
-        'name': `${algorithm} weight map`,
+        'name': 'weight map',
         'colorPalette': 'green',
         'intent': 'z-score:'
       }
@@ -73,7 +72,7 @@ export default class ViewModel extends React.Component {
 
     return (
       <div className="col-md-12">
-        <p>Result weight map for {algorithm} analysis #{model.id}</p>
+        <p>Result weight map for analysis #{model.id}</p>
 
         <div className='NSViewer'>
           <NSViewer images={images} />
