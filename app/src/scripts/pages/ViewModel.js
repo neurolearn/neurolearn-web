@@ -1,11 +1,19 @@
 import React, { PropTypes } from 'react';
-import Spinner from '../components/Spinner';
+import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
+import { deleteMLModel } from '../state/mlModels';
 
 export default class ViewModel extends React.Component {
   static propTypes = {
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    mlModels: PropTypes.object,
+    dispatch: PropTypes.func.isRequired
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
   renderState(model) {
@@ -82,13 +90,24 @@ export default class ViewModel extends React.Component {
     );
   }
 
+  handleDeleteModel(modelId) {
+    const { router } = this.context;
+
+    this.props.dispatch(deleteMLModel(modelId, router));
+  }
+
   render() {
     const { mlModels, params } = this.props;
     const model = mlModels[parseInt(params.id)];
 
     return (
       <div>
-        <h1 className="page-header">{model.name}</h1>
+        <div className="page-header">
+          <Button bsStyle="danger"
+                  className="pull-right"
+                  onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
+          <h1>{model.name}</h1>
+        </div>
         <div className="row">
         { this.renderState(model) }
         </div>

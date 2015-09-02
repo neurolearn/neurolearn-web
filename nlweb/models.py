@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
 class MLModel(db.Model):
     __tablename__ = 'mlmodels'
 
-    STATUS_DRAFT = 'draft'
+    STATUS_PRIVATE = 'private'
     STATUS_PUBLIC = 'public'
     STATUS_DELETED = 'deleted'
 
@@ -76,7 +76,7 @@ class MLModel(db.Model):
                            foreign_keys=[user_id],
                            backref=db.backref('mlmodels', lazy='dynamic'))
 
-    status = Column(db.Enum(STATUS_DRAFT, STATUS_PUBLIC, STATUS_DELETED,
+    status = Column(db.Enum(STATUS_PRIVATE, STATUS_PUBLIC, STATUS_DELETED,
                             name='status_types'),
                     nullable=False)
 
@@ -89,6 +89,13 @@ class MLModel(db.Model):
 
     input_data = db.Column(JSONB)
     output_data = db.Column(JSONB)
+
+    @classmethod
+    def get_existing(cls):
+        return cls.query.filter(cls.status != cls.STATUS_DELETED)
+
+    def delete(self):
+        self.status = self.STATUS_DELETED
 
     def __unicode__(self):
         return self.name

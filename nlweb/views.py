@@ -6,7 +6,7 @@ from celery.result import AsyncResult
 
 from flask import Blueprint, render_template, current_app
 from flask import request, Response, send_from_directory
-from flask import jsonify
+from flask import jsonify, abort
 
 from flask_jwt import jwt_required, current_user
 
@@ -57,7 +57,9 @@ def list_mlmodels():
         'output_data': as_is
     }
 
-    mlmodel_list = current_user.mlmodels.order_by('created desc').all()
+    mlmodel_list = MLModel.get_existing().filter(
+        MLModel.user == current_user).order_by('created desc').all()
+
     return jsonify(marshal_list(mlmodel_list, mfields))
 
 
@@ -65,7 +67,7 @@ def list_mlmodels():
 @jwt_required()
 def create_mlmodel():
     args = request.json
-    mlmodel = MLModel(status=MLModel.STATUS_DRAFT,
+    mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
                       training_state=MLModel.TRAINING_QUEUED,
                       input_data={'data': args['data'],
                                   'algorithm': args['algorithm'],
@@ -78,6 +80,20 @@ def create_mlmodel():
     tasks.train_model.delay(mlmodel.id)
 
     return 'Created', 201
+
+
+@frontend.route('/mlmodels/<int:model_id>', methods=['DELETE'])
+@jwt_required()
+def delete_mlmodel(model_id):
+    mlmodel = MLModel.query.get_or_404(model_id)
+
+    if mlmodel.user != current_user:
+        abort(404)
+
+    mlmodel.delete()
+    db.session.commit()
+
+    return 'No Content', 204
 
 
 @frontend.route('/applymask', methods=['POST'])
