@@ -65,7 +65,7 @@ export default class ModelPreferences extends React.Component {
             <form onSubmit={this.handleSubmit.bind(this)}>
               <div className="form-group">
                 <Input type='text'
-                       value={this.state.value}
+                       value={this.state.modelName}
                        onChange={this.handleInputChange.bind(this)}
                        ref='modelName'
                        label='Model Name'/>
@@ -82,6 +82,42 @@ export default class ModelPreferences extends React.Component {
                   <option value="ridge">ridge</option>
                 </select>
               </div>
+              <div className="form-group">
+                <label>Cross Validation</label>
+                <div className="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" value="option1" checked />
+                    k-fold
+                  </label>
+                </div>
+
+                <div className="form-horizontal well">
+                  <div className="form-group">
+                    <label htmlFor="inputEmail3" className="col-sm-5 control-label">Number of Divisions (k)</label>
+                    <div className="col-sm-7">
+                      <input type="email" className="form-control" id="inputEmail3" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" value="option2"/>
+                    Leave One Subject Out
+                  </label>
+                </div>
+
+                <div className="form-horizontal well">
+                  <div className="form-group">
+                    <label htmlFor="inputEmail3" className="col-sm-5 control-label">Subject ID</label>
+                    <div className="col-sm-7">
+                      <input type="email" className="form-control" id="inputEmail3" />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
               <button type="submit" className={classes}>Train Model</button>
             </form>
           </div>
