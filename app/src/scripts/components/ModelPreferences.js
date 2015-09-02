@@ -3,13 +3,13 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
 import { connect } from 'react-redux';
-import { trainModel } from '../actions';
 import {
   inputModelName,
   inputKfoldParam,
   inputLosoParam,
   selectCVType,
-  selectAlgorithm
+  selectAlgorithm,
+  trainModel,
 } from '../state/modelPreferences';
 
 

@@ -1,8 +1,11 @@
+import request from 'superagent';
+
 export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_KFOLD_PARAM = 'INPUT_KFOLD_PARAM';
 export const INPUT_LOSO_PARAM = 'INPUT_LOSO_PARAM';
 export const SELECT_CV_TYPE = 'SELECT_CV_TYPE';
 export const SELECT_ALGORITHM = 'SELECT_ALGORITHM';
+export const REQUEST_MODEL_TRAINING = 'REQUEST_MODEL_TRAINING';
 
 
 export function inputModelName(modelName) {
@@ -39,6 +42,41 @@ export function selectAlgorithm(algorithm) {
     algorithm
   };
 }
+
+function requestModelTraining() {
+  return {
+    type: REQUEST_MODEL_TRAINING
+  };
+}
+
+function startModelTraining(name, algorithm, targetData, cv, token) {
+  const payload = {
+    'data': targetData,
+    'collection_id': 504,
+    algorithm,
+    name,
+    cv
+  };
+
+  return request.post('/mlmodels')
+    .type('json')
+    .accept('json')
+    .set('Authorization', 'Bearer ' + token)
+    .send(payload);
+}
+
+export function trainModel(name, algorithm, targetData, crossValidation, router) {
+  return (dispatch, getState) => {
+    dispatch(requestModelTraining());
+
+    return startModelTraining(name, algorithm, targetData, crossValidation,
+                              getState().auth.token)
+      .end((err, res) => {
+        router.transitionTo('/');
+      });
+  };
+}
+
 
 export default function reducer(state = {
   modelName: '',

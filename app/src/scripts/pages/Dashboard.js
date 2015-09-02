@@ -35,7 +35,7 @@ export default class Dashboard extends React.Component {
       case 'queued':
         return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
       case 'progress':
-        return <span className="badge" style={{'backgroundColor': '#337AB7'}}>In Progress…</span>;
+        return <span className="badge" style={{'backgroundColor': '#E48110'}}>In Progress…</span>;
       case 'success':
         return <span className="badge" style={{'backgroundColor': 'green'}}>Complete</span>;
       case 'failure':
