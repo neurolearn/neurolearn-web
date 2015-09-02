@@ -8,6 +8,7 @@ import selectedImages from '../state/selectedImages';
 import imagesMetadata from '../state/imagesMetadata';
 import targetData from '../state/targetData';
 import mlModels from '../state/mlModels';
+import modelPreferences from '../state/modelPreferences';
 
 const rootReducer = combineReducers({
   auth,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   search,
   selectedImages,
   selectImagesModal,
-  targetData
+  targetData,
+  modelPreferences
 });
 
 export default rootReducer;

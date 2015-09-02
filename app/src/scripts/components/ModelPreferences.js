@@ -1,60 +1,77 @@
-import { trim } from 'lodash';
+import { isEmpty, some } from 'lodash';
 import React, { PropTypes } from 'react';
-import { Input } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import { connect } from 'react-redux';
 import { trainModel } from '../actions';
+import {
+  inputModelName,
+  inputKfoldParam,
+  inputLosoParam,
+  selectCVType,
+  selectAlgorithm
+} from '../state/modelPreferences';
+
 
 export default class ModelPreferences extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    targetData: PropTypes.array
+    targetData: PropTypes.array,
+    modelPreferences: PropTypes.object.isRequired
   }
 
   static contextTypes = {
     router: PropTypes.object.isRequired
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      modelName: '',
-      submitEnabled: false
-    };
-  }
-
   handleSubmit(e) {
     e.preventDefault();
-    this.handleTrainModelClick(
-      this.refs.algorithmInput.getDOMNode().value
-    );
-  }
 
-  handleInputChange() {
-    const modelName = trim(this.refs.modelName.getValue());
-    const algorithmInput = this.refs.algorithmInput.getDOMNode().value;
-
-    const enabled = algorithmInput !== '' && modelName !== '';
-
-    this.setState({
-      submitEnabled: enabled,
-      modelName: modelName
-    });
-  }
-
-  handleTrainModelClick(algorithm) {
     const { router } = this.context;
-    const modelName = this.state.modelName;
-    const cv = {'kfolds': 5};
+    const { modelName, algorithm, cvType } = this.props.modelPreferences;
+    const cv = {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
     this.props.dispatch(trainModel(modelName, algorithm, this.props.targetData, cv, router));
   }
 
+  submitEnabled() {
+    const {
+      modelName,
+      algorithm,
+      cvType,
+      kfoldParam,
+      losoParam
+    } = this.props.modelPreferences;
+
+    return !some([modelName, algorithm], isEmpty)
+           && (cvType === 'kfold' && !isEmpty(kfoldParam)
+               || cvType === 'loso' && !isEmpty(losoParam) );
+  }
+
+  genHandler(refName, action) {
+    const _this = this;
+    return () => {
+      const value = _this.refs[refName].getDOMNode().value;
+      _this.props.dispatch(action(value));
+    };
+  }
+
+  handleRadioChange(e) {
+    const cvType = e.target.value;
+    this.props.dispatch(selectCVType(cvType));
+  }
+
+  handleAlgorithmChange() {
+    const algorithm = this.refs.algorithm.getDOMNode().value;
+    this.props.dispatch(selectAlgorithm(algorithm));
+  }
+
   render() {
+    const { modelPreferences } = this.props;
+
     var classes = classNames({
       'btn': true,
       'btn-primary': true,
-      'disabled': !this.state.submitEnabled
+      'disabled': !this.submitEnabled()
     });
 
     return (
@@ -64,17 +81,20 @@ export default class ModelPreferences extends React.Component {
           <div className="col-md-6">
             <form onSubmit={this.handleSubmit.bind(this)}>
               <div className="form-group">
-                <Input type='text'
-                       value={this.state.modelName}
-                       onChange={this.handleInputChange.bind(this)}
+                <label>Model Name</label>
+                <input type='text'
+                       value={modelPreferences.modelName}
+                       onChange={this.genHandler('modelName', inputModelName)}
                        ref='modelName'
-                       label='Model Name'/>
+                       label=''
+                       className="form-control" />
               </div>
               <div className="form-group">
-                <label>Select the type of an algorithm.</label>
+                <label>Algorithm Type</label>
                 <select className="form-control"
-                        ref="algorithmInput"
-                        onChange={this.handleInputChange.bind(this)}
+                        value={modelPreferences.algorithm}
+                        ref="algorithm"
+                        onChange={this.handleAlgorithmChange.bind(this)}
                         style={{marginRight: 10}}>
                   <option value="">Select an Algorithm</option>
                   <option value="svm">svm</option>
@@ -86,36 +106,57 @@ export default class ModelPreferences extends React.Component {
                 <label>Cross Validation</label>
                 <div className="radio">
                   <label>
-                    <input type="radio" name="optionsRadios" value="option1" checked />
+                    <input type="radio"
+                           ref="cvType"
+                           onChange={this.handleRadioChange.bind(this)}
+                           name="cvType"
+                           value="kfold"
+                           checked={modelPreferences.cvType === 'kfold'} />
                     k-fold
                   </label>
                 </div>
 
                 <div className="form-horizontal well">
-                  <div className="form-group">
-                    <label htmlFor="inputEmail3" className="col-sm-5 control-label">Number of Divisions (k)</label>
-                    <div className="col-sm-7">
-                      <input type="email" className="form-control" id="inputEmail3" />
+                  <fieldset disabled={modelPreferences.cvType !== 'kfold'}>
+                    <div className="form-group">
+                      <label className="col-sm-5 control-label">Number of Divisions (k)</label>
+                      <div className="col-sm-7">
+                        <input type="text"
+                               ref="kfoldParam"
+                               onChange={this.genHandler('kfoldParam', inputKfoldParam)}
+                               value={modelPreferences.kfoldParam}
+                               className="form-control" />
+                      </div>
                     </div>
-                  </div>
+                  </fieldset>
                 </div>
 
                 <div className="radio">
                   <label>
-                    <input type="radio" name="optionsRadios" value="option2"/>
+                    <input type="radio"
+                           ref="cvType"
+                           onChange={this.handleRadioChange.bind(this)}
+                           name="cvType"
+                           value="loso"
+                           checked={modelPreferences.cvType === 'loso'} />
                     Leave One Subject Out
                   </label>
                 </div>
 
                 <div className="form-horizontal well">
-                  <div className="form-group">
-                    <label htmlFor="inputEmail3" className="col-sm-5 control-label">Subject ID</label>
-                    <div className="col-sm-7">
-                      <input type="email" className="form-control" id="inputEmail3" />
+                  <fieldset disabled={modelPreferences.cvType !== 'loso'}>
+                    <div className="form-group" >
+                      <label className="col-sm-5 control-label">Subject ID</label>
+                      <div className="col-sm-7">
+                        <input type="text"
+                               ref="losoParam"
+                               onChange={this.genHandler('losoParam', inputLosoParam)}
+                               value={modelPreferences.losoParam}
+                               className="form-control" />
+                      </div>
                     </div>
-                  </div>
+                  </fieldset>
                 </div>
-
               </div>
 
               <button type="submit" className={classes}>Train Model</button>
