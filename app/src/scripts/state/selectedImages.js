@@ -3,6 +3,7 @@ import update from 'react/lib/update';
 
 export const TOGGLE_IMAGE = 'TOGGLE_IMAGE';
 export const TOGGLE_ALL_IMAGES = 'TOGGLE_ALL_IMAGES';
+export const RESET_SELECTED_IMAGES = 'RESET_SELECTED_IMAGES';
 
 export function toggleImage(collectionId, imageId) {
   return {
@@ -53,7 +54,18 @@ function imageToggle(state, collection, imageId) {
   });
 }
 
-export default function reducer(state = { images: {}, collectionsById: {} }, action) {
+export function resetSelectedImages() {
+  return {
+    type: RESET_SELECTED_IMAGES
+  };
+}
+
+const initialState = {
+  images: {},
+  collectionsById: {}
+};
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case TOGGLE_IMAGE:
       return imageToggle(state, action.collectionId, action.imageId);
@@ -62,6 +74,8 @@ export default function reducer(state = { images: {}, collectionsById: {} }, act
       return allImagesToggle(state, action.collectionId, action.imageList,
                              action.checked);
 
+    case RESET_SELECTED_IMAGES:
+      return initialState;
     default:
       return state;
   }

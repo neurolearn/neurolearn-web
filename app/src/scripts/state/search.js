@@ -4,6 +4,7 @@ export const INPUT_SEARCH_QUERY = 'INPUT_SEARCH_QUERY';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SELECT_SEARCH_OFFSET = 'SELECT_SEARCH_OFFSET';
 export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
+export const RESET_SEARCH = 'RESET_SEARCH';
 
 import request from 'superagent';
 
@@ -122,13 +123,21 @@ export function changeFilter(filter) {
   };
 }
 
-export default function reducer(state = {
-    isFetching: false,
-    query: '',
-    filter: null,
-    from: 0,
-    sort: DEFAULT_SEARCH_SORT
-  }, action) {
+export function resetSearch() {
+  return {
+    type: RESET_SEARCH
+  };
+}
+
+const initialState = {
+  isFetching: false,
+  query: '',
+  filter: null,
+  from: 0,
+  sort: DEFAULT_SEARCH_SORT
+};
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_SEARCH_RESULTS:
       return Object.assign({}, state, {
@@ -158,6 +167,8 @@ export default function reducer(state = {
         sort: action.sortType,
         from: 0
       });
+    case RESET_SEARCH:
+      return initialState;
     default:
       return state;
   }

@@ -14,14 +14,15 @@ export function hideSelectImagesModal() {
   };
 }
 
-export default function reducer(state = { display: false, collectionId: null },
-                                action) {
+const initialState = { display: false, collectionId: null };
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SHOW_SELECT_IMAGES_MODAL:
       return { display: true, collectionId: action.collectionId };
 
     case HIDE_SELECT_IMAGES_MODAL:
-      return { display: false, collectionId: null };
+      return initialState;
 
     default:
       return state;
