@@ -22,6 +22,8 @@ from nlweb.models import MLModel, db
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
+    mlmodel.training_state = MLModel.TRAINING_PROGRESS
+    db.session.commit()
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
 

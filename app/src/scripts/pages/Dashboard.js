@@ -9,26 +9,37 @@ import Spinner from '../components/Spinner';
 import { loadMLModels } from '../state/mlModels';
 import styles from './Dashboard.scss';
 
+const POLL_INTERVAL = 2500;
+
 export default class Dashboard extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     mlModels: PropTypes.object
   };
 
-  componentDidMount() {
+  loadMLModels() {
     this.props.dispatch(loadMLModels());
+  }
+
+  componentDidMount() {
+    this.loadMLModels();
+    this.interval = setInterval(this.loadMLModels.bind(this), POLL_INTERVAL);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   renderState(state) {
     switch (state) {
       case 'queued':
-        return <span className="badge" style={{'background-color': 'gray'}}>Queued</span>;
+        return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
       case 'progress':
-        return <span className="badge" style={{'background-color': 'blue'}}>In Progress…</span>;
+        return <span className="badge" style={{'backgroundColor': '#337AB7'}}>In Progress…</span>;
       case 'success':
-        return <span className="badge" style={{'background-color': 'green'}}>Complete</span>;
+        return <span className="badge" style={{'backgroundColor': 'green'}}>Complete</span>;
       case 'failure':
-        return <span className="badge" style={{'background-color': '#DC0000'}}>Failed</span>;
+        return <span className="badge" style={{'backgroundColor': '#DC0000'}}>Failed</span>;
     }
   }
 
@@ -38,8 +49,8 @@ export default class Dashboard extends React.Component {
       <table className="table">
         <thead>
           <tr>
-            <th>Name</th>
             <th>Status</th>
+            <th>Name</th>
             <th>Created</th>
           </tr>
         </thead>
@@ -47,11 +58,11 @@ export default class Dashboard extends React.Component {
           {
             models.map(model =>
               <tr>
-                <td>
-                  <Link to={`/model/${model.id}`}>{model.name}</Link>
-                </td>
                 <td style={{height: 40}}>
                   { this.renderState(model.training_state) }
+                </td>
+                <td>
+                  <Link to={`/model/${model.id}`}>{model.name}</Link>
                 </td>
                 <td>
                   <span className="datetime">{moment(model.created).fromNow()}</span>
