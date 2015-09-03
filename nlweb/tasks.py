@@ -39,6 +39,7 @@ def train_model(self, mlmodel_id):
     try:
         result = analysis.train_model(image_list,
                                       mlmodel.input_data['algorithm'],
+                                      mlmodel.input_data['cv'],
                                       output_dir)
     except Exception as e:
         result = {'error': unicode(e)}

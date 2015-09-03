@@ -46,7 +46,7 @@ def to_filename_dict(rows):
     return di
 
 
-def train_model(image_list, algorithm, output_dir):
+def train_model(image_list, algorithm, cv, output_dir):
     """
     :param image_list: A list of dictionaries of the form
         {
@@ -70,16 +70,19 @@ def train_model(image_list, algorithm, output_dir):
 
     Y = np.array([int(item['target']) for item in image_list])
 
-    kfolds = 5 if 5 < len(Y) else len(Y)
-
     extra = {}
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
+    cv_dict = {cv['type']: cv['value']}
+
+    if cv['type'] == 'kfold':
+        cv_dict['kfold'] = 5 if len(Y) > 5 else len(Y)
+
     negvneu = analysis.Predict(dat, Y, algorithm=algorithm,
                                subject_id=holdout,
                                output_dir=output_dir,
-                               cv_dict={'kfolds': kfolds},
+                               cv_dict=cv_dict,
                                **extra)
 
     negvneu.predict()
