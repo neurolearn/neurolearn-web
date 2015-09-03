@@ -97,9 +97,22 @@ export default class ModelPreferences extends React.Component {
                         onChange={this.handleAlgorithmChange.bind(this)}
                         style={{marginRight: 10}}>
                   <option value="">Select an Algorithm</option>
-                  <option value="svm">svm</option>
-                  <option value="svr">svr</option>
-                  <option value="ridge">ridge</option>
+                  <optgroup label="Classify">
+                    <option value="svm">SVM</option>
+                    <option value="logistic">Logistic Regression</option>
+                    <option value="ridgeClassifier">Ridge Classifier</option>
+                    <option value="ridgeClassifierCV">RidgeClassifierCV</option>
+                    <option value="randomforestClassifier">RandomForestClassifier</option>
+                  </optgroup>
+                  <optgroup label="Predict">
+                    <option value="svr">SVR</option>
+                    <option value="linear">LinearRegression</option>
+                    <option value="lasso">Lasso</option>
+                    <option value="lassoCV">LassoCV</option>
+                    <option value="ridge">Ridge</option>
+                    <option value="ridgeCV">RidgeCV</option>
+                    <option value="randomforest">RandomForest</option>
+                  </optgroup>
                 </select>
               </div>
               <div className="form-group">
