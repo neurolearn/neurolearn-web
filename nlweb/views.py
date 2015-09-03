@@ -36,8 +36,6 @@ def about():
 
 @frontend.route('/nvproxy/<path:path>')
 def neurovault_proxy(path):
-    print path
-
     proxy_url = "http://neurovault.org/%s" % path
 
     req = requests.get(proxy_url)

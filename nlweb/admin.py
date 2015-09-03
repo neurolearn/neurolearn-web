@@ -131,7 +131,7 @@ class UserAdmin(ModelView):
 
 
 class MLModelAdmin(ModelView):
-    column_list = ('id', 'name', 'status', 'training_state',
+    column_list = ('id', 'name', 'user', 'status', 'training_state',
                    'created')
     form_overrides = {
         'input_data': wtforms.TextAreaField,
