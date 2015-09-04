@@ -25,7 +25,9 @@ def test_train_model(tmpdir):
                                  output_dir)
     image_list = resample_images(image_list, output_dir)
 
-    result = analysis.train_model(image_list, algorithm, output_dir)
+    cv = {u'type': 'kfold', u'value': 12}
+
+    result = analysis.train_model(image_list, algorithm, cv, output_dir)
     filename = '%s_weightmap.nii.gz' % algorithm
 
     assert result['weightmap'] == filename
