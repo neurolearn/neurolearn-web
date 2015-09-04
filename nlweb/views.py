@@ -19,7 +19,7 @@ from nlweb.extensions import uploaded_media
 from .models import db, MLModel
 
 from .marshal import (marshal_list, as_integer, as_is,
-                      as_string, as_iso_date)
+                      as_string, as_iso_date, filter_out_key)
 
 frontend = Blueprint('frontend', __name__)
 
@@ -52,7 +52,8 @@ def list_mlmodels():
         'name': as_string,
         'created': as_iso_date,
         'training_state': as_string,
-        'output_data': as_is
+        'output_data': as_is,
+        'input_data': filter_out_key('data')
     }
 
     mlmodel_list = MLModel.get_existing().filter(

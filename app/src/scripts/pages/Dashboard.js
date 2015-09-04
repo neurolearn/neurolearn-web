@@ -6,6 +6,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadMLModels } from '../state/mlModels';
+import { algorithmNameMap } from '../constants/Algorithms';
 import styles from './Dashboard.scss';
 
 const POLL_INTERVAL = 2500;
@@ -50,6 +51,9 @@ export default class Dashboard extends React.Component {
           <tr>
             <th>Status</th>
             <th>Name</th>
+            <th>Algorithm</th>
+            <th>Cross-validation Type</th>
+            <th>Training Duration</th>
             <th>Created</th>
           </tr>
         </thead>
@@ -62,6 +66,13 @@ export default class Dashboard extends React.Component {
                 </td>
                 <td>
                   <Link to={`/model/${model.id}`}>{model.name}</Link>
+                </td>
+                <td>{algorithmNameMap[model.input_data.algorithm]}</td>
+                <td>{model.input_data.cv.type}</td>
+                <td>
+                  {model.output_data &&
+                   model.output_data.duration &&
+                   (Math.floor(model.output_data.duration) + ' sec')}
                 </td>
                 <td>
                   <span className="datetime">{moment(model.created).fromNow()}</span>

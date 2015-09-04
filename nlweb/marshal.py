@@ -18,6 +18,14 @@ def as_is(value):
     return value
 
 
+def filter_out_key(key):
+    def func(value):
+        copy = value.copy()
+        copy.pop(key, None)
+        return copy
+    return func
+
+
 def marshal_obj(obj, fields):
     di = {}
 

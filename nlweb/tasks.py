@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 
 from nlweb.app import celery
 from nlweb import analysis
@@ -36,6 +37,8 @@ def train_model(self, mlmodel_id):
 
     mlmodel.training_state = MLModel.TRAINING_SUCCESS
 
+    tic = time.time()
+
     try:
         result = analysis.train_model(image_list,
                                       mlmodel.input_data['algorithm'],
@@ -45,7 +48,10 @@ def train_model(self, mlmodel_id):
         result = {'error': unicode(e)}
         mlmodel.training_state = MLModel.TRAINING_FAILURE
 
+    result['duration'] = time.time() - tic
+
     mlmodel.output_data = result
+
     db.session.commit()
 
 
