@@ -65,8 +65,10 @@ export default class ViewModel extends React.Component {
       {
         'url': weightmapUrl,
         'name': 'weight map',
-        'colorPalette': 'green',
-        'intent': 'z-score:'
+        'colorPalette': 'intense red-blue',
+        'intent': 'z-score:',
+        'opacity': 0.8,
+        'sign': 'both'
       }
     ];
 
