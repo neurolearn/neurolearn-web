@@ -8,8 +8,6 @@ import nltools
 from nltools import analysis
 import matplotlib.pyplot as plt
 
-from .httpclient import HTTPClient, FileCache
-
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -154,24 +152,11 @@ def run_ml_analysis(data, collection_id, algorithm, outfolder):
     print 'Elapsed: %.2f seconds' % (time.time() - tic)  # Stop timer
 
 
-def apply_mask(collection_id, weight_map_filename, output_dir):
+def apply_mask(image_list, weight_map_filename, output_dir):
     tic = time.time()  # Start Timer
 
-    client = HTTPClient(cache=FileCache('cache'))
-
-    image_list = fetch_collection_images(collection_id)
-
-    image_list = download_images(client, image_list['results'],
-                                 output_dir)
-
-    # XXX: Better to check for weightmap shape and image shape
-    # and adjust weightmap if needed
-    image_list = resample_images(image_list, output_dir)
-
-    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
-    tic = time.time()  # Start Timer
-
-    dat = nb.funcs.concat_images([item['file'] for item in image_list])
+    dat = nb.funcs.concat_images([item['resampled_file']
+                                  for item in image_list])
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer

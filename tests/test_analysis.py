@@ -36,3 +36,20 @@ def test_train_model(tmpdir):
     result_img = nib.load(os.path.join(output_dir, filename))
 
     compare_image_files(sample_img, result_img)
+
+
+def test_test_model(tmpdir):
+    client = HTTPClient(cache=FileCache('cache'))
+
+    output_dir = str(tmpdir)
+    weight_map_filename = os.path.join(os.path.dirname(__file__),
+                                       'ridge_weightmap.nii.gz')
+
+    image_list = download_images(client, TARGET_DATA,
+                                 output_dir)
+
+    # XXX: Better to check for weightmap shape and image shape
+    # and adjust weightmap if needed
+    image_list = resample_images(image_list, output_dir)
+
+    analysis.apply_mask(image_list, weight_map_filename, output_dir)
