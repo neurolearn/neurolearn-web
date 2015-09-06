@@ -15,7 +15,6 @@ import TrainModel from './pages/TrainModel';
 import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
-import Review from './components/Review';
 import ViewModel from './pages/ViewModel';
 import TestPatternMap from './pages/TestPatternMap';
 import configureStore from './store/configureStore';
@@ -32,7 +31,6 @@ function renderRoutes(history) {
           <Route path="input-data" component={InputData}/>
           <Route path="training-label" component={TrainingLabel}/>
           <Route path="model-preferences" component={ModelPreferences}/>
-          <Route path="review" component={Review}/>
         </Route>
         <Route path="model/:id" component={ViewModel} />
         <Route path="test-pattern-map" component={TestPatternMap}/>
