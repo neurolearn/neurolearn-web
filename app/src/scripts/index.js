@@ -16,6 +16,7 @@ import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
 import ViewModel from './pages/ViewModel';
+import TestModel from './pages/TestModel';
 import TestPatternMap from './pages/TestPatternMap';
 import configureStore from './store/configureStore';
 
@@ -32,6 +33,8 @@ function renderRoutes(history) {
           <Route path="training-label" component={TrainingLabel}/>
           <Route path="model-preferences" component={ModelPreferences}/>
         </Route>
+        <Route path="test-model" component={TestModel} />
+        {/* <Route path="test/:id" component={ViewTest} /> */}
         <Route path="model/:id" component={ViewModel} />
         <Route path="test-pattern-map" component={TestPatternMap}/>
       </Route>

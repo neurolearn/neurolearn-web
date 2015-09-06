@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
@@ -97,6 +97,12 @@ export default class ViewModel extends React.Component {
     this.props.dispatch(deleteMLModel(modelId, router));
   }
 
+  handleTestModel() {
+    const { router } = this.context;
+
+    router.transitionTo('/test-model');
+  }
+
   render() {
     const { mlModels, params } = this.props;
     const model = mlModels[parseInt(params.id)];
@@ -104,9 +110,12 @@ export default class ViewModel extends React.Component {
     return (
       <div>
         <div className="page-header">
-          <Button bsStyle="danger"
-                  className="pull-right"
-                  onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
+          <ButtonToolbar className="pull-right">
+            <Button bsStyle="primary"
+                    onClick={() => this.handleTestModel()}>Test Model</Button>
+            <Button bsStyle="danger"
+                    onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
+          </ButtonToolbar>
           <h1>{model.name}</h1>
         </div>
         <div className="row">
