@@ -7,6 +7,7 @@ export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
 
 import request from 'superagent';
+import debounce from 'lodash/function/debounce';
 
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -16,7 +17,7 @@ function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
 }
 
-function fetchSearchResults(state) {
+function prepareFetchSearchResults(state) {
   const query = state.query
     ? {
       'multi_match': {
@@ -87,11 +88,17 @@ function receiveSearchResults(results) {
   };
 }
 
+function fetchSearchResults(dispatch, state) {
+  return prepareFetchSearchResults(state)
+    .end((err, res) => dispatch(receiveSearchResults(res.body)));
+}
+
+const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
+
 export function loadSearchResults(action) {
   return (dispatch, getState) => {
     dispatch(action);
-    return fetchSearchResults(getState().search)
-      .end((err, res) => dispatch(receiveSearchResults(res.body)));
+    return debouncedFetchSearchResults(dispatch, getState().search);
   };
 }
 
