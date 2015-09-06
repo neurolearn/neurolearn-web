@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
-import { RESULTS_PER_PAGE } from '../constants/Search';
 import { Link } from 'react-router';
 
 import {resetImagesMetadata } from '../state/imagesMetadata';
@@ -22,9 +21,6 @@ import {
 import {
   loadSearchResults,
   inputSearchQuery,
-  selectSearchOffset,
-  selectSortType,
-  changeFilter,
 } from '../state/search';
 
 import styles from './InputData.scss';
@@ -41,36 +37,6 @@ class InputData extends React.Component {
     if (!this.props.search.results) {
       this.props.dispatch(loadSearchResults(inputSearchQuery('')));
     }
-  }
-
-  handleSearchInputChange(query) {
-    this.props.dispatch(loadSearchResults(inputSearchQuery(query)));
-  }
-
-  handlePageSelect(page) {
-    if (page < 1) {
-      return;
-    }
-
-    this.props.dispatch(loadSearchResults(selectSearchOffset(
-      (page - 1) * RESULTS_PER_PAGE)));
-  }
-
-  handleSortSelect(sortType) {
-    this.props.dispatch(loadSearchResults(selectSortType(sortType)));
-  }
-
-  handleFilterChange(value) {
-    const filter = {
-        'range': {
-          'number_of_images': {
-            'gte': parseInt(value[0]),
-            'lte': parseInt(value[1])
-          }
-        }
-    };
-
-    this.props.dispatch(loadSearchResults(changeFilter(filter)));
   }
 
   handleImageToggle(collection, imageId) {
@@ -139,10 +105,7 @@ class InputData extends React.Component {
             <div className="panel panel-default">
               <div className="panel-body">
                 <SearchContainer {...this.props.search}
-                                 onFilterChange={this.handleFilterChange.bind(this)}
-                                 onSearchInputChange={this.handleSearchInputChange.bind(this)}
-                                 onSortSelect={this.handleSortSelect.bind(this)}
-                                 onPageSelect={this.handlePageSelect.bind(this)}
+                                 dispatch={this.props.dispatch}
                                  onSearchResultClick={this.handleCollectionClick.bind(this)} />
               </div>
             </div>

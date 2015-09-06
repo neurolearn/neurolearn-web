@@ -6,6 +6,15 @@ import SearchPagination from './Pagination';
 import RefineSearchResults from './RefineSearchResults';
 import { RESULTS_PER_PAGE } from '../constants/Search';
 
+import {
+  loadSearchResults,
+  inputSearchQuery,
+  selectSearchOffset,
+  selectSortType,
+  changeFilter,
+} from '../state/search';
+
+
 import styles from './SearchContainer.scss';
 
 function totalPages(totalResults, resultsPerPage) {
@@ -22,10 +31,37 @@ export default class SearchContainer extends React.Component {
     results: PropTypes.object,
     sort: PropTypes.string,
     onSearchResultClick: PropTypes.func.isRequired,
-    onFilterChange: PropTypes.func.isRequired,
-    onSearchInputChange: PropTypes.func.isRequired,
-    onSortSelect: PropTypes.func.isRequired,
-    onPageSelect: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired
+  }
+
+  handleSearchInputChange(query) {
+    this.props.dispatch(loadSearchResults(inputSearchQuery(query)));
+  }
+
+  handleSortSelect(sortType) {
+    this.props.dispatch(loadSearchResults(selectSortType(sortType)));
+  }
+
+  handlePageSelect(page) {
+    if (page < 1) {
+      return;
+    }
+
+    this.props.dispatch(loadSearchResults(selectSearchOffset(
+      (page - 1) * RESULTS_PER_PAGE)));
+  }
+
+  handleFilterChange(value) {
+    const filter = {
+        'range': {
+          'number_of_images': {
+            'gte': parseInt(value[0]),
+            'lte': parseInt(value[1])
+          }
+        }
+    };
+
+    this.props.dispatch(loadSearchResults(changeFilter(filter)));
   }
 
   totalHits(searchResults) {
@@ -38,17 +74,17 @@ export default class SearchContainer extends React.Component {
         <div className="row">
           <div className="col-md-3">
             <RefineSearchResults results={this.props.results}
-                                 onChange={this.props.onFilterChange} />
+                                 onChange={this.handleFilterChange.bind(this)} />
           </div>
 
           <div className="col-md-9">
             <SearchInput value={this.props.query}
-                         onChange={this.props.onSearchInputChange} />
+                         onChange={this.handleSearchInputChange.bind(this)} />
             <div className="search-meta clearfix">
               <div className="pull-left HitsCount">Found {this.totalHits(this.props.results)} collections</div>
               <div className="pull-right">
                 <SortSearchResults sortType={this.props.sort}
-                                   onSelect={this.props.onSortSelect} />
+                                   onSelect={this.handleSortSelect.bind(this)} />
               </div>
             </div>
             <SearchResults results={this.props.results}
@@ -58,7 +94,7 @@ export default class SearchContainer extends React.Component {
               ? <SearchPagination
                   totalPages={totalPages(this.totalHits(this.props.results), RESULTS_PER_PAGE)}
                   activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                  onSelect={this.props.onPageSelect} />
+                  onSelect={this.handlePageSelect.bind(this)} />
               : false }
           </div>
         </div>
