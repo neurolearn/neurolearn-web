@@ -6,18 +6,6 @@ export default class TrainModel extends React.Component {
     children: React.PropTypes.object
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      collection: null,
-      collectionId: null,
-      finishedJobId: null,
-      algorithm: null,
-      targetData: null,
-      showModal: false
-    };
-  }
-
   render() {
     return (
       <div>
