@@ -14,6 +14,10 @@ export default class App extends React.Component {
     dispatch: PropTypes.func.isRequired
   };
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   componentDidMount() {
     const jwt = localStorage.getItem(JWT_KEY_NAME);
     if (jwt) {
@@ -50,11 +54,13 @@ export default class App extends React.Component {
 
   render () {
     const { auth, dispatch } = this.props;
+    const { router } = this.context;
     return (
       <div>
         <Navbar fluid brand={<a href="#">Neurolearn</a>}>
           <Nav navbar>
-            <NavItem eventKey={0} href='#'>Train Model</NavItem>
+            <NavItem eventKey={0} active={router.isActive('/models')} href='#/models'>Models</NavItem>
+            <NavItem eventKey={1} active={router.isActive('/tests')} href='#/tests'>Tests</NavItem>
           </Nav>
           <Nav navbar right>
             { auth.user

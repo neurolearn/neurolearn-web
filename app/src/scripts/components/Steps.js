@@ -9,9 +9,9 @@ export default class Steps extends React.Component {
   render() {
     return (
       <ul className="nav nav-wizard">
-        <Step to="/train-model/input-data">1. Input Data</Step>
-        <Step to="/train-model/training-label">2. Training Label</Step>
-        <Step to="/train-model/model-preferences">3. Model Preferences</Step>
+        <Step to="/models/new/input-data">1. Input Data</Step>
+        <Step to="/models/new/training-label">2. Training Label</Step>
+        <Step to="/models/new/model-preferences">3. Model Preferences</Step>
       </ul>
     );
   }

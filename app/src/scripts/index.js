@@ -11,13 +11,15 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 import HomePage from './pages/HomePage';
+import Dashboard from './pages/Dashboard';
 import TrainModel from './pages/TrainModel';
 import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
 import ViewModel from './pages/ViewModel';
 import TestModel from './pages/TestModel';
-import TestPatternMap from './pages/TestPatternMap';
+import ViewTest from './pages/ViewTest';
+import ModelTests from './pages/ModelTests';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
@@ -27,16 +29,17 @@ function renderRoutes(history) {
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
-        <Redirect from="/train-model" to="/train-model/input-data" />
-        <Route path="train-model" component={TrainModel}>
+        <Route path="/models" component={Dashboard} />
+        <Redirect from="/models/new" to="/models/new/input-data" />
+        <Route path="/models/new" component={TrainModel}>
           <Route path="input-data" component={InputData}/>
           <Route path="training-label" component={TrainingLabel}/>
           <Route path="model-preferences" component={ModelPreferences}/>
         </Route>
-        <Route path="test-model" component={TestModel} />
-        {/* <Route path="test/:id" component={ViewTest} /> */}
-        <Route path="model/:id" component={ViewModel} />
-        <Route path="test-pattern-map" component={TestPatternMap}/>
+        <Route path="/models/:id" component={ViewModel} />
+        <Route path="/tests" component={ModelTests} />
+        <Route path="/tests/new" component={TestModel} />
+        <Route path="/tests/:id" component={ViewTest} />
       </Route>
     </Router>
   );
