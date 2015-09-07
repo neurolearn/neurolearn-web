@@ -138,7 +138,9 @@ class InputData extends React.Component {
                                            selectedImages.collectionsById)}
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
                                                                selectImagesModal.collectionId)}
-            onHide={() => dispatch(hideSelectImagesModal())} />
+            onHide={() => dispatch(hideSelectImagesModal())}>
+            <Link className="btn btn-primary continue-button" to="/train-model/training-label">Continue to Training Label</Link>
+          </SelectImagesModal>
         }
       </div>
     );

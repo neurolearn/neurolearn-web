@@ -64,7 +64,7 @@ export default class SelectImagesModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
-          <Link className="btn btn-primary continue-button" to="/train-model/training-label">Continue to Training Label</Link>
+          {this.props.children}
         </Modal.Footer>
       </Modal>
     );
