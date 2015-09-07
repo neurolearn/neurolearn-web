@@ -51,9 +51,7 @@ export default class Dashboard extends React.Component {
           <tr>
             <th>Status</th>
             <th>Name</th>
-            <th>Algorithm</th>
-            <th>Cross-validation Type</th>
-            <th>Training Duration</th>
+            <th>Test Duration</th>
             <th>Created</th>
           </tr>
         </thead>
@@ -65,10 +63,8 @@ export default class Dashboard extends React.Component {
                   { this.renderState(model.training_state) }
                 </td>
                 <td>
-                  <Link to={`/models/${model.id}`}>{model.name}</Link>
+                  <Link to={`/tests/${model.id}`}>{model.name}</Link>
                 </td>
-                <td>{algorithmNameMap[model.input_data.algorithm]}</td>
-                <td>{model.input_data.cv.type}</td>
                 <td>
                   {model.output_data &&
                    model.output_data.duration &&
@@ -98,8 +94,8 @@ export default class Dashboard extends React.Component {
     return (
       <div className={styles.root}>
         <div className="page-header">
-          <Link className="btn btn-primary btn-lg pull-right" to="/models/new">Train a Model</Link>
-          <h1>Models</h1>
+          <Link className="btn btn-primary btn-lg pull-right" to="/tests/new">Test a Model</Link>
+          <h1>Tests</h1>
         </div>
         <div className="row">
           <div className="col-md-12">
