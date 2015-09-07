@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 import SearchContainer from '../components/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
@@ -98,7 +99,7 @@ export default class TestModel extends React.Component {
   }
 
   render() {
-    const { selectImagesModal, selectedImages, dispatch } = this.props;
+    const { selectImagesModal, selectedImages, testModel, dispatch } = this.props;
     const anySelected = this.countSelectedImages(selectedImages.images) === 0;
 
     return (
@@ -123,7 +124,10 @@ export default class TestModel extends React.Component {
                 <h3 className="panel-title">Model</h3>
               </div>
               <div className='panel-body'>
-                <p>Some model</p>
+                { testModel.id
+                  ? <p><Link to={`/models/${testModel.id}`}>{testModel.name}</Link></p>
+                  : <p>No test model has been selected.</p>
+                }
               </div>
             </div>
 
