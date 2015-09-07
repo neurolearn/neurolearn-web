@@ -102,7 +102,7 @@ export default class ViewModel extends React.Component {
     const { router } = this.context;
 
     this.props.dispatch(setTestModel(model));
-    router.transitionTo('/test-model');
+    router.transitionTo('/tests/new');
   }
 
   render() {
