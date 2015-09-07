@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import ImageItem from './ImageItem';
-import { Link } from 'react-router';
 
 import styles from './SelectImagesModal.scss';
 
