@@ -10,7 +10,7 @@ import {resetImagesMetadata } from '../state/imagesMetadata';
 
 import {
   showSelectImagesModal,
-  hideSelectImagesModal,
+  hideSelectImagesModal
 } from '../state/selectImagesModal';
 
 import {

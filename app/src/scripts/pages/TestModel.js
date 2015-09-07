@@ -1,9 +1,23 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Button } from 'react-bootstrap';
 
 import SearchContainer from '../components/SearchContainer';
+import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
+
+import { testModel } from '../state/testModel';
+
+import {
+  showSelectImagesModal,
+  hideSelectImagesModal
+} from '../state/selectImagesModal';
+
+import {
+  toggleImage,
+  toggleAllImages,
+} from '../state/selectedImages';
 
 import {
   loadSearchResults,
@@ -16,6 +30,10 @@ export default class TestModel extends React.Component {
     selectedImages: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
 
   componentDidMount() {
     if (!this.props.search.results) {
@@ -38,8 +56,45 @@ export default class TestModel extends React.Component {
     0);
   }
 
+  getSelectedImagesInCollection(selectedImages, collectionId) {
+    return selectedImages[collectionId];
+  }
+
+  getCollection(collectionId, collectionsById) {
+    const { results } = this.props.search;
+    let collection = collectionsById[collectionId];
+
+    if (collection) {
+      return collection;
+    }
+
+    if (!results) {
+      return null;
+    }
+
+    collection = results.hits.hits.filter(function (item) {
+      return item._id === collectionId;
+    })[0];
+
+    return collection;
+  }
+
   handleCollectionClick(id) {
     this.props.dispatch(showSelectImagesModal(id));
+  }
+
+  handleImageToggle(collection, imageId) {
+    this.props.dispatch(toggleImage(collection, imageId));
+  }
+
+  handleToggleAll(collection, checked) {
+    this.props.dispatch(toggleAllImages(collection, checked));
+  }
+
+  handleTestModelClick() {
+    const { router } = this.context;
+    const selectedModel = 7;
+    this.props.dispatch(testModel(selectedModel, this.props.selectedImages, router));
   }
 
   render() {
@@ -76,18 +131,32 @@ export default class TestModel extends React.Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Selected Images</h3>
               </div>
-              {/*
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
                 { anySelected
                   ? <p>Training dataset is empty.</p>
                   : <SelectedCollectionList selectedImages={selectedImages}
                                onItemClick={(id) => this.handleCollectionClick(id)} />
                 }
+                <Button disabled={anySelected}
+                        bsStyle="primary"
+                        onClick={this.handleTestModelClick.bind(this)}>Test Model</Button>
               </div>
-              */}
             </div>
           </div>
         </div>
+        {selectImagesModal.collectionId &&
+          <SelectImagesModal
+            show={selectImagesModal.display}
+            onToggle={(collection, imageId) =>
+                        this.handleImageToggle(collection, imageId)}
+            onToggleAll={(collection, checked) =>
+                        this.handleToggleAll(collection, checked)}
+            collection={this.getCollection(selectImagesModal.collectionId,
+                                           selectedImages.collectionsById)}
+            selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
+                                                               selectImagesModal.collectionId)}
+            onHide={() => dispatch(hideSelectImagesModal())} />
+        }
       </div>
     );
   }
