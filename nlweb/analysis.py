@@ -182,6 +182,11 @@ def apply_mask(image_list, weight_map_filename, output_dir):
     plt.xlabel('Subject')
     plt.ylabel('Correlation')
 
-    plt.savefig(os.path.join(output_dir, 'test_pattern_mask_plot.png'))
+    plot_filename = 'test_pattern_mask_plot.png'
+    plt.savefig(os.path.join(output_dir, plot_filename))
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
+
+    return {
+        'plot': plot_filename
+    }

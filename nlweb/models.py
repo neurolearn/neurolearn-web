@@ -99,3 +99,53 @@ class MLModel(db.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class ModelTest(db.Model):
+    __tablename__ = 'modeltests'
+
+    VISIBILITY_PRIVATE = 'private'
+    VISIBILITY_PUBLIC = 'public'
+    VISIBILITY_DELETED = 'deleted'
+
+    STATE_QUEUED = 'queued'
+    STATE_PROGRESS = 'progress'
+    STATE_SUCCESS = 'success'
+    STATE_FAILURE = 'failure'
+
+    id = Column(db.Integer, primary_key=True)
+    name = Column(db.String, nullable=False)
+
+    created = Column(db.DateTime, default=datetime.utcnow)
+    updated = Column(db.DateTime, onupdate=datetime.utcnow)
+
+    user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',
+                           foreign_keys=[user_id],
+                           backref=db.backref('model_tests', lazy='dynamic'))
+
+    visibility = Column(db.Enum(VISIBILITY_PRIVATE,
+                                VISIBILITY_PUBLIC,
+                                VISIBILITY_DELETED,
+                                name='status_types'),
+                        nullable=False)
+
+    state = Column(db.Enum(STATE_QUEUED,
+                           STATE_PROGRESS,
+                           STATE_SUCCESS,
+                           STATE_FAILURE,
+                           name='training_state_types'),
+                   nullable=False)
+
+    input_data = db.Column(JSONB)
+    output_data = db.Column(JSONB)
+
+    @classmethod
+    def get_existing(cls):
+        return cls.query.filter(cls.visibility != cls.VISIBILITY_DELETED)
+
+    def delete(self):
+        self.visibility = self.VISIBILITY_DELETED
+
+    def __unicode__(self):
+        return self.name

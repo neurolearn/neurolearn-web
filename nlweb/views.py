@@ -16,7 +16,7 @@ from nlweb import tasks
 from nlweb.tasks import celery
 from nlweb.extensions import uploaded_media
 
-from .models import db, MLModel
+from .models import db, MLModel, ModelTest
 
 from .marshal import (marshal_list, as_integer, as_is,
                       as_string, as_iso_date, filter_out_key)
@@ -74,7 +74,7 @@ def create_mlmodel():
                       training_state=MLModel.TRAINING_QUEUED,
                       input_data={'data': args['data'],
                                   'algorithm': args['algorithm'],
-                                  'cv': args['cv']},
+                                  'cv': cv},
                       name=args['name'],
                       user=current_user)
     db.session.add(mlmodel)
@@ -97,6 +97,22 @@ def delete_mlmodel(model_id):
     db.session.commit()
 
     return 'No Content', 204
+
+
+@frontend.route('/tests', methods=['POST'])
+@jwt_required()
+def create_test():
+    model_test = ModelTest(visibility=ModelTest.VISIBILITY_PUBLIC,
+                           state=ModelTest.STATE_QUEUED,
+                           input_data=request.json,
+                           name='Test',
+                           user=current_user)
+    db.session.add(model_test)
+    db.session.commit()
+
+    tasks.test_model.delay(model_test.id)
+
+    return 'Created', 201
 
 
 @frontend.route('/applymask', methods=['POST'])

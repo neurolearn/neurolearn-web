@@ -38,7 +38,7 @@ def test_train_model(tmpdir):
     compare_image_files(sample_img, result_img)
 
 
-def test_test_model(tmpdir):
+def test_model_test(tmpdir):
     client = HTTPClient(cache=FileCache('cache'))
 
     output_dir = str(tmpdir)
