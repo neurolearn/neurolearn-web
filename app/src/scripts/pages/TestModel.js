@@ -28,6 +28,7 @@ import {
 export default class TestModel extends React.Component {
   static propTypes = {
     search: PropTypes.object,
+    testModel: PropTypes.object,
     selectedImages: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
@@ -92,10 +93,12 @@ export default class TestModel extends React.Component {
     this.props.dispatch(toggleAllImages(collection, checked));
   }
 
-  handleTestModelClick() {
+  handleTestModelClick(e) {
+    e.preventDefault();
     const { router } = this.context;
-    const selectedModel = 7;
-    this.props.dispatch(testModel(selectedModel, this.props.selectedImages, router));
+    this.props.dispatch(testModel(this.props.testModel.id,
+                                  this.props.selectedImages.images,
+                                  router));
   }
 
   render() {
