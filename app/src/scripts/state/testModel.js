@@ -1,3 +1,4 @@
+import { map, pick, keys, mapValues } from 'lodash';
 import request from 'superagent';
 
 export const SET_TEST_MODEL = 'SET_TEST_MODEL';
@@ -10,10 +11,20 @@ export function setTestModel(model) {
   };
 }
 
-export function resetTestModel(model) {
+export function resetTestModel() {
   return {
     type: RESET_TEST_MODEL
   };
+}
+
+function extractId(url) {
+  return parseInt(url.match(/images\/(\d+)/)[1]);
+}
+
+function listImageIds(selectedImages) {
+  return mapValues(selectedImages, function(urlsMap) {
+    return map(keys(pick(urlsMap, Boolean)), extractId);
+  });
 }
 
 function startModelTesting(modelId, selectedImages, token) {
@@ -31,7 +42,7 @@ function startModelTesting(modelId, selectedImages, token) {
 
 export function testModel(modelId, selectedImages, router) {
   return (dispatch, getState) => {
-    return startModelTesting(modelId, selectedImages, getState().auth.token)
+    return startModelTesting(modelId, listImageIds(selectedImages), getState().auth.token)
       .end((err) => {
         if (!err) {
           router.transitionTo('/tests');
