@@ -102,10 +102,13 @@ def delete_mlmodel(model_id):
 @frontend.route('/tests', methods=['POST'])
 @jwt_required()
 def create_test():
+    data = request.json
+    mlmodel = MLModel.query.get_or_404(int(data['modelId']))
+
     model_test = ModelTest(visibility=ModelTest.VISIBILITY_PUBLIC,
                            state=ModelTest.STATE_QUEUED,
                            input_data=request.json,
-                           name='Test',
+                           name='Test for %s' % mlmodel.name,
                            user=current_user)
     db.session.add(model_test)
     db.session.commit()
