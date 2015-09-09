@@ -4,16 +4,15 @@ import request from 'superagent';
 export const SET_TEST_MODEL = 'SET_TEST_MODEL';
 export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
 
+import { resetSearch } from './search';
+import { resetSelectedImages } from './selectedImages';
+import { hideSelectImagesModal } from './selectImagesModal';
+
+
 export function setTestModel(model) {
   return {
     type: SET_TEST_MODEL,
     model
-  };
-}
-
-export function resetTestModel() {
-  return {
-    type: RESET_TEST_MODEL
   };
 }
 
@@ -40,13 +39,19 @@ function startModelTesting(modelId, selectedImages, token) {
     .send(payload);
 }
 
+function resetModelTestData(dispatch) {
+  [resetSearch,
+   resetSelectedImages,
+   hideSelectImagesModal].map(action => dispatch(action()));
+}
+
 export function testModel(modelId, selectedImages, router) {
   return (dispatch, getState) => {
     return startModelTesting(modelId, listImageIds(selectedImages), getState().auth.token)
       .end((err) => {
         if (!err) {
           router.transitionTo('/tests');
-          resetTestModel();
+          resetModelTestData(dispatch);
         }
       });
   };
