@@ -6,7 +6,6 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../state/modelTests';
-import { algorithmNameMap } from '../constants/Algorithms';
 import styles from './Dashboard.scss';
 
 const POLL_INTERVAL = 2500;
