@@ -122,7 +122,7 @@ class InputData extends React.Component {
                   : <SelectedCollectionList selectedImages={selectedImages}
                                onItemClick={(id) => this.handleCollectionClick(id)} />
                 }
-                <Link disabled={anySelected} className="btn btn-primary btn-block continue-button" to="/train-model/training-label">Continue to Training Label</Link>
+                <Link disabled={anySelected} className="btn btn-primary btn-block continue-button" to="/models/new/training-label">Continue to Training Label</Link>
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@ class InputData extends React.Component {
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
                                                                selectImagesModal.collectionId)}
             onHide={() => dispatch(hideSelectImagesModal())}>
-            <Link className="btn btn-primary continue-button" to="/train-model/training-label">Continue to Training Label</Link>
+            <Link className="btn btn-primary continue-button" to="/models/new/training-label">Continue to Training Label</Link>
           </SelectImagesModal>
         }
       </div>

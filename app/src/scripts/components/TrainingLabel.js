@@ -97,7 +97,7 @@ export default class TrainingLabel extends React.Component {
         }
 
         <hr/>
-        <Link disabled={false} className="btn btn-primary continue-button" to="/train-model/model-preferences">Continue to Model Preferences</Link>
+        <Link disabled={false} className="btn btn-primary continue-button" to="/models/new/model-preferences">Continue to Model Preferences</Link>
       </div>
     );
   }
