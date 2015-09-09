@@ -1,5 +1,5 @@
 import request from 'superagent';
-import logout from './auth';
+import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
 
 export const REQUEST_MLMODELS = 'REQUEST_MLMODELS';
