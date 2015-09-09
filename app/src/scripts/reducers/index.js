@@ -10,6 +10,7 @@ import targetData from '../state/targetData';
 import mlModels from '../state/mlModels';
 import modelPreferences from '../state/modelPreferences';
 import testModel from '../state/testModel';
+import modelTests from '../state/modelTests';
 
 const rootReducer = combineReducers({
   auth,
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
   selectImagesModal,
   targetData,
   modelPreferences,
-  testModel
+  testModel,
+  modelTests
 });
 
 export default rootReducer;

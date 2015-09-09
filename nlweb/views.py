@@ -108,7 +108,7 @@ def create_test():
     model_test = ModelTest(visibility=ModelTest.VISIBILITY_PUBLIC,
                            state=ModelTest.STATE_QUEUED,
                            input_data=request.json,
-                           name='Test for %s' % mlmodel.name,
+                           name='Test for %s model' % mlmodel.name,
                            user=current_user)
     db.session.add(model_test)
     db.session.commit()
@@ -116,6 +116,23 @@ def create_test():
     tasks.test_model.delay(model_test.id)
 
     return 'Created', 201
+
+
+@frontend.route('/tests', methods=['GET'])
+@jwt_required()
+def list_model_tests():
+    mfields = {
+        'id': as_integer,
+        'name': as_string,
+        'created': as_iso_date,
+        'state': as_string,
+        'output_data': as_is
+    }
+
+    model_test_list = ModelTest.get_existing().filter(
+        ModelTest.user == current_user).order_by('created desc').all()
+
+    return jsonify(marshal_list(model_test_list, mfields))
 
 
 @frontend.route('/applymask', methods=['POST'])

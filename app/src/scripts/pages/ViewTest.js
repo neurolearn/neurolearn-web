@@ -2,14 +2,13 @@ import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Spinner from '../components/Spinner';
-import NSViewer from '../components/NSViewer';
-import { deleteMLModel } from '../state/mlModels';
+import { deleteMLModel } from '../state/modelTests';
 import { setTestModel } from '../state/testModel';
 
-export default class ViewModel extends React.Component {
+export default class ViewTest extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    mlModels: PropTypes.object,
+    modelTests: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -18,7 +17,7 @@ export default class ViewModel extends React.Component {
   }
 
   renderState(model) {
-    switch (model.training_state) {
+    switch (model.state) {
       case 'queued':
       case 'progress':
         return this.renderProgress();
@@ -52,47 +51,18 @@ export default class ViewModel extends React.Component {
   }
 
   renderModel(model) {
-      const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
-      const images = [
-      {
-        id: 'anatomical',
-        json: false,
-        name: 'anatomical',
-        colorPalette: 'grayscale',
-        cache: true,
-        download: '/static/data/anatomical.nii.gz',
-        url: '/static/data/anatomical.nii.gz'
-      },
-      {
-        'url': weightmapUrl,
-        'name': 'weight map',
-        'colorPalette': 'intense red-blue',
-        'intent': 'z-score:',
-        'opacity': 0.8,
-        'sign': 'both'
-      }
-    ];
-
     return (
       <div className="col-md-12">
-        <p>Result weight map for analysis #{model.id}</p>
-
-        <div className='NSViewer'>
-          <NSViewer images={images} />
-        </div>
+        <p>Result for model test #{model.id}</p>
 
         <div className='ScatterPlot' style={{marginTop: 20}}>
-          <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
-        </div>
-
-        <div className='download' style={{marginTop: 20}}>
-          <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
+          <img src={`/media/${model.id}/${model.output_data.plot}`}/>
         </div>
       </div>
     );
   }
 
-  handleDeleteModel(modelId) {
+  handleDelete(modelId) {
     const { router } = this.context;
 
     this.props.dispatch(deleteMLModel(modelId, router));
@@ -106,17 +76,15 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { mlModels, params } = this.props;
-    const model = mlModels[parseInt(params.id)];
+    const { modelTests, params } = this.props;
+    const model = modelTests[parseInt(params.id)];
 
     return (
       <div>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
-            <Button bsStyle="primary"
-                    onClick={() => this.handleTestModel(model)}>Test Model</Button>
             <Button bsStyle="danger"
-                    onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
+                    onClick={() => this.handleDelete(model.id)}>Delete</Button>
           </ButtonToolbar>
           <h1>{model.name}</h1>
         </div>
@@ -132,5 +100,5 @@ function select(state) {
   return state;
 }
 
-export default connect(select)(ViewModel);
+export default connect(select)(ViewTest);
 

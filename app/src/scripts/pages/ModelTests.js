@@ -5,25 +5,25 @@ import React, { PropTypes } from 'react';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadMLModels } from '../state/mlModels';
+import { loadModelTests } from '../state/modelTests';
 import { algorithmNameMap } from '../constants/Algorithms';
 import styles from './Dashboard.scss';
 
 const POLL_INTERVAL = 2500;
 
-export default class Dashboard extends React.Component {
+export default class ModelTests extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    mlModels: PropTypes.object
+    modelTests: PropTypes.object
   };
 
-  loadMLModels() {
-    this.props.dispatch(loadMLModels());
+  loadModelTests() {
+    this.props.dispatch(loadModelTests());
   }
 
   componentDidMount() {
-    this.loadMLModels();
-    this.interval = setInterval(this.loadMLModels.bind(this), POLL_INTERVAL);
+    this.loadModelTests();
+    this.interval = setInterval(this.loadModelTests.bind(this), POLL_INTERVAL);
   }
 
   componentWillUnmount() {
@@ -43,8 +43,8 @@ export default class Dashboard extends React.Component {
     }
   }
 
-  renderMLModels(mlModels) {
-    const models = sortByOrder(values(mlModels), 'created', 'desc');
+  renderItems(modelTests) {
+    const models = sortByOrder(values(modelTests), 'created', 'desc');
     return (
       <table className="table">
         <thead>
@@ -60,7 +60,7 @@ export default class Dashboard extends React.Component {
             models.map(model =>
               <tr>
                 <td style={{height: 40}}>
-                  { this.renderState(model.training_state) }
+                  { this.renderState(model.state) }
                 </td>
                 <td>
                   <Link to={`/tests/${model.id}`}>{model.name}</Link>
@@ -83,13 +83,13 @@ export default class Dashboard extends React.Component {
   renderEmptyState() {
     return (
       <div style={{'text-align': 'center'}}>
-        <h3 style={{'color': 'lightgray'}}>No Trained Models Yet</h3>
+        <h3 style={{'color': 'lightgray'}}>No Model Tests Yet</h3>
       </div>
     );
   }
 
   render() {
-    const { mlModels } = this.props;
+    const { modelTests } = this.props;
 
     return (
       <div className={styles.root}>
@@ -99,9 +99,9 @@ export default class Dashboard extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(mlModels)
+            { isEmpty(modelTests)
               ? this.renderEmptyState()
-              : this.renderMLModels(mlModels) }
+              : this.renderItems(modelTests) }
           </div>
         </div>
       </div>
@@ -113,4 +113,4 @@ function select(state) {
   return state;
 }
 
-export default connect(select)(Dashboard);
+export default connect(select)(ModelTests);
