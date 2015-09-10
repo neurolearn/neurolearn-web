@@ -43,7 +43,7 @@ export default class ViewTest extends React.Component {
     return (
       <div className="col-md-12">
         <div className="alert alert-danger">
-          <h4>Training Failed</h4>
+          <h4>Testing Failed</h4>
           {model.output_data.error}
         </div>
       </div>
@@ -66,13 +66,6 @@ export default class ViewTest extends React.Component {
     const { router } = this.context;
 
     this.props.dispatch(deleteMLModel(modelId, router));
-  }
-
-  handleTestModel(model) {
-    const { router } = this.context;
-
-    this.props.dispatch(setTestModel(model));
-    router.transitionTo('/test-model');
   }
 
   render() {
