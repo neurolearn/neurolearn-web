@@ -64,26 +64,28 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
-    holdout = range(len(image_list))
-
     Y = np.array([int(item['target']) for item in image_list])
+
+    try:
+        holdout = [int(item['subject_id']) for item in image_list]
+    except KeyError:
+        holdout = None
+
+    if holdout:
+        cv['subject_id'] = holdout
+    elif cv['type'] == 'loso':
+        raise ValueError("subject_id is required for a LOSO cross validation.")
 
     extra = {}
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
-    cv_dict = {cv['type']: cv['value']}
-
-    if cv['type'] == 'kfold':
-        cv_dict['kfold'] = 5 if len(Y) > 5 else len(Y)
-
-    negvneu = analysis.Predict(dat, Y, algorithm=algorithm,
-                               subject_id=holdout,
+    predict = analysis.Predict(dat, Y, algorithm=algorithm,
                                output_dir=output_dir,
-                               cv_dict=cv_dict,
+                               cv_dict=cv,
                                **extra)
 
-    negvneu.predict()
+    predict.predict()
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
