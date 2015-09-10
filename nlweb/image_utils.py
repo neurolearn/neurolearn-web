@@ -159,7 +159,7 @@ def resample_images(image_list, output_dir):
                        }
     """
     dirname = os.path.join(output_dir, 'resampled')
-    target_nii_filename = 'MNI152_T1_2mm_brain_mask_dil.nii.gz'
+    target_nii_filename = 'MNI152_T1_2mm_brain_mask.nii.gz'
     standard = os.path.join(
         os.path.dirname(nltools.__file__), 'resources',
         target_nii_filename)
