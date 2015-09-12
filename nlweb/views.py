@@ -67,8 +67,6 @@ def list_mlmodels():
 def create_mlmodel():
     args = request.json
     cv = args['cv']
-    # XXX: move to Schematics
-    cv['value'] = int(cv['value'])
 
     mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
                       training_state=MLModel.TRAINING_QUEUED,

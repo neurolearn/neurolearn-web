@@ -27,7 +27,7 @@ def test_create_mlmodel(testapp, user):
     headers = gen_auth_header(fetch_jwt(testapp, user))
     payload = {'algorithm': nv_test_data.ALGORITHM,
                'data': nv_test_data.TARGET_DATA,
-               'cv': {'type': 'kfold', 'value': 5},
+               'cv': {'type': 'kfolds', 'n_folds': 10},
                'name': name}
 
     response = testapp.post_json('/mlmodels',
