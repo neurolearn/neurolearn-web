@@ -39,7 +39,8 @@ module.exports = {
       { test: /vendor_modules\/handsontable.full.js$/, loader: 'imports?this=>window' },
       { test: /\.scss$/, loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
-      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
+      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}, // inline base64 URLs for <=8k images, direct URLs for the rest
+      { test: /\.(otf|eot|svg|ttf|woff2?)$/, loader: 'file'}
     ],
     noParse: [
       'handsontable.full.js',

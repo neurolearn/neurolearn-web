@@ -1,6 +1,6 @@
 require('console-shim');
 require('promise.prototype.finally');
-
+require('bootstrap.css');
 require('index.css');
 require('handsontable.full.css');
 
