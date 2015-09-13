@@ -13,12 +13,6 @@ from nlweb.image_utils import (download_images, resample_images,
 
 from nlweb.models import MLModel, ModelTest, db
 
-# NTOTAL = 20
-# for i in range(NTOTAL):
-#     time.sleep(random.random())
-#     celery.current_task.update_state(state='PROGRESS',
-#                                      meta={'current': i, 'total': NTOTAL})
-# return 999
 _collection_id_re = re.compile(r'collections\/([^/]+)?\/?$')
 
 
@@ -119,12 +113,3 @@ def test_model(self, model_test_id):
     model_test.output_data = result
 
     db.session.commit()
-
-
-@celery.task(bind=True)
-def apply_mask(self, collection_id, weightmap_filename):
-
-    output_dir = os.path.join(celery.conf.MEDIA_ROOT, self.request.id)
-    analysis.apply_mask(collection_id, weightmap_filename, output_dir)
-
-    return 999
