@@ -58,6 +58,12 @@ export default class ViewTest extends React.Component {
         <div className='ScatterPlot' style={{marginTop: 20}}>
           <img src={`/media/${model.id}/${model.output_data.plot}`}/>
         </div>
+
+        <div className='download' style={{marginTop: 20}}>
+          <a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_dot_product.csv`}>Download dot product as CSV</a>
+          {' '}
+          <a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_correlation.csv`}>Download correlation as CSV</a>
+        </div>
       </div>
     );
   }
