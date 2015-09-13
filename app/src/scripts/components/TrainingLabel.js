@@ -38,15 +38,6 @@ export default class TrainingLabel extends React.Component {
     this.props.dispatch(setTargetData(targetData));
   }
 
-  renderUploadAndSelect() {
-    return (
-      <div>
-       <p className="lead">Upload a CSV file with metadata for this collection. <em>Try using <a href="/static/data/Pain_Trial_Data.csv">example metadata</a> for collection #504</em>.</p>
-        <SelectTrainingLabel onSelectTarget={this.handleTargetSelection.bind(this)} />
-      </div>
-    );
-  }
-
   prependRowWithColumnNames(data) {
     let firstRow = {};
     Object.keys(data[0]).map(key => firstRow[key] = key);
@@ -91,10 +82,8 @@ export default class TrainingLabel extends React.Component {
       <div>
         <h1 className="page-header">Training Label</h1>
         { imagesMetadata.isFetching && this.renderLoading() }
-        { isEmpty(this.props.imagesMetadata.items)
-          ? this.renderUploadAndSelect()
-          : this.renderDataGrid(this.props.imagesMetadata.items)
-        }
+        { !isEmpty(this.props.imagesMetadata.items) &&
+          this.renderDataGrid(this.props.imagesMetadata.items) }
 
         <hr/>
         <Link disabled={false} className="btn btn-primary continue-button" to="/models/new/model-preferences">Continue to Model Preferences</Link>
