@@ -47,5 +47,5 @@ matplotlib==1.4.3
 seaborn==0.5.1
 
 
-git+https://github.com/ljchang/neurolearn.git@b58132b5d8c73dd42408b103b02d17d3cdb1df4f#egg=nltools
+git+https://github.com/burnash/neurolearn.git@d48e5c51f99c303600630ac815e040f3426129e4#egg=nltools
 git+https://github.com/NeuroVault/pyneurovault.git@e5cff3e61fd6c9f06ea5b524bee43ab1829746a0#egg=pyneurovault
