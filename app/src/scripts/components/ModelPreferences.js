@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import {
   inputModelName,
   inputKfoldParam,
-  inputLosoParam,
   selectCVType,
   selectAlgorithm,
   trainModel,
@@ -38,13 +37,12 @@ export default class ModelPreferences extends React.Component {
       modelName,
       algorithm,
       cvType,
-      kfoldParam,
-      losoParam
+      kfoldsParam
     } = this.props.modelPreferences;
 
     return !some([modelName, algorithm], isEmpty)
-           && (cvType === 'kfold' && !isEmpty(kfoldParam)
-               || cvType === 'loso' && !isEmpty(losoParam) );
+           && (cvType === 'kfolds' && !isEmpty(kfoldsParam)
+               || cvType === 'loso');
   }
 
   genHandler(refName, action) {
@@ -123,21 +121,21 @@ export default class ModelPreferences extends React.Component {
                            ref="cvType"
                            onChange={this.handleRadioChange.bind(this)}
                            name="cvType"
-                           value="kfold"
-                           checked={modelPreferences.cvType === 'kfold'} />
+                           value="kfolds"
+                           checked={modelPreferences.cvType === 'kfolds'} />
                     k-fold
                   </label>
                 </div>
 
                 <div className="form-horizontal well">
-                  <fieldset disabled={modelPreferences.cvType !== 'kfold'}>
+                  <fieldset disabled={modelPreferences.cvType !== 'kfolds'}>
                     <div className="form-group">
                       <label className="col-sm-5 control-label">Number of Divisions (k)</label>
                       <div className="col-sm-7">
                         <input type="text"
-                               ref="kfoldParam"
-                               onChange={this.genHandler('kfoldParam', inputKfoldParam)}
-                               value={modelPreferences.kfoldParam}
+                               ref="kfoldsParam"
+                               onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
+                               value={modelPreferences.kfoldsParam}
                                className="form-control" />
                       </div>
                     </div>
@@ -154,21 +152,6 @@ export default class ModelPreferences extends React.Component {
                            checked={modelPreferences.cvType === 'loso'} />
                     Leave One Subject Out
                   </label>
-                </div>
-
-                <div className="form-horizontal well">
-                  <fieldset disabled={modelPreferences.cvType !== 'loso'}>
-                    <div className="form-group" >
-                      <label className="col-sm-5 control-label">Subject ID</label>
-                      <div className="col-sm-7">
-                        <input type="text"
-                               ref="losoParam"
-                               onChange={this.genHandler('losoParam', inputLosoParam)}
-                               value={modelPreferences.losoParam}
-                               className="form-control" />
-                      </div>
-                    </div>
-                  </fieldset>
                 </div>
               </div>
 

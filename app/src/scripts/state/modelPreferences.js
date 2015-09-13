@@ -22,10 +22,10 @@ export function inputModelName(modelName) {
   };
 }
 
-export function inputKfoldParam(kfoldParam) {
+export function inputKfoldParam(kfoldsParam) {
   return {
     type: INPUT_KFOLD_PARAM,
-    kfoldParam
+    kfoldsParam
   };
 }
 
@@ -104,7 +104,7 @@ const initialState = {
   modelName: '',
   algorithm: '',
   cvType: null,
-  kfoldParam: '',
+  kfoldsParam: '',
   losoParam: ''
 };
 
@@ -116,7 +116,7 @@ export default function reducer(state = initialState, action) {
       });
     case INPUT_KFOLD_PARAM:
       return Object.assign({}, state, {
-        kfoldParam: action.kfoldParam
+        kfoldsParam: action.kfoldsParam
       });
     case INPUT_LOSO_PARAM:
       return Object.assign({}, state, {
