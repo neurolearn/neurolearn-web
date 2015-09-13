@@ -1,9 +1,5 @@
 from __future__ import absolute_import
 
-import uuid
-
-from celery.result import AsyncResult
-
 from flask import Blueprint, render_template, current_app
 from flask import request, Response, send_from_directory
 from flask import jsonify, abort
@@ -13,8 +9,6 @@ from flask_jwt import jwt_required, current_user
 import requests
 
 from nlweb import tasks
-from nlweb.tasks import celery
-from nlweb.extensions import uploaded_media
 
 from .models import db, MLModel, ModelTest
 
@@ -62,11 +56,17 @@ def list_mlmodels():
     return jsonify(marshal_list(mlmodel_list, mfields))
 
 
+def parse_cv_param(cv):
+    if cv['type'] == 'kfolds':
+        cv['n_folds'] = int(cv.pop('value'))
+    return cv
+
+
 @frontend.route('/mlmodels', methods=['POST'])
 @jwt_required()
 def create_mlmodel():
     args = request.json
-    cv = args['cv']
+    cv = parse_cv_param(args['cv'])
 
     mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
                       training_state=MLModel.TRAINING_QUEUED,
@@ -131,47 +131,6 @@ def list_model_tests():
         ModelTest.user == current_user).order_by('created desc').all()
 
     return jsonify(marshal_list(model_test_list, mfields))
-
-
-@frontend.route('/applymask', methods=['POST'])
-def applymask():
-    collection_id = request.form['collection_id']
-    fs = request.files.values()[0]
-    subfolder = str(uuid.uuid4())
-
-    saved_filename = uploaded_media.save(fs, subfolder, name=fs.name)
-
-    job = tasks.apply_mask.delay(
-        collection_id, uploaded_media.path(saved_filename))
-
-    return jsonify({'jobid': job.id})
-
-
-@frontend.route('/status')
-def task_status():
-    jobid = request.args.get('jobid')
-    if jobid:
-
-        job = AsyncResult(jobid, app=celery)
-        print job.state
-        print job.result
-        if job.state == 'PROGRESS':
-            return jsonify(dict(
-                state=job.state,
-                progress=job.result['current']*1.0/job.result['total'],
-            ))
-        elif job.state == 'SUCCESS':
-            return jsonify(dict(
-                state=job.state,
-                progress=1.0,
-            ))
-        elif job.state == 'FAILURE':
-            return jsonify(dict(
-                state=job.state,
-                message=str(job.result)
-            ))
-
-    return jsonify({'jobid': jobid})
 
 
 @frontend.route('/media/<path:path>')
