@@ -58,7 +58,6 @@
     "moment": "^2.10.6",
     "numeral": "^1.5.3",
     "numeric": "^1.2.6",
-    "papaparse": "^4.1.1",
     "promise.prototype.finally": "^1.0.1",
     "react": "0.13.3",
     "react-bootstrap": "^0.23.7",
