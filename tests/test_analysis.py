@@ -46,7 +46,9 @@ def test_model_test(tmpdir):
     weight_map_filename = os.path.join(os.path.dirname(__file__),
                                        'ridge_weightmap.nii.gz')
 
-    image_list = download_images(client, TARGET_DATA,
+    image_list = download_images(client, [TARGET_DATA[0],
+                                          TARGET_DATA[30],
+                                          TARGET_DATA[62]],
                                  output_dir)
 
     # XXX: Better to check for weightmap shape and image shape

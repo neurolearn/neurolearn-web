@@ -67,6 +67,17 @@ def train_model(image_list, algorithm, cv, output_dir):
             'scatterplot': '%s_scatterplot.png ' % algorithm}
 
 
+def set_pattern_expression(pexpc, image_list):
+    result = []
+    for index, row in pexpc.iterrows():
+        image = image_list[index]
+        result.append({'r': row[0],
+                       'collection_id': image['collection_id'],
+                       'filename': image['filename']
+                       })
+    return result
+
+
 def apply_mask(image_list, weight_map_filename, output_dir):
     tic = time.time()  # Start Timer
 
@@ -77,6 +88,7 @@ def apply_mask(image_list, weight_map_filename, output_dir):
     tic = time.time()  # Start Timer
 
     weight_map = nb.load(weight_map_filename)
+
     pexpd = analysis.apply_mask(data=dat, weight_map=weight_map,
                                 output_dir=output_dir,
                                 method='dot_product',
@@ -103,5 +115,6 @@ def apply_mask(image_list, weight_map_filename, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
     return {
-        'plot': plot_filename
+        'plot': plot_filename,
+        'correlation': set_pattern_expression(pexpc, image_list)
     }
