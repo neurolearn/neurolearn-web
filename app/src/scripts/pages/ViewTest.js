@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
+
 import Spinner from '../components/Spinner';
 import { deleteMLModel } from '../state/modelTests';
-import { setTestModel } from '../state/testModel';
 
 export default class ViewTest extends React.Component {
   static propTypes = {
