@@ -4,7 +4,6 @@ import logging
 
 import numpy as np
 import nibabel as nb
-from nibabel.filename_parser import splitext_addext
 import requests
 
 from nilearn.masking import compute_background_mask, _extrapolate_out_mask
