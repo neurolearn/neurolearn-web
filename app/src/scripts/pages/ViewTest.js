@@ -3,6 +3,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Spinner from '../components/Spinner';
+import ImageBarChart from '../components/ImageBarChart';
 import { deleteMLModel } from '../state/modelTests';
 
 export default class ViewTest extends React.Component {
@@ -51,6 +52,7 @@ export default class ViewTest extends React.Component {
   }
 
   renderModel(model) {
+
     return (
       <div className="col-md-12">
         <p>Result for model test #{model.id}</p>
@@ -58,6 +60,8 @@ export default class ViewTest extends React.Component {
         <div className='ScatterPlot' style={{marginTop: 20}}>
           <img src={`/media/${model.id}/${model.output_data.plot}`}/>
         </div>
+
+        <ImageBarChart images={model.output_data.correlation} collections={model.output_data.collections} />
 
         <div className='download' style={{marginTop: 20}}>
           <a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_dot_product.csv`}>Download dot product as CSV</a>
