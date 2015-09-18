@@ -36,3 +36,10 @@ def friendly_time(dt, past_="ago",
                                  past_ if dt_is_past else future_)
 
     return default
+
+
+def pick(dictionary, *keys):
+    """
+    Create a shallow clone of dictionary specified keys only.
+    """
+    return {k: dictionary[k] for k in keys}

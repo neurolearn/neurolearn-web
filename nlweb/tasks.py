@@ -9,11 +9,15 @@ from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
 from nlweb.image_utils import (download_images, resample_images,
+                               fetch_collection,
                                fetch_collection_images)
 
 from nlweb.models import MLModel, ModelTest, db
+from nlweb.utils import pick
 
 _collection_id_re = re.compile(r'collections\/([^/]+)?\/?$')
+
+ALLOWED_COLLECTION_PROPS = ('id', 'name')
 
 
 @celery.task(bind=True)
@@ -63,6 +67,11 @@ def add_collection_id_and_filename(image_list):
     ) for image in image_list]
 
 
+def fetch_collections(ids):
+    return {cid: pick(fetch_collection(cid), *ALLOWED_COLLECTION_PROPS)
+            for cid in ids}
+
+
 @celery.task(bind=True)
 def test_model(self, model_test_id):
     model_test = ModelTest.query.get(model_test_id)
@@ -80,6 +89,8 @@ def test_model(self, model_test_id):
         raise Exception("Model #%s does not exist.", mlmodel_id)
 
     images_by_collections = model_test.input_data['selectedImages']
+
+    collections = fetch_collections(images_by_collections.keys())
 
     image_list = []
     for collection_id, image_ids in images_by_collections.items():
@@ -109,6 +120,7 @@ def test_model(self, model_test_id):
         model_test.state = ModelTest.STATE_FAILURE
 
     result['duration'] = time.time() - tic
+    result['collections'] = collections
 
     model_test.output_data = result
 

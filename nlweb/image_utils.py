@@ -104,6 +104,14 @@ def fetch_collection_images(collection_id):
     return r.json()
 
 
+def fetch_collection(collection_id):
+    url = "%s/api/collections/%s/"
+
+    r = requests.get(url % (BASE_NV_URL, collection_id))
+
+    return r.json()
+
+
 def image_media_url(collection_id, filename):
     return "%s/media/images/%s/%s" % (
         BASE_NV_URL,

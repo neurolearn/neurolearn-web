@@ -72,8 +72,11 @@ def set_pattern_expression(pexpc, image_list):
     for index, row in pexpc.iterrows():
         image = image_list[index]
         result.append({'r': row[0],
+                       'id': image['id'],
+                       'thumbnail': image['thumbnail'],
                        'collection_id': image['collection_id'],
-                       'filename': image['filename']
+                       'filename': image['filename'],
+                       'name': image['name']
                        })
     return result
 

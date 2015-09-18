@@ -84,3 +84,5 @@ def test_create_model_test(testapp, db, user):
     modeltest = ModelTest.query.get(1)
     assert modeltest.state == ModelTest.STATE_SUCCESS
     assert modeltest.output_data['plot'] == 'test_pattern_mask_plot.png'
+    assert modeltest.output_data['collections'] == {
+        '504': {'id': 504, 'name': 'Single Subject Thermal Pain'}}
