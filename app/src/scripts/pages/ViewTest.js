@@ -57,10 +57,6 @@ export default class ViewTest extends React.Component {
       <div className="col-md-12">
         <p>Result for model test #{model.id}</p>
 
-        <div className='ScatterPlot' style={{marginTop: 20}}>
-          <img src={`/media/${model.id}/${model.output_data.plot}`}/>
-        </div>
-
         <ImageBarChart images={model.output_data.correlation} collections={model.output_data.collections} />
 
         <div className='download' style={{marginTop: 20}}>
