@@ -54,7 +54,7 @@ export default class ImageBarChart extends React.Component {
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
           <div>
             <h3>{image.name}</h3>
-            <p>{this.collectionNameById(image.collection_id)}</p>
+            <p style={{marginRight: 5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{this.collectionNameById(image.collection_id)}</p>
           </div>
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
