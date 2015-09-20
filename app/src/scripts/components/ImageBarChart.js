@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import RowContainer from './RowContainer.js';
+import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 
 export default class ImageBarChart extends React.Component {
@@ -12,7 +12,7 @@ export default class ImageBarChart extends React.Component {
     return (
       <div>
       <h2>Images</h2>
-      <RowContainer items={this.props.images}
+      <BarChartRowContainer items={this.props.images}
                     label={ImageLabel}
                     collections={this.props.collections} />
       <h2>Groups</h2>

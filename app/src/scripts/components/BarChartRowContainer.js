@@ -1,7 +1,7 @@
 import pluck from 'lodash/collection/pluck';
 import React, { PropTypes } from 'react';
 
-export default class ImageBarChart extends React.Component {
+export default class BarChartRowContainer extends React.Component {
   static propTypes = {
     items: PropTypes.array.isRequired,
     collections: PropTypes.object.isRequired
