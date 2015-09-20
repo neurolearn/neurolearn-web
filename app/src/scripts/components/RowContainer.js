@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 
 export default class ImageBarChart extends React.Component {
   static propTypes = {
-    images: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
     collections: PropTypes.object.isRequired
   }
 
@@ -48,23 +48,20 @@ export default class ImageBarChart extends React.Component {
     return width * Math.abs(value) / scaleMax;
   }
 
-  renderRow(key, image, maxTick) {
+  renderRow(key, item, maxTick) {
     return (
       <tr key={key}>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          <div>
-            <h3>{image.name}</h3>
-            <p style={{marginRight: 5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{this.collectionNameById(image.collection_id)}</p>
-          </div>
+          <this.props.label item={item}/>
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          {image.r < 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, image.r), float: 'right'}}>{image.r.toFixed(4)}</div>
+          {item.r < 0 &&
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, item.r), float: 'right'}}>{item.r.toFixed(4)}</div>
           }
         </td>
         <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          {image.r >= 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, image.r)}}>{image.r.toFixed(4)}</div>
+          {item.r >= 0 &&
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, item.r)}}>{item.r.toFixed(4)}</div>
           }
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', width: 10}}>
@@ -74,8 +71,8 @@ export default class ImageBarChart extends React.Component {
   }
 
   render() {
-    const { images } = this.props;
-    const maxTick = this.rangeMax(pluck(images, 'r'));
+    const { items } = this.props;
+    const maxTick = this.rangeMax(pluck(items, 'r'));
 
     return (
       <table>
@@ -88,7 +85,7 @@ export default class ImageBarChart extends React.Component {
           <td></td>
         </tr>
 
-        {images.map((image, i) => this.renderRow(i, image, maxTick))}
+        {items.map((item, i) => this.renderRow(i, item, maxTick))}
 
         <tr key='bottom'>
           <td style={{borderRight: '1px solid #979797', height: 10}}></td>
