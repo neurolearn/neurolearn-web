@@ -1,3 +1,4 @@
+import { sum, filter, pluck } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
@@ -16,8 +17,8 @@ export default class ImageBarChart extends React.Component {
     this.state = {
       selected: null,
       groups: [
-        {name: 'Pain', r: 0.18, images: {3153: true, 3156: true}},
-        {name: 'Memory', r: -0.82, images: {}}
+        {name: 'Pain', r: 0, images: {3153: true, 3156: true}},
+        {name: 'Memory', r: 0, images: {3153: true}}
       ]
     };
   }
@@ -31,6 +32,26 @@ export default class ImageBarChart extends React.Component {
       return update(item, {
         collectionName: {
           $set: this.collectionNameById(item.collection_id)
+        }
+      });
+    });
+  }
+
+  mean(images) {
+    const rValues = pluck(filter(this.props.images, item => images[item.id]),
+                          'r');
+    if (rValues.length) {
+      return sum(rValues) / rValues.length;
+    } else {
+      return 0;
+    }
+  }
+
+  setCorrelation(groups) {
+    return groups.map(item => {
+      return update(item, {
+        r: {
+          $set: this.mean(item.images)
         }
       });
     });
@@ -72,6 +93,7 @@ export default class ImageBarChart extends React.Component {
 
   render() {
     const images = this.setCollectionName(this.props.images);
+    const groups = this.setCorrelation(this.state.groups);
     return (
       <div>
         <h2>Images</h2>
@@ -81,12 +103,12 @@ export default class ImageBarChart extends React.Component {
           labelProps={{
             showCheckbox: this.state.selected !== null,
             onChange: this.handleImageToggle.bind(this),
-            isChecked: this.isChecked.bind(this),
+            isChecked: this.isChecked.bind(this)
           }} />
 
         <h2>Groups</h2>
         <BarChartRowContainer
-          items={this.state.groups}
+          items={groups}
           label={GroupLabel}
           labelProps={{
             selected: this.state.selected,
