@@ -1,5 +1,5 @@
 import findIndex from 'lodash/array/findIndex';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 require('handsontable');
 window.Formula = require('formula.js');
@@ -8,6 +8,11 @@ require('ruleJS.js');
 require('handsontable.formula.js');
 
 export default class DataGrid extends React.Component {
+  static propTypes = {
+    data: PropTypes.array,
+    onSelectTarget: PropTypes.func.isRequired
+  }
+
   initHandsontableInstance(data) {
     var container = this.refs.hot.getDOMNode(),
         _this = this;
@@ -33,14 +38,14 @@ export default class DataGrid extends React.Component {
       }
     }
 
-    function firstRowRenderer (instance, td, row, col) {
+    function firstRowRenderer(instance, td, row, col) {
       window.Handsontable.renderers.TextRenderer.apply(this, arguments);
       td.style.fontWeight = 'bold';
 
       makeBackground(col, td);
     }
 
-    function columnSelectorRenderer (instance, td, row, col) {
+    function columnSelectorRenderer(instance, td, row, col) {
       window.Handsontable.TextCell.renderer.apply(this, arguments);
       makeBackground(col, td);
     }

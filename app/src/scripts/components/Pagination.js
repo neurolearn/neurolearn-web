@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Pagination } from 'react-bootstrap';
 
 export default class SearchPagination extends React.Component {
+  static propTypes = {
+    activePage: PropTypes.number,
+    totalPages: PropTypes.number,
+    onSelect: PropTypes.func.isRequired
+  }
+
   handleSelect(event, selectedEvent) {
     this.props.onSelect(selectedEvent.eventKey);
   }
