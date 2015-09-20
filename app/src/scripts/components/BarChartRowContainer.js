@@ -47,7 +47,7 @@ export default class BarChartRowContainer extends React.Component {
     return (
       <tr key={key}>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          <this.props.label item={item}/>
+          <this.props.label {...this.props.labelProps} index={key} item={item}/>
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
           {item.r < 0 &&
