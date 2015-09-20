@@ -3,12 +3,7 @@ import React, { PropTypes } from 'react';
 
 export default class BarChartRowContainer extends React.Component {
   static propTypes = {
-    items: PropTypes.array.isRequired,
-    collections: PropTypes.object.isRequired
-  }
-
-  collectionNameById(id) {
-    return this.props.collections[id].name;
+    items: PropTypes.array.isRequired
   }
 
   absMax(array) {
