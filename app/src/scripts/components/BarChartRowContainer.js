@@ -32,9 +32,9 @@ export default class BarChartRowContainer extends React.Component {
     return (
       <tr key='ticks'>
         <td></td>
-        <td><span>{lower.toFixed(2)}</span></td>
+        <td><span>{parseFloat(lower.toFixed(2))}</span></td>
         <td><span>0</span></td>
-        <td><span>{higher.toFixed(2)}</span></td>
+        <td><span>{parseFloat(higher.toFixed(2))}</span></td>
       </tr>
     );
   }
@@ -55,7 +55,7 @@ export default class BarChartRowContainer extends React.Component {
           }
         </td>
         <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          {item.r >= 0 &&
+          {item.r > 0 &&
             <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, item.r)}}>{item.r.toFixed(4)}</div>
           }
         </td>
@@ -68,11 +68,14 @@ export default class BarChartRowContainer extends React.Component {
   render() {
     const { items } = this.props;
     const maxTick = this.rangeMax(pluck(items, 'r'));
+    console.log(items);
 
     return (
       <table style={{marginLeft: 15}}>
         <tbody>
-        {this.renderTicks(-maxTick, maxTick)}
+        { isNaN(maxTick)
+          ? this.renderTicks(-1, 1)
+          : this.renderTicks(-maxTick, maxTick) }
 
         <tr key='top'>
           <td style={{borderRight: '1px solid #979797', height: 10, width: 450}}></td>
