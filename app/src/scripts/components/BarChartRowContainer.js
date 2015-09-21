@@ -70,11 +70,11 @@ export default class BarChartRowContainer extends React.Component {
     const maxTick = this.rangeMax(pluck(items, 'r'));
 
     return (
-      <table>
+      <table style={{marginLeft: 15}}>
         {this.renderTicks(-maxTick, maxTick)}
 
         <tr key='top'>
-          <td style={{borderRight: '1px solid #979797', height: 10}}></td>
+          <td style={{borderRight: '1px solid #979797', height: 10, width: 450}}></td>
           <td style={{borderRight: '1px solid #979797', height: 10, width: 150}}></td>
           <td style={{borderRight: '1px solid #979797', height: 10, width: 150}}></td>
           <td></td>

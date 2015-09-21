@@ -16,10 +16,7 @@ export default class ImageBarChart extends React.Component {
     super(props);
     this.state = {
       selected: null,
-      groups: [
-        {name: 'Pain', r: 0, images: {3153: true, 3156: true}},
-        {name: 'Memory', r: 0, images: {3153: true}}
-      ]
+      groups: []
     };
   }
 
