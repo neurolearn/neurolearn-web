@@ -71,6 +71,7 @@ export default class BarChartRowContainer extends React.Component {
 
     return (
       <table style={{marginLeft: 15}}>
+        <tbody>
         {this.renderTicks(-maxTick, maxTick)}
 
         <tr key='top'>
@@ -88,7 +89,7 @@ export default class BarChartRowContainer extends React.Component {
           <td style={{borderRight: '1px solid #979797', height: 10}}></td>
           <td></td>
         </tr>
-
+        </tbody>
       </table>
     );
   }

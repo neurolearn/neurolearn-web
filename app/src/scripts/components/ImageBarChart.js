@@ -1,4 +1,4 @@
-import { sum, filter, pluck } from 'lodash';
+import { sum, filter, pluck, isEmpty } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
@@ -82,7 +82,8 @@ export default class ImageBarChart extends React.Component {
     this.setState({selected: index});
   }
 
-  handleGroupAdd() {
+  handleGroupAdd(e) {
+    e.preventDefault();
     const newGroup = {'name': 'New Group', r: 0, images: {}};
     const groups = update(this.state.groups, {$push: [newGroup]});
     this.setState({groups: groups, selected: groups.length - 1});
@@ -104,6 +105,7 @@ export default class ImageBarChart extends React.Component {
           }} />
 
         <h2>Groups</h2>
+        {!isEmpty(groups) &&
         <BarChartRowContainer
           items={groups}
           label={GroupLabel}
@@ -111,8 +113,8 @@ export default class ImageBarChart extends React.Component {
             selected: this.state.selected,
             onSelect: this.handleGroupSelect.bind(this)
           }} />
-        <Button bsStyle="link"
-                onClick={this.handleGroupAdd.bind(this)}>Add a group…</Button>
+        }
+        <a href="#" onClick={this.handleGroupAdd.bind(this)}>Add a group…</a>
       </div>
     );
   }
