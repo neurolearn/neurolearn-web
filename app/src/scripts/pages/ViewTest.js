@@ -60,9 +60,7 @@ export default class ViewTest extends React.Component {
         <ImageBarChart images={model.output_data.correlation} collections={model.output_data.collections} />
 
         <div className='download' style={{marginTop: 20}}>
-          <a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_dot_product.csv`}>Download dot product as CSV</a>
-          {' '}
-          <a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_correlation.csv`}>Download correlation as CSV</a>
+          {/*<a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_correlation.csv`}>Download correlation as CSV</a>*/}
         </div>
       </div>
     );
