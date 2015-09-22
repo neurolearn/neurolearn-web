@@ -12,7 +12,7 @@ export default class BarChartRowContainer extends React.Component {
 
   rangeMax(array) {
     const m = 10;
-    const span = this.absMax(array);
+    const span = this.absMax(array).toFixed(2);
     let step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
     let err = m / span * step;
 
@@ -44,19 +44,21 @@ export default class BarChartRowContainer extends React.Component {
   }
 
   renderRow(key, item, maxTick) {
+    const r = item.r.toFixed(2);
+
     return (
       <tr key={key}>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
           <this.props.label {...this.props.labelProps} index={key} item={item}/>
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          {item.r < 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, item.r), float: 'right'}}>{item.r.toFixed(4)}</div>
+          {r < 0 &&
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, r), float: 'right'}}>{r}</div>
           }
         </td>
         <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
-          {item.r > 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, item.r)}}>{item.r.toFixed(4)}</div>
+          {r > 0 &&
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, r)}}>{r}</div>
           }
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', width: 10}}>
