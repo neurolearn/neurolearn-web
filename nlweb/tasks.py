@@ -113,8 +113,7 @@ def test_model(self, model_test_id):
 
     try:
         result = analysis.apply_mask(image_list,
-                                     weight_map_filename,
-                                     output_dir)
+                                     weight_map_filename)
     except Exception as e:
         result = {'error': unicode(e)}
         model_test.state = ModelTest.STATE_FAILURE

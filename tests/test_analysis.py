@@ -4,8 +4,7 @@ import nibabel as nib
 from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
-from nlweb.image_utils import (download_images, resample_images,
-                               fetch_collection_images)
+from nlweb.image_utils import (download_images, resample_images)
 
 from .nv_test_data import TARGET_DATA
 
@@ -55,4 +54,4 @@ def test_model_test(tmpdir):
     # and adjust weightmap if needed
     image_list = resample_images(image_list, output_dir)
 
-    analysis.apply_mask(image_list, weight_map_filename, output_dir)
+    analysis.apply_mask(image_list, weight_map_filename)

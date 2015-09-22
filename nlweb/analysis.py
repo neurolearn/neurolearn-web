@@ -5,7 +5,6 @@ import logging
 import numpy as np
 import nibabel as nb
 from nltools import analysis
-import matplotlib.pyplot as plt
 
 
 logging.basicConfig(level=logging.INFO)
@@ -81,7 +80,7 @@ def set_pattern_expression(pexpc, image_list):
     return result
 
 
-def apply_mask(image_list, weight_map_filename, output_dir):
+def apply_mask(image_list, weight_map_filename):
     tic = time.time()  # Start Timer
 
     dat = nb.funcs.concat_images([item['resampled_file']
@@ -92,32 +91,11 @@ def apply_mask(image_list, weight_map_filename, output_dir):
 
     weight_map = nb.load(weight_map_filename)
 
-    pexpd = analysis.apply_mask(data=dat, weight_map=weight_map,
-                                output_dir=output_dir,
-                                method='dot_product',
-                                save_output=True)
-
     pexpc = analysis.apply_mask(data=dat, weight_map=weight_map,
-                                output_dir=output_dir,
-                                method='correlation',
-                                save_output=True)
-
-    plt.subplot(2, 1, 1)
-    plt.plot(pexpd)
-    plt.title('Pattern Expression')
-    plt.ylabel('Dot Product')
-
-    plt.subplot(2, 1, 2)
-    plt.plot(pexpc)
-    plt.xlabel('Subject')
-    plt.ylabel('Correlation')
-
-    plot_filename = 'test_pattern_mask_plot.png'
-    plt.savefig(os.path.join(output_dir, plot_filename))
+                                method='correlation')
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
     return {
-        'plot': plot_filename,
         'correlation': set_pattern_expression(pexpc, image_list)
     }
