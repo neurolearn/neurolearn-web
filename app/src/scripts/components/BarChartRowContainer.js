@@ -3,7 +3,9 @@ import React, { PropTypes } from 'react';
 
 export default class BarChartRowContainer extends React.Component {
   static propTypes = {
-    items: PropTypes.array.isRequired
+    items: PropTypes.array.isRequired,
+    labelProps: PropTypes.object,
+    label: PropTypes.func.isRequired
   }
 
   absMax(array) {
@@ -12,7 +14,7 @@ export default class BarChartRowContainer extends React.Component {
 
   rangeMax(array) {
     const m = 10;
-    const span = this.absMax(array).toFixed(2);
+    const span = this.absMax(array);
     let step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
     let err = m / span * step;
 
@@ -40,10 +42,11 @@ export default class BarChartRowContainer extends React.Component {
   }
 
   scaleWidth(width, scaleMax, value) {
+    console.log(width, scaleMax, value);
     return width * Math.abs(value) / scaleMax;
   }
 
-  renderRow(key, item, maxTick) {
+  renderRow(key, item, scaleMax) {
     const r = item.r.toFixed(2);
 
     return (
@@ -53,12 +56,12 @@ export default class BarChartRowContainer extends React.Component {
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
           {r < 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, r), float: 'right'}}>{r}</div>
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, scaleMax, r), float: 'right'}}>{r}</div>
           }
         </td>
         <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
           {r > 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, maxTick, r)}}>{r}</div>
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, scaleMax, r)}}>{r}</div>
           }
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', width: 10}}>
@@ -69,15 +72,14 @@ export default class BarChartRowContainer extends React.Component {
 
   render() {
     const { items } = this.props;
-    const maxTick = this.rangeMax(pluck(items, 'r'));
-    console.log(items);
+    const scaleMax = this.rangeMax(pluck(items, 'r'));
 
     return (
       <table style={{marginLeft: 15}}>
         <tbody>
-        { isNaN(maxTick)
+        { isNaN(scaleMax)
           ? this.renderTicks(-1, 1)
-          : this.renderTicks(-maxTick, maxTick) }
+          : this.renderTicks(-scaleMax, scaleMax) }
 
         <tr key='top'>
           <td style={{borderRight: '1px solid #979797', height: 10, width: 450}}></td>
@@ -86,7 +88,7 @@ export default class BarChartRowContainer extends React.Component {
           <td></td>
         </tr>
 
-        {items.map((item, i) => this.renderRow(i, item, maxTick))}
+        {items.map((item, i) => this.renderRow(i, item, scaleMax))}
 
         <tr key='bottom'>
           <td style={{borderRight: '1px solid #979797', height: 10}}></td>
