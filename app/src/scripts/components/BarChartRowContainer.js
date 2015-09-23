@@ -1,4 +1,4 @@
-import pluck from 'lodash/collection/pluck';
+import { pluck, round } from 'lodash';
 import React, { PropTypes } from 'react';
 
 export default class BarChartRowContainer extends React.Component {
@@ -34,20 +34,19 @@ export default class BarChartRowContainer extends React.Component {
     return (
       <tr key='ticks'>
         <td></td>
-        <td><span>{parseFloat(lower.toFixed(2))}</span></td>
+        <td><span>{parseFloat(lower)}</span></td>
         <td><span>0</span></td>
-        <td><span>{parseFloat(higher.toFixed(2))}</span></td>
+        <td><span>{parseFloat(higher)}</span></td>
       </tr>
     );
   }
 
   scaleWidth(width, scaleMax, value) {
-    console.log(width, scaleMax, value);
     return width * Math.abs(value) / scaleMax;
   }
 
   renderRow(key, item, scaleMax) {
-    const r = item.r.toFixed(2);
+    const r = round(item.r, 2);
 
     return (
       <tr key={key}>
@@ -72,7 +71,7 @@ export default class BarChartRowContainer extends React.Component {
 
   render() {
     const { items } = this.props;
-    const scaleMax = this.rangeMax(pluck(items, 'r'));
+    const scaleMax = round(this.rangeMax(pluck(items, 'r')), 2);
 
     return (
       <table style={{marginLeft: 15}}>
