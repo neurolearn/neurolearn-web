@@ -1,6 +1,8 @@
 import { pluck, round } from 'lodash';
 import React, { PropTypes } from 'react';
 
+const AXIS_PIXEL_WIDTH = 100;
+
 export default class BarChartRowContainer extends React.Component {
   static propTypes = {
     items: PropTypes.array.isRequired,
@@ -55,12 +57,12 @@ export default class BarChartRowContainer extends React.Component {
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
           {r < 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, scaleMax, r), float: 'right'}}>{r}</div>
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(AXIS_PIXEL_WIDTH, scaleMax, r), float: 'right'}}>{r}</div>
           }
         </td>
         <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
           {r > 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(150, scaleMax, r)}}>{r}</div>
+            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(AXIS_PIXEL_WIDTH, scaleMax, r)}}>{r}</div>
           }
         </td>
         <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', width: 10}}>
@@ -74,16 +76,16 @@ export default class BarChartRowContainer extends React.Component {
     const scaleMax = round(this.rangeMax(pluck(items, 'r')), 2);
 
     return (
-      <table style={{marginLeft: 15}}>
+      <table>
         <tbody>
         { isNaN(scaleMax)
           ? this.renderTicks(-1, 1)
           : this.renderTicks(-scaleMax, scaleMax) }
 
         <tr key='top'>
-          <td style={{borderRight: '1px solid #979797', height: 10, width: 450}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10, width: 150}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10, width: 150}}></td>
+          <td style={{borderRight: '1px solid #979797', height: 10, width: '90%'}}></td>
+          <td style={{borderRight: '1px solid #979797', height: 10, minWidth: AXIS_PIXEL_WIDTH}}></td>
+          <td style={{borderRight: '1px solid #979797', height: 10, minWidth: AXIS_PIXEL_WIDTH}}></td>
           <td></td>
         </tr>
 

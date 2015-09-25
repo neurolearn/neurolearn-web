@@ -93,28 +93,32 @@ export default class ImageBarChart extends React.Component {
     const images = this.setCollectionName(this.props.images);
     const groups = this.setCorrelation(this.state.groups);
     return (
-      <div>
-        <h2>Images</h2>
-        <BarChartRowContainer
-          items={images}
-          label={ImageLabel}
-          labelProps={{
-            showCheckbox: this.state.selected !== null,
-            onChange: this.handleImageToggle.bind(this),
-            isChecked: this.isChecked.bind(this)
-          }} />
+      <div className="row">
+        <div className="col-md-6">
+          <h2>Images</h2>
+          <BarChartRowContainer
+            items={images}
+            label={ImageLabel}
+            labelProps={{
+              showCheckbox: this.state.selected !== null,
+              onChange: this.handleImageToggle.bind(this),
+              isChecked: this.isChecked.bind(this)
+            }} />
+        </div>
 
-        <h2>Groups</h2>
-        {!isEmpty(groups) &&
-        <BarChartRowContainer
-          items={groups}
-          label={GroupLabel}
-          labelProps={{
-            selected: this.state.selected,
-            onSelect: this.handleGroupSelect.bind(this)
-          }} />
-        }
-        <a href="#" onClick={this.handleGroupAdd.bind(this)}>Add a group…</a>
+        <div className="col-md-6">
+          <h2>Groups</h2>
+          {!isEmpty(groups) &&
+          <BarChartRowContainer
+            items={groups}
+            label={GroupLabel}
+            labelProps={{
+              selected: this.state.selected,
+              onSelect: this.handleGroupSelect.bind(this)
+            }} />
+          }
+          <a href="#" onClick={this.handleGroupAdd.bind(this)}>Add a group…</a>
+        </div>
       </div>
     );
   }

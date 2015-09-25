@@ -16,8 +16,8 @@ export default class GroupLabel extends React.Component {
   render() {
     const { item, index, selected } = this.props;
     return (
-      <div style={{backgroundColor: index === selected ? '#eee' : 'white'}}>
-        <h3><a href="#" onClick={this.handleClick.bind(this)}>{item.name}</a></h3>
+      <div style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}>
+        <a href="#" onClick={this.handleClick.bind(this)}>{item.name}</a>
       </div>
     );
   }

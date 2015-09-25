@@ -13,14 +13,14 @@ export default class ImageLabel extends React.Component {
     const { item, showCheckbox } = this.props;
 
     return (
-      <div>
+      <div style={{marginLeft: 20}}>
         {showCheckbox &&
           <Input type='checkbox'
                  checked={this.props.isChecked(item.id)}
                  onChange={e => this.props.onChange(item.id, e.target.checked)}/>
         }
-        <h3>{item.name}</h3>
-        <p style={{marginRight: 5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{item.collectionName}</p>
+        <p>{item.name}</p>
+        <p style={{marginRight: 5, overflow: 'hidden', textOverflow: 'ellipsis'}}>{item.collectionName}</p>
       </div>
     );
   }
