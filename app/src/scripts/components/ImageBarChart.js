@@ -82,6 +82,15 @@ export default class ImageBarChart extends React.Component {
     this.setState({selected: index});
   }
 
+  handleGroupDelete(index) {
+    const { groups } = this.state;
+
+    this.setState({
+      groups: groups.slice(0, index).concat(groups.slice(index + 1)),
+      selected: null
+    });
+  }
+
   handleGroupAdd(e) {
     e.preventDefault();
     const newGroup = {'name': 'New Group', r: 0, images: {}};
@@ -114,7 +123,8 @@ export default class ImageBarChart extends React.Component {
             label={GroupLabel}
             labelProps={{
               selected: this.state.selected,
-              onSelect: this.handleGroupSelect.bind(this)
+              onSelect: this.handleGroupSelect.bind(this),
+              onDelete: this.handleGroupDelete.bind(this)
             }} />
           }
           <a href="#" onClick={this.handleGroupAdd.bind(this)}>Add a group…</a>
