@@ -1,0 +1,17 @@
+.viewing :global {
+  .edit {
+    display: none;
+  }
+  .view {
+    display: block;
+  }
+}
+
+.editing :global {
+  .edit {
+    display: block;
+  }
+  .view {
+    display: none;
+  }
+}
