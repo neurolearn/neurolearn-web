@@ -7,6 +7,7 @@ export default class GroupLabel extends React.Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
     onSelect: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     index: PropTypes.number,
     selected: PropTypes.number
@@ -47,7 +48,8 @@ export default class GroupLabel extends React.Component {
   }
 
   handleSave() {
-
+    this.props.onSave(this.props.index, this.state.editText);
+    this.setState({editing: false});
   }
 
   componentDidUpdate(prevProps, prevState) {
