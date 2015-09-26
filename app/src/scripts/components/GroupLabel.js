@@ -15,7 +15,8 @@ export default class GroupLabel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
+      editText: this.props.item.name
     };
   }
 
@@ -30,12 +31,23 @@ export default class GroupLabel extends React.Component {
   }
 
   handleCancel() {
-    this.setState({ editing: false });
+    this.setState({
+      editing: false,
+      editText: this.props.item.name
+    });
   }
 
   handleDelete(e) {
     e.preventDefault();
     this.props.onDelete(this.props.index);
+  }
+
+  handleInputChange(e) {
+    this.setState({editText: e.target.value});
+  }
+
+  handleSave() {
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -50,16 +62,27 @@ export default class GroupLabel extends React.Component {
     const { item, index, selected } = this.props;
     const { editing } = this.state;
     return (
-      <div className={editing ? styles.editing : styles.viewing} style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}>
-        <a href="#" className="view" onClick={this.handleClick.bind(this)}>{item.name}</a>
-        <input className="edit" ref="editInput" value={item.name} />
+      <div className={editing ? styles.editing : styles.viewing}
+           style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}>
+        <a href="#"
+           className="view"
+          onClick={this.handleClick.bind(this)}>{item.name}</a>
+        <input className="edit"
+               ref="editInput"
+               value={this.state.editText}
+               onChange={this.handleInputChange.bind(this)} />
         <div className="view pull-right">
-          <a style={{padding: '8px 10px'}} href="#" onClick={this.handleEdit.bind(this)}>Edit</a>
-          <a href="#" onClick={this.handleDelete.bind(this)}>Delete</a>
+          <a style={{padding: '8px 10px'}}
+             href="#"
+             onClick={this.handleEdit.bind(this)}>Edit</a>
+          <a href="#"
+             onClick={this.handleDelete.bind(this)}>Delete</a>
         </div>
         <div className="edit pull-right">
-          <Button bsStyle='default' onClick={this.handleCancel.bind(this)}>Cancel</Button>
-          <Button bsStyle='primary'>Save</Button>
+          <Button bsStyle='default'
+                  onClick={this.handleCancel.bind(this)}>Cancel</Button>
+          <Button bsStyle='primary'
+                  onClick={this.handleSave.bind(this)}>Save</Button>
         </div>
       </div>
     );
