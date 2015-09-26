@@ -1,7 +1,6 @@
 import { sum, filter, pluck, isEmpty } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
 import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
