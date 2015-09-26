@@ -39,11 +39,11 @@ export default class GroupLabel extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-      if (!prevState.editing && this.state.editing) {
-        const node = this.refs.editInput.getDOMNode();
-        node.focus();
-        node.setSelectionRange(node.value.length, node.value.length);
-      }
+    if (!prevState.editing && this.state.editing) {
+      const node = this.refs.editInput.getDOMNode();
+      node.focus();
+      node.setSelectionRange(node.value.length, node.value.length);
+    }
   }
 
   render() {
