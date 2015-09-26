@@ -60,7 +60,7 @@ export function deleteModelTest(modelId, router) {
 
     return _deleteModelTest(modelId, getState().auth.token)
       .end((err, res) => {
-        router.transitionTo('/');
+        router.transitionTo('/tests');
       });
   };
 }

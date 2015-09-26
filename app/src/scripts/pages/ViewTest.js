@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
-import { deleteMLModel } from '../state/modelTests';
+import { deleteModelTest } from '../state/modelTests';
 
 export default class ViewTest extends React.Component {
   static propTypes = {
@@ -69,7 +69,7 @@ export default class ViewTest extends React.Component {
   handleDelete(modelId) {
     const { router } = this.context;
 
-    this.props.dispatch(deleteMLModel(modelId, router));
+    this.props.dispatch(deleteModelTest(modelId, router));
   }
 
   render() {

@@ -133,6 +133,20 @@ def list_model_tests():
     return jsonify(marshal_list(model_test_list, mfields))
 
 
+@frontend.route('/tests/<int:test_id>', methods=['DELETE'])
+@jwt_required()
+def delete_test(test_id):
+    test = ModelTest.query.get_or_404(test_id)
+
+    if test.user != current_user:
+        abort(404)
+
+    test.delete()
+    db.session.commit()
+
+    return 'No Content', 204
+
+
 @frontend.route('/media/<path:path>')
 def static_file(path):
     return send_from_directory(current_app.config['MEDIA_ROOT'], path)
