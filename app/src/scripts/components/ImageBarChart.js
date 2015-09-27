@@ -132,8 +132,10 @@ export default class ImageBarChart extends React.Component {
   }
 
   render() {
-    const images = this.setCollectionName(this.filterImages(this.state.filterText, this.props.images));
+    const images = this.setCollectionName(this.filterImages(this.state.filterText,
+                                                            this.props.images));
     const groups = this.setCorrelation(this.state.groups);
+
     return (
       <div className="row">
         <div className="col-md-6">
