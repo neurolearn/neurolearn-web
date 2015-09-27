@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 import HomePage from './pages/HomePage';
-import Dashboard from './pages/Dashboard';
+import MLModels from './pages/MLModels';
 import TrainModel from './pages/TrainModel';
 import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
@@ -29,7 +29,7 @@ function renderRoutes(history) {
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
-        <Route path="/models" component={Dashboard} />
+        <Route path="/models" component={MLModels} />
         <Redirect from="/models/new" to="/models/new/input-data" />
         <Route path="/models/new" component={TrainModel}>
           <Route path="input-data" component={InputData}/>

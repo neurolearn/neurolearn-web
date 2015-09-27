@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import LoggedOut from './LoggedOut';
-import Dashboard from './Dashboard';
+import MLModels from './MLModels';
 
 export default class HomePage extends React.Component {
   static contextTypes = {
@@ -18,7 +18,7 @@ export default class HomePage extends React.Component {
   }
   render() {
     const { auth } = this.props;
-    return auth.user ? <Dashboard /> : <LoggedOut />;
+    return auth.user ? <MLModels /> : <LoggedOut />;
   }
 }
 

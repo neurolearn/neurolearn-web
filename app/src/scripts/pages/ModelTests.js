@@ -6,7 +6,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../state/modelTests';
-import styles from './Dashboard.scss';
+import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
 
