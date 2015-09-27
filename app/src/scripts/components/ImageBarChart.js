@@ -1,4 +1,4 @@
-import { sum, filter, pluck, isEmpty } from 'lodash';
+import { sum, filter, pluck, isEmpty, every } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
@@ -61,6 +61,27 @@ export default class ImageBarChart extends React.Component {
     this.setState(state, () => this.props.onGroupsChange(this.state.groups));
   }
 
+  showCheckbox() {
+    return this.state.selected !== null;
+  }
+
+  toggleAll(images, checked) {
+    const { selected } = this.state;
+
+    const imageMap = images.reduce((accum, image) => {
+      accum[image.id] = checked;
+      return accum;
+    }, {});
+
+    const groups = update(this.state.groups, {
+      [selected]: {
+        images: { $set: imageMap }
+      }
+    });
+
+    this.setGroupsState({groups: groups});
+  }
+
   handleImageToggle(imageId, checked) {
     const { selected } = this.state;
     let groups;
@@ -83,6 +104,10 @@ export default class ImageBarChart extends React.Component {
     }
 
     return false;
+  }
+
+  isAllChecked(images) {
+    return every(images, image => this.isChecked(image.id));
   }
 
   handleGroupSelect(index) {
@@ -145,11 +170,19 @@ export default class ImageBarChart extends React.Component {
                  value={this.state.filterText}
                  ref="filterText"
                  onChange={this.handleFilterChange.bind(this)} />
+
+          {this.showCheckbox() &&
+            <Input type='checkbox'
+                   style={{marginLeft: 1}}
+                   checked={this.isAllChecked(images)}
+                   onChange={e => this.toggleAll(images, e.target.checked)}/>
+          }
+
           <BarChartRowContainer
             items={images}
             label={ImageLabel}
             labelProps={{
-              showCheckbox: this.state.selected !== null,
+              showCheckbox: this.showCheckbox(),
               onChange: this.handleImageToggle.bind(this),
               isChecked: this.isChecked.bind(this)
             }} />
