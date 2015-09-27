@@ -8,14 +8,16 @@ import GroupLabel from './GroupLabel.js';
 export default class ImageBarChart extends React.Component {
   static propTypes = {
     images: PropTypes.array.isRequired,
-    collections: PropTypes.object.isRequired
+    groups: PropTypes.array,
+    collections: PropTypes.object.isRequired,
+    onGroupsChange: PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props);
     this.state = {
       selected: null,
-      groups: []
+      groups: this.props.groups || []
     };
   }
 
@@ -53,6 +55,10 @@ export default class ImageBarChart extends React.Component {
     });
   }
 
+  setGroupsState(state) {
+    this.setState(state, () => this.props.onGroupsChange(this.state.groups));
+  }
+
   handleImageToggle(imageId, checked) {
     const { selected } = this.state;
     let groups;
@@ -64,7 +70,7 @@ export default class ImageBarChart extends React.Component {
           }
         }
       });
-      this.setState({groups: groups});
+      this.setGroupsState({groups: groups});
     }
   }
 
@@ -89,13 +95,13 @@ export default class ImageBarChart extends React.Component {
         }
       }
     });
-    this.setState({groups: groups});
+    this.setGroupsState({groups: groups});
   }
 
   handleGroupDelete(index) {
     const { groups } = this.state;
 
-    this.setState({
+    this.setGroupsState({
       groups: groups.slice(0, index).concat(groups.slice(index + 1)),
       selected: null
     });
@@ -105,7 +111,7 @@ export default class ImageBarChart extends React.Component {
     e.preventDefault();
     const newGroup = {'name': 'New Group', r: 0, images: {}};
     const groups = update(this.state.groups, {$push: [newGroup]});
-    this.setState({groups: groups, selected: groups.length - 1});
+    this.setGroupsState({groups: groups, selected: groups.length - 1});
   }
 
   render() {

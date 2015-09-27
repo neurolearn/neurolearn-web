@@ -147,6 +147,21 @@ def delete_test(test_id):
     return 'No Content', 204
 
 
+@frontend.route('/tests/<int:test_id>/groups', methods=['POST'])
+@jwt_required()
+def save_groups(test_id):
+    test = ModelTest.query.get_or_404(test_id)
+    data = request.json
+
+    if test.user != current_user:
+        abort(404)
+
+    test.output_data = dict(test.output_data, groups=data)
+    db.session.commit()
+
+    return 'Created', 201
+
+
 @frontend.route('/media/<path:path>')
 def static_file(path):
     return send_from_directory(current_app.config['MEDIA_ROOT'], path)

@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
-import { deleteModelTest } from '../state/modelTests';
+import {
+  deleteModelTest,
+  saveCorrelationGroups
+} from '../state/modelTests';
 
 export default class ViewTest extends React.Component {
   static propTypes = {
@@ -15,6 +18,16 @@ export default class ViewTest extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
+  }
+
+  handleDelete(modelId) {
+    const { router } = this.context;
+
+    this.props.dispatch(deleteModelTest(modelId, router));
+  }
+
+  handleGroupsChange(modelId, groups) {
+    this.props.dispatch(saveCorrelationGroups(modelId, groups));
   }
 
   renderState(model) {
@@ -52,24 +65,22 @@ export default class ViewTest extends React.Component {
   }
 
   renderModel(model) {
+    const {correlation, groups, collections} = model.output_data;
 
     return (
       <div className="col-md-12">
         <p>Result for model test #{model.id}</p>
 
-        <ImageBarChart images={model.output_data.correlation} collections={model.output_data.collections} />
+        <ImageBarChart images={correlation}
+                       groups={groups}
+                       collections={collections}
+                       onGroupsChange={newGroups => this.handleGroupsChange(model.id, newGroups)} />
 
         <div className='download' style={{marginTop: 20}}>
           {/*<a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_correlation.csv`}>Download correlation as CSV</a>*/}
         </div>
       </div>
     );
-  }
-
-  handleDelete(modelId) {
-    const { router } = this.context;
-
-    this.props.dispatch(deleteModelTest(modelId, router));
   }
 
   render() {

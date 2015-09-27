@@ -5,6 +5,7 @@ import { JWT_KEY_NAME } from '../constants/auth';
 export const REQUEST_MODEL_TESTS = 'REQUEST_MODEL_TESTS';
 export const RECEIVE_MODEL_TESTS = 'RECEIVE_MODEL_TESTS';
 export const REQUEST_DELETE_MLMODEL = 'REQUEST_DELETE_MLMODEL';
+export const ERROR_WHILE_SAVING_GROUPS = 'ERROR_WHILE_SAVING_GROUPS';
 
 function requestModelTests() {
   return {
@@ -26,6 +27,12 @@ function requestDeleteModelTest(modelId) {
   };
 }
 
+function errorWhileSavingGroups() {
+  return {
+    type: ERROR_WHILE_SAVING_GROUPS
+  };
+}
+
 function fetchModelTests(token) {
   return request.get('/tests')
     .type('json')
@@ -36,6 +43,13 @@ function fetchModelTests(token) {
 function _deleteModelTest(modelId, token) {
   return request.del(`/tests/${modelId}`)
     .set('Authorization', 'Bearer ' + token);
+}
+
+function _saveCorrelationGroups(modelId, groups, token) {
+  return request.post(`/tests/${modelId}/groups`)
+    .set('Authorization', 'Bearer ' + token)
+    .send(groups)
+    .type('json');
 }
 
 export function loadModelTests() {
@@ -61,6 +75,17 @@ export function deleteModelTest(modelId, router) {
     return _deleteModelTest(modelId, getState().auth.token)
       .end((err, res) => {
         router.transitionTo('/tests');
+      });
+  };
+}
+
+export function saveCorrelationGroups(modelId, groups) {
+  return (dispatch, getState) => {
+    return _saveCorrelationGroups(modelId, groups, getState().auth.token)
+      .end((err) => {
+        if (err) {
+          dispatch(errorWhileSavingGroups());
+        }
       });
   };
 }
