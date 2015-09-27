@@ -93,14 +93,10 @@ export default class DataGrid extends React.Component {
           'use_as_training_label': {
             name: 'Use as Training Label'
           },
-          'hsep1': '---------',
-          'row_above': {},
-          'row_below': {},
           'hsep2': '---------',
           'col_left': {},
           'col_right': {},
           'hsep3': '---------',
-          'remove_row': {},
           'remove_col': {},
           'hsep4': '---------',
           'undo': {},
