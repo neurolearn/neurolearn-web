@@ -7,11 +7,11 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadMLModels } from '../state/mlModels';
 import { algorithmNameMap } from '../constants/Algorithms';
-import styles from './Dashboard.scss';
+import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
 
-export default class Dashboard extends React.Component {
+export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     mlModels: PropTypes.object
@@ -117,4 +117,4 @@ function select(state) {
   return state;
 }
 
-export default connect(select)(Dashboard);
+export default connect(select)(MLModels);
