@@ -1,6 +1,7 @@
 import { sum, filter, pluck, isEmpty } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
+import { Input } from 'react-bootstrap';
 import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
@@ -17,7 +18,8 @@ export default class ImageBarChart extends React.Component {
     super(props);
     this.state = {
       selected: null,
-      groups: this.props.groups || []
+      groups: this.props.groups || [],
+      filterText: ''
     };
   }
 
@@ -114,13 +116,33 @@ export default class ImageBarChart extends React.Component {
     this.setGroupsState({groups: groups, selected: groups.length - 1});
   }
 
+  handleFilterChange() {
+    this.setState({
+      filterText: this.refs.filterText.getValue()
+    });
+  }
+
+  filterImages(filterText, images) {
+    if (isEmpty(filterText)) {
+      return images;
+    } else {
+      const regex = new RegExp(filterText, 'i');
+      return images.filter(image => image.name.search(regex) > -1);
+    }
+  }
+
   render() {
-    const images = this.setCollectionName(this.props.images);
+    const images = this.setCollectionName(this.filterImages(this.state.filterText, this.props.images));
     const groups = this.setCorrelation(this.state.groups);
     return (
       <div className="row">
         <div className="col-md-6">
           <h2>Images</h2>
+          <Input type="text"
+                 placeholder="Filter Images"
+                 value={this.state.filterText}
+                 ref="filterText"
+                 onChange={this.handleFilterChange.bind(this)} />
           <BarChartRowContainer
             items={images}
             label={ImageLabel}
