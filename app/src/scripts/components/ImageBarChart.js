@@ -156,6 +156,12 @@ export default class ImageBarChart extends React.Component {
     }
   }
 
+  renderEmptyImageList() {
+    return (
+      <div>No images matched your criteria.</div>
+    );
+  }
+
   render() {
     const images = this.setCollectionName(this.filterImages(this.state.filterText,
                                                             this.props.images));
@@ -171,35 +177,38 @@ export default class ImageBarChart extends React.Component {
                  ref="filterText"
                  onChange={this.handleFilterChange.bind(this)} />
 
-          {this.showCheckbox() &&
-            <Input type='checkbox'
-                   style={{marginLeft: 1}}
+          {!isEmpty(images) && this.showCheckbox() &&
+            <Input type="checkbox"
+                   label={`Select ${images.length} images`}
                    checked={this.isAllChecked(images)}
                    onChange={e => this.toggleAll(images, e.target.checked)}/>
           }
 
-          <BarChartRowContainer
-            items={images}
-            label={ImageLabel}
-            labelProps={{
-              showCheckbox: this.showCheckbox(),
-              onChange: this.handleImageToggle.bind(this),
-              isChecked: this.isChecked.bind(this)
-            }} />
+          {isEmpty(images)
+            ? this.renderEmptyImageList()
+            : <BarChartRowContainer
+                items={images}
+                label={ImageLabel}
+                labelProps={{
+                  showCheckbox: this.showCheckbox(),
+                  onChange: this.handleImageToggle.bind(this),
+                  isChecked: this.isChecked.bind(this)
+                }} />
+           }
         </div>
 
         <div className="col-md-6">
           <h2>Groups</h2>
           {!isEmpty(groups) &&
-          <BarChartRowContainer
-            items={groups}
-            label={GroupLabel}
-            labelProps={{
-              selected: this.state.selected,
-              onSelect: this.handleGroupSelect.bind(this),
-              onSave: this.handleGroupSave.bind(this),
-              onDelete: this.handleGroupDelete.bind(this)
-            }} />
+            <BarChartRowContainer
+              items={groups}
+              label={GroupLabel}
+              labelProps={{
+                selected: this.state.selected,
+                onSelect: this.handleGroupSelect.bind(this),
+                onSave: this.handleGroupSave.bind(this),
+                onDelete: this.handleGroupDelete.bind(this)
+              }} />
           }
           <a href="#" onClick={this.handleGroupAdd.bind(this)}>Add a group…</a>
         </div>
