@@ -202,6 +202,7 @@ export default class ImageBarChart extends React.Component {
 
         <div className="col-md-6">
           <h2>Groups</h2>
+          <p>Groups images to calculate mean correlation</p>
           {!isEmpty(groups) &&
             <BarChartRowContainer
               items={groups}
