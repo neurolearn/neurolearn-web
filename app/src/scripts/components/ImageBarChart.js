@@ -111,7 +111,10 @@ export default class ImageBarChart extends React.Component {
   }
 
   handleGroupSelect(index) {
-    this.setState({selected: index});
+    this.setState({
+      selected: index,
+      filterText: ''
+    });
   }
 
   handleGroupSave(index, newGroupName) {
