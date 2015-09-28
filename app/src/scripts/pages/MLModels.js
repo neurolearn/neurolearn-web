@@ -2,10 +2,12 @@ import { values, sortByOrder, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
+import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadMLModels } from '../state/mlModels';
+import { resetSelectedImages } from '../state/selectedImages';
 import { algorithmNameMap } from '../constants/Algorithms';
 import styles from './MLModels.scss';
 
@@ -16,6 +18,10 @@ export default class MLModels extends React.Component {
     dispatch: PropTypes.func.isRequired,
     mlModels: PropTypes.object
   };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
 
   loadMLModels() {
     this.props.dispatch(loadMLModels());
@@ -28,6 +34,12 @@ export default class MLModels extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  handleTrainNewModel() {
+    const { router } = this.context;
+    this.props.dispatch(resetSelectedImages());
+    router.transitionTo('/models/new');
   }
 
   renderState(state) {
@@ -98,7 +110,11 @@ export default class MLModels extends React.Component {
     return (
       <div className={styles.root}>
         <div className="page-header">
-          <Link className="btn btn-primary btn-lg pull-right" to="/models/new">Train a Model</Link>
+          <Button bsStyle="primary"
+                  bsSize="large"
+                  className="pull-right"
+                  onClick={this.handleTrainNewModel.bind(this)}>Train a Model</Button>
+
           <h1>Models</h1>
         </div>
         <div className="row">

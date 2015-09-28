@@ -2,10 +2,12 @@ import { values, sortByOrder, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
+import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../state/modelTests';
+import { resetSelectedImages } from '../state/selectedImages';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
@@ -15,6 +17,10 @@ export default class ModelTests extends React.Component {
     dispatch: PropTypes.func.isRequired,
     modelTests: PropTypes.object
   };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
 
   loadModelTests() {
     this.props.dispatch(loadModelTests());
@@ -27,6 +33,12 @@ export default class ModelTests extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  handleTestNewModel() {
+    const { router } = this.context;
+    this.props.dispatch(resetSelectedImages());
+    router.transitionTo('/tests/new');
   }
 
   renderState(state) {
@@ -93,7 +105,10 @@ export default class ModelTests extends React.Component {
     return (
       <div className={styles.root}>
         <div className="page-header">
-          <Link className="btn btn-primary btn-lg pull-right" to="/tests/new">Test a Model</Link>
+          <Button bsStyle="primary"
+                  bsSize="large"
+                  className="pull-right"
+                  onClick={this.handleTestNewModel.bind(this)}>Test a Model</Button>
           <h1>Tests</h1>
         </div>
         <div className="row">
