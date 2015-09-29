@@ -74,11 +74,8 @@ export default class GroupLabel extends React.Component {
                value={this.state.editText}
                onChange={this.handleInputChange.bind(this)} />
         <div className="view pull-right">
-          <a style={{padding: '8px 10px'}}
-             href="#"
-             onClick={this.handleEdit.bind(this)}>Edit</a>
-          <a href="#"
-             onClick={this.handleDelete.bind(this)}>Delete</a>
+          <span className="action pull-left" onClick={this.handleEdit.bind(this)}><i className="fa fa-pencil"></i> Edit</span>
+          <span className="action pull-left" onClick={this.handleDelete.bind(this)}><i className="fa fa-trash"></i> Delete</span>
         </div>
         <div className="edit pull-right">
           <Button bsStyle='default'

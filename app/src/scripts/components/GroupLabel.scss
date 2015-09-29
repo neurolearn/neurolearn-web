@@ -5,6 +5,16 @@
   .view {
     display: block;
   }
+
+  .action {
+    padding: 8px 10px;
+    color: #777;
+  }
+
+  .action:hover {
+    color: #333;
+    cursor: pointer;
+  }
 }
 
 .editing :global {
