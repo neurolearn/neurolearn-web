@@ -7,15 +7,18 @@
     width: 90%;
   }
 
-  td.low-chart {
+  td.chart-cell {
+    position: relative;
     vertical-align: top;
     border-bottom: 1px solid #eee;
-    border-top: 1px solid #eee;
     border-right: 1px solid #979797;
   }
 
+  td.low-chart {
+    border-top: 1px solid #eee;
+  }
+
   td.high-chart {
-    vertical-align: top;
     border: 1px solid #eee;
     border-right: 1px solid #979797;
   }
@@ -27,17 +30,33 @@
   }
 
   .bar-chart {
-    margin-top: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: #d8d8d8;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    height: 30px;
+  }
+
+  .bar-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .bar-negative {
     background-color: #edaeab;
+    right: 0;
   }
 
   .bar-positive {
     background-color: #afcee9;
+  }
+
+  .bar-label-positive {
+    left: 8px;
+  }
+
+  .bar-label-negative {
+    right: 8px;
   }
 }

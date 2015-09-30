@@ -1,7 +1,7 @@
 import { sum, filter, pluck, isEmpty, every } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
-import { Input, Button, ButtonToolbar } from 'react-bootstrap';
+import { Input, Button } from 'react-bootstrap';
 import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
@@ -215,7 +215,7 @@ export default class ImageBarChart extends React.Component {
                 onDelete: this.handleGroupDelete.bind(this)
               }} />
           }
-          <Button style={{marginTop: 10}} onClick={this.handleGroupAdd.bind(this)} bsStyle="primary">New Group</Button>
+          <Button style={{marginTop: 12}} onClick={this.handleGroupAdd.bind(this)} bsStyle="primary"><i className="fa fa-plus"></i> New Group</Button>
         </div>
       </div>
     );

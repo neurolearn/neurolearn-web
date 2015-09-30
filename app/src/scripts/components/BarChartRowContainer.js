@@ -48,16 +48,18 @@ export default class BarChartRowContainer extends React.Component {
         <td className="image-label">
           <this.props.label {...this.props.labelProps} index={key} item={item}/>
         </td>
-        <td className="low-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
+        <td className="chart-cell low-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
           {key === 0 && <div className="tick pull-left">{parseFloat(-maxTick)}</div>}
           {r < 0 &&
-            <div className="bar-chart bar-negative" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r), float: 'right'}}>{r}</div>
+            [<div className="bar-chart bar-negative" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}></div>,
+             <div className="bar-label bar-label-negative">{r}</div>]
           }
         </td>
-        <td className="high-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
+        <td className="chart-cell high-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
           {key === 0 && <div className="tick pull-right">{parseFloat(maxTick)}</div>}
           {r > 0 &&
-            <div className="bar-chart bar-positive" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}>{r}</div>
+            [<div className="bar-chart bar-positive" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}></div>,
+             <div className="bar-label bar-label-positive">{r}</div>]
           }
         </td>
       </tr>
