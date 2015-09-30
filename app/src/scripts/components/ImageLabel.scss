@@ -1,0 +1,17 @@
+.root :global {
+  .collection-name {
+    margin-right: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 9px;
+    color: gray;
+  }
+  .image-name {
+    margin-top: 10px;
+  }
+}
+
+.root {
+    margin-left: 28px;
+}
+

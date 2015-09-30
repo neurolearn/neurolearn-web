@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
 
+import styles from './ImageLabel.scss';
+
 export default class ImageLabel extends React.Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
@@ -13,14 +15,14 @@ export default class ImageLabel extends React.Component {
     const { item, showCheckbox } = this.props;
 
     return (
-      <div style={{marginLeft: 20}}>
+      <div className={styles.root}>
         {showCheckbox &&
           <Input type='checkbox'
                  checked={this.props.isChecked(item.id)}
                  onChange={e => this.props.onChange(item.id, e.target.checked)}/>
         }
-        <p>{item.name}</p>
-        <p style={{marginRight: 5, overflow: 'hidden', textOverflow: 'ellipsis'}}>{item.collectionName}</p>
+        <div className="image-name">{item.name}</div>
+        <p className="collection-name">{item.collectionName}</p>
       </div>
     );
   }

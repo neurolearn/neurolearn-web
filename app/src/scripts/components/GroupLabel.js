@@ -66,9 +66,8 @@ export default class GroupLabel extends React.Component {
     return (
       <div className={editing ? styles.editing : styles.viewing}
            style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}>
-        <a href="#"
-           className="view"
-          onClick={this.handleClick.bind(this)}>{item.name}</a>
+        <span className="view group-title"
+          onClick={this.handleClick.bind(this)}>{item.name}</span>
         <input className="edit"
                ref="editInput"
                value={this.state.editText}
@@ -78,9 +77,9 @@ export default class GroupLabel extends React.Component {
           <span className="action pull-left" onClick={this.handleDelete.bind(this)}><i className="fa fa-trash"></i> Delete</span>
         </div>
         <div className="edit pull-right">
-          <Button bsStyle='default'
+          <Button bsStyle='default' className="edit-action"
                   onClick={this.handleCancel.bind(this)}>Cancel</Button>
-          <Button bsStyle='primary'
+          <Button bsStyle='primary' className="edit-action"
                   onClick={this.handleSave.bind(this)}>Save</Button>
         </div>
       </div>

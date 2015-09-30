@@ -1,6 +1,9 @@
 import { pluck, round } from 'lodash';
 import React, { PropTypes } from 'react';
 
+import styles from './BarChartRowContainer.scss';
+
+
 const AXIS_PIXEL_WIDTH = 100;
 
 export default class BarChartRowContainer extends React.Component {
@@ -32,40 +35,30 @@ export default class BarChartRowContainer extends React.Component {
     return Math.floor(span / step) * step + step * .5;
   }
 
-  renderTicks(lower, higher) {
-    return (
-      <tr key='ticks'>
-        <td></td>
-        <td><span>{parseFloat(lower)}</span></td>
-        <td><span>0</span></td>
-        <td><span>{parseFloat(higher)}</span></td>
-      </tr>
-    );
-  }
-
   scaleWidth(width, scaleMax, value) {
     return width * Math.abs(value) / scaleMax;
   }
 
-  renderRow(key, item, scaleMax) {
+  renderRow(key, item, bound) {
     const r = round(item.r, 2);
+    const maxTick = isNaN(bound) ? 1 : bound;
 
     return (
       <tr key={key}>
-        <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
+        <td className="image-label">
           <this.props.label {...this.props.labelProps} index={key} item={item}/>
         </td>
-        <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', borderRight: '1px solid #979797'}}>
+        <td className="low-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
+          {key === 0 && <div className="tick pull-left">{parseFloat(-maxTick)}</div>}
           {r < 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(AXIS_PIXEL_WIDTH, scaleMax, r), float: 'right'}}>{r}</div>
+            <div className="bar-chart bar-negative" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r), float: 'right'}}>{r}</div>
           }
         </td>
-        <td style={{border: '1px solid #eee', borderRight: '1px solid #979797'}}>
+        <td className="high-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
+          {key === 0 && <div className="tick pull-right">{parseFloat(maxTick)}</div>}
           {r > 0 &&
-            <div style={{backgroundColor: '#d8d8d8', height: 37, width: this.scaleWidth(AXIS_PIXEL_WIDTH, scaleMax, r)}}>{r}</div>
+            <div className="bar-chart bar-positive" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}>{r}</div>
           }
-        </td>
-        <td style={{borderBottom: '1px solid #eee', borderTop: '1px solid #eee', width: 10}}>
         </td>
       </tr>
     );
@@ -73,30 +66,12 @@ export default class BarChartRowContainer extends React.Component {
 
   render() {
     const { items } = this.props;
-    const scaleMax = round(this.rangeMax(pluck(items, 'r')), 2);
+    const bound = round(this.rangeMax(pluck(items, 'r')), 2);
 
     return (
-      <table>
+      <table className={styles.root}>
         <tbody>
-        { isNaN(scaleMax)
-          ? this.renderTicks(-1, 1)
-          : this.renderTicks(-scaleMax, scaleMax) }
-
-        <tr key='top'>
-          <td style={{borderRight: '1px solid #979797', height: 10, width: '90%'}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10, minWidth: AXIS_PIXEL_WIDTH}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10, minWidth: AXIS_PIXEL_WIDTH}}></td>
-          <td></td>
-        </tr>
-
-        {items.map((item, i) => this.renderRow(i, item, scaleMax))}
-
-        <tr key='bottom'>
-          <td style={{borderRight: '1px solid #979797', height: 10}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10}}></td>
-          <td style={{borderRight: '1px solid #979797', height: 10}}></td>
-          <td></td>
-        </tr>
+          {items.map((item, i) => this.renderRow(i, item, bound))}
         </tbody>
       </table>
     );

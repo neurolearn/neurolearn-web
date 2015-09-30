@@ -15,13 +15,34 @@
     color: #333;
     cursor: pointer;
   }
+
+  .group-title {
+    padding: 8px;
+    font-size: 18px;
+  }
+
+  .group-title:hover {
+    cursor: pointer;
+  }
 }
 
 .editing :global {
   .edit {
     display: block;
   }
+
   .view {
     display: none;
+  }
+
+  input.edit {
+    display: inline-block;
+    margin: 6px;
+    font-size: 18px;
+  }
+
+  .edit-action {
+    margin-top: 6px;
+    margin-right: 5px;
   }
 }
