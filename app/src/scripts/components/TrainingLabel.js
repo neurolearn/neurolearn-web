@@ -1,4 +1,4 @@
-import isEmpty from 'lodash/lang/isEmpty';
+import { isEmpty, without } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -43,10 +43,12 @@ export default class TrainingLabel extends React.Component {
     return [firstRow].concat(data);
   }
 
-  convertToArrayOfArrays(data) {
-    console.log(data);
-    const keys = Object.keys(data[0]);
+  withFirst(frontItems, items) {
+    return frontItems.concat(without(items, ...frontItems));
+  }
 
+  convertToArrayOfArrays(data) {
+    const keys = this.withFirst(['id', 'file', 'name'], Object.keys(data[0]));
     return [keys].concat(data.map(item => keys.map(key => item[key])));
   }
 
