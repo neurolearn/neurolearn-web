@@ -25,12 +25,12 @@ export default class DataGrid extends React.Component {
     });
 
     var selectedColumns = {
-      fileName: null,
+      subjectId: null,
       trainingLabel: null
     };
 
     function makeBackground(col, td) {
-      if (col === selectedColumns.fileName) {
+      if (col === selectedColumns.subjectId) {
         td.style.background = '#43aafd';
       }
       if (col === selectedColumns.trainingLabel) {
@@ -56,11 +56,13 @@ export default class DataGrid extends React.Component {
 
     function getTargetData(columnIndex) {
       const tableData = hot.getData();
+      const idIndex = findColumnIndex(tableData, 'id');
       const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
 
       return tableData.slice(1).map(function (row) {
         return {
-          filename: row[columnIndex.fileName],
+          'id': row[idIndex],
+          'subject_id': row[columnIndex.subjectId],
           target: row[columnIndex.trainingLabel],
           'collection_id': row[collectionIdIndex]
         };
@@ -69,7 +71,7 @@ export default class DataGrid extends React.Component {
 
     function useColumnAs(name, col) {
       selectedColumns[name] = col;
-      if (selectedColumns.fileName !== null &&
+      if (selectedColumns.subjectId !== null &&
           selectedColumns.trainingLabel !== null ) {
         _this.props.onSelectTarget(getTargetData(selectedColumns));
       }
@@ -80,18 +82,18 @@ export default class DataGrid extends React.Component {
     hot.updateSettings({
       contextMenu: {
         callback: function (key) {
-          if (key === 'use_as_filename') {
-            useColumnAs('fileName', hot.getSelected()[1]);
+          if (key === 'use_as_subject_id') {
+            useColumnAs('subjectId', hot.getSelected()[1]);
           } else if (key === 'use_as_training_label') {
             useColumnAs('trainingLabel', hot.getSelected()[1]);
           }
         },
         items: {
-          'use_as_filename': {
-            name: 'Use as Filename'
-          },
           'use_as_training_label': {
             name: 'Use as Training Label'
+          },
+          'use_as_subject_id': {
+            name: 'Use as Subject ID'
           },
           'hsep2': '---------',
           'col_left': {},

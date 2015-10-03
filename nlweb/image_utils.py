@@ -112,22 +112,35 @@ def fetch_collection(collection_id):
     return r.json()
 
 
-def image_media_url(collection_id, filename):
-    return "%s/media/images/%s/%s" % (
-        BASE_NV_URL,
-        collection_id,
-        filename
-    )
+def image_media_url(image):
+    media_url = image.get('media_url')
+
+    if not media_url:
+        media_url = "%s/media/images/%s/%s" % (
+            BASE_NV_URL,
+            image['collection_id'],
+            image['filename']
+        )
+
+    return media_url
+
+
+def collection_to_mapping(key, collection):
+    return {item[key]: item for item in collection}
+
+
+def collection_ids(image_list):
+    return set([x.get('collection_id') for x in image_list])
+
+
+def media_url_from_collection(collection_images, image):
+    return collection_images[image['collection_id']][image['id']]['file']
 
 
 def download_images(client, image_list, output_dir):
     """
     :param client: An instance of nlweb.HTTPClient
-    :param image_list: A list of dictionaries of the form
-                       {
-                           'collection_id': '42',
-                           'filename': 'file.nii.gz'
-                       }
+    :param image_list: A list of dictionaries with image data
     """
     dirname = os.path.join(output_dir, 'original')
     try:
@@ -135,13 +148,28 @@ def download_images(client, image_list, output_dir):
     except (IOError, OSError):
         pass
 
+    has_filenames = all([x.get('filename') for x in image_list])
+
+    if not has_filenames:
+        collection_images = {
+            id: collection_to_mapping('id',
+                                      fetch_collection_images(id)['results'])
+            for id in collection_ids(image_list)
+        }
+
+        for image in image_list:
+            image['media_url'] = media_url_from_collection(collection_images,
+                                                           image)
+
     image_items = []
 
     for image in image_list:
-        media_url = image_media_url(image['collection_id'], image['filename'])
+        media_url = image_media_url(image)
+        key = (image['filename']
+               if has_filenames else os.path.basename(media_url))
 
         log.info("Retrieving %s from collection #%s",
-                 image['filename'],
+                 key,
                  image['collection_id'])
         image_items.append(dict(
             original_file=client.retrieve(
@@ -149,7 +177,7 @@ def download_images(client, image_list, output_dir):
                 local_filepath(
                     dirname,
                     image['collection_id'],
-                    image['filename']),
+                    key),
                 force_cache=True),
             **image))
 
@@ -184,7 +212,7 @@ def resample_images(image_list, output_dir):
     for image in image_list:
         filename = os.path.join(dirname,
                                 os.path.basename(image['original_file']))
-        key = 'resample://images/{collection_id}/{filename}/?target={target_nii}'.format(
+        key = 'resample://images/{collection_id}/{id}/?target={target_nii}'.format(
             target_nii=target_nii_filename,
             **image
         )

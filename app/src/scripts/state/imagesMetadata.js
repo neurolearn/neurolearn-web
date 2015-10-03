@@ -51,9 +51,9 @@ export function loadImagesMetadata(collectionId, imageMap) {
 }
 
 const propsToOmit = ['collection', 'cognitive_paradigm_cogatlas_id', 'description', 'add_date', 'is_thresholded',
-                     'perc_bad_voxels', 'perc_voxels_outside', 'reduced_representation', 'thumbnail', 'not_mni',
-                     'statistic_parameters', 'smoothness_fwhm', 'contrast_definition', 'contrast_definition_cogatlas',
-                     'figure', 'modify_date'];
+                     'perc_bad_voxels', 'brain_coverage', 'perc_voxels_outside', 'reduced_representation', 'thumbnail',
+                     'not_mni', 'statistic_parameters', 'smoothness_fwhm', 'contrast_definition',
+                     'contrast_definition_cogatlas', 'figure', 'modify_date'];
 
 export default function reducer(state = {
   isFetching: false,

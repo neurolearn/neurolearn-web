@@ -6,7 +6,7 @@ from nlweb import analysis
 from nlweb.httpclient import HTTPClient, FileCache
 from nlweb.image_utils import (download_images, resample_images)
 
-from .nv_test_data import TARGET_DATA
+from .nv_test_data import TARGET_DATA, TARGET_DATA_IMG_IDS
 
 
 def compare_image_files(img_a, img_b):
@@ -20,7 +20,7 @@ def test_train_model(tmpdir):
 
     client = HTTPClient(cache=FileCache('cache'))
 
-    image_list = download_images(client, TARGET_DATA,
+    image_list = download_images(client, TARGET_DATA_IMG_IDS,
                                  output_dir)
     image_list = resample_images(image_list, output_dir)
 

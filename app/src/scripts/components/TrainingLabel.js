@@ -48,7 +48,7 @@ export default class TrainingLabel extends React.Component {
   }
 
   convertToArrayOfArrays(data) {
-    const keys = this.withFirst(['id', 'file', 'name'], Object.keys(data[0]));
+    const keys = this.withFirst(['id', 'collection_id', 'file', 'name'], Object.keys(data[0]));
     return [keys].concat(data.map(item => keys.map(key => item[key])));
   }
 
