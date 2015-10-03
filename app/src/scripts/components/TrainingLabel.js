@@ -1,4 +1,4 @@
-import { isEmpty, without } from 'lodash';
+import { isEmpty, without, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -16,14 +16,11 @@ export default class TrainingLabel extends React.Component {
   };
 
   componentDidMount() {
-    const { images } = this.props.selectedImages;
-    const selectedCollectionIds = Object.keys(images).filter((collectionId) =>
-      this.countSelectedImages(images[collectionId])
-    );
-
-    if (selectedCollectionIds.length === 1 && isEmpty(this.props.imagesMetadata.items)) {
-      const collectionId = selectedCollectionIds[0];
-      this.props.dispatch(loadImagesMetadata(collectionId, images[collectionId]));
+    const images = pick(this.props.selectedImages.images,
+                        this.countSelectedImages);
+    if (!isEmpty(Object.keys(images))
+        && isEmpty(this.props.imagesMetadata.items)) {
+      this.props.dispatch(loadImagesMetadata(images));
     }
   }
 

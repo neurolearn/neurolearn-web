@@ -14,8 +14,7 @@ export function resetImagesMetadata() {
 
 function requestImagesMetadata(collectionId) {
   return {
-    type: REQUEST_IMAGES_METADATA,
-    collectionId
+    type: REQUEST_IMAGES_METADATA
   };
 }
 
@@ -41,12 +40,35 @@ function baseFilename(imageUrl) {
   return imageUrl.replace(/.*?images\/\d+\//, '');
 }
 
-export function loadImagesMetadata(collectionId, imageMap) {
+function setExtraProps(collectionId, imageList) {
+  return imageList.map(item => update(item, {
+    file: {$apply: baseFilename},
+    'collection_id': {$set: collectionId}
+  }));
+}
+
+export function loadImagesMetadata(imageMap) {
   return dispatch => {
-    dispatch(requestImagesMetadata(collectionId));
-    return fetchImagesMetadata(collectionId)
-      .end((err, res) => dispatch(receiveImagesMetadata(collectionId,
-                                                        filterImages(imageMap, res.body.results))));
+    dispatch(requestImagesMetadata());
+    const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
+      return new Promise((resolve, reject) => {
+        fetchImagesMetadata(collectionId).end((err, res) => {
+          return err ? reject([collectionId, err]) : resolve([collectionId, res]);
+        });
+      });
+    });
+    return Promise.all(imageMetadataPromises).then(results => {
+      const items = results.reduce((accum, r) => {
+        const [collectionId, response] = r;
+        return accum.concat(setExtraProps(collectionId,
+          filterImages(imageMap[collectionId],
+                       response.body.results)));
+      }, []);
+      dispatch(receiveImagesMetadata(504, items));
+    }).
+    catch(err => {
+      console.log('Error', err);
+    });
   };
 }
 
@@ -69,10 +91,7 @@ export default function reducer(state = {
     case RECEIVE_IMAGES_METADATA:
       return {
         isFetching: false,
-        items: action.results.map((item) => update(omit(item, propsToOmit), {
-          file: {$apply: baseFilename},
-          'collection_id': {$set: action.collectionId}
-        }))
+        items: action.results.map((item) => omit(item, propsToOmit))
       };
     default:
       return state;
