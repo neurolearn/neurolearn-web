@@ -66,5 +66,19 @@ def test():
     return exit_code
 
 
+@manager.command
+def retrain_model(mlmodel_id):
+    from nlweb.models import MLModel
+    from nlweb import tasks
+
+    mlmodel = MLModel.query.get(mlmodel_id)
+
+    if not mlmodel:
+        print "Model #%s not found." % mlmodel_id
+        return
+
+    tasks.train_model(mlmodel.id)
+
+
 if __name__ == '__main__':
     manager.run()
