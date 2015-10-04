@@ -57,7 +57,7 @@ export default class BarChartRowContainer extends React.Component {
         </td>
         <td className="chart-cell high-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
           {key === 0 && <div className="tick pull-right">{parseFloat(maxTick)}</div>}
-          {r > 0 &&
+          {r >= 0 &&
             [<div className="bar-chart bar-positive" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}></div>,
              <div className="bar-label bar-label-positive">{r}</div>]
           }
