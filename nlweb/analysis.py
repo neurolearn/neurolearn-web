@@ -59,7 +59,7 @@ def train_model(image_list, algorithm, cv, output_dir):
                                cv_dict=cv,
                                **extra)
 
-    predict.predict()
+    predict.predict(save_output=False, save_plot=False)
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
