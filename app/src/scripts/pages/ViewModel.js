@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ReactCSSTransitionGroup  from 'react-addons-css-transition-group';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Spinner from '../components/Spinner';
@@ -23,7 +24,7 @@ export default class ViewModel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadingImages: true,
+      loadingImages: true
     };
   }
 
@@ -92,8 +93,10 @@ export default class ViewModel extends React.Component {
         <p>Result weight map for analysis #{model.id}</p>
         <div className='viewer-wrapper'>
           <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-          {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
-                                        <Spinner opts={{position: 'absolute'}} />]}
+          <ReactCSSTransitionGroup transitionName="carousel" transitionLeaveTimeout={100}>
+            {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
+                                          <Spinner opts={{position: 'absolute'}} />]}
+          </ReactCSSTransitionGroup>
         </div>
 
         <div className='ScatterPlot' style={{marginTop: 20}}>
