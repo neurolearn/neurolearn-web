@@ -6,6 +6,7 @@ require('index.css');
 require('handsontable.full.css');
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Router, Route, Redirect } from 'react-router';
 import { history } from 'react-router/lib/HashHistory';
 import { Provider } from 'react-redux';
@@ -46,7 +47,7 @@ function renderRoutes(history) {
   );
 }
 
-React.render((
+ReactDOM.render((
   <Provider store={store}>
     {() => renderRoutes(history)}
   </Provider>
