@@ -36,7 +36,7 @@ export default class NSViewer extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-10 col-md-offset-1">
+        <div className="col-md-10">
           <div id="views_left">
             <div className="view" id="view_coronal">
               <canvas height="220" id="cor_canvas" width="220"></canvas>
