@@ -6,6 +6,9 @@ import NSViewer from '../components/NSViewer';
 import { deleteMLModel } from '../state/mlModels';
 import { setTestModel } from '../state/testModel';
 
+import styles from './ViewModel.scss';
+
+
 export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
@@ -85,23 +88,12 @@ export default class ViewModel extends React.Component {
     ];
 
     return (
-      <div className="col-md-12">
+      <div className={`${styles.root} col-md-12`}>
         <p>Result weight map for analysis #{model.id}</p>
-        <div style={{position: 'relative'}} className='NSViewer'>
+        <div className='viewer-wrapper'>
           <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-          {this.state.loadingImages && <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '101%',
-            background: 'rgba(255, 255, 255, 0.8)',
-            zIndex: 10,
-            color: 'black',
-            textAlign: 'center',
-            padding: 150,
-            fontSize: '26px'
-          }}>Loading…</div>}
+          {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
+                                        <Spinner opts={{position: 'absolute'}} />]}
         </div>
 
         <div className='ScatterPlot' style={{marginTop: 20}}>
