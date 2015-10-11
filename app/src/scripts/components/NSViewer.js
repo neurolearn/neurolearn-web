@@ -22,6 +22,9 @@ export default class NSViewer extends React.Component {
     viewer.addDataField('currentCoords', '#data_current_coords');
     viewer.addTextField('image-intent', '#image_intent');
     viewer.clear();
+
+    window.jQuery(viewer).on('imagesLoaded', this.props.onImagesLoaded);
+
     viewer.loadImages(this.props.images);
   }
 

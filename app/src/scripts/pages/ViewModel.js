@@ -17,6 +17,13 @@ export default class ViewModel extends React.Component {
     router: PropTypes.object.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadingImages: true,
+    };
+  }
+
   renderState(model) {
     switch (model.training_state) {
       case 'queued':
@@ -51,6 +58,10 @@ export default class ViewModel extends React.Component {
     );
   }
 
+  handleImagesLoaded() {
+    this.setState({loadingImages: false});
+  }
+
   renderModel(model) {
       const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
       const images = [
@@ -76,9 +87,21 @@ export default class ViewModel extends React.Component {
     return (
       <div className="col-md-12">
         <p>Result weight map for analysis #{model.id}</p>
-
-        <div className='NSViewer'>
-          <NSViewer images={images} />
+        <div style={{position: 'relative'}} className='NSViewer'>
+          <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
+          {this.state.loadingImages && <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '101%',
+            background: 'rgba(255, 255, 255, 0.8)',
+            zIndex: 10,
+            color: 'black',
+            textAlign: 'center',
+            padding: 150,
+            fontSize: '26px'
+          }}>Loading…</div>}
         </div>
 
         <div className='ScatterPlot' style={{marginTop: 20}}>
