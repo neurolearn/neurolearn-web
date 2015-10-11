@@ -93,7 +93,9 @@ export default class ViewModel extends React.Component {
         <p>Result weight map for analysis #{model.id}</p>
         <div className='viewer-wrapper'>
           <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-          <ReactCSSTransitionGroup transitionName="carousel" transitionLeaveTimeout={100}>
+          <ReactCSSTransitionGroup transitionName="overlay"
+                                   transitionEnterTimeout={100}
+                                   transitionLeaveTimeout={100}>
             {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
                                           <Spinner opts={{position: 'absolute'}} />]}
           </ReactCSSTransitionGroup>
