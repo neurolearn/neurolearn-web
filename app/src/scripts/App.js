@@ -76,7 +76,7 @@ export default class App extends React.Component {
           </Nav>
         </Navbar>
 
-        <div className="appcontent">
+        <div className="container">
           {this.props.children}
         </div>
         <AuthModal auth={auth}
