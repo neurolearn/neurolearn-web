@@ -48,7 +48,7 @@ export default class ViewTest extends React.Component {
     return (
       <div className="col-md-12" >
         <div style={{'padding-top': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
-        <div style={{'color': 'gray', 'margin': 40, 'text-align': 'center'}}>Model testing is in progress…</div>
+        <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Model testing is in progress…</div>
       </div>
     );
   }
