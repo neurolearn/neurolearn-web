@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 require('nsviewer.js');
 
 export default class NSViewer extends React.Component {
+  static propTypes = {
+    images: PropTypes.array.isRequired,
+    onImagesLoaded: PropTypes.func
+  }
+
   componentDidMount() {
     var Viewer = window.Viewer;
     var viewer = new Viewer('#layer_list', '.layer_settings');
@@ -76,8 +81,6 @@ export default class NSViewer extends React.Component {
           </div>
         </div>
       </div>
-
-
     );
   }
 }
