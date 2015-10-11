@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Navbar, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AuthModal from './components/AuthModal';
 import { showAuthModal, hideAuthModal } from './state/authModal';
 import { login, logout, loginSuccess } from './state/auth';
@@ -46,16 +46,16 @@ export default class App extends React.Component {
 
   renderUserDropdown(user) {
     return (
-      <DropdownButton eventKey={1} title={user.email}>
+      <NavDropdown eventKey={1} title={user.email}>
         <MenuItem eventKey='1' onClick={this.handleLogout.bind(this)}>Logout</MenuItem>
-      </DropdownButton>
+      </NavDropdown>
     );
   }
 
   renderAuthenticatedNav() {
     const { router } = this.context;
     return (
-      <Nav navbar>
+      <Nav>
         <NavItem eventKey={0} active={router.isActive('/models')} href='#/models'>Models</NavItem>
         <NavItem eventKey={1} active={router.isActive('/tests')} href='#/tests'>Tests</NavItem>
       </Nav>
@@ -66,9 +66,10 @@ export default class App extends React.Component {
     const { auth, dispatch } = this.props;
     return (
       <div>
-        <Navbar fluid brand={<a href="#">Neurolearn</a>}>
+        <Navbar staticTop>
+          <NavBrand><a href="#">Neurolearn</a></NavBrand>
           { auth.user && this.renderAuthenticatedNav() }
-          <Nav navbar right>
+          <Nav right>
             { auth.user
               ? this.renderUserDropdown(auth.user)
               : this.renderLoginLink() }
