@@ -35,49 +35,47 @@ export default class NSViewer extends React.Component {
 
   render() {
     return (
-      <div className="row">
-        <div className="col-md-10">
-          <div id="views_left">
-            <div className="view" id="view_coronal">
-              <canvas height="220" id="cor_canvas" width="220"></canvas>
-              <div className="slider nav-slider-vertical" id="nav-yaxis"></div>
+      <div>
+        <div id="views_left">
+          <div className="view" id="view_coronal">
+            <canvas height="220" id="cor_canvas" width="220"></canvas>
+            <div className="slider nav-slider-vertical" id="nav-yaxis"></div>
+          </div>
+          <div className="view" id="view_axial">
+            <canvas height="264" id="axial_canvas" width="220"></canvas>
+            <div className="slider nav-slider-vertical" id="nav-zaxis"></div>
+          </div>
+        </div>
+        <div id="views_right">
+          <div className="view" id="view_sagittal">
+            <canvas height="220" id="sag_canvas" width="264"></canvas>
+            <div className="slider nav-slider-horizontal" id="nav-xaxis"></div>
+          </div>
+          <div id="data_panel">
+            <div className="data_display_row">
+              <div className="data_label">Coordinates:</div>
+              <div id="data_current_coords"></div>
             </div>
-            <div className="view" id="view_axial">
-              <canvas height="264" id="axial_canvas" width="220"></canvas>
-              <div className="slider nav-slider-vertical" id="nav-zaxis"></div>
+            <div className="data_display_row">
+              <div id="image_intent" className="data_label">Initial value</div>
+              <div id="data_current_value"></div>
             </div>
           </div>
-          <div id="views_right">
-            <div className="view" id="view_sagittal">
-              <canvas height="220" id="sag_canvas" width="264"></canvas>
-              <div className="slider nav-slider-horizontal" id="nav-xaxis"></div>
-            </div>
-            <div id="data_panel">
-              <div className="data_display_row">
-                <div className="data_label">Coordinates:</div>
-                <div id="data_current_coords"></div>
-              </div>
-              <div className="data_display_row">
-                <div id="image_intent" className="data_label">Initial value</div>
-                <div id="data_current_value"></div>
-              </div>
-            </div>
-          </div>
+        </div>
 
-          <div id="layer_panel">
-            <div id="layer_list_panel">
-              <div>Layers</div>
-              <div id="layer_visible_list"></div>
-              <ul id="layer_list" className="layer_settings">
-              </ul>
-            </div>
-            <div id="layer_settings_panel">
-              Color palette:<select id="select_color" className="layer_settings"></select>
-              Positive/Negative:<select id="select_sign" className="layer_settings"></select>
-              Opacity:<div className="slider layer_settings" id="opacity"></div>
-              Pos. threshold:<div className="slider layer_settings" id="pos-threshold"></div>
-              Neg. threshold: <div className="slider layer_settings" id="neg-threshold"></div>
-            </div>
+        <div id="layer_panel">
+          <div id="layer_list_panel">
+            <div>Layers</div>
+            <div id="layer_visible_list"></div>
+            <ul id="layer_list" className="layer_settings">
+            </ul>
+          </div>
+          <div id="layer_settings_panel">
+            Color palette:<select id="select_color" className="layer_settings"></select>
+            Positive/Negative:<select id="select_sign" className="layer_settings"></select>
+            Opacity:<div className="slider layer_settings" id="opacity"></div>
+            Pos. threshold:<div className="slider layer_settings" id="pos-threshold"></div>
+            Neg. threshold: <div className="slider layer_settings" id="neg-threshold"></div>
           </div>
         </div>
       </div>

@@ -89,21 +89,25 @@ export default class ViewModel extends React.Component {
     ];
 
     return (
-      <div className={`${styles.root} col-md-12`}>
+      <div className={styles.root}>
         <p>Result weight map for analysis #{model.id}</p>
-        <div className='viewer-wrapper'>
-          <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-          <ReactCSSTransitionGroup transitionName="overlay"
-                                   transitionEnterTimeout={100}
-                                   transitionLeaveTimeout={100}>
-            {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
-                                          <Spinner opts={{position: 'absolute'}} />]}
-          </ReactCSSTransitionGroup>
+
+        <div className="row">
+          <div className="col-md-6 viewer-wrapper">
+            <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
+            <ReactCSSTransitionGroup transitionName="overlay"
+                                     transitionEnterTimeout={100}
+                                     transitionLeaveTimeout={100}>
+              {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
+                                            <Spinner opts={{position: 'absolute'}} />]}
+            </ReactCSSTransitionGroup>
+          </div>
+
+          <div className='col-md-6' style={{marginTop: 20}}>
+            <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
+          </div>
         </div>
 
-        <div className='ScatterPlot' style={{marginTop: 20}}>
-          <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
-        </div>
 
         <div className='download' style={{marginTop: 20}}>
           <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
@@ -140,9 +144,7 @@ export default class ViewModel extends React.Component {
           </ButtonToolbar>
           <h1>{model.name}</h1>
         </div>
-        <div className="row">
         { this.renderState(model) }
-        </div>
       </div>
     );
   }
