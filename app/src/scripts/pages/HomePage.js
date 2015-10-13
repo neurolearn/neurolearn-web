@@ -8,7 +8,7 @@ export default class HomePage extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  componentDidMount() {
+  componentWillReceiveProps() {
     const { auth } = this.props;
     const { router } = this.context;
 
@@ -16,6 +16,7 @@ export default class HomePage extends React.Component {
       router.transitionTo('/models');
     }
   }
+
   render() {
     const { auth } = this.props;
     return auth.user ? <MLModels /> : <LoggedOut />;
