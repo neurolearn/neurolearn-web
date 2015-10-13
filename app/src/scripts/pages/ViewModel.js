@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Button, ButtonToolbar } from 'react-bootstrap';
@@ -6,6 +8,8 @@ import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
 import { deleteMLModel } from '../state/mlModels';
 import { setTestModel } from '../state/testModel';
+import { algorithmNameMap } from '../constants/Algorithms';
+
 
 import styles from './ViewModel.scss';
 
@@ -90,7 +94,26 @@ export default class ViewModel extends React.Component {
 
     return (
       <div className={styles.root}>
-        <p>Result weight map for analysis #{model.id}</p>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Cross-validation Type</th>
+              <th>Training Duration</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{algorithmNameMap[model.input_data.algorithm]}</td>
+              <td>{model.input_data.cv.type}</td>
+              <td>{Math.floor(model.output_data.duration) + ' sec'}</td>
+              <td>
+                  <span className="datetime">{moment(model.created).fromNow()}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div className="row">
           <div className="col-md-6 viewer-wrapper">
