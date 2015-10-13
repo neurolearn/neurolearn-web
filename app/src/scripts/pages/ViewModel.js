@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import ReactCSSTransitionGroup  from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Spinner from '../components/Spinner';

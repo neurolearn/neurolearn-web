@@ -56,19 +56,23 @@ export default class App extends React.Component {
     const { router } = this.context;
     return (
       <Nav>
-        <NavItem eventKey={0} active={router.isActive('/models')} href='#/models'>Models</NavItem>
-        <NavItem eventKey={1} active={router.isActive('/tests')} href='#/tests'>Tests</NavItem>
+        <NavItem eventKey={0} active={router.isActive('/')} href='#/'>Dashboard</NavItem>
       </Nav>
     );
   }
 
   render () {
     const { auth, dispatch } = this.props;
+    const { router } = this.context;
+
     return (
       <div>
         <Navbar staticTop>
           <NavBrand><a href="#">Neurolearn</a></NavBrand>
           { auth.user && this.renderAuthenticatedNav() }
+          <Nav>
+            <NavItem eventKey={1} active={router.isActive('/explore')} href='#/explore'>Explore</NavItem>
+          </Nav>
           <Nav right>
             { auth.user
               ? this.renderUserDropdown(auth.user)

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { loadMLModels } from '../state/mlModels';
 import { resetSelectedImages } from '../state/selectedImages';
 import { algorithmNameMap } from '../constants/Algorithms';
+import DashboardNav from '../components/DashboardNav';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
@@ -61,8 +62,8 @@ export default class MLModels extends React.Component {
       <table className="table">
         <thead>
           <tr>
-            <th>Status</th>
             <th>Name</th>
+            <th>Status</th>
             <th>Algorithm</th>
             <th>Cross-validation Type</th>
             <th>Training Duration</th>
@@ -73,11 +74,11 @@ export default class MLModels extends React.Component {
           {
             models.map(model =>
               <tr>
-                <td style={{height: 40}}>
-                  { this.renderState(model.training_state) }
-                </td>
                 <td>
                   <Link to={`/models/${model.id}`}>{model.name}</Link>
+                </td>
+                <td style={{height: 40}}>
+                  { this.renderState(model.training_state) }
                 </td>
                 <td>{algorithmNameMap[model.input_data.algorithm]}</td>
                 <td>{model.input_data.cv.type}</td>
@@ -109,14 +110,12 @@ export default class MLModels extends React.Component {
 
     return (
       <div className={styles.root}>
-        <div className="page-header">
+        <DashboardNav router={this.context.router}>
           <Button bsStyle="primary"
-                  bsSize="large"
                   className="pull-right"
-                  onClick={this.handleTrainNewModel.bind(this)}>Train a Model</Button>
+                  onClick={this.handleTrainNewModel.bind(this)}><i className="fa fa-plus"></i> New Model</Button>
+        </DashboardNav>
 
-          <h1>Models</h1>
-        </div>
         <div className="row">
           <div className="col-md-12">
             { isEmpty(mlModels)

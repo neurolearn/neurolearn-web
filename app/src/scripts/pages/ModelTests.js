@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../state/modelTests';
 import { resetSelectedImages } from '../state/selectedImages';
+import DashboardNav from '../components/DashboardNav';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
@@ -104,13 +105,12 @@ export default class ModelTests extends React.Component {
 
     return (
       <div className={styles.root}>
-        <div className="page-header">
+        <DashboardNav router={this.context.router}>
           <Button bsStyle="primary"
-                  bsSize="large"
                   className="pull-right"
-                  onClick={this.handleTestNewModel.bind(this)}>Test a Model</Button>
-          <h1>Tests</h1>
-        </div>
+                  onClick={this.handleTestNewModel.bind(this)}><i className="fa fa-plus"></i> New Test</Button>
+        </DashboardNav>
+
         <div className="row">
           <div className="col-md-12">
             { isEmpty(modelTests)
