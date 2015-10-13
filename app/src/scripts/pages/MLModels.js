@@ -59,10 +59,10 @@ export default class MLModels extends React.Component {
   renderMLModels(mlModels) {
     const models = sortByOrder(values(mlModels), 'created', 'desc');
     return (
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
-            <th>Name</th>
+            <th className="col-md-3">Name</th>
             <th>Status</th>
             <th>Algorithm</th>
             <th>Cross-validation Type</th>

@@ -58,11 +58,11 @@ export default class ModelTests extends React.Component {
   renderItems(modelTests) {
     const models = sortByOrder(values(modelTests), 'created', 'desc');
     return (
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
+            <th className="col-md-3">Name</th>
             <th>Status</th>
-            <th>Name</th>
             <th>Test Duration</th>
             <th>Created</th>
           </tr>
@@ -71,11 +71,11 @@ export default class ModelTests extends React.Component {
           {
             models.map(model =>
               <tr>
-                <td style={{height: 40}}>
-                  { this.renderState(model.state) }
-                </td>
                 <td>
                   <Link to={`/tests/${model.id}`}>{model.name}</Link>
+                </td>
+                <td style={{height: 40}}>
+                  { this.renderState(model.state) }
                 </td>
                 <td>
                   {model.output_data &&
