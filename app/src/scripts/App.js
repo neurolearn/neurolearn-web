@@ -47,7 +47,7 @@ export default class App extends React.Component {
   renderUserDropdown(user) {
     return (
       <NavDropdown eventKey={1} title={user.email}>
-        <MenuItem eventKey='1' onClick={this.handleLogout.bind(this)}>Logout</MenuItem>
+        <MenuItem eventKey='1' onSelect={this.handleLogout.bind(this)}>Logout</MenuItem>
       </NavDropdown>
     );
   }
@@ -71,7 +71,7 @@ export default class App extends React.Component {
           <NavBrand><a href="#">Neurolearn</a></NavBrand>
           { auth.user && this.renderAuthenticatedNav() }
           <Nav>
-            <NavItem eventKey={1} active={router.isActive('/explore')} href='#/explore'>Explore</NavItem>
+            <NavItem eventKey={1} active={router.isActive('/explore')} href='#'>Explore</NavItem>
           </Nav>
           <Nav right>
             { auth.user
