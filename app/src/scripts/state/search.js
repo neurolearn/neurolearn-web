@@ -25,7 +25,7 @@ function prepareFetchSearchResults(state) {
         'query': state.query,
         'max_expansions': 50,
         'slop': 10,
-        'fields': ['name', 'authors']
+        'fields': ['name', 'authors', 'description']
       }
     }
     : undefined;
