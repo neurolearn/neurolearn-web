@@ -45,6 +45,11 @@ function prepareFetchSearchResults(state) {
           'field': 'handedness'
       }
     },
+    'has_DOI': {
+      'filter': {
+        'exists': { 'field': 'DOI'}
+      }
+    },
     'nested_aggs': {
       'nested': {
         'path': 'images'

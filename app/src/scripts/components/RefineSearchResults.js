@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/lang/isEmpty';
+import { Input } from 'react-bootstrap';
 
 import React, { PropTypes } from 'react';
 import RangeFilter from './RangeFilter';
@@ -26,6 +27,10 @@ export default class RefineSearchResults extends React.Component {
       ? results.aggregations.handedness.buckets :
       [];
 
+    const hasDOI = results
+      ? results.aggregations.has_DOI
+      : null;
+
     const mapType = results
       ? results.aggregations.nested_aggs.map_type.buckets :
       [];
@@ -41,6 +46,10 @@ export default class RefineSearchResults extends React.Component {
             label="Number of images"
             value={[imagesStats.min, imagesStats.max]}
             onChange={this.props.onChange} />
+
+          { hasDOI && hasDOI.doc_count > 0 &&
+            <Input type='checkbox' label={`Has DOI (${hasDOI.doc_count})`} />
+          }
 
           { !isEmpty(handedness)
             ? <TermsFilter
