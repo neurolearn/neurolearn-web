@@ -7,7 +7,7 @@ export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
 
 import request from 'superagent';
-import debounce from 'lodash/function/debounce';
+import { debounce, values, isEmpty } from 'lodash';
 
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
 
@@ -15,6 +15,10 @@ import SearchSortTypes from '../constants/SearchSortTypes';
 
 function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
+}
+
+function combineFilters(filters) {
+  return {'and': values(filters)};
 }
 
 function prepareFetchSearchResults(state) {
@@ -30,8 +34,8 @@ function prepareFetchSearchResults(state) {
     }
     : undefined;
 
-  const filter = state.filter
-    ? state.filter
+  const filter = !isEmpty(state.filter)
+    ? combineFilters(state.filter)
     : undefined;
 
   const aggs = {
@@ -144,7 +148,7 @@ export function resetSearch() {
 const initialState = {
   isFetching: false,
   query: '',
-  filter: null,
+  filter: {},
   from: 0,
   sort: DEFAULT_SEARCH_SORT
 };

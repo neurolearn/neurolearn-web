@@ -1,19 +1,59 @@
-import isEmpty from 'lodash/lang/isEmpty';
-import { Input } from 'react-bootstrap';
-
 import React, { PropTypes } from 'react';
+
+import update from 'react/lib/update';
+import { isEmpty, omit } from 'lodash';
+import { Input } from 'react-bootstrap';
 import RangeFilter from './RangeFilter';
 import TermsFilter from './TermsFilter';
 
-
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
+    filter: PropTypes.object,
     results: PropTypes.object.isRequired,
     onChange: PropTypes.func
   }
 
   renderBuckets(buckets) {
     return buckets.map(bucket => <div>{bucket.key}: {bucket.doc_count}</div>);
+  }
+
+  handleRangeFilterChange(value) {
+    const numberOfImages = {
+      'range': {
+        'number_of_images': {
+          'gte': parseInt(value[0]),
+          'lte': parseInt(value[1])
+        }
+      }
+    };
+
+    const newFilter = update(this.props.filter, {
+      numberOfImages: {$set: numberOfImages}
+    });
+
+    this.props.onChange(newFilter);
+  }
+
+  _setDOI(filter) {
+    const hasDOI = {
+        'exists': {'field': 'DOI'}
+    };
+
+    return update(filter, {
+      hasDOI: {$set: hasDOI}
+    });
+  }
+
+  _unsetDOI(filter) {
+    return omit(filter, 'hasDOI');
+  }
+
+  handleHasDOIChange(e) {
+    const { checked } = e.target;
+    const { filter } = this.props;
+    const newFilter = checked ? this._setDOI(filter) : this._unsetDOI(filter);
+
+    this.props.onChange(newFilter);
   }
 
   render() {
@@ -45,10 +85,15 @@ export default class RefineSearchResults extends React.Component {
           <RangeFilter
             label="Number of images"
             value={[imagesStats.min, imagesStats.max]}
-            onChange={this.props.onChange} />
+            onChange={this.handleRangeFilterChange.bind(this)}
+          />
 
           { hasDOI && hasDOI.doc_count > 0 &&
-            <Input type='checkbox' label={`Has DOI (${hasDOI.doc_count})`} />
+            <Input
+              type='checkbox'
+              label={`Has DOI (${hasDOI.doc_count})`}
+              onChange={(e) => this.handleHasDOIChange(e)}
+            />
           }
 
           { !isEmpty(handedness)
