@@ -44,6 +44,22 @@ function prepareFetchSearchResults(state) {
         'field': 'number_of_images'
       }
     },
+
+    'image_map_types': {
+      'terms': {
+        'field': 'image_map_types'
+      }
+    },
+    'image_image_types': {
+      'terms': {
+        'field': 'image_image_types'
+      }
+    },
+    'image_modalities': {
+      'terms': {
+        'field': 'image_modalities'
+      }
+    },
     'image_analysis_levels': {
       'terms': {
         'field': 'image_analysis_levels'

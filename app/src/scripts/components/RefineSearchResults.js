@@ -63,13 +63,25 @@ export default class RefineSearchResults extends React.Component {
       ? results.aggregations.number_of_images_stats :
       {max: 0, min: 0};
 
-    const image_analysis_levels = results
-      ? results.aggregations.image_analysis_levels.buckets :
-      [];
-
     const hasDOI = results
       ? results.aggregations.has_DOI
       : null;
+
+    const imageMapTypes = results
+      ? results.aggregations.image_map_types.buckets :
+      [];
+
+    const imageImageTypes = results
+      ? results.aggregations.image_image_types.buckets :
+      [];
+
+    const imageModalities = results
+      ? results.aggregations.image_modalities.buckets :
+      [];
+
+    const imageAnalysisLevels = results
+      ? results.aggregations.image_analysis_levels.buckets :
+      [];
 
     const mapType = results
       ? results.aggregations.nested_aggs.map_type.buckets :
@@ -96,10 +108,31 @@ export default class RefineSearchResults extends React.Component {
             />
           }
 
-          { !isEmpty(image_analysis_levels) &&
+          { !isEmpty(imageMapTypes) &&
+            <TermsFilter
+              label="Image Map Types"
+              terms={imageMapTypes}
+            />
+          }
+
+          { !isEmpty(imageImageTypes) &&
+            <TermsFilter
+              label="Image Types"
+              terms={imageImageTypes}
+            />
+          }
+
+          { !isEmpty(imageModalities) &&
+            <TermsFilter
+              label="Image Modalities"
+              terms={imageModalities}
+            />
+          }
+
+          { !isEmpty(imageAnalysisLevels) &&
             <TermsFilter
               label="Image Analysis Levels"
-              terms={image_analysis_levels}
+              terms={imageAnalysisLevels}
             />
           }
 
