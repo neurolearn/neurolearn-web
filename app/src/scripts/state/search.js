@@ -44,9 +44,10 @@ function prepareFetchSearchResults(state) {
         'field': 'number_of_images'
       }
     },
-    'handedness': {
+    'image_analysis_levels': {
       'terms': {
-          'field': 'handedness'
+        'field': 'image_analysis_levels',
+        'execution_hint': 'map'
       }
     },
     'has_DOI': {

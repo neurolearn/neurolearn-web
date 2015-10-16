@@ -63,8 +63,8 @@ export default class RefineSearchResults extends React.Component {
       ? results.aggregations.number_of_images_stats :
       {max: 0, min: 0};
 
-    const handedness = results
-      ? results.aggregations.handedness.buckets :
+    const image_analysis_levels = results
+      ? results.aggregations.image_analysis_levels.buckets :
       [];
 
     const hasDOI = results
@@ -96,11 +96,11 @@ export default class RefineSearchResults extends React.Component {
             />
           }
 
-          { !isEmpty(handedness)
-            ? <TermsFilter
-              label="Handedness"
-              terms={handedness} />
-            : false
+          { !isEmpty(image_analysis_levels) &&
+            <TermsFilter
+              label="Image Analysis Levels"
+              terms={image_analysis_levels}
+            />
           }
 
           { !isEmpty(mapType)
