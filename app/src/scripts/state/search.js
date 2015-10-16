@@ -69,23 +69,6 @@ function prepareFetchSearchResults(state) {
       'filter': {
         'exists': { 'field': 'DOI'}
       }
-    },
-    'nested_aggs': {
-      'nested': {
-        'path': 'images'
-      },
-      'aggs': {
-        'modality': {
-          'terms': {
-            'field': 'images.modality'
-          }
-        },
-        'map_type': {
-          'terms': {
-            'field': 'images.map_type'
-          }
-        }
-      }
     }
   };
 

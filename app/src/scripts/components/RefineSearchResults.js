@@ -83,14 +83,6 @@ export default class RefineSearchResults extends React.Component {
       ? results.aggregations.image_analysis_levels.buckets :
       [];
 
-    const mapType = results
-      ? results.aggregations.nested_aggs.map_type.buckets :
-      [];
-
-    const modality = results
-      ? results.aggregations.nested_aggs.modality.buckets :
-      [];
-
     return (
       <div className="panel panel-default">
         <div className="panel-body">
@@ -134,22 +126,6 @@ export default class RefineSearchResults extends React.Component {
               label="Image Analysis Levels"
               terms={imageAnalysisLevels}
             />
-          }
-
-          { !isEmpty(mapType)
-            ? <TermsFilter
-              label="Map Type"
-              disabled={true}
-              terms={mapType} />
-            : false
-          }
-
-          { !isEmpty(modality)
-            ? <TermsFilter
-              label="Modality"
-              disabled={true}
-              terms={modality} />
-            : false
           }
         </div>
       </div>
