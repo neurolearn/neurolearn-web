@@ -6,6 +6,35 @@ import { Input } from 'react-bootstrap';
 import RangeFilter from './RangeFilter';
 import TermsFilter from './TermsFilter';
 
+function unsetFilter(fieldName, filter) {
+  return omit(filter, fieldName);
+}
+
+function setFilter(fieldName, filter, clause) {
+  return update(filter, {[fieldName]: {$set: clause}});
+}
+
+function markSelected(filter, fieldName, terms) {
+  const selected = filter[fieldName] && filter[fieldName].terms[fieldName];
+
+  if (isEmpty(selected)) {
+    return terms;
+  }
+
+  const reduced = selected.reduce((accum, term) => {
+    accum[term] = true;
+    return accum;
+  }, {});
+
+  return terms.map(item =>
+    Object.assign({}, item, {selected: reduced[item.key]})
+  );
+}
+
+function getBuckets(results, aggregation) {
+  return results ? results.aggregations[aggregation].buckets : [];
+}
+
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
     filter: PropTypes.object,
@@ -13,12 +42,8 @@ export default class RefineSearchResults extends React.Component {
     onChange: PropTypes.func
   }
 
-  renderBuckets(buckets) {
-    return buckets.map(bucket => <div>{bucket.key}: {bucket.doc_count}</div>);
-  }
-
   handleRangeFilterChange(value) {
-    const numberOfImages = {
+    const clause = {
       'range': {
         'number_of_images': {
           'gte': parseInt(value[0]),
@@ -27,37 +52,46 @@ export default class RefineSearchResults extends React.Component {
       }
     };
 
-    const newFilter = update(this.props.filter, {
-      numberOfImages: {$set: numberOfImages}
-    });
-
+    const newFilter = setFilter('number_of_images',
+                                this.props.filter, clause);
     this.props.onChange(newFilter);
   }
 
-  _setDOI(filter) {
-    const hasDOI = {
-        'exists': {'field': 'DOI'}
+  handleTermsFilterChange(fieldName, terms) {
+    const selectedTerms = terms
+      .filter(term => term.selected)
+      .map(term => term.key);
+
+    const clause = {
+      'terms': {
+        [fieldName]: selectedTerms
+      }
     };
 
-    return update(filter, {
-      hasDOI: {$set: hasDOI}
-    });
-  }
+    const newFilter = isEmpty(selectedTerms)
+      ? unsetFilter(fieldName, this.props.filter)
+      : setFilter(fieldName, this.props.filter, clause);
 
-  _unsetDOI(filter) {
-    return omit(filter, 'hasDOI');
+    this.props.onChange(newFilter);
   }
 
   handleHasDOIChange(e) {
     const { checked } = e.target;
     const { filter } = this.props;
-    const newFilter = checked ? this._setDOI(filter) : this._unsetDOI(filter);
+
+    const clause = {
+      'exists': {'field': 'DOI'}
+    };
+
+    const newFilter = checked
+      ? setFilter('hasDOI', filter, clause)
+      : unsetFilter('hasDOI', filter);
 
     this.props.onChange(newFilter);
   }
 
   render() {
-    const { results } = this.props;
+    const { results, filter } = this.props;
 
     const imagesStats = results
       ? results.aggregations.number_of_images_stats :
@@ -67,21 +101,28 @@ export default class RefineSearchResults extends React.Component {
       ? results.aggregations.has_DOI
       : null;
 
-    const imageMapTypes = results
-      ? results.aggregations.image_map_types.buckets :
-      [];
-
-    const imageImageTypes = results
-      ? results.aggregations.image_image_types.buckets :
-      [];
-
-    const imageModalities = results
-      ? results.aggregations.image_modalities.buckets :
-      [];
-
-    const imageAnalysisLevels = results
-      ? results.aggregations.image_analysis_levels.buckets :
-      [];
+    const termFilters = [
+      {
+        label: 'Image Map Types',
+        fieldName: 'image_map_types',
+        terms: getBuckets(results, 'image_map_types')
+      },
+      {
+        label: 'Image Types',
+        fieldName: 'image_image_types',
+        terms: getBuckets(results, 'image_image_types')
+      },
+      {
+        label: 'Image Modalities',
+        fieldName: 'image_modalities',
+        terms: getBuckets(results, 'image_modalities')
+      },
+      {
+        label: 'Image Analysis Levels',
+        fieldName: 'image_analysis_levels',
+        terms: getBuckets(results, 'image_analysis_levels')
+      }
+    ];
 
     return (
       <div className="panel panel-default">
@@ -100,33 +141,17 @@ export default class RefineSearchResults extends React.Component {
             />
           }
 
-          { !isEmpty(imageMapTypes) &&
-            <TermsFilter
-              label="Image Map Types"
-              terms={imageMapTypes}
-            />
+          {termFilters.map(tf =>
+              !isEmpty(tf.terms) &&
+                <TermsFilter
+                  label={tf.label}
+                  terms={markSelected(filter, tf.fieldName, tf.terms)}
+                  onChange={(terms) =>
+                    this.handleTermsFilterChange(tf.fieldName, terms)}
+                />
+            )
           }
 
-          { !isEmpty(imageImageTypes) &&
-            <TermsFilter
-              label="Image Types"
-              terms={imageImageTypes}
-            />
-          }
-
-          { !isEmpty(imageModalities) &&
-            <TermsFilter
-              label="Image Modalities"
-              terms={imageModalities}
-            />
-          }
-
-          { !isEmpty(imageAnalysisLevels) &&
-            <TermsFilter
-              label="Image Analysis Levels"
-              terms={imageAnalysisLevels}
-            />
-          }
         </div>
       </div>
     );
