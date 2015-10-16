@@ -46,8 +46,7 @@ function prepareFetchSearchResults(state) {
     },
     'image_analysis_levels': {
       'terms': {
-        'field': 'image_analysis_levels',
-        'execution_hint': 'map'
+        'field': 'image_analysis_levels'
       }
     },
     'has_DOI': {
