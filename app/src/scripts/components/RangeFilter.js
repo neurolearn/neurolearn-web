@@ -27,8 +27,8 @@ export default class RangeFilter extends React.Component {
   inputOnChange() {
     this.setState({
       value: [
-        this.refs.inputFrom.getDOMNode().value,
-        this.refs.inputTo.getDOMNode().value
+        this.refs.inputFrom.value,
+        this.refs.inputTo.value
       ]
     }, this.triggerOnChange);
   }
