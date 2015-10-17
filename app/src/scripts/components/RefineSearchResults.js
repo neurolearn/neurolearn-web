@@ -43,7 +43,8 @@ export default class RefineSearchResults extends React.Component {
   }
 
   handleRangeFilterChange(value) {
-    const clause = {
+    const { filter } = this.props;
+    const clause = value && {
       'range': {
         'number_of_images': {
           'gte': parseInt(value[0]),
@@ -52,8 +53,9 @@ export default class RefineSearchResults extends React.Component {
       }
     };
 
-    const newFilter = setFilter('number_of_images',
-                                this.props.filter, clause);
+    const newFilter = value
+      ? setFilter('number_of_images', filter, clause)
+      : unsetFilter('number_of_images', filter);
     this.props.onChange(newFilter);
   }
 
@@ -141,9 +143,10 @@ export default class RefineSearchResults extends React.Component {
             />
           }
 
-          {termFilters.map(tf =>
+          {termFilters.map((tf, i) =>
               !isEmpty(tf.terms) &&
                 <TermsFilter
+                  key={i}
                   label={tf.label}
                   terms={markSelected(filter, tf.fieldName, tf.terms)}
                   onChange={(terms) =>

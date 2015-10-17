@@ -42,8 +42,7 @@ export default class RangeFilter extends React.Component {
   }
 
   handleClearFilterClick() {
-    this.sliderOnChange(null);
-    this.triggerOnChange();
+    this.setState({value: null}, this.triggerOnChange);
   }
 
   render() {
