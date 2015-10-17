@@ -54,7 +54,7 @@ export default class RangeFilter extends React.Component {
           this.props.label
         }&nbsp;<i
                   title="Clear Filter"
-                  className="clear-filter fa fa-times"
+                  className="clear-filter fa fa-times-circle"
                   onClick={this.handleClearFilterClick.bind(this)}
                ></i></label>
 

@@ -59,7 +59,7 @@ export default class TermsFilter extends React.Component {
           className={classNames('control-label',
                                 !anySelected(terms) && 'empty-filter')}
         >{label}&nbsp;<i title="Clear Filter"
-                         className="clear-filter fa fa-times"
+                         className="clear-filter fa fa-times-circle"
                          onClick={this.handleClearFilterClick.bind(this)}
                       ></i>
         </label>
