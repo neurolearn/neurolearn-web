@@ -1,3 +1,10 @@
+import { debounce, values, isEmpty } from 'lodash';
+import api from '../api';
+
+import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
+
+import SearchSortTypes from '../constants/SearchSortTypes';
+
 export const REQUEST_SEARCH_RESULTS = 'REQUEST_SEARCH_RESULTS';
 export const RECEIVE_SEARCH_RESULTS = 'RECEIVE_SEARCH_RESULTS';
 export const INPUT_SEARCH_QUERY = 'INPUT_SEARCH_QUERY';
@@ -6,12 +13,6 @@ export const SELECT_SEARCH_OFFSET = 'SELECT_SEARCH_OFFSET';
 export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
 
-import request from 'superagent';
-import { debounce, values, isEmpty } from 'lodash';
-
-import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
-
-import SearchSortTypes from '../constants/SearchSortTypes';
 
 function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
@@ -72,21 +73,14 @@ function prepareFetchSearchResults(state) {
     }
   };
 
-  return request.post('/search')
-    .send({
-      query: {
-        filtered: {
-          query: query,
-          filter: filter
-        }
-      },
-      size: RESULTS_PER_PAGE,
-      from: state.from,
-      sort: sortOption(state.sort),
-      aggs: aggs
-    })
-    .type('json')
-    .accept('json');
+  return api.search(
+    query,
+    filter,
+    aggs,
+    sortOption(state.sort),
+    state.from,
+    RESULTS_PER_PAGE
+  );
 }
 
 function requestSearchResults(results) {

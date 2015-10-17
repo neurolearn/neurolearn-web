@@ -1,6 +1,6 @@
 import update from 'react/lib/update';
 import omit from 'lodash/object/omit';
-import request from 'superagent';
+import api from '../api';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
 export const REQUEST_IMAGES_METADATA = 'REQUEST_IMAGES_METADATA';
@@ -26,12 +26,6 @@ function receiveImagesMetadata(collectionId, results) {
   };
 }
 
-function fetchImagesMetadata(collectionId) {
-  let url = `/nvproxy/api/collections/${collectionId}/images/`;
-
-  return request.get(url);
-}
-
 function filterImages(imageMap, imageList) {
   return imageList.filter(image => imageMap[image.url]);
 }
@@ -52,7 +46,7 @@ export function loadImagesMetadata(imageMap) {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
       return new Promise((resolve, reject) => {
-        fetchImagesMetadata(collectionId).end((err, res) => {
+        api.fetchImagesMetadata(collectionId).end((err, res) => {
           return err ? reject([collectionId, err]) : resolve([collectionId, res]);
         });
       });

@@ -1,6 +1,6 @@
-import request from 'superagent';
 import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
+import api from '../api';
 
 export const REQUEST_MLMODELS = 'REQUEST_MLMODELS';
 export const RECEIVE_MLMODELS = 'RECEIVE_MLMODELS';
@@ -26,23 +26,11 @@ function requestDeleteMLModel(modelId) {
   };
 }
 
-function fetchMLModels(token) {
-  return request.get('/mlmodels')
-    .type('json')
-    .accept('json')
-    .set('Authorization', 'Bearer ' + token);
-}
-
-function _deleteMLModel(modelId, token) {
-  return request.del(`/mlmodels/${modelId}`)
-    .set('Authorization', 'Bearer ' + token);
-}
-
 export function loadMLModels() {
   return (dispatch, getState) => {
     dispatch(requestMLModels());
 
-    return fetchMLModels(getState().auth.token)
+    return api.fetchMLModels(getState().auth.token)
       .end((err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
@@ -58,7 +46,7 @@ export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteMLModel(modelId));
 
-    return _deleteMLModel(modelId, getState().auth.token)
+    return api.deleteMLModel(modelId, getState().auth.token)
       .end((err, res) => {
         router.transitionTo('/');
       });

@@ -1,4 +1,4 @@
-import request from 'superagent';
+import api from '../api';
 
 export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_KFOLD_PARAM = 'INPUT_KFOLD_PARAM';
@@ -56,22 +56,6 @@ function requestModelTraining() {
   };
 }
 
-function startModelTraining(name, algorithm, targetData, cv, token) {
-  const payload = {
-    'data': targetData,
-    'collection_id': 504,
-    algorithm,
-    name,
-    cv
-  };
-
-  return request.post('/mlmodels')
-    .type('json')
-    .accept('json')
-    .set('Authorization', 'Bearer ' + token)
-    .send(payload);
-}
-
 export function resetModelPreferences() {
   return {
     type: RESET_MODEL_PREFERENCES
@@ -91,7 +75,7 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
   return (dispatch, getState) => {
     dispatch(requestModelTraining());
 
-    return startModelTraining(name, algorithm, targetData, crossValidation,
+    return api.startModelTraining(name, algorithm, targetData, crossValidation,
                               getState().auth.token)
       .end((err, res) => {
         router.transitionTo('/');

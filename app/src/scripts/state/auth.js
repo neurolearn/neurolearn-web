@@ -1,5 +1,5 @@
-import request from 'superagent';
 import jwtDecode from 'jwt-decode';
+import api from '../api';
 import { hideAuthModal } from './authModal';
 import { JWT_KEY_NAME } from '../constants/auth';
 
@@ -34,17 +34,10 @@ export function logout() {
   };
 }
 
-function fetchAuthToken(email, password) {
-  return request.post('/auth')
-    .type('json')
-    .accept('json')
-    .send({email, password});
-}
-
 export function login(email, password) {
   return dispatch => {
     dispatch(requestLogin());
-    return fetchAuthToken(email, password)
+    return api.fetchAuthToken(email, password)
       .end((err, res) => {
         if (err) {
           dispatch(loginFail({message: err.message}));

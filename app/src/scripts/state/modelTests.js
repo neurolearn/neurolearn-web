@@ -1,6 +1,6 @@
-import request from 'superagent';
 import logout from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
+import api from '../api';
 
 export const REQUEST_MODEL_TESTS = 'REQUEST_MODEL_TESTS';
 export const RECEIVE_MODEL_TESTS = 'RECEIVE_MODEL_TESTS';
@@ -33,30 +33,11 @@ function errorWhileSavingGroups() {
   };
 }
 
-function fetchModelTests(token) {
-  return request.get('/tests')
-    .type('json')
-    .accept('json')
-    .set('Authorization', 'Bearer ' + token);
-}
-
-function _deleteModelTest(modelId, token) {
-  return request.del(`/tests/${modelId}`)
-    .set('Authorization', 'Bearer ' + token);
-}
-
-function _saveCorrelationGroups(modelId, groups, token) {
-  return request.post(`/tests/${modelId}/groups`)
-    .set('Authorization', 'Bearer ' + token)
-    .send(groups)
-    .type('json');
-}
-
 export function loadModelTests() {
   return (dispatch, getState) => {
     dispatch(requestModelTests());
 
-    return fetchModelTests(getState().auth.token)
+    return api.fetchModelTests(getState().auth.token)
       .end((err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
@@ -72,7 +53,7 @@ export function deleteModelTest(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteModelTest(modelId));
 
-    return _deleteModelTest(modelId, getState().auth.token)
+    return api.deleteModelTest(modelId, getState().auth.token)
       .end((err, res) => {
         router.transitionTo('/tests');
       });
@@ -81,7 +62,7 @@ export function deleteModelTest(modelId, router) {
 
 export function saveCorrelationGroups(modelId, groups) {
   return (dispatch, getState) => {
-    return _saveCorrelationGroups(modelId, groups, getState().auth.token)
+    return api.saveCorrelationGroups(modelId, groups, getState().auth.token)
       .end((err) => {
         if (err) {
           dispatch(errorWhileSavingGroups());
