@@ -1,5 +1,8 @@
 .root {
-    :global .HitsCount {
-        color: gray;
-    }
+  :global .search-meta {
+    margin-top: 10px;
+  }
+  :global .HitsCount {
+    color: gray;
+  }
 }

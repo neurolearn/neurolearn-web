@@ -75,6 +75,7 @@ export default class SearchContainer extends React.Component {
           <div className="col-md-9">
             <SearchInput
               value={this.props.query}
+              placeholder="Search NeuroVault Collections"
               onChange={this.handleSearchInputChange.bind(this)}
             />
             <div className="search-meta clearfix">

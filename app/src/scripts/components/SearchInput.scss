@@ -1,0 +1,28 @@
+.root {
+  position: relative;
+  font-size: 18px;
+  margin: 0 auto 0;
+
+  label {
+    position: absolute;
+    left: 14px;
+    top: 10px;
+  }
+
+  input {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  :global .clear-search {
+    cursor: pointer;
+    position: absolute;
+    right: 14px;
+    top: 15px;
+    color: #b3b3b3;
+  }
+
+  :global .clear-search:hover {
+    color: #8f8f8f;
+  }
+}
