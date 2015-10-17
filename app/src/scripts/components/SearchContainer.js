@@ -87,10 +87,13 @@ export default class SearchContainer extends React.Component {
                 />
               </div>
             </div>
-            <SearchResults
-              results={this.props.results}
-              onSearchResultClick={this.props.onSearchResultClick}
-            />
+            <div className="search-results-wrapper">
+              <SearchResults
+                results={this.props.results}
+                onSearchResultClick={this.props.onSearchResultClick}
+              />
+              {this.props.isFetching && <div className="overlay"></div>}
+            </div>
 
             { this.totalHits(this.props.results) > RESULTS_PER_PAGE
               ? <SearchPagination

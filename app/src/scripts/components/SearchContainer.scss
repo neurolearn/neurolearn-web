@@ -1,8 +1,20 @@
-.root {
-  :global .search-meta {
+.root :global {
+  .search-meta {
     margin-top: 10px;
   }
-  :global .HitsCount {
+  .HitsCount {
     color: gray;
+  }
+  .search-results-wrapper {
+    position: relative;
+  }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 101%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
   }
 }

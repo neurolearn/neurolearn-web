@@ -89,6 +89,13 @@ function prepareFetchSearchResults(state) {
     .accept('json');
 }
 
+function requestSearchResults(results) {
+  return {
+    type: REQUEST_SEARCH_RESULTS,
+    results
+  };
+}
+
 function receiveSearchResults(results) {
   return {
     type: RECEIVE_SEARCH_RESULTS,
@@ -105,6 +112,7 @@ const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
 
 export function loadSearchResults(action) {
   return (dispatch, getState) => {
+    dispatch(requestSearchResults());
     dispatch(action);
     return debouncedFetchSearchResults(dispatch, getState().search);
   };
