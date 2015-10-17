@@ -1,8 +1,18 @@
-
 import React, { PropTypes } from 'react';
+import classNames from 'classnames';
+import { some, omit, sortBy } from 'lodash';
+
 import { Input } from 'react-bootstrap';
 
 import styles from './TermsFilter.scss';
+
+function anySelected(terms) {
+  return some(terms, 'selected');
+}
+
+function clearSelected(terms) {
+  return terms.map(term => omit(term, 'selected'));
+}
 
 export default class TermsFilter extends React.Component {
   static propTypes = {
@@ -24,8 +34,12 @@ export default class TermsFilter extends React.Component {
     this.props.onChange(newTerms);
   }
 
+  handleClearFilterClick() {
+    this.props.onChange(clearSelected(this.props.terms));
+  }
+
   renderCheckboxes(terms, disabled) {
-    return terms.map(term =>
+    return sortBy(terms, 'key').map(term =>
       <Input
         type='checkbox'
         disabled={disabled}
@@ -41,7 +55,14 @@ export default class TermsFilter extends React.Component {
     const { label, terms, disabled } = this.props;
     return (
       <div className={styles.root}>
-        <label className="control-label">{label}</label>
+        <label
+          className={classNames('control-label',
+                                !anySelected(terms) && 'empty-filter')}
+        >{label}&nbsp;<i title="Clear Filter"
+                         className="clear-filter fa fa-times"
+                         onClick={this.handleClearFilterClick.bind(this)}
+                      ></i>
+        </label>
         { this.renderCheckboxes(terms, disabled) }
       </div>
     );

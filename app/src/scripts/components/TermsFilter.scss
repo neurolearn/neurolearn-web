@@ -9,4 +9,17 @@
   :global .form-group {
     margin-bottom: 2px;
   }
+
+  :global .clear-filter {
+    color: #777;
+  }
+
+  :global .clear-filter:hover {
+    color: #333;
+    cursor: pointer;
+  }
+
+  :global .empty-filter .clear-filter {
+    display: none;
+  }
 }
