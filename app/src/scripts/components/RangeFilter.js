@@ -41,17 +41,30 @@ export default class RangeFilter extends React.Component {
     this.triggerOnChange();
   }
 
+  handleClearFilterClick() {
+    this.sliderOnChange(null);
+    this.triggerOnChange();
+  }
+
   render() {
+    const { value } = this.state;
+
     return (
       <div className={styles.root}>
-        <label>{this.props.label}</label>
+        <label className={!value && 'empty-filter'}>{
+          this.props.label
+        }&nbsp;<i
+                  title="Clear Filter"
+                  className="clear-filter fa fa-times"
+                  onClick={this.handleClearFilterClick.bind(this)}
+               ></i></label>
 
         <div className="clearfix">
             <div className={styles.from}>
               <input
                   type='text'
                   className='form-control'
-                  value={this.state.value ? this.state.value[0] : ''}
+                  value={value ? value[0] : ''}
                   ref='inputFrom'
                   onChange={this.inputOnChange.bind(this)} />
             </div>
@@ -61,7 +74,7 @@ export default class RangeFilter extends React.Component {
                   type='text'
                   className='form-control'
                   ref='inputTo'
-                  value={this.state.value ? this.state.value[1] : ''}
+                  value={value ? value[1] : ''}
                   onChange={this.inputOnChange.bind(this)} />
             </div>
         </div>
@@ -72,7 +85,7 @@ export default class RangeFilter extends React.Component {
         <ReactSlider
           min={RANGE_MIN}
           max={RANGE_MAX}
-          value={this.state.value ? this.state.value : [RANGE_MIN, RANGE_MAX]}
+          value={value ? value : [RANGE_MIN, RANGE_MAX]}
           orientation="horizontal"
           withBars
           onChange={this.sliderOnChange.bind(this)}
