@@ -18,7 +18,11 @@ export default class SortSearchResults extends React.Component {
 
   renderMenuItems(sortTypes) {
     return sortTypes.map(sortType =>
-      <MenuItem key={sortType} eventKey={sortType} active={sortType === this.props.sortType}>{sortTitle(sortType)}</MenuItem>);
+      <MenuItem
+        key={sortType}
+        eventKey={sortType}
+        active={sortType === this.props.sortType}
+      >{sortTitle(sortType)}</MenuItem>);
   }
 
   render() {
@@ -27,7 +31,7 @@ export default class SortSearchResults extends React.Component {
         <DropdownButton
           bsStyle='link'
           title={`Sort: ${sortTitle(this.props.sortType)}`}
-          onSelect={this.props.onSelect} >
+          onSelect={(event, eventKey) => this.props.onSelect(eventKey)}>
           {this.renderMenuItems(SORT_TYPES)}
         </DropdownButton>
       </div>
