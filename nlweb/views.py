@@ -40,7 +40,7 @@ def neurovault_proxy(path):
 
 @frontend.route('/mlmodels', methods=['GET'])
 @jwt_required()
-def list_mlmodels():
+def list_user_mlmodels():
     mfields = {
         'id': as_integer,
         'name': as_string,
@@ -118,7 +118,7 @@ def create_test():
 
 @frontend.route('/tests', methods=['GET'])
 @jwt_required()
-def list_model_tests():
+def list_user_model_tests():
     mfields = {
         'id': as_integer,
         'name': as_string,
