@@ -37,8 +37,8 @@ export function logout() {
 export function login(email, password) {
   return dispatch => {
     dispatch(requestLogin());
-    return api.fetchAuthToken(email, password)
-      .end((err, res) => {
+    return api.fetchAuthToken(email, password,
+      (err, res) => {
         if (err) {
           dispatch(loginFail({message: err.message}));
         } else {

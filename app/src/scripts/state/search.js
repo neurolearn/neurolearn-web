@@ -22,7 +22,7 @@ function combineFilters(filters) {
   return {'and': values(filters)};
 }
 
-function prepareFetchSearchResults(state) {
+function prepareSearchParams(state) {
   const query = state.query
     ? {
       'multi_match': {
@@ -73,14 +73,18 @@ function prepareFetchSearchResults(state) {
     }
   };
 
-  return api.search(
-    query,
-    filter,
-    aggs,
-    sortOption(state.sort),
-    state.from,
-    RESULTS_PER_PAGE
-  );
+  return {
+    query: {
+      filtered: {
+        query: query,
+        filter: filter
+      }
+    },
+    aggs: aggs,
+    sort: sortOption(state.sort),
+    from: state.from,
+    size: RESULTS_PER_PAGE
+  };
 }
 
 function requestSearchResults(results) {
@@ -98,8 +102,11 @@ function receiveSearchResults(results) {
 }
 
 function fetchSearchResults(dispatch, state) {
-  return prepareFetchSearchResults(state)
-    .end((err, res) => dispatch(receiveSearchResults(res.body)));
+  const searchParams = prepareSearchParams(state);
+  return api.search(
+    searchParams,
+    (err, res) => dispatch(receiveSearchResults(res.body))
+  );
 }
 
 const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);

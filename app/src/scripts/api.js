@@ -1,50 +1,56 @@
 import request from 'superagent';
 
 const api = {
-  fetchAuthToken: (email, password) => {
+  fetchAuthToken: (email, password, callback) => {
     return request.post('/auth')
       .type('json')
       .accept('json')
-      .send({email, password});
+      .send({email, password})
+      .end(callback);
   },
 
-  fetchMLModels: (token) => {
+  fetchMLModels: (token, callback) => {
     return request.get('/mlmodels')
       .type('json')
       .accept('json')
-      .set('Authorization', 'Bearer ' + token);
+      .set('Authorization', 'Bearer ' + token)
+      .end(callback);
   },
 
-  deleteMLModel: (modelId, token) => {
+  deleteMLModel: (modelId, token, callback) => {
     return request.del(`/mlmodels/${modelId}`)
-      .set('Authorization', 'Bearer ' + token);
+      .set('Authorization', 'Bearer ' + token)
+      .end(callback);
   },
 
-  fetchModelTests: (token) => {
+  fetchModelTests: (token, callback) => {
     return request.get('/tests')
       .type('json')
       .accept('json')
-      .set('Authorization', 'Bearer ' + token);
+      .set('Authorization', 'Bearer ' + token)
+      .end(callback);
   },
 
-  deleteModelTest: (modelId, token) => {
+  deleteModelTest: (modelId, token, callback) => {
     return request.del(`/tests/${modelId}`)
-      .set('Authorization', 'Bearer ' + token);
+      .set('Authorization', 'Bearer ' + token)
+      .end(callback);
   },
 
-  saveCorrelationGroups: (modelId, groups, token) => {
+  saveCorrelationGroups: (modelId, groups, token, callback) => {
     return request.post(`/tests/${modelId}/groups`)
       .set('Authorization', 'Bearer ' + token)
       .send(groups)
-      .type('json');
+      .type('json')
+      .end(callback);
   },
 
-  fetchImagesMetadata: (collectionId) => {
+  fetchImagesMetadata: (collectionId, callback) => {
     const url = `/nvproxy/api/collections/${collectionId}/images/`;
-    return request.get(url);
+    return request.get(url).end(callback);
   },
 
-  startModelTraining: (name, algorithm, targetData, cv, token) => {
+  trainModel: (name, algorithm, targetData, cv, token, callback) => {
     const payload = {
       'data': targetData,
       'collection_id': 504,
@@ -57,10 +63,11 @@ const api = {
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
-      .send(payload);
+      .send(payload)
+      .end(callback);
   },
 
-  startModelTesting: (modelId, selectedImages, token) => {
+  testModel: (modelId, selectedImages, token, callback) => {
     const payload = {
       modelId,
       selectedImages
@@ -70,25 +77,16 @@ const api = {
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
-      .send(payload);
+      .send(payload)
+      .end(callback);
   },
 
-  search: (query, filter, aggs, sort, from, size) => {
+  search: (params, callback) => {
     return request.post('/search')
-      .send({
-        query: {
-          filtered: {
-            query: query,
-            filter: filter
-          }
-        },
-        aggs: aggs,
-        sort: sort,
-        from: from,
-        size: size
-      })
+      .send(params)
       .type('json')
-      .accept('json');
+      .accept('json')
+      .end(callback);
   }
 };
 

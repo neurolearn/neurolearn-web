@@ -37,8 +37,8 @@ export function loadModelTests() {
   return (dispatch, getState) => {
     dispatch(requestModelTests());
 
-    return api.fetchModelTests(getState().auth.token)
-      .end((err, res) => {
+    return api.fetchModelTests(getState().auth.token,
+      (err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
           dispatch(logout());
@@ -53,8 +53,10 @@ export function deleteModelTest(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteModelTest(modelId));
 
-    return api.deleteModelTest(modelId, getState().auth.token)
-      .end((err, res) => {
+    return api.deleteModelTest(
+      modelId,
+      getState().auth.token,
+      (err, res) => {
         router.transitionTo('/tests');
       });
   };
@@ -62,8 +64,11 @@ export function deleteModelTest(modelId, router) {
 
 export function saveCorrelationGroups(modelId, groups) {
   return (dispatch, getState) => {
-    return api.saveCorrelationGroups(modelId, groups, getState().auth.token)
-      .end((err) => {
+    return api.saveCorrelationGroups(
+      modelId,
+      groups,
+      getState().auth.token,
+      (err) => {
         if (err) {
           dispatch(errorWhileSavingGroups());
         }

@@ -12,7 +12,7 @@ export function resetImagesMetadata() {
   };
 }
 
-function requestImagesMetadata(collectionId) {
+function requestImagesMetadata() {
   return {
     type: REQUEST_IMAGES_METADATA
   };
@@ -46,7 +46,7 @@ export function loadImagesMetadata(imageMap) {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
       return new Promise((resolve, reject) => {
-        api.fetchImagesMetadata(collectionId).end((err, res) => {
+        api.fetchImagesMetadata(collectionId, (err, res) => {
           return err ? reject([collectionId, err]) : resolve([collectionId, res]);
         });
       });

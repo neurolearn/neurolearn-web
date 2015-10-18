@@ -30,8 +30,9 @@ export function loadMLModels() {
   return (dispatch, getState) => {
     dispatch(requestMLModels());
 
-    return api.fetchMLModels(getState().auth.token)
-      .end((err, res) => {
+    return api.fetchMLModels(
+      getState().auth.token,
+      (err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
           dispatch(logout());
@@ -46,8 +47,10 @@ export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteMLModel(modelId));
 
-    return api.deleteMLModel(modelId, getState().auth.token)
-      .end((err, res) => {
+    return api.deleteMLModel(
+      modelId,
+      getState().auth.token,
+      (err, res) => {
         router.transitionTo('/');
       });
   };

@@ -34,8 +34,11 @@ function resetModelTestData(dispatch) {
 
 export function testModel(modelId, selectedImages, router) {
   return (dispatch, getState) => {
-    return api.startModelTesting(modelId, listImageIds(selectedImages), getState().auth.token)
-      .end((err) => {
+    return api.testModel(
+      modelId,
+      listImageIds(selectedImages),
+      getState().auth.token,
+      err => {
         if (!err) {
           router.transitionTo('/tests');
           resetModelTestData(dispatch);
