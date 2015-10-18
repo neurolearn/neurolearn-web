@@ -67,7 +67,7 @@ export default class TrainingLabel extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12" >
-          <div style={{'padding-top': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
+          <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
           <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Loading image metadata…</div>
         </div>
       </div>
