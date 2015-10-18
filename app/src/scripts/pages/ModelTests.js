@@ -70,7 +70,7 @@ export default class ModelTests extends React.Component {
         <tbody>
           {
             models.map(model =>
-              <tr>
+              <tr key={model.id}>
                 <td>
                   <Link to={`/tests/${model.id}`}>{model.name}</Link>
                 </td>

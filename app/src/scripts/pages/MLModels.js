@@ -73,7 +73,7 @@ export default class MLModels extends React.Component {
         <tbody>
           {
             models.map(model =>
-              <tr>
+              <tr key={model.id}>
                 <td>
                   <Link to={`/models/${model.id}`}>{model.name}</Link>
                 </td>

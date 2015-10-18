@@ -47,8 +47,11 @@ export default class App extends React.Component {
 
   renderUserDropdown(user) {
     return (
-      <NavDropdown eventKey={1} title={user.email}>
-        <MenuItem eventKey='1' onSelect={this.handleLogout.bind(this)}>Logout</MenuItem>
+      <NavDropdown id="user-account-dropdown" eventKey={1} title={user.email}>
+        <MenuItem
+          eventKey='1'
+          onSelect={this.handleLogout.bind(this)}
+        >Logout</MenuItem>
       </NavDropdown>
     );
   }
