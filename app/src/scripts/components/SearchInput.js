@@ -30,7 +30,7 @@ export default class SearchInput extends React.Component {
           className="form-control input-lg"
           autoComplete="off"
           spellCheck="false"
-          autocorrect="off"
+          autoCorrect="off"
           value={this.props.value}
           placeholder={this.props.placeholder}
           onChange={this.handleChange.bind(this)}
