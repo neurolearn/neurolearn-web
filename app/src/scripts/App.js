@@ -18,7 +18,7 @@ export default class App extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const jwt = localStorage.getItem(JWT_KEY_NAME);
     if (jwt) {
       this.props.dispatch(loginSuccess(jwt));

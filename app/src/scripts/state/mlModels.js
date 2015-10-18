@@ -29,7 +29,6 @@ function requestDeleteMLModel(modelId) {
 export function loadMLModels() {
   return (dispatch, getState) => {
     dispatch(requestMLModels());
-
     return api.fetchMLModels(
       getState().auth.token,
       (err, res) => {
