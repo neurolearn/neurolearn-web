@@ -55,7 +55,7 @@ export function login(email, password) {
   };
 }
 
-export default function reducer(state = { display: false }, action) {
+export default function reducer(state = {}, action) {
   switch (action.type) {
     case REQUEST_LOGIN:
       return { loggingIn: true };
