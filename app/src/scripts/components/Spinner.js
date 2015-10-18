@@ -8,7 +8,7 @@ export default class ReactSpinner extends React.Component {
 
   componentDidMount() {
     this.spinner = new Spinner(this.props.opts);
-    this.spinner.spin(this.refs.spinner.getDOMNode());
+    this.spinner.spin(this.refs.spinner);
   }
 
   render() {

@@ -14,7 +14,7 @@ export default class DataGrid extends React.Component {
   }
 
   initHandsontableInstance(data) {
-    var container = this.refs.hot.getDOMNode(),
+    var container = this.refs.hot,
         _this = this;
 
     var hot = new window.Handsontable(container, {

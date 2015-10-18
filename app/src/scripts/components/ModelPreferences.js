@@ -48,7 +48,7 @@ export default class ModelPreferences extends React.Component {
   genHandler(refName, action) {
     const _this = this;
     return () => {
-      const value = _this.refs[refName].getDOMNode().value;
+      const value = _this.refs[refName].value;
       _this.props.dispatch(action(value));
     };
   }
@@ -59,7 +59,7 @@ export default class ModelPreferences extends React.Component {
   }
 
   handleAlgorithmChange() {
-    const algorithm = this.refs.algorithm.getDOMNode().value;
+    const algorithm = this.refs.algorithm.value;
     this.props.dispatch(selectAlgorithm(algorithm));
   }
 
