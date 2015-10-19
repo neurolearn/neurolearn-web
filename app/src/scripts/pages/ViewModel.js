@@ -1,18 +1,27 @@
 import moment from 'moment';
+import zipWith from 'lodash/array/zipWith';
 
 import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Button, ButtonToolbar } from 'react-bootstrap';
+import { ScatterChart } from 'react-d3';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
 import { deleteMLModel } from '../state/mlModels';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
 
-
 import styles from './ViewModel.scss';
 
+function scatterplotData(stats) {
+  const {Y, yfit_xval, yfit_all} = stats;
+  const yfit = yfit_xval || yfit_all;
+
+  return zipWith(Y, yfit_xval, (acc, value) => {
+        return { x: acc, y: value };
+  });
+}
 
 export default class ViewModel extends React.Component {
   static propTypes = {
@@ -28,7 +37,8 @@ export default class ViewModel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadingImages: true
+      loadingImages: true,
+      showMPLPlot: false
     };
   }
 
@@ -92,6 +102,13 @@ export default class ViewModel extends React.Component {
       }
     ];
 
+    const scatterData = [
+      {
+        name: 'series',
+        values: scatterplotData(model.output_data.stats)
+      }
+    ];
+
     return (
       <div className={styles.root}>
         <table className="table">
@@ -127,7 +144,29 @@ export default class ViewModel extends React.Component {
           </div>
 
           <div className='col-md-6' style={{marginTop: 20}}>
-            <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
+            <ScatterChart
+              data={scatterData}
+              width={500}
+              height={400}
+              xAxisLabel={'Pain Level'}
+              xAxisLabelOffset={50}
+              yAxisLabel={'Predicted Pain Level'}
+              gridHorizontal={true}
+              title="" />
+            {!this.state.showMPLPlot &&
+            <Button onClick={() => this.setState({showMPLPlot: true})}>
+              Show matplotlib Scatterplot
+            </Button>
+            }
+            {this.state.showMPLPlot &&
+              <div>
+              <hr />
+              <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
+              <Button onClick={() => this.setState({showMPLPlot: false})}>
+                Hide matplotlib Scatterplot
+              </Button>
+              </div>
+            }
           </div>
         </div>
 

@@ -63,7 +63,8 @@ def train_model(image_list, algorithm, cv, output_dir):
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
-            'scatterplot': '%s_scatterplot.png ' % algorithm}
+            'scatterplot': '%s_scatterplot.png ' % algorithm,
+            'stats': predict.stats_output.to_dict('list')}
 
 
 def set_pattern_expression(pexpc, image_list):
