@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
+import sortBy from 'lodash/collection/sortBy';
+
 import ImageItem from './ImageItem';
 
 import styles from './SelectImagesModal.scss';
@@ -29,7 +31,7 @@ export default class SelectImagesModal extends React.Component {
     const { collection } = this.props;
     return (
       <ul className={styles.root}>
-        {images.map((image) =>
+        {sortBy(images, 'name').map((image) =>
           <ImageItem {...image}
                      key={image.url}
                      checked={this.isImageSelected(image.url)}
