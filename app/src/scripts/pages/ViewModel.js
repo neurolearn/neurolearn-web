@@ -11,6 +11,7 @@ import NSViewer from '../components/NSViewer';
 import { deleteMLModel } from '../state/mlModels';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
+import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 
 import styles from './ViewModel.scss';
 
@@ -76,6 +77,29 @@ export default class ViewModel extends React.Component {
     );
   }
 
+  renderSummaryProp(summary, propName) {
+    return (
+      <tr key={propName}>
+        <th>{summaryPropsNameMap[propName]}</th>
+        <td>{summary[propName].toFixed(2)}</td>
+      </tr>
+    );
+  }
+
+  renderSummary(summary) {
+    return (
+      <table style={{marginTop: 10}} className="table">
+        <tbody>
+        {propOrder.map(propName => {
+          return summary[propName]
+          ? this.renderSummaryProp(summary, propName)
+          : false;
+        })}
+        </tbody>
+      </table>
+    );
+  }
+
   handleImagesLoaded() {
     this.setState({loadingImages: false});
   }
@@ -109,6 +133,8 @@ export default class ViewModel extends React.Component {
       }
     ];
 
+    const { summary } = model.output_data;
+
     return (
       <div className={styles.root}>
         <table className="table">
@@ -141,6 +167,9 @@ export default class ViewModel extends React.Component {
               {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
                                             <Spinner opts={{position: 'absolute'}} />]}
             </ReactCSSTransitionGroup>
+            <div className='download' style={{marginTop: 20}}>
+              <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
+            </div>
           </div>
 
           <div className='col-md-6' style={{marginTop: 20}}>
@@ -152,7 +181,7 @@ export default class ViewModel extends React.Component {
               xAxisLabelOffset={50}
               yAxisLabel={'Predicted Pain Level'}
               gridHorizontal={true}
-              title="" />
+              title="Prediction" />
             {!this.state.showMPLPlot &&
             <Button onClick={() => this.setState({showMPLPlot: true})}>
               Show matplotlib Scatterplot
@@ -167,13 +196,10 @@ export default class ViewModel extends React.Component {
               </Button>
               </div>
             }
+            {this.renderSummary(summary)}
           </div>
         </div>
 
-
-        <div className='download' style={{marginTop: 20}}>
-          <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
-        </div>
       </div>
     );
   }

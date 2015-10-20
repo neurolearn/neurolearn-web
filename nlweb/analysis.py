@@ -7,6 +7,9 @@ import nibabel as nb
 from nltools import analysis
 
 
+SUMMARY_PROPS = ('mcr_all', 'mcr_xval', 'rmse_all', 'r_all', 'rmse_xval',
+                 'r_xval')
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -16,6 +19,11 @@ def to_filename_dict(rows):
     for r in rows:
         di[r['filename']] = r
     return di
+
+
+def get_summary(predict):
+    return {k: getattr(predict, k, None)
+            for k in SUMMARY_PROPS if getattr(predict, k, None)}
 
 
 def train_model(image_list, algorithm, cv, output_dir):
@@ -64,7 +72,8 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
             'scatterplot': '%s_scatterplot.png ' % algorithm,
-            'stats': predict.stats_output.to_dict('list')}
+            'stats': predict.stats_output.to_dict('list'),
+            'summary': get_summary(predict)}
 
 
 def set_pattern_expression(pexpc, image_list):
