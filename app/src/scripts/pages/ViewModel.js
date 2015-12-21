@@ -6,6 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { ScatterChart } from 'react-d3';
+import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
 import { deleteMLModel } from '../state/mlModels';
@@ -135,6 +136,11 @@ export default class ViewModel extends React.Component {
 
     const { summary } = model.output_data;
 
+    const spData = [{
+        label: 'somethingA',
+        values: scatterplotData(model.output_data.stats)
+    }];
+
     return (
       <div className={styles.root}>
         <table className="table">
@@ -173,6 +179,15 @@ export default class ViewModel extends React.Component {
           </div>
 
           <div className='col-md-6' style={{marginTop: 20}}>
+            <ScatterPlot
+              data={spData}
+              width={500}
+              height={400}
+              margin={{top: 10, bottom: 50, left: 50, right: 10}}
+              xAxis={{label: 'Pain Level'}}
+              yAxis={{label: 'Predicted Pain Level'}}
+            />
+
             <ScatterChart
               data={scatterData}
               width={500}
