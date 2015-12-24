@@ -179,11 +179,12 @@ export default class ViewModel extends React.Component {
           </div>
 
           <div className='col-md-6' style={{marginTop: 20}}>
+            <h4>Actual vs. Predicted</h4>
             <ScatterPlot
               data={spData}
               width={500}
               height={400}
-              margin={{top: 10, bottom: 50, left: 50, right: 10}}
+              margin={{top: 10, bottom: 30, left: 30, right: 0}}
               xAxis={{label: 'Pain Level'}}
               yAxis={{label: 'Predicted Pain Level'}}
             />
