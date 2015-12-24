@@ -188,16 +188,6 @@ export default class ViewModel extends React.Component {
               xAxis={{label: 'Pain Level'}}
               yAxis={{label: 'Predicted Pain Level'}}
             />
-
-            <ScatterChart
-              data={scatterData}
-              width={500}
-              height={400}
-              xAxisLabel={'Pain Level'}
-              xAxisLabelOffset={50}
-              yAxisLabel={'Predicted Pain Level'}
-              gridHorizontal={true}
-              title="Prediction" />
             {!this.state.showMPLPlot &&
             <Button onClick={() => this.setState({showMPLPlot: true})}>
               Show matplotlib Scatterplot
