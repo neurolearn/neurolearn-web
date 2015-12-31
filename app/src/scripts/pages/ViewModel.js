@@ -225,7 +225,7 @@ export default class ViewModel extends React.Component {
 
   render() {
     const { mlModels, params } = this.props;
-    const model = mlModels[parseInt(params.id)];
+    const model = mlModels.entities[parseInt(params.id)];
 
     return (
       <div>

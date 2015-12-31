@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadMLModels } from '../state/mlModels';
+import { loadAuthUserMLModels } from '../state/mlModels';
 import { resetSelectedImages } from '../state/selectedImages';
 import { algorithmNameMap } from '../constants/Algorithms';
 import DashboardNav from '../components/DashboardNav';
@@ -24,13 +24,13 @@ export default class MLModels extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  loadMLModels() {
-    this.props.dispatch(loadMLModels());
+  loadAuthUserMLModels() {
+    this.props.dispatch(loadAuthUserMLModels());
   }
 
   componentDidMount() {
-    this.loadMLModels();
-    this.interval = setInterval(this.loadMLModels.bind(this), POLL_INTERVAL);
+    this.loadAuthUserMLModels();
+    this.interval = setInterval(this.loadAuthUserMLModels.bind(this), POLL_INTERVAL);
   }
 
   componentWillUnmount() {
@@ -57,7 +57,8 @@ export default class MLModels extends React.Component {
   }
 
   renderMLModels(mlModels) {
-    const models = sortByOrder(values(mlModels), 'created', 'desc');
+    const models = mlModels.items.map(modelId => mlModels.entities[modelId]);
+
     return (
       <table className="table table-hover">
         <thead>
@@ -118,7 +119,7 @@ export default class MLModels extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(mlModels)
+            { isEmpty(mlModels.items)
               ? this.renderEmptyState()
               : this.renderMLModels(mlModels) }
           </div>

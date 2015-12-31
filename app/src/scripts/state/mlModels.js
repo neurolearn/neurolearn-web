@@ -2,19 +2,19 @@ import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
 import api from '../api';
 
-export const REQUEST_MLMODELS = 'REQUEST_MLMODELS';
-export const RECEIVE_MLMODELS = 'RECEIVE_MLMODELS';
+export const REQUEST_AUTH_USER_MLMODELS = 'REQUEST_AUTH_USER_MLMODELS';
+export const RECEIVE_AUTH_USER_MLMODELS = 'RECEIVE_AUTH_USER_MLMODELS';
 export const REQUEST_DELETE_MLMODEL = 'REQUEST_DELETE_MLMODEL';
 
-function requestMLModels() {
+function requestAuthUserMLModels() {
   return {
-    type: REQUEST_MLMODELS
+    type: REQUEST_AUTH_USER_MLMODELS
   };
 }
 
-function receiveMLModels(objects) {
+function receiveAuthUserMLModels(objects) {
   return {
-    type: RECEIVE_MLMODELS,
+    type: RECEIVE_AUTH_USER_MLMODELS,
     objects
   };
 }
@@ -26,18 +26,28 @@ function requestDeleteMLModel(modelId) {
   };
 }
 
-export function loadMLModels() {
+export function loadAuthUserMLModels() {
   return (dispatch, getState) => {
-    dispatch(requestMLModels());
-    return api.fetchMLModels(
+    dispatch(requestAuthUserMLModels());
+    return api.fetchAuthUserMLModels(
       getState().auth.token,
       (err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
           dispatch(logout());
         } else {
-          dispatch(receiveMLModels(res.body));
+          dispatch(receiveAuthUserMLModels(res.body));
         }
+      });
+  };
+}
+
+export function loadPublicModels() {
+  return (dispatch) => {
+    dispatch(requestAuthUserMLModels());
+    return api.fetchMLModels(
+      (err, res) => {
+        dispatch(receiveAuthUserMLModels(res.body));
       });
   };
 }
@@ -45,7 +55,6 @@ export function loadMLModels() {
 export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteMLModel(modelId));
-
     return api.deleteMLModel(
       modelId,
       getState().auth.token,
@@ -55,12 +64,24 @@ export function deleteMLModel(modelId, router) {
   };
 }
 
-export default function reducer(state = {}, action) {
+const initialState = {
+  isFetching: false,
+  entities: {},
+  items: []
+};
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case RECEIVE_MLMODELS:
-      return action.objects.entities
-        ? action.objects.entities.MLModel
-        : {};
+    case REQUEST_AUTH_USER_MLMODELS:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+    case RECEIVE_AUTH_USER_MLMODELS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        entities: action.objects.entities.MLModel,
+        items: action.objects.result
+      });
     default:
       return state;
   }

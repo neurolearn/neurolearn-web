@@ -9,11 +9,18 @@ const api = {
       .end(callback);
   },
 
-  fetchMLModels: (token, callback) => {
-    return request.get('/mlmodels')
+  fetchAuthUserMLModels: (token, callback) => {
+    return request.get('/user/mlmodels')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
+      .end(callback);
+  },
+
+  fetchMLModels: (callback) => {
+    return request.get('/mlmodels')
+      .type('json')
+      .accept('json')
       .end(callback);
   },
 
