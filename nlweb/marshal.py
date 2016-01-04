@@ -1,5 +1,6 @@
-def get_class_name(obj):
-    return obj.__class__.__name__
+from collections import namedtuple, defaultdict
+
+EntityRef = namedtuple('EntityRef', ['id', 'type', 'obj'])
 
 
 def as_integer(value):
@@ -28,28 +29,46 @@ def filter_out_key(key):
 
 def marshal_obj(obj, fields):
     di = {}
+    entities = defaultdict(dict)
 
     for field_name, func in fields.items():
-        di[field_name] = func(getattr(obj, field_name))
+        value = func(getattr(obj, field_name))
 
-    return di
+        entity_ref_obj = getattr(value, 'obj', None)
+        if entity_ref_obj:
+            entities[value.type][value.id] = value.obj
+            di[field_name] = value.id
+        else:
+            di[field_name] = value
+
+    return (di, entities)
 
 
-def marshal_list(object_list, fields):
+def entity_ref(entity_type, fields):
+    def func(obj):
+        return EntityRef(id=obj.id,
+                         type=entity_type,
+                         obj=marshal_obj(obj, fields)[0])
+    return func
+
+
+def marshal_list(object_list, entity_type, fields):
     if not object_list:
         return {}
 
     result = []
-    entities = {}
-    entity_type = get_class_name(object_list[0])
+    list_entities = {}
+    related_entities = defaultdict(dict)
 
     for obj in object_list:
         result.append(obj.id)
-        entities[obj.id] = marshal_obj(obj, fields)
+        (list_entities[obj.id], obj_entities) = marshal_obj(obj, fields)
+        for key, value in obj_entities.items():
+            related_entities[key].update(value)
 
-    return {
-        'result': result,
-        'entities': {
-            entity_type: entities
-        }
+    entities = {
+        entity_type: list_entities
     }
+    entities.update(related_entities)
+
+    return dict(result=result, entities=entities)

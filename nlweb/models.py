@@ -94,6 +94,10 @@ class MLModel(db.Model):
     def get_existing(cls):
         return cls.query.filter(cls.status != cls.STATUS_DELETED)
 
+    @classmethod
+    def get_public(cls):
+        return cls.query.filter(cls.status == cls.STATUS_PUBLIC)
+
     def delete(self):
         self.status = self.STATUS_DELETED
 
