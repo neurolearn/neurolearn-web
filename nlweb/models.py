@@ -96,7 +96,8 @@ class MLModel(db.Model):
 
     @classmethod
     def get_public(cls):
-        return cls.query.filter(cls.status == cls.STATUS_PUBLIC)
+        return cls.query.filter(cls.status == cls.STATUS_PUBLIC,
+                                cls.training_state == cls.TRAINING_SUCCESS)
 
     def delete(self):
         self.status = self.STATUS_DELETED

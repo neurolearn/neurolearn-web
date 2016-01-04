@@ -24,6 +24,18 @@ const api = {
       .end(callback);
   },
 
+  fetchMLModel: (modelId, token, callback) => {
+    let req = request.get(`/mlmodels/${modelId}`)
+      .type('json')
+      .accept('json');
+
+    if (token) {
+      req = req.set('Authorization', 'Bearer ' + token);
+    }
+
+    return req.end(callback);
+  },
+
   deleteMLModel: (modelId, token, callback) => {
     return request.del(`/mlmodels/${modelId}`)
       .set('Authorization', 'Bearer ' + token)

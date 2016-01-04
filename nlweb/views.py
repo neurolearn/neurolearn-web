@@ -12,10 +12,39 @@ from nlweb import tasks
 
 from .models import db, MLModel, ModelTest
 
-from .marshal import (marshal_list, as_integer, as_is,
-                      as_string, as_iso_date, filter_out_key)
+from .marshal import (marshal_list, marshal_obj, entity_ref,
+                      as_integer, as_is, as_string, as_iso_date,
+                      filter_out_key)
 
 frontend = Blueprint('frontend', __name__)
+
+
+USER_FIELDS = {
+    'id': as_integer
+}
+
+MLMODEL_FIELDS = {
+    'id': as_integer,
+    'name': as_string,
+    'created': as_iso_date,
+    'training_state': as_string,
+    'output_data': filter_out_key('stats'),
+    'input_data': filter_out_key('data'),
+    'user': entity_ref('User', USER_FIELDS)
+}
+
+MLMODEL_DETAIL_FIELDS = MLMODEL_FIELDS.copy()
+MLMODEL_DETAIL_FIELDS.update({
+    'output_data': as_is,
+})
+
+TEST_FIELDS = {
+    'id': as_integer,
+    'name': as_string,
+    'created': as_iso_date,
+    'state': as_string,
+    'output_data': as_is
+}
 
 
 @frontend.route('/')
@@ -38,22 +67,24 @@ def neurovault_proxy(path):
                     content_type=req.headers['content-type'])
 
 
-@frontend.route('/mlmodels', methods=['GET'])
+@frontend.route('/user/mlmodels', methods=['GET'])
 @jwt_required()
-def list_user_mlmodels():
-    mfields = {
-        'id': as_integer,
-        'name': as_string,
-        'created': as_iso_date,
-        'training_state': as_string,
-        'output_data': as_is,
-        'input_data': filter_out_key('data')
-    }
-
+def list_own_mlmodels():
     mlmodel_list = MLModel.get_existing().filter(
         MLModel.user == current_user).order_by('created desc').all()
 
-    return jsonify(marshal_list(mlmodel_list, mfields))
+    return jsonify(marshal_list(mlmodel_list, 'MLModel', MLMODEL_FIELDS))
+
+
+@frontend.route('/users/<int:user_id>/mlmodels', methods=['GET'])
+def list_user_mlmodels(user_id):
+    pass
+
+
+@frontend.route('/mlmodels', methods=['GET'])
+def list_public_mlmodels():
+    mlmodel_list = MLModel.get_public().order_by('created desc').all()
+    return jsonify(marshal_list(mlmodel_list, 'MLModel', MLMODEL_FIELDS))
 
 
 def parse_cv_param(cv):
@@ -81,6 +112,15 @@ def create_mlmodel():
     tasks.train_model.delay(mlmodel.id)
 
     return 'Created', 201
+
+
+@frontend.route('/mlmodels/<int:model_id>', methods=['GET'])
+def get_mlmodel(model_id):
+    mlmodel = MLModel.query.get_or_404(model_id)
+
+    (obj, entities) = marshal_obj(mlmodel, MLMODEL_DETAIL_FIELDS)
+
+    return jsonify(dict(result=obj, entities=entities))
 
 
 @frontend.route('/mlmodels/<int:model_id>', methods=['DELETE'])
@@ -119,18 +159,10 @@ def create_test():
 @frontend.route('/tests', methods=['GET'])
 @jwt_required()
 def list_user_model_tests():
-    mfields = {
-        'id': as_integer,
-        'name': as_string,
-        'created': as_iso_date,
-        'state': as_string,
-        'output_data': as_is
-    }
-
     model_test_list = ModelTest.get_existing().filter(
         ModelTest.user == current_user).order_by('created desc').all()
 
-    return jsonify(marshal_list(model_test_list, mfields))
+    return jsonify(marshal_list(model_test_list, TEST_FIELDS))
 
 
 @frontend.route('/tests/<int:test_id>', methods=['DELETE'])

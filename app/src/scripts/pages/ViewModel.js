@@ -9,7 +9,7 @@ import { ScatterChart } from 'react-d3';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
-import { deleteMLModel } from '../state/mlModels';
+import { loadMLModel, deleteMLModel } from '../state/mlModels';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
@@ -42,6 +42,11 @@ export default class ViewModel extends React.Component {
       loadingImages: true,
       showMPLPlot: false
     };
+  }
+
+  componentDidMount() {
+    const { id } = this.props.params;
+    this.props.dispatch(loadMLModel(parseInt(id)));
   }
 
   renderState(model) {
@@ -226,6 +231,10 @@ export default class ViewModel extends React.Component {
   render() {
     const { mlModels, params } = this.props;
     const model = mlModels.entities[parseInt(params.id)];
+
+    if (!model) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div>

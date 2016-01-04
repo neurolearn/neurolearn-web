@@ -1,8 +1,11 @@
 import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
 import api from '../api';
+import merge from 'lodash/object/merge';
 
 export const REQUEST_AUTH_USER_MLMODELS = 'REQUEST_AUTH_USER_MLMODELS';
+export const REQUEST_MLMODEL = 'REQUEST_MLMODEL';
+export const RECEIVE_MLMODEL = 'RECEIVE_MLMODEL';
 export const RECEIVE_AUTH_USER_MLMODELS = 'RECEIVE_AUTH_USER_MLMODELS';
 export const REQUEST_DELETE_MLMODEL = 'REQUEST_DELETE_MLMODEL';
 
@@ -19,10 +22,23 @@ function receiveAuthUserMLModels(objects) {
   };
 }
 
+function receiveMLModel(model) {
+  return {
+    type: RECEIVE_MLMODEL,
+    model
+  };
+}
+
 function requestDeleteMLModel(modelId) {
   return {
     type: REQUEST_DELETE_MLMODEL,
     modelId
+  };
+}
+
+function requestMLModel() {
+  return {
+    type: REQUEST_MLMODEL
   };
 }
 
@@ -42,7 +58,7 @@ export function loadAuthUserMLModels() {
   };
 }
 
-export function loadPublicModels() {
+export function loadPublicMLModels() {
   return (dispatch) => {
     dispatch(requestAuthUserMLModels());
     return api.fetchMLModels(
@@ -64,6 +80,21 @@ export function deleteMLModel(modelId, router) {
   };
 }
 
+export function loadMLModel(modelId) {
+  return (dispatch, getState) => {
+    dispatch(requestMLModel());
+    const token = getState().auth ? getState().auth.token : null;
+
+    return api.fetchMLModel(
+      modelId,
+      token,
+      (err, res) => {
+        dispatch(receiveMLModel(res.body.result));
+      }
+    );
+  };
+}
+
 const initialState = {
   isFetching: false,
   entities: {},
@@ -76,11 +107,23 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, {
         isFetching: true
       });
+    case REQUEST_MLMODEL:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
     case RECEIVE_AUTH_USER_MLMODELS:
       return Object.assign({}, state, {
         isFetching: false,
         entities: action.objects.entities.MLModel,
         items: action.objects.result
+      });
+    case RECEIVE_MLMODEL:
+      const model = action.model;
+      return Object.assign({}, state, {
+        isFetching: false,
+        entities: merge({},
+                        state.entities,
+                        {[model.id]: model})
       });
     default:
       return state;
