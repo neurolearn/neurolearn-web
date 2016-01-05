@@ -97,7 +97,6 @@ export function loadMLModel(modelId) {
 
 const initialState = {
   isFetching: false,
-  entities: {},
   items: []
 };
 

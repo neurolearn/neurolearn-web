@@ -28,15 +28,10 @@ MLMODEL_FIELDS = {
     'name': as_string,
     'created': as_iso_date,
     'training_state': as_string,
-    'output_data': filter_out_key('stats'),
+    'output_data': as_is,
     'input_data': filter_out_key('data'),
     'user': entity_ref('User', USER_FIELDS)
 }
-
-MLMODEL_DETAIL_FIELDS = MLMODEL_FIELDS.copy()
-MLMODEL_DETAIL_FIELDS.update({
-    'output_data': as_is,
-})
 
 TEST_FIELDS = {
     'id': as_integer,
@@ -118,7 +113,7 @@ def create_mlmodel():
 def get_mlmodel(model_id):
     mlmodel = MLModel.query.get_or_404(model_id)
 
-    (obj, obj_entities) = marshal_obj(mlmodel, MLMODEL_DETAIL_FIELDS)
+    (obj, obj_entities) = marshal_obj(mlmodel, MLMODEL_FIELDS)
 
     entities = {
         'MLModel': {obj['id']: obj}
