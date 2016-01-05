@@ -14,7 +14,7 @@ export class Explore extends React.Component {
   }
 
   render() {
-    const { publicMLModels } = this.props;
+    const { publicMLModels, entities } = this.props;
     return (
       <div>
         <div className="page-header">
@@ -23,7 +23,7 @@ export class Explore extends React.Component {
         <div>
         {publicMLModels.items.map(itemId =>
           <ListItem key={itemId}
-                    item={publicMLModels.entities.MLModel[itemId]} />)}
+                    item={entities.MLModel[itemId]} />)}
         </div>
       </div>
     );

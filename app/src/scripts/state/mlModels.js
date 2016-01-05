@@ -15,17 +15,17 @@ function requestAuthUserMLModels() {
   };
 }
 
-function receiveAuthUserMLModels(objects) {
+function receiveAuthUserMLModels(response) {
   return {
     type: RECEIVE_AUTH_USER_MLMODELS,
-    objects
+    response
   };
 }
 
-function receiveMLModel(model) {
+function receiveMLModel(response) {
   return {
     type: RECEIVE_MLMODEL,
-    model
+    response
   };
 }
 
@@ -89,7 +89,7 @@ export function loadMLModel(modelId) {
       modelId,
       token,
       (err, res) => {
-        dispatch(receiveMLModel(res.body.result));
+        dispatch(receiveMLModel(res.body));
       }
     );
   };
@@ -114,16 +114,12 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_AUTH_USER_MLMODELS:
       return Object.assign({}, state, {
         isFetching: false,
-        entities: action.objects.entities.MLModel,
-        items: action.objects.result
+        items: action.response.result
       });
     case RECEIVE_MLMODEL:
       const model = action.model;
       return Object.assign({}, state, {
-        isFetching: false,
-        entities: merge({},
-                        state.entities,
-                        {[model.id]: model})
+        isFetching: false
       });
     default:
       return state;

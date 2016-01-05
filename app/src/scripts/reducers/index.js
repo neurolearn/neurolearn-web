@@ -12,6 +12,7 @@ import publicMLModels from '../state/publicMLModels';
 import modelPreferences from '../state/modelPreferences';
 import testModel from '../state/testModel';
 import modelTests from '../state/modelTests';
+import entities from '../state/entities';
 
 const rootReducer = combineReducers({
   auth,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   targetData,
   modelPreferences,
   testModel,
-  modelTests
+  modelTests,
+  entities
 });
 
 export default rootReducer;

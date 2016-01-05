@@ -9,10 +9,10 @@ function requestPublicMLModels() {
   };
 }
 
-function receiveAuthUserMLModels(objects) {
+function receivePublicMLModels(response) {
   return {
     type: RECEIVE_PUBLIC_MLMODELS,
-    objects
+    response
   };
 }
 
@@ -21,14 +21,13 @@ export function loadPublicMLModels() {
     dispatch(requestPublicMLModels());
     return api.fetchMLModels(
       (err, res) => {
-        dispatch(receiveAuthUserMLModels(res.body));
+        dispatch(receivePublicMLModels(res.body));
       });
   };
 }
 
 const initialState = {
   isFetching: false,
-  entities: {},
   items: []
 };
 
@@ -41,8 +40,7 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_PUBLIC_MLMODELS:
       return Object.assign({}, state, {
         isFetching: false,
-        entities: action.objects.entities,
-        items: action.objects.result
+        items: action.response.result
       });
     default:
       return state;

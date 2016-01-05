@@ -17,7 +17,8 @@ const POLL_INTERVAL = 2500;
 export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    mlModels: PropTypes.object
+    mlModels: PropTypes.object,
+    entities: PropTypes.object
   };
 
   static contextTypes = {
@@ -56,8 +57,8 @@ export default class MLModels extends React.Component {
     }
   }
 
-  renderMLModels(mlModels) {
-    const models = mlModels.items.map(modelId => mlModels.entities[modelId]);
+  renderMLModels(mlModels, entities) {
+    const models = mlModels.items.map(modelId => entities.MLModel[modelId]);
 
     return (
       <table className="table table-hover">
@@ -107,7 +108,7 @@ export default class MLModels extends React.Component {
   }
 
   render() {
-    const { mlModels } = this.props;
+    const { mlModels, entities } = this.props;
 
     return (
       <div className={styles.root}>
@@ -121,7 +122,7 @@ export default class MLModels extends React.Component {
           <div className="col-md-12">
             { isEmpty(mlModels.items)
               ? this.renderEmptyState()
-              : this.renderMLModels(mlModels) }
+              : this.renderMLModels(mlModels, entities) }
           </div>
         </div>
       </div>

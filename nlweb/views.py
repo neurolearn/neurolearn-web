@@ -118,9 +118,14 @@ def create_mlmodel():
 def get_mlmodel(model_id):
     mlmodel = MLModel.query.get_or_404(model_id)
 
-    (obj, entities) = marshal_obj(mlmodel, MLMODEL_DETAIL_FIELDS)
+    (obj, obj_entities) = marshal_obj(mlmodel, MLMODEL_DETAIL_FIELDS)
 
-    return jsonify(dict(result=obj, entities=entities))
+    entities = {
+        'MLModel': {obj['id']: obj}
+    }
+    entities.update(obj_entities)
+
+    return jsonify(dict(result=obj['id'], entities=entities))
 
 
 @frontend.route('/mlmodels/<int:model_id>', methods=['DELETE'])
