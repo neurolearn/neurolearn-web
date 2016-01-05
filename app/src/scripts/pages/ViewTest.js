@@ -84,8 +84,8 @@ export default class ViewTest extends React.Component {
   }
 
   render() {
-    const { modelTests, params } = this.props;
-    const model = modelTests[parseInt(params.id)];
+    const { modelTests, entities, params } = this.props;
+    const model = entities.ModelTest[parseInt(params.id)];
 
     return (
       <div>

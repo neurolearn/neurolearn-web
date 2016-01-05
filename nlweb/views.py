@@ -39,7 +39,8 @@ TEST_FIELDS = {
     'name': as_string,
     'created': as_iso_date,
     'state': as_string,
-    'output_data': as_is
+    'output_data': as_is,
+    'user': entity_ref('User', USER_FIELDS)
 }
 
 
@@ -157,13 +158,13 @@ def create_test():
     return 'Created', 201
 
 
-@frontend.route('/tests', methods=['GET'])
+@frontend.route('/user/tests', methods=['GET'])
 @jwt_required()
 def list_user_model_tests():
     model_test_list = ModelTest.get_existing().filter(
         ModelTest.user == current_user).order_by('created desc').all()
 
-    return jsonify(marshal_list(model_test_list, TEST_FIELDS))
+    return jsonify(marshal_list(model_test_list, 'ModelTest', TEST_FIELDS))
 
 
 @frontend.route('/tests/<int:test_id>', methods=['DELETE'])

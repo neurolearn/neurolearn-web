@@ -13,10 +13,10 @@ function requestModelTests() {
   };
 }
 
-function receiveModelTests(objects) {
+function receiveModelTests(response) {
   return {
     type: RECEIVE_MODEL_TESTS,
-    objects
+    response
   };
 }
 
@@ -37,7 +37,7 @@ export function loadModelTests() {
   return (dispatch, getState) => {
     dispatch(requestModelTests());
 
-    return api.fetchModelTests(getState().auth.token,
+    return api.fetchAuthUserModelTests(getState().auth.token,
       (err, res) => {
         if (err && err.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
@@ -76,12 +76,16 @@ export function saveCorrelationGroups(modelId, groups) {
   };
 }
 
-export default function reducer(state = {}, action) {
+export default function reducer(state = {
+  isFetching: false,
+  items: []
+}, action) {
   switch (action.type) {
     case RECEIVE_MODEL_TESTS:
-      return action.objects.entities
-        ? action.objects.entities.ModelTest
-        : {};
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.response.result
+      });
     default:
       return state;
   }

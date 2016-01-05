@@ -55,8 +55,9 @@ export default class ModelTests extends React.Component {
     }
   }
 
-  renderItems(modelTests) {
-    const models = sortByOrder(values(modelTests), 'created', 'desc');
+  renderItems(modelTests, entities) {
+    const models = modelTests.items.map(testId => entities.ModelTest[testId]);
+
     return (
       <table className="table table-hover">
         <thead>
@@ -101,7 +102,7 @@ export default class ModelTests extends React.Component {
   }
 
   render() {
-    const { modelTests } = this.props;
+    const { modelTests, entities } = this.props;
 
     return (
       <div className={styles.root}>
@@ -115,7 +116,7 @@ export default class ModelTests extends React.Component {
           <div className="col-md-12">
             { isEmpty(modelTests)
               ? this.renderEmptyState()
-              : this.renderItems(modelTests) }
+              : this.renderItems(modelTests, entities) }
           </div>
         </div>
       </div>

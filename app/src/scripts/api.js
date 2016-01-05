@@ -42,8 +42,8 @@ const api = {
       .end(callback);
   },
 
-  fetchModelTests: (token, callback) => {
-    return request.get('/tests')
+  fetchAuthUserModelTests: (token, callback) => {
+    return request.get('/user/tests')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
