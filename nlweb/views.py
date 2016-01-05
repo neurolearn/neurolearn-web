@@ -20,7 +20,8 @@ frontend = Blueprint('frontend', __name__)
 
 
 USER_FIELDS = {
-    'id': as_integer
+    'id': as_integer,
+    'email': as_string
 }
 
 MLMODEL_FIELDS = {

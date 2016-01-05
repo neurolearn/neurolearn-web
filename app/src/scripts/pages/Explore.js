@@ -23,7 +23,8 @@ export class Explore extends React.Component {
         <div>
         {publicMLModels.items.map(itemId =>
           <ListItem key={itemId}
-                    item={entities.MLModel[itemId]} />)}
+                    item={entities.MLModel[itemId]}
+                    entities={entities} />)}
         </div>
       </div>
     );
