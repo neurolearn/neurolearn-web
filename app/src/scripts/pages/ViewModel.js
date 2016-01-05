@@ -29,6 +29,7 @@ export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     mlModels: PropTypes.object,
+    entities: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -132,13 +133,6 @@ export default class ViewModel extends React.Component {
       }
     ];
 
-    const scatterData = [
-      {
-        name: 'series',
-        values: scatterplotData(model.output_data.stats)
-      }
-    ];
-
     const { summary } = model.output_data;
 
     const spData = [{
@@ -233,7 +227,7 @@ export default class ViewModel extends React.Component {
     const model = entities.MLModel[parseInt(params.id)];
 
     if (!model) {
-      return <div>Loading...</div>;
+      return <div>Loading model...</div>;
     }
 
     return (
