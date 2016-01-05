@@ -46,9 +46,9 @@ export function login(email, password) {
             dispatch(loginFail({fields: res.body.errors}));
           } else {
             const jwt = res.body.token;
+            localStorage.setItem(JWT_KEY_NAME, jwt);
             dispatch(loginSuccess(jwt));
             dispatch(hideAuthModal());
-            localStorage.setItem(JWT_KEY_NAME, jwt);
           }
         }
       });
