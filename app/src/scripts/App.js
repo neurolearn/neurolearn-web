@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { login, logout, loginSuccess } from './state/auth';
-import { JWT_KEY_NAME } from './constants/auth';
+import { logout, loginSuccess } from './state/auth';
+import { JWT_KEY_NAME, NEUROVAULT_CLIENT_IDS } from './constants/auth';
 
 export default class App extends React.Component {
   static propTypes = {
@@ -30,9 +30,10 @@ export default class App extends React.Component {
   }
 
   authLink() {
-    const clientId = 'q5avszwASkC3WNywlGOgQYgiztNStiLbdy80izw8';
-    const redirectUri = 'http%3A%2F%2Flocalhost%3A3000%2Fsignin%2Fauthorized';
-    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+    const host = window.location.host;
+    const clientId = NEUROVAULT_CLIENT_IDS[/^localhost\b/.test(host) ? 'development' : 'production'];
+    const redirectUri = `${window.location.protocol}//${host}/signin/authorized`;
+    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
   }
 
   renderLoginLink() {
