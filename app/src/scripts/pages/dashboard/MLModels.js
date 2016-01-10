@@ -101,7 +101,7 @@ export default class MLModels extends React.Component {
 
   renderEmptyState() {
     return (
-      <div style={{'textAlign': 'center'}}>
+      <div style={{'textAlign': 'center', marginTop: 50}}>
         <h3 style={{'color': 'lightgray'}}>No Trained Models Yet</h3>
       </div>
     );

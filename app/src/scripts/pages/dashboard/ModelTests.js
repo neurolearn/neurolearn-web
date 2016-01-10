@@ -95,7 +95,7 @@ export default class ModelTests extends React.Component {
 
   renderEmptyState() {
     return (
-      <div style={{'textAlign': 'center'}}>
+      <div style={{'textAlign': 'center', marginTop: 50}}>
         <h3 style={{'color': 'lightgray'}}>No Model Tests Yet</h3>
       </div>
     );
