@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import AuthModal from './components/AuthModal';
-import { showAuthModal, hideAuthModal } from './state/authModal';
 import { login, logout, loginSuccess } from './state/auth';
 import { JWT_KEY_NAME } from './constants/auth';
 
@@ -10,7 +8,6 @@ export default class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
     auth: PropTypes.object,
-    authModal: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -23,15 +20,6 @@ export default class App extends React.Component {
     if (jwt) {
       this.props.dispatch(loginSuccess(jwt));
     }
-  }
-
-  handleShowAuthModal(e) {
-    e.preventDefault();
-    this.props.dispatch(showAuthModal());
-  }
-
-  handleLogin(email, password) {
-    this.props.dispatch(login(email, password));
   }
 
   handleLogout(e) {
@@ -48,8 +36,7 @@ export default class App extends React.Component {
   }
 
   renderLoginLink() {
-    return [<NavItem onClick={this.handleShowAuthModal.bind(this)} href='#'>Log In</NavItem>,
-            <NavItem href={this.authLink()}>Sign in with NeuroVault</NavItem>];
+    return <NavItem href={this.authLink()}>Sign in with NeuroVault</NavItem>;
   }
 
   renderUserDropdown(user) {
@@ -75,7 +62,7 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { auth, dispatch } = this.props;
+    const { auth } = this.props;
     const { router } = this.context;
 
     return (
@@ -96,10 +83,6 @@ export default class App extends React.Component {
         <div className="container">
           {this.props.children}
         </div>
-        <AuthModal auth={auth}
-                   show={this.props.authModal.display}
-                   onLogin={this.handleLogin.bind(this)}
-                   onHide={() => dispatch(hideAuthModal())} />
       </div>
     );
   }
