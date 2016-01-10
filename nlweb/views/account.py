@@ -1,5 +1,7 @@
-from flask import request, jsonify, url_for, session, redirect
+from flask import request, url_for, session, render_template
 from flask import Blueprint
+from flask import current_app
+from flask_jwt import generate_token
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -41,6 +43,10 @@ def signin():
 
 @blueprint.route('/signin/authorized')
 def authorized():
+    # Patch for proxy
+    if current_app.debug:
+        session['neurovault_oauthredir'] = 'http://localhost:3000/signin/authorized'
+
     resp = neurovault_oauth.authorized_response()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
@@ -67,7 +73,7 @@ def authorized():
     connection.access_token = resp['access_token']
     db.session.commit()
 
-    return redirect('/')
+    return render_template('authorized.html', token=generate_token(connection.user))
 
 
 @neurovault_oauth.tokengetter

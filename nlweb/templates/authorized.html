@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Neurolearn</title>
+    <script>
+        var jwt = {{ token | tojson | safe }};
+        function setToken() {
+            localStorage.setItem('jwt', jwt);
+            window.location = "/";
+        }
+    </script>
+</head>
+<body onload="window.setTimeout(setToken, 1);">
+    <p>
+        Loading…
+    </p>
+</body>
+</html>

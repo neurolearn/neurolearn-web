@@ -102,7 +102,7 @@ def register_jwt_handlers(jwt):
     def make_payload(user):
         return {
             'user_id': user.id,
-            'email': user.email
+            'name': user.name
         }
 
 

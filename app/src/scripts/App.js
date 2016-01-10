@@ -41,13 +41,20 @@ export default class App extends React.Component {
     this.context.router.transitionTo('/');
   }
 
+  authLink() {
+    const clientId = 'q5avszwASkC3WNywlGOgQYgiztNStiLbdy80izw8';
+    const redirectUri = 'http%3A%2F%2Flocalhost%3A3000%2Fsignin%2Fauthorized';
+    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+  }
+
   renderLoginLink() {
-    return <NavItem onClick={this.handleShowAuthModal.bind(this)} href='#'>Log In</NavItem>;
+    return [<NavItem onClick={this.handleShowAuthModal.bind(this)} href='#'>Log In</NavItem>,
+            <NavItem href={this.authLink()}>Sign in with NeuroVault</NavItem>];
   }
 
   renderUserDropdown(user) {
     return (
-      <NavDropdown id="user-account-dropdown" eventKey={1} title={user.email}>
+      <NavDropdown id="user-account-dropdown" eventKey={1} title={user.name}>
         <MenuItem
           eventKey='1'
           onSelect={this.handleLogout.bind(this)}
