@@ -61,7 +61,7 @@ export default class App extends React.Component {
     return (
       <Nav>
         <NavItem eventKey={0}
-                 active={router.isActive('/models') || router.isActive('/tests')}
+                 active={router.isActive('/dashboard')}
                  href='#/'>Dashboard</NavItem>
       </Nav>
     );

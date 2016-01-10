@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import MLModels from './dashboard/MLModels';
 import LoggedOut from './LoggedOut';
-import MLModels from './MLModels';
 
 export default class HomePage extends React.Component {
   static contextTypes = {
@@ -13,7 +13,7 @@ export default class HomePage extends React.Component {
     const { router } = this.context;
 
     if (auth.user) {
-      router.transitionTo('/models');
+      router.transitionTo('/dashboard/models');
     }
   }
 

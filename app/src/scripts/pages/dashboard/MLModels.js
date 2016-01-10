@@ -6,10 +6,10 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadAuthUserMLModels } from '../state/mlModels';
-import { resetSelectedImages } from '../state/selectedImages';
-import { algorithmNameMap } from '../constants/Algorithms';
-import DashboardNav from '../components/DashboardNav';
+import { loadAuthUserMLModels } from '../../state/mlModels';
+import { resetSelectedImages } from '../../state/selectedImages';
+import { algorithmNameMap } from '../../constants/Algorithms';
+import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;

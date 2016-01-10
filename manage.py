@@ -13,6 +13,8 @@ from sqlalchemy.schema import CreateTable
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 
 def _make_context():
     from nlweb import models, db

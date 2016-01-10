@@ -14,15 +14,15 @@ import { Provider } from 'react-redux';
 import App from './App';
 import HomePage from './pages/HomePage';
 import Explore from './pages/Explore';
-import MLModels from './pages/MLModels';
+import MLModels from './pages/dashboard/MLModels';
+import ModelTests from './pages/dashboard/ModelTests';
 import TrainModel from './pages/TrainModel';
-import InputData from './components/InputData';
-import TrainingLabel from './components/TrainingLabel';
-import ModelPreferences from './components/ModelPreferences';
 import ViewModel from './pages/ViewModel';
 import TestModel from './pages/TestModel';
 import ViewTest from './pages/ViewTest';
-import ModelTests from './pages/ModelTests';
+import InputData from './components/InputData';
+import TrainingLabel from './components/TrainingLabel';
+import ModelPreferences from './components/ModelPreferences';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
@@ -33,7 +33,8 @@ function renderRoutes(history) {
       <Route component={App}>
         <Route path="/" component={HomePage}/>
         <Route path="/explore" component={Explore} />
-        <Route path="/models" component={MLModels} />
+        <Route path="/dashboard/models" component={MLModels} />
+        <Route path="/dashboard/tests" component={ModelTests} />
         <Redirect from="/models/new" to="/models/new/input-data" />
         <Route path="/models/new" component={TrainModel}>
           <Route path="input-data" component={InputData}/>
@@ -41,7 +42,6 @@ function renderRoutes(history) {
           <Route path="model-preferences" component={ModelPreferences}/>
         </Route>
         <Route path="/models/:id" component={ViewModel} />
-        <Route path="/tests" component={ModelTests} />
         <Route path="/tests/new" component={TestModel} />
         <Route path="/tests/:id" component={ViewTest} />
       </Route>

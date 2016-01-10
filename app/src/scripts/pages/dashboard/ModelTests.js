@@ -6,9 +6,9 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadModelTests } from '../state/modelTests';
-import { resetSelectedImages } from '../state/selectedImages';
-import DashboardNav from '../components/DashboardNav';
+import { loadModelTests } from '../../state/modelTests';
+import { resetSelectedImages } from '../../state/selectedImages';
+import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;

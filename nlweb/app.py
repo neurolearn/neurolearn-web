@@ -10,7 +10,7 @@ from flask.ext.security.utils import verify_and_update_password
 from .admin import admin
 
 from .extensions import (db, migrate, celery, uploaded_media,
-                         jwt, security, mail)
+                         jwt, security, mail, oauth)
 
 from .models import User
 
@@ -65,6 +65,7 @@ def init_extensions(app):
 
     mail.init_app(app)
     jwt.init_app(app)
+    oauth.init_app(app)
     security.init_app(app)
     admin.init_app(app)
     configure_uploads(app, uploaded_media)
@@ -107,7 +108,11 @@ def register_jwt_handlers(jwt):
 
 def register_blueprints(app):
     from nlweb.views import frontend
-    app.register_blueprint(frontend)
+    from nlweb.views import account
+    from nlweb.views import api
+
+    for view in (frontend, account, api):
+        app.register_blueprint(view.blueprint)
 
 
 def register_errorhandlers(app):
