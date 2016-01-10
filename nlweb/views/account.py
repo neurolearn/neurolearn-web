@@ -1,4 +1,4 @@
-from flask import request, jsonify, url_for, session
+from flask import request, jsonify, url_for, session, redirect
 from flask import Blueprint
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -64,7 +64,10 @@ def authorized():
         db.session.add(connection)
         db.session.commit()
 
-    return jsonify({'ok': True, 'result': resp, 'user_data': user_data})
+    connection.access_token = resp['access_token']
+    db.session.commit()
+
+    return redirect('/')
 
 
 @neurovault_oauth.tokengetter
