@@ -1,6 +1,5 @@
 import jwtDecode from 'jwt-decode';
 import api from '../api';
-import { hideAuthModal } from './authModal';
 import { JWT_KEY_NAME } from '../constants/auth';
 
 const REQUEST_LOGIN = 'REQUEST_LOGIN';
@@ -48,7 +47,6 @@ export function login(email, password) {
             const jwt = res.body.token;
             localStorage.setItem(JWT_KEY_NAME, jwt);
             dispatch(loginSuccess(jwt));
-            dispatch(hideAuthModal());
           }
         }
       });

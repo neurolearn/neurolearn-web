@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import authModal from '../state/authModal';
 import selectImagesModal from '../state/selectImagesModal';
 import search from '../state/search';
 import auth from '../state/auth';
@@ -16,7 +15,6 @@ import entities from '../state/entities';
 
 const rootReducer = combineReducers({
   auth,
-  authModal,
   imagesMetadata,
   mlModels,
   publicMLModels,
