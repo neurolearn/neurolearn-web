@@ -16,7 +16,7 @@ from flask_security import current_user
 from jinja2 import filters, Markup
 
 from nlweb import db
-from nlweb.models import User, Role, MLModel, ModelTest
+from nlweb.models import User, Role, MLModel, ModelTest, Connection
 
 from nlweb.utils import friendly_time
 
@@ -109,7 +109,7 @@ class ModelView(sqla.ModelView):
 
 
 class UserAdmin(ModelView):
-    column_list = ('id', 'email', 'created', 'active')
+    column_list = ('id', 'name', 'email', 'created', 'active')
 
     column_formatters = {
         'id': _user_id_formatter,
@@ -150,4 +150,5 @@ admin = admin.Admin(name='Neurolearn',
 admin.add_view(MLModelAdmin(MLModel, db.session, name="MLModel"))
 admin.add_view(MLModelAdmin(ModelTest, db.session, name="Model Test"))
 admin.add_view(UserAdmin(User, db.session))
+admin.add_view(ModelView(Connection, db.session))
 admin.add_view(RoleAdmin(Role, db.session))

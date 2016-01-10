@@ -74,6 +74,9 @@ class Connection(db.Model):
     display_name = db.Column(db.String(255))
     profile_url = db.Column(db.String)
 
+    created = Column(db.DateTime, default=datetime.utcnow)
+    updated = Column(db.DateTime, onupdate=datetime.utcnow)
+
 
 class MLModel(db.Model):
     __tablename__ = 'mlmodels'
