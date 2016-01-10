@@ -114,7 +114,7 @@ export default class ModelTests extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(modelTests)
+            { isEmpty(modelTests.items)
               ? this.renderEmptyState()
               : this.renderItems(modelTests, entities) }
           </div>
