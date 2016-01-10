@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String(255))
     email = Column(db.String(255), unique=True, nullable=False)
-    password = Column(db.String(255), nullable=False)
+    password = Column(db.String(255))
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)
     active = db.Column(db.Boolean(), default=True)
