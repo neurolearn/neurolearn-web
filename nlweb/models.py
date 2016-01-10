@@ -31,11 +31,12 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = Column(db.Integer, primary_key=True)
+    name = Column(db.String(255))
     email = Column(db.String(255), unique=True, nullable=False)
     password = Column(db.String(255), nullable=False)
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)
-    active = db.Column(db.Boolean())
+    active = db.Column(db.Boolean(), default=True)
 
     last_login_at = Column(db.DateTime())
     current_login_at = Column(db.DateTime())
@@ -51,6 +52,27 @@ class User(db.Model, UserMixin):
 
     def __unicode__(self):
         return self.email
+
+
+class Connection(db.Model):
+    __tablename__ = 'connections'
+
+    NEUROVAULT = 'neurovault'
+    GOOGLE = 'google'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',
+                           foreign_keys=[user_id],
+                           backref=db.backref('connections', lazy='dynamic'))
+
+    provider_type = db.Column(db.Enum(NEUROVAULT,
+                                      GOOGLE,
+                                      name='provider_types'))
+    provider_user_id = db.Column(db.String(255))
+    access_token = db.Column(db.String(255))
+    display_name = db.Column(db.String(255))
+    profile_url = db.Column(db.String)
 
 
 class MLModel(db.Model):
