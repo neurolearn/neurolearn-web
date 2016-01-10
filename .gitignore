@@ -55,6 +55,5 @@ docs/_build
 
 # Virtualenvs
 env
-env*
 
 node_modules
