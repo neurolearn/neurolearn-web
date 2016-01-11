@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from flaskext.uploads import configure_uploads
 from flask_admin import helpers as admin_helpers
 from flask.ext.security.utils import verify_and_update_password
@@ -73,6 +73,7 @@ def init_extensions(app):
     load_celery_config(celery)
 
     register_jwt_handlers(jwt)
+    register_remote_apps(app, oauth)
 
     security2 = app.extensions['security']
 
@@ -104,6 +105,17 @@ def register_jwt_handlers(jwt):
             'user_id': user.id,
             'name': user.name
         }
+
+
+def register_remote_apps(app, oauth):
+    neurovault_oauth = oauth.remote_app(
+        'neurovault',
+        **app.config['OAUTH_REMOTE_APPS']['neurovault']
+    )
+
+    @neurovault_oauth.tokengetter
+    def get_neurovault_oauth_token():
+        return session.get('neurovault_oauth_token')
 
 
 def register_blueprints(app):

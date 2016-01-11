@@ -2,17 +2,18 @@ from flask import request, url_for, session, render_template
 from flask import Blueprint
 from flask import current_app
 from flask_jwt import generate_token
+from flask_oauthlib.client import OAuthException
 
 from sqlalchemy.orm.exc import NoResultFound
 
 from ..models import User, Connection, db
-from ..extensions import neurovault_oauth
+from ..extensions import oauth
 
 blueprint = Blueprint('account', __name__)
 
 
 def get_external_user_data(oauth_client):
-    return neurovault_oauth.get('api/user').data
+    return oauth_client.get('api/user').data
 
 
 def find_connection(provider_type, provider_user_id):
@@ -37,8 +38,9 @@ def create_connection(provider_type, user, user_data):
 
 @blueprint.route('/signin')
 def signin():
-    return neurovault_oauth.authorize(callback=url_for('.authorized',
-                                                       _external=True))
+    oauth_client = oauth.remote_apps['neurovault']
+    return oauth_client.authorize(callback=url_for('.authorized',
+                                                   _external=True))
 
 
 @blueprint.route('/signin/authorized')
@@ -46,16 +48,27 @@ def authorized():
     # Patch for proxy
     if current_app.debug:
         session['neurovault_oauthredir'] = 'http://localhost:3000/signin/authorized'
+    else:
+        session['neurovault_oauthredir'] = url_for('.authorized',
+                                                   _external=True)
 
-    resp = neurovault_oauth.authorized_response()
+    oauth_client = oauth.remote_apps['neurovault']
+    resp = oauth_client.authorized_response()
+
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error'],
             request.args['error_description']
         )
+    if isinstance(resp, OAuthException):
+        return 'Access denied: reason=%s error=%s' % (
+            resp.message,
+            resp.data
+        )
+
     session['neurovault_oauth_token'] = (resp['access_token'], '')
 
-    user_data = get_external_user_data(neurovault_oauth)
+    user_data = get_external_user_data(oauth_client)
 
     try:
         connection = find_connection(Connection.NEUROVAULT,
@@ -73,9 +86,5 @@ def authorized():
     connection.access_token = resp['access_token']
     db.session.commit()
 
-    return render_template('authorized.html', token=generate_token(connection.user))
-
-
-@neurovault_oauth.tokengetter
-def get_neurovault_oauth_token():
-    return session.get('neurovault_oauth_token')
+    return render_template('authorized.html',
+                           token=generate_token(connection.user))
