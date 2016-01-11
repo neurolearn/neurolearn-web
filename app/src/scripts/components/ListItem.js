@@ -17,7 +17,7 @@ export default class ListItem extends React.Component {
         <div className="col-md-12">
           <h3><Link to={`/models/${item.id}`}>{item.name}</Link></h3>
           <p>Created <span className="datetime">{moment(item.created).fromNow()}</span></p>
-          <p>{user.email}</p>
+          <p>{user.name}</p>
         </div>
       </div>
     );

@@ -19,7 +19,7 @@ blueprint = Blueprint('api', __name__)
 
 USER_FIELDS = {
     'id': as_integer,
-    'email': as_string
+    'name': as_string
 }
 
 MLMODEL_FIELDS = {
