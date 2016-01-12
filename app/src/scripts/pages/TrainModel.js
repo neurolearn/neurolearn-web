@@ -1,5 +1,5 @@
 import React from 'react';
-import Steps from '../components/Steps';
+import NavItem from '../components/NavItem';
 
 export default class TrainModel extends React.Component {
   static propTypes = {
@@ -9,7 +9,11 @@ export default class TrainModel extends React.Component {
   render() {
     return (
       <div>
-        <Steps />
+        <ul className="nav nav-wizard">
+          <NavItem to="/models/new/input-data">1. Input Data</NavItem>
+          <NavItem to="/models/new/training-label">2. Training Label</NavItem>
+          <NavItem to="/models/new/model-preferences">3. Model Preferences</NavItem>
+        </ul>
 
         {this.props.children}
       </div>
