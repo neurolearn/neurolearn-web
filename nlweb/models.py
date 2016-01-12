@@ -174,6 +174,11 @@ class ModelTest(db.Model):
     def get_existing(cls):
         return cls.query.filter(cls.visibility != cls.VISIBILITY_DELETED)
 
+    @classmethod
+    def get_public(cls):
+        return cls.query.filter(cls.visibility == cls.VISIBILITY_PUBLIC,
+                                cls.state == cls.STATE_SUCCESS)
+
     def delete(self):
         self.visibility = self.VISIBILITY_DELETED
 

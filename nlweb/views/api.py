@@ -117,6 +117,12 @@ def delete_mlmodel(model_id):
     return 'No Content', 204
 
 
+@blueprint.route('/tests', methods=['GET'])
+def list_public_tests():
+    tests_list = ModelTest.get_public().order_by('created desc').all()
+    return jsonify(marshal_list(tests_list, 'ModelTest', TEST_FIELDS))
+
+
 @blueprint.route('/tests', methods=['POST'])
 @jwt_required()
 def create_test():
