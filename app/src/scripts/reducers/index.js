@@ -8,6 +8,7 @@ import imagesMetadata from '../state/imagesMetadata';
 import targetData from '../state/targetData';
 import mlModels from '../state/mlModels';
 import publicMLModels from '../state/publicMLModels';
+import publicModelTests from '../state/publicModelTests';
 import modelPreferences from '../state/modelPreferences';
 import testModel from '../state/testModel';
 import modelTests from '../state/modelTests';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   imagesMetadata,
   mlModels,
   publicMLModels,
+  publicModelTests,
   search,
   selectedImages,
   selectImagesModal,

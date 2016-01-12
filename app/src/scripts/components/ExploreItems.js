@@ -1,35 +1,24 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 import ListItem from '../components/ListItem';
 
-import { loadPublicMLModels } from '../state/publicMLModels';
-
-export class Explore extends React.Component {
+export default class ExploreItems extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    publicMLModels: PropTypes.object,
-    entities: PropTypes.object
+    entities: PropTypes.object,
+    items: PropTypes.array.isRequired,
+    itemType: PropTypes.string.isRequired
   };
 
-  componentDidMount() {
-    this.props.dispatch(loadPublicMLModels());
-  }
-
   render() {
-    const { publicMLModels, entities } = this.props;
+    const { entities, items, itemType } = this.props;
+
     return (
       <div>
-      {publicMLModels.items.map(itemId =>
+      {items.map(itemId =>
         <ListItem key={itemId}
-                  item={entities.MLModel[itemId]}
+                  itemType={itemType}
+                  item={entities[itemType][itemId]}
                   entities={entities} />)}
       </div>
     );
   }
 }
-
-function select(state) {
-  return state;
-}
-
-export default connect(select)(Explore);

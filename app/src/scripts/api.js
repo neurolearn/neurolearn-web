@@ -24,6 +24,13 @@ const api = {
       .end(callback);
   },
 
+  fetchModelTests: (callback) => {
+    return request.get('/tests')
+      .type('json')
+      .accept('json')
+      .end(callback);
+  },
+
   fetchMLModel: (modelId, token, callback) => {
     let req = request.get(`/mlmodels/${modelId}`)
       .type('json')
