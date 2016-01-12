@@ -23,6 +23,7 @@ import ViewTest from './pages/ViewTest';
 import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
+import ExploreItems from './components/ExploreItems';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
@@ -32,9 +33,13 @@ function renderRoutes(history) {
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
-        <Route path="/explore" component={Explore} />
         <Route path="/dashboard/models" component={MLModels} />
         <Route path="/dashboard/tests" component={ModelTests} />
+        <Redirect from="/explore" to="/explore/models" />
+        <Route path="/explore" component={Explore}>
+          <Route path="models" component={ExploreItems}/>
+          <Route path="tests" component={ExploreItems}/>
+        </Route>
         <Redirect from="/models/new" to="/models/new/input-data" />
         <Route path="/models/new" component={TrainModel}>
           <Route path="input-data" component={InputData}/>

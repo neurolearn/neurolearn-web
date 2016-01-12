@@ -1,38 +1,25 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import ListItem from '../components/ListItem';
+import React from 'react';
+import NavItem from '../components/NavItem';
 
-import { loadPublicMLModels } from '../state/publicMLModels';
-
-export class Explore extends React.Component {
+export default class Explore extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired
+    children: React.PropTypes.object
   };
 
-  componentDidMount() {
-    this.props.dispatch(loadPublicMLModels());
-  }
-
   render() {
-    const { publicMLModels, entities } = this.props;
     return (
       <div>
         <div className="page-header">
           <h1>Explore Neurolearn</h1>
         </div>
-        <div>
-        {publicMLModels.items.map(itemId =>
-          <ListItem key={itemId}
-                    item={entities.MLModel[itemId]}
-                    entities={entities} />)}
-        </div>
+        <ul className="nav nav-tabs">
+          <NavItem to="/explore">Models</NavItem>
+          <NavItem to="/explore/tests">Tests</NavItem>
+        </ul>
+
+        {this.props.children}
       </div>
     );
   }
 }
 
-function select(state) {
-  return state;
-}
-
-export default connect(select)(Explore);
