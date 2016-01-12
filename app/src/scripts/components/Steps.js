@@ -1,5 +1,5 @@
 import React from 'react';
-import Step from './Step';
+import NavItem from './NavItem';
 
 export default class Steps extends React.Component {
   static propTypes = {
@@ -9,12 +9,10 @@ export default class Steps extends React.Component {
   render() {
     return (
       <ul className="nav nav-wizard">
-        <Step to="/models/new/input-data">1. Input Data</Step>
-        <Step to="/models/new/training-label">2. Training Label</Step>
-        <Step to="/models/new/model-preferences">3. Model Preferences</Step>
+        <NavItem to="/models/new/input-data">1. Input Data</NavItem>
+        <NavItem to="/models/new/training-label">2. Training Label</NavItem>
+        <NavItem to="/models/new/model-preferences">3. Model Preferences</NavItem>
       </ul>
     );
   }
 }
-
-
