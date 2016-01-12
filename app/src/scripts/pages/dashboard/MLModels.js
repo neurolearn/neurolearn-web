@@ -18,7 +18,8 @@ export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     mlModels: PropTypes.object,
-    entities: PropTypes.object
+    entities: PropTypes.object,
+    auth: PropTypes.object
   };
 
   static contextTypes = {
@@ -32,6 +33,15 @@ export default class MLModels extends React.Component {
   componentDidMount() {
     this.loadAuthUserMLModels();
     this.interval = setInterval(this.loadAuthUserMLModels.bind(this), POLL_INTERVAL);
+  }
+
+  componentWillReceiveProps() {
+    const { auth } = this.props;
+    const { router } = this.context;
+
+    if (!auth.user) {
+      router.transitionTo('/');
+    }
   }
 
   componentWillUnmount() {

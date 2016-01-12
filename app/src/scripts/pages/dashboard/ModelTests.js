@@ -16,7 +16,8 @@ const POLL_INTERVAL = 2500;
 export default class ModelTests extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    modelTests: PropTypes.object
+    modelTests: PropTypes.object,
+    auth: PropTypes.object
   };
 
   static contextTypes = {
@@ -30,6 +31,15 @@ export default class ModelTests extends React.Component {
   componentDidMount() {
     this.loadModelTests();
     this.interval = setInterval(this.loadModelTests.bind(this), POLL_INTERVAL);
+  }
+
+  componentWillReceiveProps() {
+    const { auth } = this.props;
+    const { router } = this.context;
+
+    if (!auth.user) {
+      router.transitionTo('/');
+    }
   }
 
   componentWillUnmount() {
