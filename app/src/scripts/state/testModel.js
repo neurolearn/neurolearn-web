@@ -40,7 +40,7 @@ export function testModel(modelId, selectedImages, router) {
       getState().auth.token,
       err => {
         if (!err) {
-          router.transitionTo('/tests');
+          router.transitionTo('/dashboard/tests');
           resetModelTestData(dispatch);
         }
       });
