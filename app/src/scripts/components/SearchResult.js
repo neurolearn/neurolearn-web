@@ -2,6 +2,7 @@ import styles from './SearchResult.scss';
 
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import FallbackImage from './FallbackImage';
 
 export default class SearchResult extends React.Component {
   static propTypes = {
@@ -26,7 +27,7 @@ export default class SearchResult extends React.Component {
             <p>{authors}</p>
           </div>
           <div className="images">
-            <img src={thumbnail} className="img-responsive" />
+            <FallbackImage src={thumbnail} className="img-responsive" />
             <div className="number-of-images">{number_of_images} images</div>
           </div>
           <div className="button">
