@@ -14,7 +14,11 @@ export function resetTargetData() {
   };
 }
 
-const initialState = [];
+const initialState = {
+  targetColumn: {
+    index: null
+  }
+};
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {

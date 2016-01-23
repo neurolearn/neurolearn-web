@@ -15,7 +15,7 @@ import {
 export default class ModelPreferences extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    targetData: PropTypes.array,
+    targetData: PropTypes.object.isRequired,
     modelPreferences: PropTypes.object.isRequired
   }
 

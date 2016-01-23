@@ -10,10 +10,11 @@ require('handsontable.formula.js');
 export default class DataGrid extends React.Component {
   static propTypes = {
     data: PropTypes.array,
+    targetData: PropTypes.object,
     onSelectTarget: PropTypes.func.isRequired
   }
 
-  initHandsontableInstance(data) {
+  initHandsontableInstance(data, targetData) {
     var container = this.refs.hot,
         _this = this;
 
@@ -26,7 +27,7 @@ export default class DataGrid extends React.Component {
 
     var selectedColumns = {
       subjectId: null,
-      trainingLabel: null
+      trainingLabel: targetData.targetColumn.index
     };
 
     function makeBackground(col, td) {
@@ -54,12 +55,16 @@ export default class DataGrid extends React.Component {
       return findIndex(tableData[0], col => col === colName);
     }
 
+    function columnName (tableData, columnIndex) {
+      return tableData[0][columnIndex];
+    }
+
     function getTargetData(columnIndex) {
       const tableData = hot.getData();
       const idIndex = findColumnIndex(tableData, 'id');
       const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
 
-      return tableData.slice(1).map(function (row) {
+      const targetData = tableData.slice(1).map(function (row) {
         return {
           'id': row[idIndex],
           'subject_id': row[columnIndex.subjectId],
@@ -67,6 +72,14 @@ export default class DataGrid extends React.Component {
           'collection_id': row[collectionIdIndex]
         };
       });
+
+      return {
+        targetColumn: {
+          index: columnIndex.trainingLabel,
+          name: columnName(tableData, columnIndex.trainingLabel)
+        },
+        data: targetData
+      };
     }
 
     function useColumnAs(name, col) {
@@ -119,11 +132,13 @@ export default class DataGrid extends React.Component {
   }
 
   componentDidMount() {
-    this.hot = this.initHandsontableInstance(this.props.data);
+    this.hot = this.initHandsontableInstance(this.props.data,
+                                             this.props.targetData);
   }
 
   componentDidUpdate() {
-    this.hot = this.initHandsontableInstance(this.props.data);
+    this.hot = this.initHandsontableInstance(this.props.data,
+                                             this.props.targetData);
   }
 
   componentWillUnmount() {

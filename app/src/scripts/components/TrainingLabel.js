@@ -12,7 +12,8 @@ export default class TrainingLabel extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     selectedImages: PropTypes.object,
-    imagesMetadata: PropTypes.object
+    imagesMetadata: PropTypes.object,
+    targetData: PropTypes.object
   };
 
   componentDidMount() {
@@ -49,12 +50,12 @@ export default class TrainingLabel extends React.Component {
     return [keys].concat(data.map(item => keys.map(key => item[key])));
   }
 
-  renderDataGrid(imagesMetadata) {
+  renderDataGrid(imagesMetadata, targetData) {
     const data = this.convertToArrayOfArrays(imagesMetadata);
     return (
       <div>
         <p>Select a column for training labels and (optionally) a column with subject IDs. Right click a corresponding columns.</p>
-        <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} />
+        <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} targetData={targetData} />
       </div>
     );
   }
@@ -75,13 +76,13 @@ export default class TrainingLabel extends React.Component {
   }
 
   render() {
-    const { imagesMetadata } = this.props;
+    const { imagesMetadata, targetData } = this.props;
     return (
       <div>
         <h1 className="page-header">Training Label</h1>
         { imagesMetadata.isFetching && this.renderLoading() }
-        { !isEmpty(this.props.imagesMetadata.items) &&
-          this.renderDataGrid(this.props.imagesMetadata.items) }
+        { !isEmpty(imagesMetadata.items) &&
+          this.renderDataGrid(imagesMetadata.items, targetData) }
 
         <hr/>
         <Link disabled={false} className="btn btn-primary continue-button" to="/models/new/model-preferences">Continue to Model Preferences</Link>
