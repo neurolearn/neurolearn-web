@@ -9,6 +9,7 @@ module.exports = {
       .setValue('input[id=\'id_password\']', 'testuser')
       .click('input[type=submit]')
       .pause(1000)
+      .assert.containsText('a[id=user-account-dropdown] > span', 'testuser')
       .end();
   }
 };
