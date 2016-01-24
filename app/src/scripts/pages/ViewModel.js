@@ -29,7 +29,6 @@ export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     mlModels: PropTypes.object,
-    entities: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
