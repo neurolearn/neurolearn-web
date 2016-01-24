@@ -27,7 +27,7 @@ export default class DataGrid extends React.Component {
 
     var selectedColumns = {
       subjectId: null,
-      trainingLabel: targetData.targetColumn.index
+      trainingLabel: targetData.trainingLabel.index
     };
 
     function makeBackground(col, td) {
@@ -74,7 +74,7 @@ export default class DataGrid extends React.Component {
       });
 
       return {
-        targetColumn: {
+        trainingLabel: {
           index: columnIndex.trainingLabel,
           name: columnName(tableData, columnIndex.trainingLabel)
         },

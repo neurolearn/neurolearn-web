@@ -78,8 +78,8 @@ const api = {
 
   trainModel: (name, algorithm, targetData, cv, token, callback) => {
     const payload = {
-      'data': targetData,
-      'collection_id': 504,
+      'data': targetData.data,
+      'trainingLabel': targetData.trainingLabel,
       algorithm,
       name,
       cv

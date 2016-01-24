@@ -15,7 +15,7 @@ export function resetTargetData() {
 }
 
 const initialState = {
-  targetColumn: {
+  trainingLabel: {
     index: null
   }
 };
