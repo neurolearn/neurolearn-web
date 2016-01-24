@@ -57,11 +57,6 @@ def list_own_mlmodels():
     return jsonify(data=result.data)
 
 
-@blueprint.route('/users/<int:user_id>/mlmodels', methods=['GET'])
-def list_user_mlmodels(user_id):
-    pass
-
-
 @blueprint.route('/mlmodels', methods=['GET'])
 def list_public_mlmodels():
     item_list = MLModel.get_public().order_by('created desc').all()
@@ -108,15 +103,17 @@ def get_mlmodel(pk):
     return jsonify(data=result.data)
 
 
-@blueprint.route('/mlmodels/<int:model_id>', methods=['DELETE'])
+@blueprint.route('/mlmodels/<int:pk>', methods=['DELETE'])
 @jwt_required()
-def delete_mlmodel(model_id):
-    mlmodel = MLModel.query.get_or_404(model_id)
+def delete_mlmodel(pk):
+    item = MLModel.query.get(pk)
+    if not item:
+        return not_found()
 
-    if mlmodel.user != current_user:
+    if item.user != current_user:
         abort(404)
 
-    mlmodel.delete()
+    item.delete()
     db.session.commit()
 
     return 'No Content', 204
