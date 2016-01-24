@@ -64,7 +64,7 @@ export default class DataGrid extends React.Component {
       const idIndex = findColumnIndex(tableData, 'id');
       const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
 
-      const targetData = tableData.slice(1).map(function (row) {
+      const trainingData = tableData.slice(1).map(function (row) {
         return {
           'id': row[idIndex],
           'subject_id': row[columnIndex.subjectId],
@@ -78,7 +78,7 @@ export default class DataGrid extends React.Component {
           index: columnIndex.trainingLabel,
           name: columnName(tableData, columnIndex.trainingLabel)
         },
-        data: targetData
+        data: trainingData
       };
     }
 
