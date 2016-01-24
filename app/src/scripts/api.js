@@ -31,6 +31,18 @@ const api = {
       .end(callback);
   },
 
+  fetchModelTest: (pk, token, callback) => {
+    let req = request.get(`/tests/${pk}`)
+      .type('json')
+      .accept('json');
+
+    if (token) {
+      req = req.set('Authorization', 'Bearer ' + token);
+    }
+
+    return req.end(callback);
+  },
+
   fetchMLModel: (modelId, token, callback) => {
     let req = request.get(`/mlmodels/${modelId}`)
       .type('json')

@@ -65,8 +65,8 @@ export default class ModelTests extends React.Component {
     }
   }
 
-  renderItems(modelTests, entities) {
-    const models = modelTests.items.map(testId => entities.ModelTest[testId]);
+  renderItems(modelTests) {
+    const models = modelTests.items;
 
     return (
       <table className="table table-hover">
@@ -89,9 +89,8 @@ export default class ModelTests extends React.Component {
                   { this.renderState(model.state) }
                 </td>
                 <td>
-                  {model.output_data &&
-                   model.output_data.duration &&
-                   (Math.floor(model.output_data.duration) + ' sec')}
+                  { model.test_duration &&
+                   (Math.floor(model.test_duration) + ' sec')}
                 </td>
                 <td>
                   <span className="datetime">{moment(model.created).fromNow()}</span>
@@ -112,7 +111,7 @@ export default class ModelTests extends React.Component {
   }
 
   render() {
-    const { modelTests, entities } = this.props;
+    const { modelTests } = this.props;
 
     return (
       <div className={styles.root}>
@@ -126,7 +125,7 @@ export default class ModelTests extends React.Component {
           <div className="col-md-12">
             { isEmpty(modelTests.items)
               ? this.renderEmptyState()
-              : this.renderItems(modelTests, entities) }
+              : this.renderItems(modelTests) }
           </div>
         </div>
       </div>

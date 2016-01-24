@@ -6,8 +6,10 @@ import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
 import {
   deleteModelTest,
-  saveCorrelationGroups
+  saveCorrelationGroups,
+  loadModelTest
 } from '../state/modelTests';
+
 
 export default class ViewTest extends React.Component {
   static propTypes = {
@@ -18,6 +20,11 @@ export default class ViewTest extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    const { id } = this.props.params;
+    this.props.dispatch(loadModelTest(parseInt(id)));
   }
 
   handleDelete(modelId) {
@@ -84,20 +91,24 @@ export default class ViewTest extends React.Component {
   }
 
   render() {
-    const { modelTests, entities, params } = this.props;
-    const model = entities.ModelTest[parseInt(params.id)];
+    const { modelTests } = this.props;
+    const item = modelTests.item;
+
+    if (!item || modelTests.isFetching) {
+      return <div>Loading test...</div>;
+    }
 
     return (
       <div>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
             <Button bsStyle="danger"
-                    onClick={() => this.handleDelete(model.id)}>Delete</Button>
+                    onClick={() => this.handleDelete(item.id)}>Delete</Button>
           </ButtonToolbar>
-          <h1>{model.name}</h1>
+          <h1>{item && item.name}</h1>
         </div>
         <div className="row">
-        { this.renderState(model) }
+        { item && this.renderState(item) }
         </div>
       </div>
     );
