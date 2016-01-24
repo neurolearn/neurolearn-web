@@ -18,7 +18,6 @@ export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     mlModels: PropTypes.object,
-    entities: PropTypes.object,
     auth: PropTypes.object
   };
 
@@ -67,8 +66,8 @@ export default class MLModels extends React.Component {
     }
   }
 
-  renderMLModels(mlModels, entities) {
-    const models = mlModels.items.map(modelId => entities.MLModel[modelId]);
+  renderMLModels(mlModels) {
+    const { items } = mlModels;
 
     return (
       <table className="table table-hover">
@@ -84,20 +83,19 @@ export default class MLModels extends React.Component {
         </thead>
         <tbody>
           {
-            models.map(model =>
+            items.map(model =>
               <tr key={model.id}>
                 <td>
                   <Link to={`/models/${model.id}`}>{model.name}</Link>
                 </td>
                 <td style={{height: 40}}>
-                  { this.renderState(model.training_state) }
+                  { this.renderState(model.state) }
                 </td>
-                <td>{algorithmNameMap[model.input_data.algorithm]}</td>
-                <td>{model.input_data.cv.type}</td>
+                <td>{algorithmNameMap[model.algorithm]}</td>
+                <td>{model.cv.type}</td>
                 <td>
-                  {model.output_data &&
-                   model.output_data.duration &&
-                   (Math.floor(model.output_data.duration) + ' sec')}
+                  { model.training_duration &&
+                   (Math.floor(model.training_duration) + ' sec')}
                 </td>
                 <td>
                   <span className="datetime">{moment(model.created).fromNow()}</span>
@@ -118,7 +116,7 @@ export default class MLModels extends React.Component {
   }
 
   render() {
-    const { mlModels, entities } = this.props;
+    const { mlModels } = this.props;
 
     return (
       <div className={styles.root}>
@@ -132,7 +130,7 @@ export default class MLModels extends React.Component {
           <div className="col-md-12">
             { isEmpty(mlModels.items)
               ? this.renderEmptyState()
-              : this.renderMLModels(mlModels, entities) }
+              : this.renderMLModels(mlModels) }
           </div>
         </div>
       </div>

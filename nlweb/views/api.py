@@ -14,14 +14,19 @@ from ..marshal import (marshal_list, marshal_obj, entity_ref,
                        as_integer, as_is, as_string, as_iso_date,
                        filter_out_key)
 
-from ..schemas import MLModelSchema, ModelTestSchema
+from ..schemas import MLModelBriefSchema, ModelTestBriefSchema
 
 blueprint = Blueprint('api', __name__)
-public_mlmodels_schema = MLModelSchema(many=True, exclude=('input_data',
-                                                           'output_data'))
 
-public_tests_schema = ModelTestSchema(many=True, exclude=('input_data',
-                                                          'output_data'))
+public_mlmodels_schema = MLModelBriefSchema(
+    many=True, exclude=('input_data', 'output_data'))
+
+public_tests_schema = ModelTestBriefSchema(
+    many=True, exclude=('input_data', 'output_data'))
+
+own_mlmodels_schema = MLModelBriefSchema(
+    many=True, exclude=('input_data', 'output_data'))
+
 
 USER_FIELDS = {
     'id': as_integer,
@@ -51,10 +56,11 @@ TEST_FIELDS = {
 @blueprint.route('/user/mlmodels', methods=['GET'])
 @jwt_required()
 def list_own_mlmodels():
-    mlmodel_list = MLModel.get_existing().filter(
+    item_list = MLModel.get_existing().filter(
         MLModel.user == current_user).order_by('created desc').all()
 
-    return jsonify(marshal_list(mlmodel_list, 'MLModel', MLMODEL_FIELDS))
+    result = public_mlmodels_schema.dump(item_list)
+    return jsonify(data=result.data)
 
 
 @blueprint.route('/users/<int:user_id>/mlmodels', methods=['GET'])

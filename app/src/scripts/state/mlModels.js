@@ -113,7 +113,7 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_AUTH_USER_MLMODELS:
       return Object.assign({}, state, {
         isFetching: false,
-        items: action.response.result
+        items: action.response.data
       });
     case RECEIVE_MLMODEL:
       const model = action.model;
