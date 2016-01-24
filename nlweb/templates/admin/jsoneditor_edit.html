@@ -1,0 +1,30 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block tail %}
+    {{ super() }}
+    <link href="/static/admin/jsoneditor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="/static/admin/jsoneditor/jsoneditor.min.js"></script>
+
+    <script>
+        $('.jsoneditor-wrapper').each(function(i, el) {
+            console.log(el);
+            var container = $('.jsoneditor', el)[0];
+            var $textarea = $('textarea', el);
+
+            var onChange = function() {
+                var value = editor.getText();
+                $textarea.text(value);
+            }
+
+            var options = {
+                mode: 'view',
+                modes: ['view', 'form', 'tree'],
+                onChange: onChange
+            };
+
+            var editor = new JSONEditor(container, options);
+            var json = JSON.parse($textarea.text());
+            editor.set(json);
+        });
+    </script>
+{% endblock %}

@@ -20,6 +20,8 @@ from nlweb.models import User, Role, MLModel, ModelTest, Connection
 
 from nlweb.utils import friendly_time
 
+from flask_admin_jsoneditor import JSONEditorField
+
 
 def check_auth(username, password):
     return (username == 'admin' and password == 'admin')
@@ -134,9 +136,12 @@ class MLModelAdmin(ModelView):
     column_list = ('id', 'name', 'user', 'status', 'training_state',
                    'created')
     form_overrides = {
-        'input_data': wtforms.TextAreaField,
-        'output_data': wtforms.TextAreaField
+        'input_data': JSONEditorField,
+        'output_data': JSONEditorField
     }
+
+    create_template = 'admin/jsoneditor_edit.html'
+    edit_template = 'admin/jsoneditor_edit.html'
 
 
 class RoleAdmin(ModelView):
