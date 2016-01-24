@@ -134,9 +134,10 @@ export default class ViewModel extends React.Component {
     ];
 
     const { summary } = model.output_data;
+    const { algorithm, cv, label } = model.input_data;
 
     const spData = [{
-        label: 'somethingA',
+        label: label.name,
         values: scatterplotData(model.output_data.stats)
     }];
 
@@ -153,8 +154,8 @@ export default class ViewModel extends React.Component {
           </thead>
           <tbody>
             <tr>
-              <td>{algorithmNameMap[model.input_data.algorithm]}</td>
-              <td>{model.input_data.cv.type}</td>
+              <td>{algorithmNameMap[algorithm]}</td>
+              <td>{cv.type}</td>
               <td>{Math.floor(model.output_data.duration) + ' sec'}</td>
               <td>
                   <span className="datetime">{moment(model.created).fromNow()}</span>
@@ -184,8 +185,8 @@ export default class ViewModel extends React.Component {
               width={500}
               height={400}
               margin={{top: 10, bottom: 30, left: 30, right: 0}}
-              xAxis={{label: 'Pain Level'}}
-              yAxis={{label: 'Predicted Pain Level'}}
+              xAxis={{label: label.name}}
+              yAxis={{label: `Predicted ${label.name}`}}
             />
             {!this.state.showMPLPlot &&
             <Button onClick={() => this.setState({showMPLPlot: true})}>
