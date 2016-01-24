@@ -111,7 +111,7 @@ def delete_mlmodel(pk):
         return not_found()
 
     if item.user != current_user:
-        abort(404)
+        return not_found()
 
     item.delete()
     db.session.commit()
@@ -155,15 +155,17 @@ def list_user_model_tests():
     return jsonify(marshal_list(model_test_list, 'ModelTest', TEST_FIELDS))
 
 
-@blueprint.route('/tests/<int:test_id>', methods=['DELETE'])
+@blueprint.route('/tests/<int:pk>', methods=['DELETE'])
 @jwt_required()
-def delete_test(test_id):
-    test = ModelTest.query.get_or_404(test_id)
+def delete_test(pk):
+    item = ModelTest.query.get(pk)
+    if not item:
+        return not_found()
 
-    if test.user != current_user:
-        abort(404)
+    if item.user != current_user:
+        return not_found()
 
-    test.delete()
+    item.delete()
     db.session.commit()
 
     return 'No Content', 204
