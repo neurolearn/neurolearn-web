@@ -3,7 +3,6 @@
 import hashlib
 
 import flask
-import wtforms
 
 from flask import current_app, url_for, redirect, request, abort
 
