@@ -19,6 +19,9 @@ git+https://github.com/mattupstate/flask-jwt.git@51486d4d259f36234a3c73423e37cf4
 # Database
 Flask-SQLAlchemy==2.0
 
+# API
+marshmallow==2.5.0
+
 # Migrations
 Flask-Migrate==1.7.0
 

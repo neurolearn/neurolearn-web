@@ -25,8 +25,7 @@ export class Explore extends React.Component {
     route: PropTypes.object.isRequired,
     publicMLModels: PropTypes.object,
     publicModelTests: PropTypes.object,
-    params: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired
   };
 
   loadItems(itemType) {
@@ -40,7 +39,6 @@ export class Explore extends React.Component {
   }
 
   render() {
-    const { entities } = this.props;
     const { itemType } = this.props.params;
     const store = this.props[ITEM_TYPE_MAPPING[itemType].store];
     const { serverItemType } = ITEM_TYPE_MAPPING[itemType];
@@ -55,7 +53,7 @@ export class Explore extends React.Component {
           <NavItem to="/explore/tests" onClick={() => this.loadItems('tests')}>Tests</NavItem>
         </ul>
 
-        <ExploreItems itemType={serverItemType} items={store.items} entities={entities} />
+        <ExploreItems itemType={serverItemType} items={store.items} />
       </div>
     );
   }

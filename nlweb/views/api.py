@@ -14,8 +14,14 @@ from ..marshal import (marshal_list, marshal_obj, entity_ref,
                        as_integer, as_is, as_string, as_iso_date,
                        filter_out_key)
 
-blueprint = Blueprint('api', __name__)
+from ..schemas import MLModelSchema, ModelTestSchema
 
+blueprint = Blueprint('api', __name__)
+public_mlmodels_schema = MLModelSchema(many=True, exclude=('input_data',
+                                                           'output_data'))
+
+public_tests_schema = ModelTestSchema(many=True, exclude=('input_data',
+                                                          'output_data'))
 
 USER_FIELDS = {
     'id': as_integer,
@@ -58,8 +64,10 @@ def list_user_mlmodels(user_id):
 
 @blueprint.route('/mlmodels', methods=['GET'])
 def list_public_mlmodels():
-    mlmodel_list = MLModel.get_public().order_by('created desc').all()
-    return jsonify(marshal_list(mlmodel_list, 'MLModel', MLMODEL_FIELDS))
+    item_list = MLModel.get_public().order_by('created desc').all()
+
+    result = public_mlmodels_schema.dump(item_list)
+    return jsonify(data=result.data)
 
 
 def parse_cv_param(cv):
@@ -120,8 +128,10 @@ def delete_mlmodel(model_id):
 
 @blueprint.route('/tests', methods=['GET'])
 def list_public_tests():
-    tests_list = ModelTest.get_public().order_by('created desc').all()
-    return jsonify(marshal_list(tests_list, 'ModelTest', TEST_FIELDS))
+    item_list = ModelTest.get_public().order_by('created desc').all()
+
+    result = public_tests_schema.dump(item_list)
+    return jsonify(data=result.data)
 
 
 @blueprint.route('/tests', methods=['POST'])

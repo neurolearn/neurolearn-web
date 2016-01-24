@@ -40,7 +40,7 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_PUBLIC_MODEL_TESTS:
       return Object.assign({}, state, {
         isFetching: false,
-        items: action.response.result
+        items: action.response.data
       });
     default:
       return state;

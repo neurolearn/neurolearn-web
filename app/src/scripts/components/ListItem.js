@@ -10,8 +10,7 @@ const BASE_URL = {
 export default class ListItem extends React.Component {
   static propTypes = {
     item: PropTypes.object.isRequired,
-    itemType: PropTypes.string.isRequired,
-    entities: PropTypes.object.isRequired
+    itemType: PropTypes.string.isRequired
   };
 
   itemLink(item) {
@@ -20,15 +19,14 @@ export default class ListItem extends React.Component {
   }
 
   render() {
-    const { item, entities } = this.props;
-    const user = entities.User[item.user];
+    const { item } = this.props;
 
     return (
       <div className="row">
         <div className="col-md-12">
           <h3>{this.itemLink(item)}</h3>
           <p>Created <span className="datetime">{moment(item.created).fromNow()}</span></p>
-          <p>{user.name}</p>
+          <p>{item.user.name}</p>
         </div>
       </div>
     );

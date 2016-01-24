@@ -40,7 +40,7 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_PUBLIC_MLMODELS:
       return Object.assign({}, state, {
         isFetching: false,
-        items: action.response.result
+        items: action.response.data
       });
     default:
       return state;

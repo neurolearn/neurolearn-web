@@ -153,7 +153,7 @@ admin = admin.Admin(name='Neurolearn',
                     template_mode='bootstrap3')
 
 admin.add_view(MLModelAdmin(MLModel, db.session, name="MLModel"))
-admin.add_view(MLModelAdmin(ModelTest, db.session, name="Model Test"))
+admin.add_view(ModelView(ModelTest, db.session, name="Model Test"))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(ModelView(Connection, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
