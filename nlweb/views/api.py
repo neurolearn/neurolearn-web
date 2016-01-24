@@ -10,37 +10,31 @@ from nlweb import tasks
 
 from ..models import db, MLModel, ModelTest
 
-from ..marshal import (marshal_list, marshal_obj, entity_ref,
+from ..marshal import (marshal_list, entity_ref,
                        as_integer, as_is, as_string, as_iso_date,
                        filter_out_key)
 
 from ..schemas import MLModelBriefSchema, ModelTestBriefSchema
+
+from . import not_found
 
 blueprint = Blueprint('api', __name__)
 
 public_mlmodels_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-public_tests_schema = ModelTestBriefSchema(
+own_mlmodels_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-own_mlmodels_schema = MLModelBriefSchema(
+mlmodel_schema = MLModelBriefSchema()
+
+public_tests_schema = ModelTestBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
 
 USER_FIELDS = {
     'id': as_integer,
     'name': as_string
-}
-
-MLMODEL_FIELDS = {
-    'id': as_integer,
-    'name': as_string,
-    'created': as_iso_date,
-    'training_state': as_string,
-    'output_data': as_is,
-    'input_data': filter_out_key('data'),
-    'user': entity_ref('User', USER_FIELDS)
 }
 
 TEST_FIELDS = {
@@ -104,18 +98,14 @@ def create_mlmodel():
     return 'Created', 201
 
 
-@blueprint.route('/mlmodels/<int:model_id>', methods=['GET'])
-def get_mlmodel(model_id):
-    mlmodel = MLModel.query.get_or_404(model_id)
+@blueprint.route('/mlmodels/<int:pk>', methods=['GET'])
+def get_mlmodel(pk):
+    item = MLModel.query.get(pk)
+    if not item:
+        return not_found()
 
-    (obj, obj_entities) = marshal_obj(mlmodel, MLMODEL_FIELDS)
-
-    entities = {
-        'MLModel': {obj['id']: obj}
-    }
-    entities.update(obj_entities)
-
-    return jsonify(dict(result=obj['id'], entities=entities))
+    result = mlmodel_schema.dump(item)
+    return jsonify(data=result.data)
 
 
 @blueprint.route('/mlmodels/<int:model_id>', methods=['DELETE'])

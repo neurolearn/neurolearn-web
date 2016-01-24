@@ -97,7 +97,8 @@ export function loadMLModel(modelId) {
 
 const initialState = {
   isFetching: false,
-  items: []
+  items: [],
+  item: null
 };
 
 export default function reducer(state = initialState, action) {
@@ -116,9 +117,9 @@ export default function reducer(state = initialState, action) {
         items: action.response.data
       });
     case RECEIVE_MLMODEL:
-      const model = action.model;
       return Object.assign({}, state, {
-        isFetching: false
+        isFetching: false,
+        item: action.response.data
       });
     default:
       return state;

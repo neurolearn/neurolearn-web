@@ -51,7 +51,7 @@ export default class ViewModel extends React.Component {
   }
 
   renderState(model) {
-    switch (model.training_state) {
+    switch (model.state) {
       case 'queued':
       case 'progress':
         return this.renderProgress();
@@ -224,10 +224,10 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { entities, params } = this.props;
-    const model = entities.MLModel[parseInt(params.id)];
+    const { mlModels } = this.props;
+    const model = mlModels.item;
 
-    if (!model) {
+    if (!model || mlModels.isFetching) {
       return <div>Loading model...</div>;
     }
 
@@ -240,9 +240,9 @@ export default class ViewModel extends React.Component {
             <Button bsStyle="danger"
                     onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
           </ButtonToolbar>
-          <h1>{model.name}</h1>
+          <h1>{model && model.name}</h1>
         </div>
-        { this.renderState(model) }
+        { model && this.renderState(model) }
       </div>
     );
   }
