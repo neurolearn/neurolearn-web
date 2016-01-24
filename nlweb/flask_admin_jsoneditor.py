@@ -22,3 +22,7 @@ class JSONEditorWidget(widgets.TextArea):
 
 class JSONEditorField(fields.TextAreaField):
     widget = JSONEditorWidget()
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = json.loads(valuelist[0])
