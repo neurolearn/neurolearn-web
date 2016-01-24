@@ -10,15 +10,13 @@ from nlweb import tasks
 
 from ..models import db, MLModel, ModelTest
 
-from ..marshal import (marshal_list, entity_ref,
-                       as_integer, as_is, as_string, as_iso_date,
-                       filter_out_key)
-
 from ..schemas import MLModelBriefSchema, ModelTestBriefSchema
 
 from . import not_found
 
 blueprint = Blueprint('api', __name__)
+
+mlmodel_schema = MLModelBriefSchema()
 
 public_mlmodels_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
@@ -26,25 +24,13 @@ public_mlmodels_schema = MLModelBriefSchema(
 own_mlmodels_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-mlmodel_schema = MLModelBriefSchema()
+test_schema = ModelTestBriefSchema()
 
 public_tests_schema = ModelTestBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-
-USER_FIELDS = {
-    'id': as_integer,
-    'name': as_string
-}
-
-TEST_FIELDS = {
-    'id': as_integer,
-    'name': as_string,
-    'created': as_iso_date,
-    'state': as_string,
-    'output_data': as_is,
-    'user': entity_ref('User', USER_FIELDS)
-}
+own_tests_schema = ModelTestBriefSchema(
+    many=True, exclude=('input_data', 'output_data'))
 
 
 @blueprint.route('/user/mlmodels', methods=['GET'])
@@ -53,7 +39,7 @@ def list_own_mlmodels():
     item_list = MLModel.get_existing().filter(
         MLModel.user == current_user).order_by('created desc').all()
 
-    result = public_mlmodels_schema.dump(item_list)
+    result = own_mlmodels_schema.dump(item_list)
     return jsonify(data=result.data)
 
 
@@ -127,6 +113,16 @@ def list_public_tests():
     return jsonify(data=result.data)
 
 
+@blueprint.route('/tests/<int:pk>', methods=['GET'])
+def get_test(pk):
+    item = ModelTest.query.get(pk)
+    if not item:
+        return not_found()
+
+    result = test_schema.dump(item)
+    return jsonify(data=result.data)
+
+
 @blueprint.route('/tests', methods=['POST'])
 @jwt_required()
 def create_test():
@@ -148,11 +144,12 @@ def create_test():
 
 @blueprint.route('/user/tests', methods=['GET'])
 @jwt_required()
-def list_user_model_tests():
-    model_test_list = ModelTest.get_existing().filter(
+def list_own_model_tests():
+    item_list = ModelTest.get_existing().filter(
         ModelTest.user == current_user).order_by('created desc').all()
 
-    return jsonify(marshal_list(model_test_list, 'ModelTest', TEST_FIELDS))
+    result = own_tests_schema.dump(item_list)
+    return jsonify(data=result.data)
 
 
 @blueprint.route('/tests/<int:pk>', methods=['DELETE'])

@@ -25,5 +25,6 @@ class MLModelBriefSchema(BaseBriefItemSchema):
 
 
 class ModelTestBriefSchema(BaseBriefItemSchema):
-    pass
-
+    state = fields.String()
+    test_duration = fields.Function(
+        lambda obj: obj.output_data.get('duration'))
