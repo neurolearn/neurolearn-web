@@ -1,4 +1,4 @@
-import { isEmpty, without, pick } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -20,7 +20,7 @@ export default class TrainingLabel extends React.Component {
     const images = pick(this.props.selectedImages.images,
                         this.countSelectedImages);
     if (!isEmpty(Object.keys(images))
-        && isEmpty(this.props.imagesMetadata.items)) {
+        && isEmpty(this.props.imagesMetadata.data)) {
       this.props.dispatch(loadImagesMetadata(images));
     }
   }
@@ -41,17 +41,7 @@ export default class TrainingLabel extends React.Component {
     return [firstRow].concat(data);
   }
 
-  withFirst(frontItems, items) {
-    return frontItems.concat(without(items, ...frontItems));
-  }
-
-  convertToArrayOfArrays(data) {
-    const keys = this.withFirst(['id', 'collection_id', 'file', 'name'], Object.keys(data[0]));
-    return [keys].concat(data.map(item => keys.map(key => item[key])));
-  }
-
-  renderDataGrid(imagesMetadata, targetData) {
-    const data = this.convertToArrayOfArrays(imagesMetadata);
+  renderDataGrid(data, targetData) {
     return (
       <div>
         <p>Select a column for training labels and (optionally) a column with subject IDs. Right click a corresponding columns.</p>
@@ -81,8 +71,8 @@ export default class TrainingLabel extends React.Component {
       <div>
         <h1 className="page-header">Training Label</h1>
         { imagesMetadata.isFetching && this.renderLoading() }
-        { !isEmpty(imagesMetadata.items) &&
-          this.renderDataGrid(imagesMetadata.items, targetData) }
+        { !isEmpty(imagesMetadata.data) &&
+          this.renderDataGrid(imagesMetadata.data, targetData) }
 
         <hr/>
         <Link disabled={false} className="btn btn-primary continue-button" to="/models/new/model-preferences">Continue to Model Preferences</Link>

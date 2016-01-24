@@ -1,5 +1,6 @@
 import update from 'react/lib/update';
 import omit from 'lodash/object/omit';
+import without from 'lodash/array/without';
 import api from '../api';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
@@ -18,11 +19,10 @@ function requestImagesMetadata() {
   };
 }
 
-function receiveImagesMetadata(collectionId, results) {
+function receiveImagesMetadata(items) {
   return {
     type: RECEIVE_IMAGES_METADATA,
-    collectionId,
-    results
+    items
   };
 }
 
@@ -39,6 +39,15 @@ function setExtraProps(collectionId, imageList) {
     file: {$apply: baseFilename},
     'collection_id': {$set: collectionId}
   }));
+}
+
+function withFirst(frontItems, items) {
+  return frontItems.concat(without(items, ...frontItems));
+}
+
+function convertToArrayOfArrays(items) {
+    const keys = withFirst(['id', 'collection_id', 'file', 'name'], Object.keys(items[0]));
+    return [keys].concat(items.map(item => keys.map(key => item[key])));
 }
 
 export function loadImagesMetadata(imageMap) {
@@ -58,7 +67,7 @@ export function loadImagesMetadata(imageMap) {
           filterImages(imageMap[collectionId],
                        response.body.results)));
       }, []);
-      dispatch(receiveImagesMetadata(504, items));
+      dispatch(receiveImagesMetadata(items));
     }).
     catch(err => {
       console.log('Error', err);
@@ -73,19 +82,20 @@ const propsToOmit = ['collection', 'cognitive_paradigm_cogatlas_id', 'descriptio
 
 export default function reducer(state = {
   isFetching: false,
-  items: []
+  data: []
 }, action) {
   switch (action.type) {
     case RESET_IMAGES_METADATA:
     case REQUEST_IMAGES_METADATA:
       return {
         isFetching: true,
-        items: []
+        data: []
       };
     case RECEIVE_IMAGES_METADATA:
       return {
         isFetching: false,
-        items: action.results.map((item) => omit(item, propsToOmit))
+        data: convertToArrayOfArrays(
+          action.items.map((item) => omit(item, propsToOmit)))
       };
     default:
       return state;
