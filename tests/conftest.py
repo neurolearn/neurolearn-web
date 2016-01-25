@@ -1,3 +1,4 @@
+import os
 import pytest
 
 from webtest import TestApp
@@ -8,9 +9,19 @@ from nlweb.extensions import db as _db
 from .factories import UserFactory
 
 
+def test_env_enabled():
+    return os.environ.get('ENV') == 'test'
+
+
 @pytest.fixture(scope='session')
 def app(request):
     """Session-wide test `Flask` application."""
+
+    if not test_env_enabled():
+        pytest.exit('ENV is not \'test\' this may lead to the'
+                    ' database corruption. Make sure you set '
+                    'proper ENV value.')
+
     app = create_app()
 
     ctx = app.app_context()
