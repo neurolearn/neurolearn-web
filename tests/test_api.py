@@ -25,10 +25,19 @@ def test_create_mlmodel(testapp, user):
     name = 'Test %s' % uuid.uuid4()
 
     headers = gen_auth_header(fetch_jwt(testapp, user))
-    payload = {'algorithm': nv_test_data.ALGORITHM,
-               'data': nv_test_data.TARGET_DATA,
-               'cv': {'type': 'kfolds', 'n_folds': 10},
-               'name': name}
+    payload = {
+        'algorithm': nv_test_data.ALGORITHM,
+        'data': nv_test_data.TARGET_DATA,
+        'cv': {
+            'type': 'kfolds',
+            'value': '10'
+        },
+        'label': {
+            'name': 'PainLevel',
+            'index': 13
+        },
+        'name': name
+    }
 
     response = testapp.post_json('/mlmodels',
                                  payload,
