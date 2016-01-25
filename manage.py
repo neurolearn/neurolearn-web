@@ -62,7 +62,11 @@ def db_create_all():
 
 @manager.command
 def test():
-    """Run the tests."""
+    """Run the tests.
+
+    Alternative:
+    ENV=test py.test -s --verbose tests
+    """
     import pytest
     exit_code = pytest.main([TEST_PATH, '--verbose'])
     return exit_code
