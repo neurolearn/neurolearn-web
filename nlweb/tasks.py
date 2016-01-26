@@ -15,7 +15,6 @@ from nlweb.image_utils import (download_images, resample_images,
 from nlweb.models import MLModel, ModelTest, db
 from nlweb.utils import pick
 
-_collection_id_re = re.compile(r'collections\/([^/]+)?\/?$')
 
 ALLOWED_COLLECTION_PROPS = ('id', 'name')
 
@@ -59,9 +58,8 @@ def filter_selected_images(image_ids, image_list):
     return [i for i in image_list if i['id'] in image_ids]
 
 
-def add_collection_id_and_filename(image_list):
+def add_filename(image_list):
     return [dict(
-        collection_id=_collection_id_re.search(image['collection']).group(1),
         filename=os.path.basename(image['file']),
         **image
     ) for image in image_list]
@@ -95,7 +93,7 @@ def test_model(self, model_test_id):
     image_list = []
     for collection_id, image_ids in images_by_collections.items():
         images = fetch_collection_images(collection_id)
-        images = add_collection_id_and_filename(images['results'])
+        images = add_filename(images['results'])
         image_list.extend(filter_selected_images(
             set(image_ids),
             images))

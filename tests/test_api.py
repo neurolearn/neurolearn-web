@@ -27,7 +27,7 @@ def test_create_mlmodel(testapp, user):
     headers = gen_auth_header(fetch_jwt(testapp, user))
     payload = {
         'algorithm': nv_test_data.ALGORITHM,
-        'data': nv_test_data.TARGET_DATA,
+        'data': nv_test_data.TARGET_DATA_IMG_IDS,
         'cv': {
             'type': 'kfolds',
             'value': '10'
@@ -44,7 +44,7 @@ def test_create_mlmodel(testapp, user):
                                  headers=headers)
     assert response.status_code == 201
     model = MLModel.query.filter_by(name=name).first()
-    assert model.training_state == MLModel.TRAINING_QUEUED
+    assert model.training_state == MLModel.TRAINING_SUCCESS
 
 
 def create_test_mlmodel(user, output_data):
