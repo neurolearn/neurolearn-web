@@ -73,17 +73,31 @@ def test():
 
 
 @manager.command
-def retrain_model(mlmodel_id):
+def retrain_model(pk):
     from nlweb.models import MLModel
     from nlweb import tasks
 
-    mlmodel = MLModel.query.get(mlmodel_id)
+    item = MLModel.query.get(pk)
 
-    if not mlmodel:
-        print "Model #%s not found." % mlmodel_id
+    if not item:
+        print "Model #%s not found." % pk
         return
 
-    tasks.train_model(mlmodel.id)
+    tasks.train_model(item.id)
+
+
+@manager.command
+def redo_model_test(pk):
+    from nlweb.models import ModelTest
+    from nlweb import tasks
+
+    item = ModelTest.query.get(pk)
+
+    if not item:
+        print "Model #%s not found." % pk
+        return
+
+    tasks.test_model(item.id)
 
 
 if __name__ == '__main__':
