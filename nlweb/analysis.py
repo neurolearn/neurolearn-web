@@ -83,7 +83,6 @@ def set_pattern_expression(pexpc, image_list):
                        'id': image['id'],
                        'thumbnail': image['thumbnail'],
                        'collection_id': image['collection_id'],
-                       'filename': image['filename'],
                        'name': image['name']})
     return result
 

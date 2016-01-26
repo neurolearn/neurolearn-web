@@ -6,7 +6,7 @@ from nlweb import analysis
 from nlweb.httpclient import HTTPClient, FileCache
 from nlweb.image_utils import (download_images, resample_images)
 
-from .nv_test_data import TARGET_DATA, TARGET_DATA_IMG_IDS
+from .nv_test_data import TARGET_DATA_IMG_IDS
 
 
 def compare_image_files(img_a, img_b):
@@ -44,11 +44,14 @@ def test_model_test(tmpdir):
     output_dir = str(tmpdir)
     weight_map_filename = os.path.join(os.path.dirname(__file__),
                                        'ridge_weightmap.nii.gz')
-
-    image_list = download_images(client, [TARGET_DATA[0],
-                                          TARGET_DATA[30],
-                                          TARGET_DATA[62]],
+    image_list = download_images(client, [TARGET_DATA_IMG_IDS[0],
+                                          TARGET_DATA_IMG_IDS[30],
+                                          TARGET_DATA_IMG_IDS[62]],
                                  output_dir)
+    # Add dummy name and thumbnail
+    image_list = [dict(thumbnail='image.png',
+                       name='name %s' % item['id'],
+                       **item) for item in image_list]
 
     # XXX: Better to check for weightmap shape and image shape
     # and adjust weightmap if needed
