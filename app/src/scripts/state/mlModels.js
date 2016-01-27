@@ -75,7 +75,7 @@ export function deleteMLModel(modelId, router) {
       modelId,
       getState().auth.token,
       (err, res) => {
-        router.transitionTo('/');
+        router.transitionTo('/dashboard/models');
       });
   };
 }
