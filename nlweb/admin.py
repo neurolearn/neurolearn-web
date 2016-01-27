@@ -132,7 +132,7 @@ class UserAdmin(ModelView):
 
 
 class MLModelAdmin(ModelView):
-    column_list = ('id', 'name', 'user', 'status', 'training_state',
+    column_list = ('id', 'name', 'user', 'training_state', 'status',
                    'created')
     form_overrides = {
         'input_data': JSONEditorField,
@@ -141,6 +141,11 @@ class MLModelAdmin(ModelView):
 
     create_template = 'admin/jsoneditor_edit.html'
     edit_template = 'admin/jsoneditor_edit.html'
+
+
+class ModelTestAdmin(MLModelAdmin):
+    column_list = ('id', 'name', 'user', 'state', 'visibility',
+                   'created')
 
 
 class RoleAdmin(ModelView):
@@ -152,7 +157,7 @@ admin = admin.Admin(name='Neurolearn',
                     template_mode='bootstrap3')
 
 admin.add_view(MLModelAdmin(MLModel, db.session, name="MLModel"))
-admin.add_view(ModelView(ModelTest, db.session, name="Model Test"))
+admin.add_view(ModelTestAdmin(ModelTest, db.session, name="Model Test"))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(ModelView(Connection, db.session))
 admin.add_view(RoleAdmin(Role, db.session))
