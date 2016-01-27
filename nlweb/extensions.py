@@ -19,9 +19,6 @@ jwt = JWT()
 from flask_oauthlib.client import OAuth
 oauth = OAuth()
 
-from flaskext.uploads import UploadSet
-uploaded_media = UploadSet('media')
-
 from flask_migrate import Migrate
 migrate = Migrate()
 

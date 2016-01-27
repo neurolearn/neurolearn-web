@@ -3,14 +3,13 @@
 import os
 
 from flask import Flask, render_template, session
-from flaskext.uploads import configure_uploads
 from flask_admin import helpers as admin_helpers
 from flask.ext.security.utils import verify_and_update_password
 
 from .admin import admin
 
-from .extensions import (db, migrate, celery, uploaded_media,
-                         jwt, security, mail, oauth)
+from .extensions import (db, migrate, celery, jwt,
+                         security, mail, oauth)
 
 from .models import User
 
@@ -68,7 +67,6 @@ def init_extensions(app):
     oauth.init_app(app)
     security.init_app(app)
     admin.init_app(app)
-    configure_uploads(app, uploaded_media)
 
     load_celery_config(celery)
 
