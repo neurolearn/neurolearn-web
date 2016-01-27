@@ -9,11 +9,16 @@ from flask_migrate import MigrateCommand
 from flask.ext.failsafe import failsafe
 
 from sqlalchemy.schema import CreateTable
+from dotenv import Dotenv
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
+ENV_FILE_NAME = '.env'
 
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+def update_environment(env_file_path):
+    dotenv = Dotenv(env_file_path)
+    os.environ.update(dotenv)
 
 
 def _make_context():
@@ -32,6 +37,8 @@ def _make_context():
 def _create_app():
     from nlweb.app import create_app
     return create_app()
+
+update_environment(os.path.join(HERE, ENV_FILE_NAME))
 
 manager = Manager(_create_app)  # pylint: disable=invalid-name
 
