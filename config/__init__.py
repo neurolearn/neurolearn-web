@@ -9,6 +9,7 @@ class Configuration(object):
     import logging
     LOGGING_LEVEL = logging.WARNING
 
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_ECHO = True
 
     # Flask-Security config
@@ -31,3 +32,15 @@ class Configuration(object):
     JWT_AUTH_USERNAME_KEY = 'email'
     JWT_AUTH_HEADER_PREFIX = 'Bearer'
     JWT_EXPIRATION_DELTA = timedelta(hours=24)
+
+    OAUTH_REMOTE_APPS = {
+        'neurovault': {
+            'consumer_key': os.getenv('NEUROVAULT_OAUTH_CONSUMER_KEY'),
+            'consumer_secret': os.getenv('NEUROVAULT_OAUTH_CONSUMER_SECRET'),
+            'base_url': 'http://neurovault.org/',
+            'request_token_url': None,
+            'access_token_method': 'POST',
+            'access_token_url': 'http://neurovault.org/o/token/',
+            'authorize_url': 'http://neurovault.org/o/authorize/'
+        }
+    }
