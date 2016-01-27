@@ -36,6 +36,9 @@ Flask-OAuthlib==0.9.2
 # Background Jobs
 celery==3.1.18
 
+# Monitoring
+opbeat==3.2.1
+
 requests
 urllib3
 ujson

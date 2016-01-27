@@ -10,7 +10,7 @@ from flask.ext.security.utils import verify_and_update_password
 from .admin import admin
 
 from .extensions import (db, migrate, celery, uploaded_media,
-                         jwt, security, mail, oauth)
+                         jwt, security, mail, oauth, opbeat)
 
 from .models import User
 
@@ -60,6 +60,10 @@ def create_app():
 
 
 def init_extensions(app):
+
+    if not app.debug:
+        opbeat.init_app(app)
+
     db.init_app(app)
     migrate.init_app(app, db)
 
