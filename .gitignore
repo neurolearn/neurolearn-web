@@ -12,6 +12,9 @@ cache/
 nlweb/static/app
 nlweb/templates/index.html
 
+# dotenv
+.env
+
 
 # C extensions
 *.so
