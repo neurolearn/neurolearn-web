@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from celery import Celery
 
 from nlweb.app import create_app, load_celery_config
+from nlweb.extensions import opbeat
+from opbeat.contrib.celery import register_signal
 
 
 def make_celery(app):
@@ -25,3 +27,5 @@ def make_celery(app):
 
 flask_app = create_app()
 celery = make_celery(flask_app)
+if not flask_app.debug:
+    register_signal(opbeat.client)
