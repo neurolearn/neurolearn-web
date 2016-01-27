@@ -24,3 +24,6 @@ migrate = Migrate()
 
 from celery import Celery
 celery = Celery()
+
+from opbeat.contrib.flask import Opbeat
+opbeat = Opbeat()
