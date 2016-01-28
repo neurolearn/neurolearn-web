@@ -48,7 +48,7 @@ export function loadAuthUserMLModels() {
     return api.fetchAuthUserMLModels(
       getState().auth.token,
       (err, res) => {
-        if (err && err.status === 401) {
+        if (err && (err.status === 400 || err.status === 401)) {
           localStorage.removeItem(JWT_KEY_NAME);
           dispatch(logout());
         } else {
