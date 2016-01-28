@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import api from '../api';
 
 import { resetSearch } from './search';
@@ -51,17 +53,9 @@ export function selectAlgorithm(algorithm) {
   };
 }
 
-function requestModelTraining() {
-  return {
-    type: REQUEST_MODEL_TRAINING
-  };
-}
+const requestModelTraining = createAction(REQUEST_MODEL_TRAINING);
+const resetModelPreferences = createAction(RESET_MODEL_PREFERENCES);
 
-export function resetModelPreferences() {
-  return {
-    type: RESET_MODEL_PREFERENCES
-  };
-}
 
 function resetModelTrainData(dispatch) {
   [resetSearch,
@@ -90,6 +84,7 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
 }
 
 const initialState = {
+  isFetching: false,
   modelName: '',
   algorithm: '',
   cvType: null,
@@ -118,6 +113,10 @@ export default function reducer(state = initialState, action) {
     case SELECT_ALGORITHM:
       return Object.assign({}, state, {
         algorithm: action.algorithm
+      });
+    case REQUEST_MODEL_TRAINING:
+      return Object.assign({}, state, {
+        isFetching: true
       });
     case RESET_MODEL_PREFERENCES:
       return initialState;

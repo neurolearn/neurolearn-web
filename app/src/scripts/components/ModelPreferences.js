@@ -155,7 +155,12 @@ export default class ModelPreferences extends React.Component {
                 </div>
               </div>
 
-              <button type="submit" className={classes}>Train Model</button>
+              <button type="submit"
+                      className={classes}
+                      disabled={modelPreferences.isFetching}>{
+                        modelPreferences.isFetching
+                        ? 'Please wait…'
+                        : 'Train Model'}</button>
             </form>
           </div>
         </div>
