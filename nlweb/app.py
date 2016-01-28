@@ -120,8 +120,10 @@ def register_blueprints(app):
     from nlweb.views import account
     from nlweb.views import api
 
-    for view in (frontend, account, api):
+    for view in (frontend, account):
         app.register_blueprint(view.blueprint)
+
+    app.register_blueprint(api.blueprint, url_prefix='/api')
 
 
 def register_errorhandlers(app):

@@ -10,7 +10,7 @@ const api = {
   },
 
   fetchAuthUserMLModels: (token, callback) => {
-    return request.get('/user/mlmodels')
+    return request.get('/api/user/mlmodels')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
@@ -18,21 +18,21 @@ const api = {
   },
 
   fetchMLModels: (callback) => {
-    return request.get('/mlmodels')
+    return request.get('/api/mlmodels')
       .type('json')
       .accept('json')
       .end(callback);
   },
 
   fetchModelTests: (callback) => {
-    return request.get('/tests')
+    return request.get('/api/tests')
       .type('json')
       .accept('json')
       .end(callback);
   },
 
   fetchModelTest: (pk, token, callback) => {
-    let req = request.get(`/tests/${pk}`)
+    let req = request.get(`/api/tests/${pk}`)
       .type('json')
       .accept('json');
 
@@ -44,7 +44,7 @@ const api = {
   },
 
   fetchMLModel: (modelId, token, callback) => {
-    let req = request.get(`/mlmodels/${modelId}`)
+    let req = request.get(`/api/mlmodels/${modelId}`)
       .type('json')
       .accept('json');
 
@@ -56,13 +56,13 @@ const api = {
   },
 
   deleteMLModel: (modelId, token, callback) => {
-    return request.del(`/mlmodels/${modelId}`)
+    return request.del(`/api/mlmodels/${modelId}`)
       .set('Authorization', 'Bearer ' + token)
       .end(callback);
   },
 
   fetchAuthUserModelTests: (token, callback) => {
-    return request.get('/user/tests')
+    return request.get('/api/user/tests')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
@@ -70,13 +70,13 @@ const api = {
   },
 
   deleteModelTest: (modelId, token, callback) => {
-    return request.del(`/tests/${modelId}`)
+    return request.del(`/api/tests/${modelId}`)
       .set('Authorization', 'Bearer ' + token)
       .end(callback);
   },
 
   saveCorrelationGroups: (modelId, groups, token, callback) => {
-    return request.post(`/tests/${modelId}/groups`)
+    return request.post(`/api/tests/${modelId}/groups`)
       .set('Authorization', 'Bearer ' + token)
       .send(groups)
       .type('json')
@@ -97,7 +97,7 @@ const api = {
       cv
     };
 
-    return request.post('/mlmodels')
+    return request.post('/api/mlmodels')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
@@ -111,7 +111,7 @@ const api = {
       selectedImages
     };
 
-    return request.post('/tests')
+    return request.post('/api/tests')
       .type('json')
       .accept('json')
       .set('Authorization', 'Bearer ' + token)
