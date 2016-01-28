@@ -26,7 +26,7 @@ def train_model(self, mlmodel_id):
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
 
-    client = HTTPClient(cache=FileCache('cache'))
+    client = HTTPClient(cache=FileCache(celery.conf.FILE_CACHE_ROOT))
 
     target_data = mlmodel.input_data['data']
 
@@ -77,7 +77,7 @@ def test_model(self, model_test_id):
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(model_test.id))
 
-    client = HTTPClient(cache=FileCache('cache'))
+    client = HTTPClient(cache=FileCache(celery.conf.FILE_CACHE_ROOT))
 
     mlmodel_id = int(model_test.input_data['modelId'])
     mlmodel = MLModel.query.get(mlmodel_id)
