@@ -1,5 +1,12 @@
 import api from '../api';
 
+import { resetSearch } from './search';
+import { resetImagesMetadata } from './imagesMetadata';
+import { resetSelectedImages } from './selectedImages';
+import { hideSelectImagesModal } from './selectImagesModal';
+import { resetTargetData } from './targetData';
+
+
 export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_KFOLD_PARAM = 'INPUT_KFOLD_PARAM';
 export const INPUT_LOSO_PARAM = 'INPUT_LOSO_PARAM';
@@ -7,12 +14,6 @@ export const SELECT_CV_TYPE = 'SELECT_CV_TYPE';
 export const SELECT_ALGORITHM = 'SELECT_ALGORITHM';
 export const REQUEST_MODEL_TRAINING = 'REQUEST_MODEL_TRAINING';
 export const RESET_MODEL_PREFERENCES = 'RESET_MODEL_PREFERENCES';
-
-import { resetSearch } from './search';
-import { resetImagesMetadata } from './imagesMetadata';
-import { resetSelectedImages } from './selectedImages';
-import { hideSelectImagesModal } from './selectImagesModal';
-import { resetTargetData } from './targetData';
 
 
 export function inputModelName(modelName) {
