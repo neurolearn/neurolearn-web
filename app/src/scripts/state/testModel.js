@@ -3,13 +3,13 @@ import { createAction } from 'redux-actions';
 
 import api from '../api';
 
-export const SET_TEST_MODEL = 'SET_TEST_MODEL';
-export const REQUEST_TEST_MODEL = 'REQUEST_TEST_MODEL';
-export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
-
 import { resetSearch } from './search';
 import { resetSelectedImages } from './selectedImages';
 import { hideSelectImagesModal } from './selectImagesModal';
+
+export const SET_TEST_MODEL = 'SET_TEST_MODEL';
+export const REQUEST_TEST_MODEL = 'REQUEST_TEST_MODEL';
+export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
 
 export const setTestModel = createAction(SET_TEST_MODEL);
 export const requestTestModel = createAction(REQUEST_TEST_MODEL);
