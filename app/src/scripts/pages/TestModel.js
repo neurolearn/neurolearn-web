@@ -96,8 +96,9 @@ export default class TestModel extends React.Component {
   handleTestModelClick(e) {
     e.preventDefault();
     const { router } = this.context;
-    this.props.dispatch(testModel(this.props.testModel.id,
-                                  this.props.selectedImages.images,
+    const { selectedImages } = this.props;
+    this.props.dispatch(testModel(this.props.testModel.model.id,
+                                  selectedImages.images,
                                   router));
   }
 
@@ -127,8 +128,8 @@ export default class TestModel extends React.Component {
                 <h3 className="panel-title">Model</h3>
               </div>
               <div className='panel-body'>
-                { testModel.id
-                  ? <p><Link to={`/models/${testModel.id}`}>{testModel.name}</Link></p>
+                { testModel.model
+                  ? <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
                   : <p>No test model has been selected.</p>
                 }
               </div>
@@ -144,9 +145,9 @@ export default class TestModel extends React.Component {
                   : <SelectedCollectionList selectedImages={selectedImages}
                                onItemClick={(id) => this.handleCollectionClick(id)} />
                 }
-                <Button disabled={anySelected}
+                <Button disabled={anySelected || testModel.isFetching}
                         bsStyle="primary"
-                        onClick={this.handleTestModelClick.bind(this)}>Test Model</Button>
+                        onClick={this.handleTestModelClick.bind(this)}>{testModel.isFetching ? 'Please wait…' : 'Test Model'}</Button>
               </div>
             </div>
           </div>

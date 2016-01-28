@@ -1,20 +1,18 @@
 import { map, pick, keys, mapValues } from 'lodash';
+import { createAction } from 'redux-actions';
+
 import api from '../api';
 
 export const SET_TEST_MODEL = 'SET_TEST_MODEL';
+export const REQUEST_TEST_MODEL = 'REQUEST_TEST_MODEL';
 export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
 
 import { resetSearch } from './search';
 import { resetSelectedImages } from './selectedImages';
 import { hideSelectImagesModal } from './selectImagesModal';
 
-
-export function setTestModel(model) {
-  return {
-    type: SET_TEST_MODEL,
-    model
-  };
-}
+export const setTestModel = createAction(SET_TEST_MODEL);
+export const requestTestModel = createAction(REQUEST_TEST_MODEL);
 
 function extractId(url) {
   return parseInt(url.match(/images\/(\d+)/)[1]);
@@ -34,6 +32,7 @@ function resetModelTestData(dispatch) {
 
 export function testModel(modelId, selectedImages, router) {
   return (dispatch, getState) => {
+    dispatch(requestTestModel());
     return api.testModel(
       modelId,
       listImageIds(selectedImages),
@@ -47,12 +46,21 @@ export function testModel(modelId, selectedImages, router) {
   };
 }
 
-const initialState = {};
+const initialState = {
+  isFetching: false,
+  model: null
+};
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_TEST_MODEL:
-      return action.model;
+      return Object.assign({}, state, {
+        model: action.payload
+      });
+    case REQUEST_TEST_MODEL:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
     case RESET_TEST_MODEL:
       return initialState;
     default:

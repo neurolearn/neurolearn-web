@@ -74,6 +74,7 @@
     "react-router": "^1.0.0-beta3",
     "react-slider": "git+https://git@github.com/burnash/react-slider.git",
     "redux": "^1.0.1",
+    "redux-actions": "^0.9.1",
     "redux-thunk": "^0.1.0",
     "spin.js": "^2.3.2",
     "superagent": "^1.2.0",
