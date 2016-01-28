@@ -46,12 +46,6 @@ export default class ModelTests extends React.Component {
     clearInterval(this.interval);
   }
 
-  handleTestNewModel() {
-    const { router } = this.context;
-    this.props.dispatch(resetSelectedImages());
-    router.transitionTo('/tests/new');
-  }
-
   renderState(state) {
     switch (state) {
       case 'queued':
@@ -115,11 +109,7 @@ export default class ModelTests extends React.Component {
 
     return (
       <div className={styles.root}>
-        <DashboardNav router={this.context.router}>
-          <Button bsStyle="primary"
-                  className="pull-right"
-                  onClick={this.handleTestNewModel.bind(this)}><i className="fa fa-plus"></i> New Test</Button>
-        </DashboardNav>
+        <DashboardNav router={this.context.router} />
 
         <div className="row">
           <div className="col-md-12">
