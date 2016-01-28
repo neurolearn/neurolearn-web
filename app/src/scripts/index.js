@@ -23,6 +23,7 @@ import ViewTest from './pages/ViewTest';
 import InputData from './components/InputData';
 import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
+import NotFound from './pages/NotFound';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
@@ -45,6 +46,7 @@ function renderRoutes(history) {
         <Route path="/models/:id" component={ViewModel} />
         <Route path="/tests/new" component={TestModel} />
         <Route path="/tests/:id" component={ViewTest} />
+        <Route path="*" component={NotFound} />
       </Route>
     </Router>
   );
