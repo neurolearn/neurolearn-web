@@ -1,13 +1,11 @@
-import { values, sortByOrder, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../../state/modelTests';
-import { resetSelectedImages } from '../../state/selectedImages';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
 
