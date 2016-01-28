@@ -18,11 +18,12 @@ def test_train_model(tmpdir):
     algorithm = 'ridge'
     output_dir = str(tmpdir)
 
-    client = HTTPClient(cache=FileCache('cache'))
+    cache = FileCache('cache')
+    client = HTTPClient(cache)
 
     image_list = download_images(client, TARGET_DATA_IMG_IDS,
                                  output_dir)
-    image_list = resample_images(image_list, output_dir)
+    image_list = resample_images(cache, image_list, output_dir)
 
     cv = {'type': 'kfolds', 'n_folds': 10}
     # cv = {'type': 'loso'}
@@ -39,7 +40,8 @@ def test_train_model(tmpdir):
 
 
 def test_model_test(tmpdir):
-    client = HTTPClient(cache=FileCache('cache'))
+    cache = FileCache('cache')
+    client = HTTPClient(cache)
 
     output_dir = str(tmpdir)
     weight_map_filename = os.path.join(os.path.dirname(__file__),
@@ -55,6 +57,6 @@ def test_model_test(tmpdir):
 
     # XXX: Better to check for weightmap shape and image shape
     # and adjust weightmap if needed
-    image_list = resample_images(image_list, output_dir)
+    image_list = resample_images(cache, image_list, output_dir)
 
     analysis.apply_mask(image_list, weight_map_filename)

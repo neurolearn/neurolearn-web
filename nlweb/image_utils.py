@@ -184,7 +184,7 @@ def download_images(client, image_list, output_dir):
     return image_items
 
 
-def resample_images(image_list, output_dir):
+def resample_images(cache, image_list, output_dir):
     """
     :param image_list: A list of dictionaries of the form
                        {
@@ -207,7 +207,7 @@ def resample_images(image_list, output_dir):
         pass
 
     image_items = []
-    resampler = ImageResampler(cache=FileCache('cache'))
+    resampler = ImageResampler(cache)
 
     for image in image_list:
         filename = os.path.join(dirname,

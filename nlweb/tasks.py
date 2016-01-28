@@ -26,12 +26,13 @@ def train_model(self, mlmodel_id):
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
 
-    client = HTTPClient(cache=FileCache(celery.conf.FILE_CACHE_ROOT))
+    cache = FileCache(celery.conf.FILE_CACHE_ROOT)
+    client = HTTPClient(cache)
 
     target_data = mlmodel.input_data['data']
 
     image_list = download_images(client, target_data, output_dir)
-    image_list = resample_images(image_list, output_dir)
+    image_list = resample_images(cache, image_list, output_dir)
 
     mlmodel.training_state = MLModel.TRAINING_SUCCESS
 
@@ -77,7 +78,8 @@ def test_model(self, model_test_id):
 
     output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(model_test.id))
 
-    client = HTTPClient(cache=FileCache(celery.conf.FILE_CACHE_ROOT))
+    cache = FileCache(celery.conf.FILE_CACHE_ROOT)
+    client = HTTPClient(cache)
 
     mlmodel_id = int(model_test.input_data['modelId'])
     mlmodel = MLModel.query.get(mlmodel_id)
@@ -98,7 +100,7 @@ def test_model(self, model_test_id):
             images))
 
     image_list = download_images(client, image_list, output_dir)
-    image_list = resample_images(image_list, output_dir)
+    image_list = resample_images(cache, image_list, output_dir)
 
     model_test.state = ModelTest.STATE_SUCCESS
 
