@@ -14,7 +14,7 @@ nlweb/templates/index.html
 
 # dotenv
 .env
-
+production.env
 
 # C extensions
 *.so
