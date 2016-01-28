@@ -9,12 +9,14 @@ class Configuration(object):
     import logging
     LOGGING_LEVEL = logging.WARNING
 
+    SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_ECHO = True
 
     # Flask-Security config
-    SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-    SECURITY_PASSWORD_SALT = "ATEL$hirGOJKiu@ghaeubaG--EGj"
+    SECURITY_PASSWORD_HASH = os.getenv('FLASK_SECURITY_PASSWORD_HASH')
+    SECURITY_PASSWORD_SALT = os.getenv('FLASK_SECURITY_PASSWORD_SALT')
 
     # Flask-Security URLs, overridden because they don't put a / at the end
     SECURITY_LOGIN_URL = "/login/"
