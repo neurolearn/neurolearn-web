@@ -5,7 +5,6 @@ import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { ScatterChart } from 'react-d3';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
@@ -189,7 +188,7 @@ export default class ViewModel extends React.Component {
             />
             {!this.state.showMPLPlot &&
             <Button onClick={() => this.setState({showMPLPlot: true})}>
-              Show matplotlib Scatterplot
+              Debug: Show matplotlib Scatterplot
             </Button>
             }
             {this.state.showMPLPlot &&
