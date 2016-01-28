@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadAuthUserMLModels } from '../../state/mlModels';
-import { resetSelectedImages } from '../../state/selectedImages';
+import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
@@ -49,7 +49,7 @@ export default class MLModels extends React.Component {
 
   handleTrainNewModel() {
     const { router } = this.context;
-    this.props.dispatch(resetSelectedImages());
+    resetModelTrainData(this.props.dispatch);
     router.transitionTo('/models/new');
   }
 

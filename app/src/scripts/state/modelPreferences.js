@@ -57,7 +57,7 @@ const requestModelTraining = createAction(REQUEST_MODEL_TRAINING);
 const resetModelPreferences = createAction(RESET_MODEL_PREFERENCES);
 
 
-function resetModelTrainData(dispatch) {
+export function resetModelTrainData(dispatch) {
   [resetSearch,
    resetImagesMetadata,
    resetSelectedImages,
