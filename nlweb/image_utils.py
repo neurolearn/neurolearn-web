@@ -11,7 +11,7 @@ from nilearn.image import resample_img
 
 import nltools
 
-from .httpclient import FileCache, CachedObject
+from .httpclient import CachedObject
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
