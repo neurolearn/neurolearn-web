@@ -236,7 +236,7 @@ export default class ViewModel extends React.Component {
       <div>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
-            {user &&
+            {user && model.state === 'success' &&
               <Button bsStyle="primary"
                       onClick={() => this.handleTestModel(model)}>Test Model</Button>}
             {userIsOwner &&
