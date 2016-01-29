@@ -3,10 +3,12 @@
 
 import os
 import inspect
+from getpass import getpass
 
 from flask_script import Manager, Shell, Server
 from flask_migrate import MigrateCommand
 from flask.ext.failsafe import failsafe
+from flask.ext.security.utils import encrypt_password
 
 from sqlalchemy.schema import CreateTable
 from dotenv import Dotenv
@@ -65,6 +67,22 @@ def sql(model_name):
 def db_create_all():
     from nlweb import db
     db.create_all()
+
+
+@manager.command
+def changepassword(email):
+    from nlweb import db
+    from nlweb.models import User
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        password = getpass()
+        user.password = encrypt_password(password)
+        db.session.commit()
+        print "Password has been changed."
+    else:
+        print "User not found."
 
 
 @manager.command
