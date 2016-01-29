@@ -15,6 +15,7 @@ export default class ViewTest extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     modelTests: PropTypes.object,
+    user: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -91,8 +92,10 @@ export default class ViewTest extends React.Component {
   }
 
   render() {
-    const { modelTests } = this.props;
+    const { modelTests, user } = this.props;
     const item = modelTests.item;
+
+    const userIsOwner = (item && user && item.user.id === item.user_id);
 
     if (!item || modelTests.isFetching) {
       return <div>Loading test...</div>;
@@ -102,8 +105,9 @@ export default class ViewTest extends React.Component {
       <div>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
-            <Button bsStyle="danger"
-                    onClick={() => this.handleDelete(item.id)}>Delete</Button>
+            {userIsOwner &&
+              <Button bsStyle="danger"
+                      onClick={() => this.handleDelete(item.id)}>Delete</Button>}
           </ButtonToolbar>
           <h1>{item && item.name}</h1>
         </div>
@@ -116,7 +120,10 @@ export default class ViewTest extends React.Component {
 }
 
 function select(state) {
-  return state;
+  return {
+    modelTests: state.modelTests,
+    user: state.auth.user
+  };
 }
 
 export default connect(select)(ViewTest);

@@ -53,7 +53,14 @@ export function login(email, password) {
   };
 }
 
-export default function reducer(state = {}, action) {
+const initialState = {
+  loggingIn: false,
+  loginError: null,
+  token: null,
+  user: null
+};
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_LOGIN:
       return { loggingIn: true };

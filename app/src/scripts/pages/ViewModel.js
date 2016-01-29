@@ -28,6 +28,7 @@ export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     mlModels: PropTypes.object,
+    user: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -222,8 +223,10 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { mlModels } = this.props;
+    const { mlModels, user } = this.props;
     const model = mlModels.item;
+
+    const userIsOwner = (model && user && model.user.id === user.user_id);
 
     if (!model || mlModels.isFetching) {
       return <div>Loading model...</div>;
@@ -233,10 +236,12 @@ export default class ViewModel extends React.Component {
       <div>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
-            <Button bsStyle="primary"
-                    onClick={() => this.handleTestModel(model)}>Test Model</Button>
-            <Button bsStyle="danger"
-                    onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>
+            {user &&
+              <Button bsStyle="primary"
+                      onClick={() => this.handleTestModel(model)}>Test Model</Button>}
+            {userIsOwner &&
+              <Button bsStyle="danger"
+                      onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>}
           </ButtonToolbar>
           <h1>{model && model.name}</h1>
         </div>
@@ -247,8 +252,10 @@ export default class ViewModel extends React.Component {
 }
 
 function select(state) {
-  return state;
+  return {
+    mlModels: state.mlModels,
+    user: state.auth.user
+  };
 }
 
 export default connect(select)(ViewModel);
-
