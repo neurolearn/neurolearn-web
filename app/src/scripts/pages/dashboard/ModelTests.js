@@ -6,6 +6,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { loadModelTests } from '../../state/modelTests';
+import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
 
@@ -44,19 +45,6 @@ export default class ModelTests extends React.Component {
     clearInterval(this.interval);
   }
 
-  renderState(state) {
-    switch (state) {
-      case 'queued':
-        return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
-      case 'progress':
-        return <span className="badge" style={{'backgroundColor': '#E48110'}}>In Progress…</span>;
-      case 'success':
-        return <span className="badge" style={{'backgroundColor': 'green'}}>Complete</span>;
-      case 'failure':
-        return <span className="badge" style={{'backgroundColor': '#DC0000'}}>Failed</span>;
-    }
-  }
-
   renderItems(modelTests) {
     const models = modelTests.items;
 
@@ -78,7 +66,7 @@ export default class ModelTests extends React.Component {
                   <Link to={`/tests/${model.id}`}>{model.name}</Link>
                 </td>
                 <td style={{height: 40}}>
-                  { this.renderState(model.state) }
+                  <TaskStateLabel state={model.state}/>
                 </td>
                 <td>
                   { model.test_duration &&

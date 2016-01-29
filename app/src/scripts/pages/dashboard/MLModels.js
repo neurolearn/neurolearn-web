@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { loadAuthUserMLModels } from '../../state/mlModels';
 import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
+import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
 
@@ -53,19 +54,6 @@ export default class MLModels extends React.Component {
     router.transitionTo('/models/new');
   }
 
-  renderState(state) {
-    switch (state) {
-      case 'queued':
-        return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
-      case 'progress':
-        return <span className="badge" style={{'backgroundColor': '#E48110'}}>In Progress…</span>;
-      case 'success':
-        return <span className="badge" style={{'backgroundColor': 'green'}}>Complete</span>;
-      case 'failure':
-        return <span className="badge" style={{'backgroundColor': '#DC0000'}}>Failed</span>;
-    }
-  }
-
   renderMLModels(mlModels) {
     const { items } = mlModels;
 
@@ -89,7 +77,7 @@ export default class MLModels extends React.Component {
                   <Link to={`/models/${model.id}`}>{model.name}</Link>
                 </td>
                 <td style={{height: 40}}>
-                  { this.renderState(model.state) }
+                  <TaskStateLabel state={model.state}/>
                 </td>
                 <td>{algorithmNameMap[model.algorithm]}</td>
                 <td>{model.cv.type}</td>
