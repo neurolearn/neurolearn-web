@@ -14,7 +14,7 @@ const TaskStateLabel = props => {
 };
 
 TaskStateLabel.PropTypes = {
-  state: PropTypes.string
+  state: PropTypes.string.isRequired
 };
 
 export default TaskStateLabel;
