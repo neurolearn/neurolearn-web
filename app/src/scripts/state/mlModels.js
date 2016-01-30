@@ -1,7 +1,6 @@
 import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
 import api from '../api';
-import merge from 'lodash/object/merge';
 
 export const REQUEST_AUTH_USER_MLMODELS = 'REQUEST_AUTH_USER_MLMODELS';
 export const REQUEST_MLMODEL = 'REQUEST_MLMODEL';
