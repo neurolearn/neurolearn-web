@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
 import { JWT_KEY_NAME, NEUROVAULT_CLIENT_IDS } from './constants/auth';
 
@@ -63,7 +64,7 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { auth } = this.props;
+    const { auth, alertMessages } = this.props;
     const { router } = this.context;
 
     return (
@@ -82,6 +83,7 @@ export default class App extends React.Component {
         </Navbar>
 
         <div className="container">
+          <AlertMessages messages={alertMessages} />
           {this.props.children}
         </div>
       </div>

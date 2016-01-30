@@ -12,6 +12,7 @@ import publicModelTests from '../state/publicModelTests';
 import modelPreferences from '../state/modelPreferences';
 import testModel from '../state/testModel';
 import modelTests from '../state/modelTests';
+import alertMessages from '../state/alertMessages';
 
 const rootReducer = combineReducers({
   auth,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   targetData,
   modelPreferences,
   testModel,
-  modelTests
+  modelTests,
+  alertMessages
 });
 
 export default rootReducer;

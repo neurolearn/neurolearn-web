@@ -1,5 +1,6 @@
 import { logout } from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
+import { apiError } from './alertMessages';
 import api from '../api';
 
 export const REQUEST_AUTH_USER_MLMODELS = 'REQUEST_AUTH_USER_MLMODELS';
@@ -70,12 +71,16 @@ export function loadPublicMLModels() {
 export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteMLModel(modelId));
-    return api.deleteMLModel(
-      modelId,
-      getState().auth.token,
-      (err, res) => {
-        router.transitionTo('/dashboard/models');
-      });
+
+    return api.delete(`/api/mlmodels/${modelId}`, getState().auth.token)
+      .then(
+        () => {
+          router.transitionTo('/dashboard/models');
+        },
+        error => {
+          dispatch(apiError(error));
+        }
+    );
   };
 }
 
