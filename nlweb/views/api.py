@@ -10,26 +10,26 @@ from nlweb import tasks
 
 from ..models import db, MLModel, ModelTest
 
-from ..schemas import MLModelBriefSchema, ModelTestBriefSchema
+from ..schemas import MLModelSchema, ModelTestSchema
 
 from . import not_found
 
 blueprint = Blueprint('api', __name__)
 
-mlmodel_schema = MLModelBriefSchema()
+mlmodel_schema = MLModelSchema()
 
-public_models_schema = MLModelBriefSchema(
+public_models_schema = MLModelSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-own_models_schema = MLModelBriefSchema(
+own_models_schema = MLModelSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-test_schema = ModelTestBriefSchema()
+test_schema = ModelTestSchema()
 
-public_tests_schema = ModelTestBriefSchema(
+public_tests_schema = ModelTestSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-own_tests_schema = ModelTestBriefSchema(
+own_tests_schema = ModelTestSchema(
     many=True, exclude=('input_data', 'output_data'))
 
 

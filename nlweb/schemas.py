@@ -6,7 +6,7 @@ class UserSchema(Schema):
         fields = ('id', 'name')
 
 
-class BaseBriefItemSchema(Schema):
+class BaseItemSchema(Schema):
     user = fields.Nested(UserSchema)
 
     class Meta:
@@ -15,7 +15,7 @@ class BaseBriefItemSchema(Schema):
                       'created', 'updated')
 
 
-class MLModelBriefSchema(BaseBriefItemSchema):
+class MLModelSchema(BaseItemSchema):
     state = fields.String(attribute='training_state')
     visibility = fields.String(attribute='status')
     algorithm = fields.Function(lambda obj: obj.input_data['algorithm'])
@@ -24,7 +24,7 @@ class MLModelBriefSchema(BaseBriefItemSchema):
         lambda obj: obj.output_data.get('duration'))
 
 
-class ModelTestBriefSchema(BaseBriefItemSchema):
+class ModelTestSchema(BaseItemSchema):
     state = fields.String()
     test_duration = fields.Function(
         lambda obj: obj.output_data.get('duration'))
