@@ -1,14 +1,17 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
+import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME, NEUROVAULT_CLIENT_IDS } from './constants/auth';
 
 export default class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
     auth: PropTypes.object,
+    alertMessages: PropTypes.array,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -64,7 +67,7 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { auth, alertMessages } = this.props;
+    const { auth, alertMessages, dispatch } = this.props;
     const { router } = this.context;
 
     return (
@@ -83,7 +86,8 @@ export default class App extends React.Component {
         </Navbar>
 
         <div className="container">
-          <AlertMessages messages={alertMessages} />
+          <AlertMessages messages={alertMessages}
+                         {...bindActionCreators({dismissAlert}, dispatch)} />
           {this.props.children}
         </div>
       </div>

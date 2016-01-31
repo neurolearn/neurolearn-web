@@ -11,20 +11,17 @@ function mapLevelToStyle(level) {
 
 export default class AlertMessages extends React.Component {
   static propTypes = {
-    messages: PropTypes.array.isRequired
-  }
-
-  handleAlertDismiss() {
-    console.log('dismiss');
+    messages: PropTypes.array.isRequired,
+    dismissAlert: PropTypes.func
   }
 
   render() {
-    const { messages } = this.props;
+    const { messages, dismissAlert } = this.props;
 
     return (
       <div>
         {messages.map((message, index) =>
-          <Alert key={index} bsStyle={mapLevelToStyle(message.level)} onDismiss={this.handleAlertDismiss}>
+          <Alert key={index} bsStyle={mapLevelToStyle(message.level)} onDismiss={() => dismissAlert(message)}>
             {message.message}
           </Alert>
         )}
