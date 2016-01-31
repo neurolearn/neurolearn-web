@@ -19,10 +19,9 @@ function receivePublicModelTests(response) {
 export function loadPublicModelTests() {
   return (dispatch) => {
     dispatch(requestPublicModelTests());
-    return api.fetchModelTests(
-      (err, res) => {
-        dispatch(receivePublicModelTests(res.body));
-      });
+    return api.get('/api/tests').then(
+      result => dispatch(receivePublicModelTests(result))
+    );
   };
 }
 

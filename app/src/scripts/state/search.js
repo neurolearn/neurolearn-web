@@ -103,9 +103,8 @@ function receiveSearchResults(results) {
 
 function fetchSearchResults(dispatch, state) {
   const searchParams = prepareSearchParams(state);
-  return api.search(
-    searchParams,
-    (err, res) => dispatch(receiveSearchResults(res.body))
+  return api.post('/search', searchParams).then(
+    result => dispatch(receiveSearchResults(result))
   );
 }
 

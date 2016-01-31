@@ -1,4 +1,5 @@
 import api from '../api';
+import { apiError } from './alertMessages';
 
 export const REQUEST_PUBLIC_MLMODELS = 'REQUEST_PUBLIC_MLMODELS';
 export const RECEIVE_PUBLIC_MLMODELS = 'RECEIVE_PUBLIC_MLMODELS';
@@ -19,10 +20,11 @@ function receivePublicMLModels(response) {
 export function loadPublicMLModels() {
   return (dispatch) => {
     dispatch(requestPublicMLModels());
-    return api.fetchMLModels(
-      (err, res) => {
-        dispatch(receivePublicMLModels(res.body));
-      });
+    return api.get('/api/mlmodels')
+      .then(
+        result => dispatch(receivePublicMLModels(result)),
+        error => dispatch(apiError(error))
+      );
   };
 }
 

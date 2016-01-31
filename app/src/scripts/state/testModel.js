@@ -12,6 +12,7 @@ export const REQUEST_TEST_MODEL = 'REQUEST_TEST_MODEL';
 export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
 
 export const setTestModel = createAction(SET_TEST_MODEL);
+export const resetTestModel = createAction(RESET_TEST_MODEL);
 export const requestTestModel = createAction(REQUEST_TEST_MODEL);
 
 function extractId(url) {
@@ -27,22 +28,26 @@ function listImageIds(selectedImages) {
 function resetModelTestData(dispatch) {
   [resetSearch,
    resetSelectedImages,
+   resetTestModel,
    hideSelectImagesModal].map(action => dispatch(action()));
 }
 
 export function testModel(modelId, selectedImages, router) {
   return (dispatch, getState) => {
     dispatch(requestTestModel());
-    return api.testModel(
-      modelId,
-      listImageIds(selectedImages),
-      getState().auth.token,
-      err => {
-        if (!err) {
+
+    const payload = {
+      selectedImages: listImageIds(selectedImages),
+      modelId
+    };
+
+    return api.post('/api/tests', payload, getState().auth.token)
+      .then(
+        () => {
           router.transitionTo('/dashboard/tests');
           resetModelTestData(dispatch);
         }
-      });
+    );
   };
 }
 
@@ -55,6 +60,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_TEST_MODEL:
       return Object.assign({}, state, {
+        isFetching: false,
         model: action.payload
       });
     case REQUEST_TEST_MODEL:

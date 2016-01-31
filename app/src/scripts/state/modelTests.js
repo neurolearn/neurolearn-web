@@ -1,6 +1,7 @@
 import logout from './auth';
 import { JWT_KEY_NAME } from '../constants/auth';
 import api from '../api';
+import { apiError } from './alertMessages';
 
 export const REQUEST_MODEL_TEST = 'REQUEST_MODEL_TEST';
 export const RECEIVE_MODEL_TEST = 'RECEIVE_MODEL_TEST';
@@ -52,15 +53,18 @@ export function loadModelTests() {
   return (dispatch, getState) => {
     dispatch(requestModelTests());
 
-    return api.fetchAuthUserModelTests(getState().auth.token,
-      (err, res) => {
-        if (err && err.status === 401) {
+    return api.get('/api/user/tests', getState().auth.token)
+     .then(
+      result => dispatch(receiveModelTests(result)),
+      error => {
+        if (error && error.status === 401) {
           localStorage.removeItem(JWT_KEY_NAME);
           dispatch(logout());
         } else {
-          dispatch(receiveModelTests(res.body));
+          dispatch(apiError(error));
         }
-      });
+      }
+    );
   };
 }
 
@@ -69,12 +73,8 @@ export function loadModelTest(pk) {
     dispatch(requestModelTest());
     const token = getState().auth ? getState().auth.token : null;
 
-    return api.fetchModelTest(
-      pk,
-      token,
-      (err, res) => {
-        dispatch(receiveModelTest(res.body));
-      }
+    return api.get(`/api/tests/${pk}`, token).then(
+      result => dispatch(receiveModelTest(result))
     );
   };
 }
@@ -83,19 +83,17 @@ export function deleteModelTest(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteModelTest(modelId));
 
-    return api.deleteModelTest(
-      modelId,
-      getState().auth.token,
-      (err, res) => {
-        router.transitionTo('/dashboard/tests');
-      });
+    return api.delete(
+      `/api/tests/${modelId}`,
+      getState().auth.token).then(
+      () => router.transitionTo('/dashboard/tests')
+    );
   };
 }
 
 export function saveCorrelationGroups(modelId, groups) {
   return (dispatch, getState) => {
-    return api.saveCorrelationGroups(
-      modelId,
+    return api.post(`/api/tests/${modelId}/groups`,
       groups,
       getState().auth.token,
       (err) => {

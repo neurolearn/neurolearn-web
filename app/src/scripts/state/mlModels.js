@@ -45,28 +45,22 @@ function requestMLModel() {
 export function loadAuthUserMLModels() {
   return (dispatch, getState) => {
     dispatch(requestAuthUserMLModels());
-    return api.fetchAuthUserMLModels(
-      getState().auth.token,
-      (err, res) => {
-        if (err && (err.status === 400 || err.status === 401)) {
-          localStorage.removeItem(JWT_KEY_NAME);
-          dispatch(logout());
-        } else {
-          dispatch(receiveAuthUserMLModels(res.body));
+    return api.get('/api/user/mlmodels', getState().auth.token)
+      .then(
+        result => dispatch(receiveAuthUserMLModels(result)),
+        error => {
+          if (error && (error.response.status === 400
+                     || error.response.status === 401)) {
+            localStorage.removeItem(JWT_KEY_NAME);
+            dispatch(logout());
+          } else {
+            dispatch(apiError(error));
+          }
         }
-      });
-  };
+      );
+ };
 }
 
-export function loadPublicMLModels() {
-  return (dispatch) => {
-    dispatch(requestAuthUserMLModels());
-    return api.fetchMLModels(
-      (err, res) => {
-        dispatch(receiveAuthUserMLModels(res.body));
-      });
-  };
-}
 
 export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
@@ -89,13 +83,11 @@ export function loadMLModel(modelId) {
     dispatch(requestMLModel());
     const token = getState().auth ? getState().auth.token : null;
 
-    return api.fetchMLModel(
-      modelId,
-      token,
-      (err, res) => {
-        dispatch(receiveMLModel(res.body));
-      }
-    );
+    return api.get(`/api/mlmodels/${modelId}`, token)
+      .then(
+        result => dispatch(receiveMLModel(result)),
+        error => dispatch(apiError(error))
+      );
   };
 }
 

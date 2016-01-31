@@ -70,16 +70,21 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
   return (dispatch, getState) => {
     dispatch(requestModelTraining());
 
-    return api.trainModel(
-      name,
+    const payload = {
+      'data': targetData.data,
+      'label': targetData.trainingLabel,
+      'cv': crossValidation,
       algorithm,
-      targetData,
-      crossValidation,
-      getState().auth.token,
-      (err, res) => {
-        router.transitionTo('/');
-        resetModelTrainData(dispatch);
-      });
+      name
+    };
+
+    return api.post('/api/mlmodels', payload, getState().auth.token)
+      .then(
+        () => {
+          router.transitionTo('/');
+          resetModelTrainData(dispatch);
+        }
+    );
   };
 }
 

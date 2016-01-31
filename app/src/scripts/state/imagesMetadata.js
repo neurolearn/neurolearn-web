@@ -2,6 +2,7 @@ import update from 'react/lib/update';
 import omit from 'lodash/object/omit';
 import without from 'lodash/array/without';
 import api from '../api';
+import { apiError } from './alertMessages';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
 export const REQUEST_IMAGES_METADATA = 'REQUEST_IMAGES_METADATA';
@@ -55,9 +56,11 @@ export function loadImagesMetadata(imageMap) {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
       return new Promise((resolve, reject) => {
-        api.fetchImagesMetadata(collectionId, (err, res) => {
-          return err ? reject([collectionId, err]) : resolve([collectionId, res]);
-        });
+        api.get(`/nvproxy/api/collections/${collectionId}/images/`)
+          .then(
+            result => resolve([collectionId, result]),
+            error => reject([collectionId, error])
+        );
       });
     });
     return Promise.all(imageMetadataPromises).then(results => {
@@ -65,13 +68,11 @@ export function loadImagesMetadata(imageMap) {
         const [collectionId, response] = r;
         return accum.concat(setExtraProps(collectionId,
           filterImages(imageMap[collectionId],
-                       response.body.results)));
+                       response.results)));
       }, []);
       dispatch(receiveImagesMetadata(items));
-    }).
-    catch(err => {
-      console.log('Error', err);
-    });
+    })
+    .catch(error => dispatch(apiError(error)));
   };
 }
 
