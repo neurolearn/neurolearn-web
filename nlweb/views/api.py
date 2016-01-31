@@ -81,7 +81,7 @@ def create_mlmodel():
 
 @blueprint.route('/mlmodels/<int:pk>', methods=['GET'])
 def get_mlmodel(pk):
-    item = MLModel.query.get(pk)
+    item = MLModel.get_existing_item(pk)
     if not item:
         return not_found()
 
@@ -92,7 +92,7 @@ def get_mlmodel(pk):
 @blueprint.route('/mlmodels/<int:pk>', methods=['DELETE'])
 @jwt_required()
 def delete_mlmodel(pk):
-    item = MLModel.query.get(pk)
+    item = MLModel.get_existing_item(pk)
     if not item:
         return not_found()
 

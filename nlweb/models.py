@@ -124,6 +124,10 @@ class MLModel(db.Model):
         return cls.query.filter(cls.status == cls.STATUS_PUBLIC,
                                 cls.training_state == cls.TRAINING_SUCCESS)
 
+    @classmethod
+    def get_existing_item(cls, pk):
+        return cls.get_existing().filter_by(id=pk).first()
+
     def delete(self):
         self.status = self.STATUS_DELETED
 
