@@ -6,7 +6,7 @@ import nv_test_data
 
 
 def test_unauth_access(testapp):
-    response = testapp.post_json('/mlmodels', expect_errors=True)
+    response = testapp.post_json('/models', expect_errors=True)
     assert response.status_code == 401
 
 
@@ -39,7 +39,7 @@ def test_create_mlmodel(testapp, user):
         'name': name
     }
 
-    response = testapp.post_json('/mlmodels',
+    response = testapp.post_json('/models',
                                  payload,
                                  headers=headers)
     assert response.status_code == 201

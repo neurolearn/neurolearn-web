@@ -78,7 +78,7 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
       name
     };
 
-    return api.post('/api/mlmodels', payload, getState().auth.token)
+    return api.post('/api/models', payload, getState().auth.token)
       .then(
         () => {
           router.transitionTo('/');

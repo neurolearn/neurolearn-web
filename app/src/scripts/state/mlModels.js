@@ -45,7 +45,7 @@ function requestMLModel() {
 export function loadAuthUserMLModels() {
   return (dispatch, getState) => {
     dispatch(requestAuthUserMLModels());
-    return api.get('/api/user/mlmodels', getState().auth.token)
+    return api.get('/api/user/models', getState().auth.token)
       .then(
         result => dispatch(receiveAuthUserMLModels(result)),
         error => {
@@ -66,7 +66,7 @@ export function deleteMLModel(modelId, router) {
   return (dispatch, getState) => {
     dispatch(requestDeleteMLModel(modelId));
 
-    return api.delete(`/api/mlmodels/${modelId}`, getState().auth.token)
+    return api.delete(`/api/models/${modelId}`, getState().auth.token)
       .then(
         () => {
           router.transitionTo('/dashboard/models');
@@ -83,7 +83,7 @@ export function loadMLModel(modelId) {
     dispatch(requestMLModel());
     const token = getState().auth ? getState().auth.token : null;
 
-    return api.get(`/api/mlmodels/${modelId}`, token)
+    return api.get(`/api/models/${modelId}`, token)
       .then(
         result => dispatch(receiveMLModel(result)),
         error => dispatch(apiError(error))

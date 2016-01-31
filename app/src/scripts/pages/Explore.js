@@ -3,18 +3,13 @@ import NavItem from '../components/NavItem';
 import ExploreItems from '../components/ExploreItems';
 import { connect } from 'react-redux';
 
-import { loadPublicMLModels } from '../state/publicMLModels';
-import { loadPublicModelTests } from '../state/publicModelTests';
+import { loadItemList } from '../state/itemList';
 
 const ITEM_TYPE_MAPPING = {
   'models': {
-    actionType: loadPublicMLModels,
-    store: 'publicMLModels',
     serverItemType: 'MLModel'
   },
   'tests': {
-    actionType: loadPublicModelTests,
-    store: 'publicModelTests',
     serverItemType: 'ModelTest'
   }
 };
@@ -23,14 +18,12 @@ export class Explore extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     route: PropTypes.object.isRequired,
-    publicMLModels: PropTypes.object,
-    publicModelTests: PropTypes.object,
+    itemList: PropTypes.object,
     params: PropTypes.object.isRequired
   };
 
   loadItems(itemType) {
-    const { actionType } = ITEM_TYPE_MAPPING[itemType];
-    this.props.dispatch(actionType());
+    this.props.dispatch(loadItemList(`/api/${itemType}`));
   }
 
   componentDidMount() {
@@ -40,7 +33,6 @@ export class Explore extends React.Component {
 
   render() {
     const { itemType } = this.props.params;
-    const store = this.props[ITEM_TYPE_MAPPING[itemType].store];
     const { serverItemType } = ITEM_TYPE_MAPPING[itemType];
 
     return (
@@ -53,7 +45,7 @@ export class Explore extends React.Component {
           <NavItem to="/explore/tests" onClick={() => this.loadItems('tests')}>Tests</NavItem>
         </ul>
 
-        <ExploreItems itemType={serverItemType} items={store.items} />
+        <ExploreItems itemType={serverItemType} items={this.props.itemList.items} />
       </div>
     );
   }
