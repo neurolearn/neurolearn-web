@@ -9,8 +9,8 @@ export const dismissAlert = createAction(DISMISS_ALERT);
 
 
 function createMessage(payload) {
-  if (payload.response && payload.response.status === 500) {
-    return payload.response.statusText;
+  if (payload.response && payload.response.status ) {
+      return payload.response.statusText;
   }
 
   return payload.message;
