@@ -18,10 +18,10 @@ blueprint = Blueprint('api', __name__)
 
 mlmodel_schema = MLModelBriefSchema()
 
-public_mlmodels_schema = MLModelBriefSchema(
+public_models_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
-own_mlmodels_schema = MLModelBriefSchema(
+own_models_schema = MLModelBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
 test_schema = ModelTestBriefSchema()
@@ -33,21 +33,21 @@ own_tests_schema = ModelTestBriefSchema(
     many=True, exclude=('input_data', 'output_data'))
 
 
-@blueprint.route('/user/mlmodels', methods=['GET'])
+@blueprint.route('/user/models', methods=['GET'])
 @jwt_required()
-def list_own_mlmodels():
+def list_own_models():
     item_list = MLModel.get_existing().filter(
         MLModel.user == current_user).order_by('created desc').all()
 
-    result = own_mlmodels_schema.dump(item_list)
+    result = own_models_schema.dump(item_list)
     return jsonify(data=result.data)
 
 
-@blueprint.route('/mlmodels', methods=['GET'])
-def list_public_mlmodels():
+@blueprint.route('/models', methods=['GET'])
+def list_public_models():
     item_list = MLModel.get_public().order_by('created desc').all()
 
-    result = public_mlmodels_schema.dump(item_list)
+    result = public_models_schema.dump(item_list)
     return jsonify(data=result.data)
 
 
@@ -57,7 +57,7 @@ def parse_cv_param(cv):
     return cv
 
 
-@blueprint.route('/mlmodels', methods=['POST'])
+@blueprint.route('/models', methods=['POST'])
 @jwt_required()
 def create_mlmodel():
     args = request.json
@@ -79,7 +79,7 @@ def create_mlmodel():
     return 'Created', 201
 
 
-@blueprint.route('/mlmodels/<int:pk>', methods=['GET'])
+@blueprint.route('/models/<int:pk>', methods=['GET'])
 def get_mlmodel(pk):
     item = MLModel.get_existing_item(pk)
     if not item:
@@ -89,7 +89,7 @@ def get_mlmodel(pk):
     return jsonify(data=result.data)
 
 
-@blueprint.route('/mlmodels/<int:pk>', methods=['DELETE'])
+@blueprint.route('/models/<int:pk>', methods=['DELETE'])
 @jwt_required()
 def delete_mlmodel(pk):
     item = MLModel.get_existing_item(pk)
