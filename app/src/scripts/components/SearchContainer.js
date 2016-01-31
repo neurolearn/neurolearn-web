@@ -27,6 +27,7 @@ function activePage(searchFrom, resultsPerPage) {
 
 export default class SearchContainer extends React.Component {
   static propTypes = {
+    isFetching: PropTypes.bool,
     query: PropTypes.string,
     filter: PropTypes.object,
     results: PropTypes.object,
