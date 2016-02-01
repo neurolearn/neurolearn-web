@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadModelTests } from '../../state/modelTests';
+import { loadItemList } from '../../state/itemList';
 import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
@@ -15,7 +15,7 @@ const POLL_INTERVAL = 2500;
 export default class ModelTests extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    modelTests: PropTypes.object,
+    itemList: PropTypes.object,
     auth: PropTypes.object
   };
 
@@ -24,7 +24,7 @@ export default class ModelTests extends React.Component {
   }
 
   loadModelTests() {
-    this.props.dispatch(loadModelTests());
+    this.props.dispatch(loadItemList('/api/user/tests'));
   }
 
   componentDidMount() {
@@ -91,7 +91,7 @@ export default class ModelTests extends React.Component {
   }
 
   render() {
-    const { modelTests } = this.props;
+    const { itemList } = this.props;
 
     return (
       <div className={styles.root}>
@@ -99,9 +99,9 @@ export default class ModelTests extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(modelTests.items)
+            { isEmpty(itemList.items)
               ? this.renderEmptyState()
-              : this.renderItems(modelTests) }
+              : this.renderItems(itemList) }
           </div>
         </div>
       </div>
