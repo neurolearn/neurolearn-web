@@ -15,7 +15,7 @@ const POLL_INTERVAL = 2500;
 export default class ModelTests extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    itemList: PropTypes.object,
+    items: PropTypes.array,
     auth: PropTypes.object
   };
 
@@ -24,7 +24,7 @@ export default class ModelTests extends React.Component {
   }
 
   loadModelTests() {
-    this.props.dispatch(loadItemList('/api/user/tests'));
+    this.props.dispatch(loadItemList('/api/user/tests', 'dashboardTests'));
   }
 
   componentDidMount() {
@@ -45,9 +45,7 @@ export default class ModelTests extends React.Component {
     clearInterval(this.interval);
   }
 
-  renderItems(modelTests) {
-    const models = modelTests.items;
-
+  renderItems(items) {
     return (
       <table className="table table-hover">
         <thead>
@@ -60,7 +58,7 @@ export default class ModelTests extends React.Component {
         </thead>
         <tbody>
           {
-            models.map(model =>
+            items.map(model =>
               <tr key={model.id}>
                 <td>
                   <Link to={`/tests/${model.id}`}>{model.name}</Link>
@@ -91,7 +89,7 @@ export default class ModelTests extends React.Component {
   }
 
   render() {
-    const { itemList } = this.props;
+    const { items } = this.props;
 
     return (
       <div className={styles.root}>
@@ -99,9 +97,9 @@ export default class ModelTests extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(itemList.items)
+            { isEmpty(items)
               ? this.renderEmptyState()
-              : this.renderItems(itemList) }
+              : this.renderItems(items) }
           </div>
         </div>
       </div>
@@ -110,7 +108,10 @@ export default class ModelTests extends React.Component {
 }
 
 function select(state) {
-  return state;
+  return {
+    items: state.itemList.items.dashboardTests,
+    auth: state.auth
+  }
 }
 
 export default connect(select)(ModelTests);

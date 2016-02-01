@@ -10,16 +10,22 @@ export const REQUEST_ITEM_LIST = 'REQUEST_ITEM_LIST';
 export const RECEIVE_ITEM_LIST = 'RECEIVE_ITEM_LIST';
 
 const requestItemList = createAction(REQUEST_ITEM_LIST);
-const receiveItemList = createAction(RECEIVE_ITEM_LIST);
 
+function receiveItemList(payload, key) {
+  return {
+    type: RECEIVE_ITEM_LIST,
+    payload,
+    meta: { key }
+  };
+}
 
-export function loadItemList(path) {
+export function loadItemList(path, key) {
   return (dispatch, getState) => {
     const { token } = getState().auth;
     dispatch(requestItemList());
     return api.get(path, token)
       .then(
-        result => dispatch(receiveItemList(result)),
+        result => dispatch(receiveItemList(result, key)),
         error => {
           if (token && error && (error.response.status === 400
                      || error.response.status === 401)) {
@@ -35,7 +41,7 @@ export function loadItemList(path) {
 
 const initialState = {
   isFetching: false,
-  items: []
+  items: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -47,7 +53,9 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_ITEM_LIST:
       return Object.assign({}, state, {
         isFetching: false,
-        items: action.payload.data
+        items: {
+          [action.meta.key]: action.payload.data
+        }
       });
     default:
       return state;

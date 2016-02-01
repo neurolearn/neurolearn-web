@@ -1,3 +1,4 @@
+import capitalize from 'lodash/string/capitalize';
 import React, { PropTypes } from 'react';
 import NavItem from '../components/NavItem';
 import ExploreItems from '../components/ExploreItems';
@@ -14,6 +15,10 @@ const ITEM_TYPE_MAPPING = {
   }
 };
 
+function keyName(itemType) {
+  return `explore${capitalize(itemType)}`;
+}
+
 export class Explore extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -23,7 +28,7 @@ export class Explore extends React.Component {
   };
 
   loadItems(itemType) {
-    this.props.dispatch(loadItemList(`/api/${itemType}`));
+    this.props.dispatch(loadItemList(`/api/${itemType}`, keyName(itemType)));
   }
 
   componentDidMount() {
@@ -34,6 +39,13 @@ export class Explore extends React.Component {
   render() {
     const { itemType } = this.props.params;
     const { serverItemType } = ITEM_TYPE_MAPPING[itemType];
+    const { items } = this.props.itemList;
+
+    const exploreItems = items[keyName(itemType)];
+
+    if (!exploreItems) {
+      return null;
+    }
 
     return (
       <div>
@@ -45,7 +57,7 @@ export class Explore extends React.Component {
           <NavItem to="/explore/tests" onClick={() => this.loadItems('tests')}>Tests</NavItem>
         </ul>
 
-        <ExploreItems itemType={serverItemType} items={this.props.itemList.items} />
+        <ExploreItems itemType={serverItemType} items={exploreItems} />
       </div>
     );
   }

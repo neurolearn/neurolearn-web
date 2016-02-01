@@ -20,7 +20,7 @@ const POLL_INTERVAL = 2500;
 export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    itemList: PropTypes.object,
+    items: PropTypes.array,
     auth: PropTypes.object
   };
 
@@ -29,7 +29,7 @@ export default class MLModels extends React.Component {
   }
 
   loadAuthUserMLModels() {
-    this.props.dispatch(loadItemList('/api/user/models'));
+    this.props.dispatch(loadItemList('/api/user/models', 'dashboardModels'));
   }
 
   componentDidMount() {
@@ -56,9 +56,7 @@ export default class MLModels extends React.Component {
     router.push('/models/new');
   }
 
-  renderMLModels(mlModels) {
-    const { items } = mlModels;
-
+  renderMLModels(items) {
     return (
       <table className="table table-hover">
         <thead>
@@ -106,7 +104,7 @@ export default class MLModels extends React.Component {
   }
 
   render() {
-    const { itemList } = this.props;
+    const { items } = this.props;
 
     return (
       <div className={styles.root}>
@@ -118,9 +116,9 @@ export default class MLModels extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(itemList.items)
+            { isEmpty(items)
               ? this.renderEmptyState()
-              : this.renderMLModels(itemList) }
+              : this.renderMLModels(items) }
           </div>
         </div>
       </div>
@@ -129,7 +127,10 @@ export default class MLModels extends React.Component {
 }
 
 function select(state) {
-  return state;
+  return {
+    items: state.itemList.items.dashboardModels,
+    auth: state.auth
+  }
 }
 
 export default connect(select)(MLModels);
