@@ -1,11 +1,12 @@
 import React from 'react';
+import NavItem from '../components/NavItem';
 
 const DashboardNav = (props) => {
-  const { router, children } = props;
+  const { children } = props;
   return (
     <ul className="nav nav-tabs">
-      <li role="presentation" className={router.isActive('/dashboard/models') && 'active'}><a href="#/dashboard/models">Models</a></li>
-      <li role="presentation" className={router.isActive('/dashboard/tests') && 'active'}><a href="#/dashboard/tests">Tests</a></li>
+      <NavItem to="/dashboard/models">Models</NavItem>
+      <NavItem to="/dashboard/tests">Tests</NavItem>
       <li className="pull-right">
         {children}
       </li>

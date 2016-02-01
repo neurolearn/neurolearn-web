@@ -21,10 +21,14 @@ export default function renderRoutes(history) {
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
-        <Route path="/dashboard/models" component={MLModels} />
-        <Route path="/dashboard/tests" component={ModelTests} />
+        <Route path="/dashboard">
+          <Route path="models" component={MLModels} />
+          <Route path="tests" component={ModelTests} />
+        </Route>
         <Redirect from="/explore" to="/explore/models" />
-        <Route path="/explore(/:itemType)" component={Explore} />
+        <Route path="/explore">
+          <Route path="(:itemType)" component={Explore} />
+        </Route>
         <Redirect from="/models/new" to="/models/new/input-data" />
         <Route path="/models/new" component={TrainModel}>
           <Route path="input-data" component={InputData}/>

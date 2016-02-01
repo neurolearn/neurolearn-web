@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router'
+import { LinkContainer } from 'react-router-bootstrap'
 import { bindActionCreators } from 'redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AlertMessages from './components/AlertMessages';
@@ -59,9 +61,9 @@ export default class App extends React.Component {
     const { router } = this.context;
     return (
       <Nav>
-        <NavItem eventKey={0}
-                 active={router.isActive('/dashboard')}
-                 href='#/'>Dashboard</NavItem>
+        <LinkContainer to="/" active={router.isActive('/dashboard')}>
+          <NavItem eventKey={0}>Dashboard</NavItem>
+        </LinkContainer>
       </Nav>
     );
   }
@@ -73,10 +75,12 @@ export default class App extends React.Component {
     return (
       <div>
         <Navbar staticTop>
-          <NavBrand><a href="#">Neurolearn</a></NavBrand>
+          <NavBrand><Link to="/">Neurolearn</Link></NavBrand>
           { auth.user && this.renderAuthenticatedNav() }
           <Nav>
-            <NavItem eventKey={1} active={router.isActive('/explore')} href='#/explore'>Explore</NavItem>
+            <LinkContainer to="/explore">
+              <NavItem eventKey={1} active={router.isActive('/explore')}>Explore</NavItem>
+            </LinkContainer>
           </Nav>
           <Nav right>
             { auth.user

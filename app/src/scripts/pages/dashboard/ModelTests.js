@@ -95,7 +95,7 @@ export default class ModelTests extends React.Component {
 
     return (
       <div className={styles.root}>
-        <DashboardNav router={this.context.router} />
+        <DashboardNav />
 
         <div className="row">
           <div className="col-md-12">

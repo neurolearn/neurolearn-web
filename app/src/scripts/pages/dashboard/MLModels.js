@@ -110,7 +110,7 @@ export default class MLModels extends React.Component {
 
     return (
       <div className={styles.root}>
-        <DashboardNav router={this.context.router}>
+        <DashboardNav>
           <Button bsStyle="primary"
                   className="pull-right"
                   onClick={this.handleTrainNewModel.bind(this)}><i className="fa fa-plus"></i> New Model</Button>
