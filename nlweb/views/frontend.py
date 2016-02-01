@@ -7,7 +7,11 @@ blueprint = Blueprint('frontend', __name__)
 
 
 @blueprint.route('/')
-def home():
+@blueprint.route('/dashboard/<path:path>')
+@blueprint.route('/explore/<path:path>')
+@blueprint.route('/models/<path:path>')
+@blueprint.route('/tests/<path:path>')
+def home(path=None):
     return render_template('index.html')
 
 
