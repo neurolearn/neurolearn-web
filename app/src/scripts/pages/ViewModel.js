@@ -8,7 +8,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
-import { loadMLModel, deleteMLModel } from '../state/mlModels';
+import { loadItemDetail, deleteItem } from '../state/itemDetail';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
@@ -27,7 +27,7 @@ function scatterplotData(stats) {
 export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    mlModels: PropTypes.object,
+    itemDetail: PropTypes.object,
     user: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
@@ -46,7 +46,7 @@ export default class ViewModel extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    this.props.dispatch(loadMLModel(parseInt(id)));
+    this.props.dispatch(loadItemDetail(`/api/models/${parseInt(id)}`));
   }
 
   renderState(model) {
@@ -209,10 +209,12 @@ export default class ViewModel extends React.Component {
     );
   }
 
-  handleDeleteModel(modelId) {
+  handleDelete(modelId) {
     const { router } = this.context;
 
-    this.props.dispatch(deleteMLModel(modelId, router));
+    this.props.dispatch(deleteItem(`/api/models/${modelId}`,
+      () => router.transitionTo('/dashboard/models')
+    ));
   }
 
   handleTestModel(model) {
@@ -223,14 +225,14 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { mlModels, user } = this.props;
-    const model = mlModels.item;
+    const { itemDetail, user } = this.props;
+    const model = itemDetail.item;
 
-    const userIsOwner = (model && user && model.user.id === user.user_id);
-
-    if (!model || mlModels.isFetching) {
+    if (!model || itemDetail.isFetching) {
       return <div>Loading model...</div>;
     }
+
+    const userIsOwner = (model && user && model.user.id === user.user_id);
 
     return (
       <div>
@@ -241,7 +243,7 @@ export default class ViewModel extends React.Component {
                       onClick={() => this.handleTestModel(model)}>Test Model</Button>}
             {userIsOwner &&
               <Button bsStyle="danger"
-                      onClick={() => this.handleDeleteModel(model.id)}>Delete</Button>}
+                      onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
           <h1>{model && model.name}</h1>
         </div>
@@ -253,7 +255,7 @@ export default class ViewModel extends React.Component {
 
 function select(state) {
   return {
-    mlModels: state.mlModels,
+    itemDetail: state.itemDetail,
     user: state.auth.user
   };
 }

@@ -1,20 +1,24 @@
 import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import api from '../api';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
-import {
-  deleteModelTest,
-  saveCorrelationGroups,
-  loadModelTest
-} from '../state/modelTests';
+import { loadItemDetail, deleteItem } from '../state/itemDetail';
 
+function saveCorrelationGroups(modelId, groups) {
+  return (dispatch, getState) => {
+    return api.post(`/api/tests/${modelId}/groups`,
+      groups,
+      getState().auth.token);
+  };
+}
 
 export default class ViewTest extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    modelTests: PropTypes.object,
+    itemDetail: PropTypes.object,
     user: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
@@ -25,13 +29,15 @@ export default class ViewTest extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    this.props.dispatch(loadModelTest(parseInt(id)));
+    this.props.dispatch(loadItemDetail(`/api/tests/${parseInt(id)}`));
   }
 
-  handleDelete(modelId) {
+  handleDelete(testId) {
     const { router } = this.context;
 
-    this.props.dispatch(deleteModelTest(modelId, router));
+    this.props.dispatch(deleteItem(`/api/tests/${testId}`,
+      () => router.transitionTo('/dashboard/tests')
+    ));
   }
 
   handleGroupsChange(modelId, groups) {
@@ -92,14 +98,14 @@ export default class ViewTest extends React.Component {
   }
 
   render() {
-    const { modelTests, user } = this.props;
-    const item = modelTests.item;
+    const { itemDetail, user } = this.props;
+    const item = itemDetail.item;
 
-    const userIsOwner = (item && user && item.user.id === item.user_id);
-
-    if (!item || modelTests.isFetching) {
+    if (!item || itemDetail.isFetching) {
       return <div>Loading test...</div>;
     }
+
+    const userIsOwner = (item && user && item.user.id === item.user_id);
 
     return (
       <div>
@@ -121,7 +127,7 @@ export default class ViewTest extends React.Component {
 
 function select(state) {
   return {
-    modelTests: state.modelTests,
+    itemDetail: state.itemDetail,
     user: state.auth.user
   };
 }

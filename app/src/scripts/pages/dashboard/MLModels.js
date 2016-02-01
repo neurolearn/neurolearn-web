@@ -6,7 +6,9 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadAuthUserMLModels } from '../../state/mlModels';
+import { loadItemList } from '../../state/itemList';
+
+
 import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
 import TaskStateLabel from '../../components/TaskStateLabel';
@@ -18,7 +20,7 @@ const POLL_INTERVAL = 2500;
 export default class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    mlModels: PropTypes.object,
+    itemList: PropTypes.object,
     auth: PropTypes.object
   };
 
@@ -27,7 +29,7 @@ export default class MLModels extends React.Component {
   }
 
   loadAuthUserMLModels() {
-    this.props.dispatch(loadAuthUserMLModels());
+    this.props.dispatch(loadItemList('/api/user/models'));
   }
 
   componentDidMount() {
@@ -104,7 +106,7 @@ export default class MLModels extends React.Component {
   }
 
   render() {
-    const { mlModels } = this.props;
+    const { itemList } = this.props;
 
     return (
       <div className={styles.root}>
@@ -116,9 +118,9 @@ export default class MLModels extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(mlModels.items)
+            { isEmpty(itemList.items)
               ? this.renderEmptyState()
-              : this.renderMLModels(mlModels) }
+              : this.renderMLModels(itemList) }
           </div>
         </div>
       </div>

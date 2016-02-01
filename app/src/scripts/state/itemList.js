@@ -1,3 +1,6 @@
+import { logout } from './auth';
+import { JWT_KEY_NAME } from '../constants/auth';
+
 import { createAction } from 'redux-actions';
 
 import api from '../api';
@@ -11,12 +14,21 @@ const receiveItemList = createAction(RECEIVE_ITEM_LIST);
 
 
 export function loadItemList(path) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { token } = getState().auth;
     dispatch(requestItemList());
-    return api.get(path)
+    return api.get(path, token)
       .then(
         result => dispatch(receiveItemList(result)),
-        error => dispatch(apiError(error))
+        error => {
+          if (token && error && (error.response.status === 400
+                     || error.response.status === 401)) {
+            localStorage.removeItem(JWT_KEY_NAME);
+            dispatch(logout());
+          } else {
+            dispatch(apiError(error));
+          }
+        }
       );
   };
 }
