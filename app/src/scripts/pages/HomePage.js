@@ -5,15 +5,16 @@ import LoggedOut from './LoggedOut';
 
 export default class HomePage extends React.Component {
   static contextTypes = {
-    router: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+    history: PropTypes.object
   }
 
   componentWillReceiveProps() {
     const { auth } = this.props;
-    const { router } = this.context;
+    const { router, history } = this.context;
 
     if (auth.user) {
-      router.transitionTo('/dashboard/models');
+      router.push('/dashboard/models');
     }
   }
 

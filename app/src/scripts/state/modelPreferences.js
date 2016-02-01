@@ -81,7 +81,7 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
     return api.post('/api/models', payload, getState().auth.token)
       .then(
         () => {
-          router.transitionTo('/');
+          router.push('/');
           resetModelTrainData(dispatch);
         }
     );

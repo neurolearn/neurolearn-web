@@ -42,7 +42,7 @@ export default class MLModels extends React.Component {
     const { router } = this.context;
 
     if (!auth.user) {
-      router.transitionTo('/');
+      router.push('/');
     }
   }
 
@@ -53,7 +53,7 @@ export default class MLModels extends React.Component {
   handleTrainNewModel() {
     const { router } = this.context;
     resetModelTrainData(this.props.dispatch);
-    router.transitionTo('/models/new');
+    router.push('/models/new');
   }
 
   renderMLModels(mlModels) {

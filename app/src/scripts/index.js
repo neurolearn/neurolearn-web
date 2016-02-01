@@ -6,8 +6,8 @@ require('index.css');
 require('handsontable.full.css');
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { history } from 'react-router/lib/HashHistory';
+import render from 'react-dom';
+import { hashHistory } from 'react-router'
 import { Provider } from 'react-redux';
 
 import renderRoutes from './routes';
@@ -16,8 +16,8 @@ import configureStore from './store/configureStore';
 
 const store = configureStore();
 
-ReactDOM.render((
+render.render((
   <Provider store={store}>
-    {() => renderRoutes(history)}
+    {() => renderRoutes(hashHistory)}
   </Provider>
 ), document.getElementById('root'));

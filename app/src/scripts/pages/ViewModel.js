@@ -213,7 +213,7 @@ export default class ViewModel extends React.Component {
     const { router } = this.context;
 
     this.props.dispatch(deleteItem(`/api/models/${modelId}`,
-      () => router.transitionTo('/dashboard/models')
+      () => router.push('/dashboard/models')
     ));
   }
 
@@ -221,7 +221,7 @@ export default class ViewModel extends React.Component {
     const { router } = this.context;
 
     this.props.dispatch(setTestModel(model));
-    router.transitionTo('/tests/new');
+    router.push('/tests/new');
   }
 
   render() {

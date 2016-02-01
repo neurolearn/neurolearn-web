@@ -37,7 +37,7 @@ export default class ModelTests extends React.Component {
     const { router } = this.context;
 
     if (!auth.user) {
-      router.transitionTo('/');
+      router.push('/');
     }
   }
 

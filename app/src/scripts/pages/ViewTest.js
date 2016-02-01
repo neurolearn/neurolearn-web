@@ -36,7 +36,7 @@ export default class ViewTest extends React.Component {
     const { router } = this.context;
 
     this.props.dispatch(deleteItem(`/api/tests/${testId}`,
-      () => router.transitionTo('/dashboard/tests')
+      () => router.push('/dashboard/tests')
     ));
   }
 

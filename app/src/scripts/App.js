@@ -30,7 +30,7 @@ export default class App extends React.Component {
     e.preventDefault();
     localStorage.removeItem(JWT_KEY_NAME);
     this.props.dispatch(logout());
-    this.context.router.transitionTo('/');
+    this.context.router.push('/');
   }
 
   authLink() {

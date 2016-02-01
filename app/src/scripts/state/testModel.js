@@ -44,7 +44,7 @@ export function testModel(modelId, selectedImages, router) {
     return api.post('/api/tests', payload, getState().auth.token)
       .then(
         () => {
-          router.transitionTo('/dashboard/tests');
+          router.push('/dashboard/tests');
           resetModelTestData(dispatch);
         }
     );
