@@ -54,6 +54,7 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, {
         isFetching: false,
         items: {
+          ...state.items,
           [action.meta.key]: action.payload.data
         }
       });
