@@ -98,7 +98,7 @@ export default class ViewTest extends React.Component {
     const { itemDetail, user } = this.props;
     const item = itemDetail.item;
 
-    if (item) {
+    if (!item) {
       return null;
     }
 
