@@ -1,4 +1,7 @@
 .root {
   max-height: 400px;
   overflow: scroll;
+  :global .name, :global .map-thumbnail {
+    cursor: pointer;
+  }
 }

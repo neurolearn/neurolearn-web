@@ -17,10 +17,10 @@ export default class ImageItem extends React.Component {
         <td>
           <input type='checkbox' checked={checked} onChange={onChange}/>
         </td>
-        <td>{name}</td>
+        <td onClick={onChange} className="name">{name}</td>
         <td>{image_type}</td>
         <td>{map_type}</td>
-        <td>
+        <td onClick={onChange} className="map-thumbnail">
           <FallbackImage src={thumbnail} className="img-responsive" />
         </td>
       </tr>
