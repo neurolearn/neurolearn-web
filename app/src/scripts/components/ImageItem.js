@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
+import FallbackImage from './FallbackImage';
 
 export default class ImageItem extends React.Component {
   static propTypes = {
@@ -9,13 +10,20 @@ export default class ImageItem extends React.Component {
   }
 
   render() {
+    const { name, checked, onChange, thumbnail,
+            image_type, map_type } = this.props;
     return (
-      <li>
-        <Input type='checkbox'
-               checked={this.props.checked}
-               label={this.props.name}
-               onChange={this.props.onChange}/>
-      </li>
+      <tr>
+        <td>
+          <input type='checkbox' checked={checked} onChange={onChange}/>
+        </td>
+        <td>{name}</td>
+        <td>{image_type}</td>
+        <td>{map_type}</td>
+        <td>
+          <FallbackImage src={thumbnail} className="img-responsive" />
+        </td>
+      </tr>
     );
   }
 }

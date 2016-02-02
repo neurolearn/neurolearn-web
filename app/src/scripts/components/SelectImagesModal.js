@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
@@ -30,14 +31,14 @@ export default class SelectImagesModal extends React.Component {
   renderImages(images) {
     const { collection } = this.props;
     return (
-      <ul className={styles.root}>
+      <tbody>
         {sortBy(images, 'name').map((image) =>
           <ImageItem {...image}
                      key={image.url}
                      checked={this.isImageSelected(image.url)}
                      onChange={() => this.props.onToggle(collection, image.url)} />
         )}
-      </ul>
+      </tbody>
     );
   }
 
@@ -56,12 +57,22 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id='contained-modal-title-lg'>Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Input type='checkbox'
-               label='Select All Images'
-               onChange={this.toggleAll.bind(this)}
-               checked={isAllSelected} />
-
-        {collection && this.renderImages(collection._source.images)}
+        <div className={styles.root}>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" checked={isAllSelected} onChange={this.toggleAll.bind(this)} />
+                </th>
+                <th className="col-md-4">Name</th>
+                <th className="col-md-2">Image Type</th>
+                <th>Map Type</th>
+                <th className="col-md-4"></th>
+              </tr>
+            </thead>
+            {collection && this.renderImages(collection._source.images)}
+          </table>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
