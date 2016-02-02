@@ -46,7 +46,8 @@ export default class ViewModel extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    this.props.dispatch(loadItemDetail(`/api/models/${parseInt(id)}`));
+    this.props.dispatch(
+      loadItemDetail(`/api/models/${parseInt(id)}`, 'model'));
   }
 
   renderState(model) {
@@ -226,7 +227,7 @@ export default class ViewModel extends React.Component {
 
   render() {
     const { itemDetail, user } = this.props;
-    const model = itemDetail.item;
+    const model = itemDetail.item.model;
 
     if (!model || itemDetail.isFetching) {
       return <div>Loading model...</div>;

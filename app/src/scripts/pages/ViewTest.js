@@ -29,7 +29,8 @@ export default class ViewTest extends React.Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    this.props.dispatch(loadItemDetail(`/api/tests/${parseInt(id)}`));
+    this.props.dispatch(
+      loadItemDetail(`/api/tests/${parseInt(id)}`, 'test'));
   }
 
   handleDelete(testId) {
@@ -99,13 +100,13 @@ export default class ViewTest extends React.Component {
 
   render() {
     const { itemDetail, user } = this.props;
-    const item = itemDetail.item;
+    const item = itemDetail.item.test;
 
     if (!item || itemDetail.isFetching) {
       return <div>Loading test...</div>;
     }
 
-    const userIsOwner = (item && user && item.user.id === item.user_id);
+    const userIsOwner = (item && user && item.user.id === user.user_id);
 
     return (
       <div>
