@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { prefetch } from 'react-fetcher';
+
 import api from '../api';
 
 import Spinner from '../components/Spinner';
@@ -25,11 +27,6 @@ export default class ViewTest extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
-  }
-
-  componentDidMount() {
-    const { id } = this.props.params;
-    this.props.dispatch(loadItemDetail(`/api/tests/${parseInt(id)}`));
   }
 
   handleDelete(testId) {
@@ -101,8 +98,8 @@ export default class ViewTest extends React.Component {
     const { itemDetail, user } = this.props;
     const item = itemDetail.item;
 
-    if (!item || itemDetail.isFetching) {
-      return <div>Loading test...</div>;
+    if (item) {
+      return null;
     }
 
     const userIsOwner = (item && user && item.user.id === item.user_id);
@@ -132,5 +129,5 @@ function select(state) {
   };
 }
 
-export default connect(select)(ViewTest);
-
+const connected = connect(select)(ViewTest);
+export default prefetch(({ dispatch, params: { id } }) => dispatch(loadItemDetail(`/api/tests/${parseInt(id)}`)))(connected);
