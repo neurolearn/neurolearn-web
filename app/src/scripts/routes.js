@@ -16,9 +16,8 @@ import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
 import NotFound from './pages/NotFound';
 
-export default function renderRoutes(history) {
+export default function renderRoutes() {
   return (
-    <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
         <Route path="/dashboard">
@@ -40,6 +39,5 @@ export default function renderRoutes(history) {
         <Route path="/tests/:id" component={ViewTest} />
         <Route path="*" component={NotFound} />
       </Route>
-    </Router>
   );
 }

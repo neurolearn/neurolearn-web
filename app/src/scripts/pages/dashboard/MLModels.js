@@ -6,8 +6,10 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadItemList } from '../../state/itemList';
+import { compose } from 'redux';
+import { prefetch } from 'react-fetcher'
 
+import { loadItemList } from '../../state/itemList';
 
 import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
@@ -17,7 +19,7 @@ import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
 
-export default class MLModels extends React.Component {
+class MLModels extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     items: PropTypes.array,
@@ -32,10 +34,10 @@ export default class MLModels extends React.Component {
     this.props.dispatch(loadItemList('/api/user/models', 'dashboardModels'));
   }
 
-  componentDidMount() {
-    this.loadAuthUserMLModels();
-    this.interval = setInterval(this.loadAuthUserMLModels.bind(this), POLL_INTERVAL);
-  }
+  // componentDidMount() {
+  //   this.loadAuthUserMLModels();
+  //   this.interval = setInterval(this.loadAuthUserMLModels.bind(this), POLL_INTERVAL);
+  // }
 
   componentWillReceiveProps() {
     const { auth } = this.props;
@@ -133,4 +135,12 @@ function select(state) {
   }
 }
 
-export default connect(select)(MLModels);
+const connected = connect(select)(MLModels);
+export default prefetch(({ dispatch, params, query }) => dispatch(loadItemList('/api/user/models', 'dashboardModels')))(connected);
+
+//    this.props.dispatch(loadItemList('/api/user/models', 'dashboardModels'));
+// export default compose(
+//   prefetch(({ dispatch, params, query }) => dispatch(loadItemList('/api/user/models', 'dashboardModels'))),
+//   connect(select)
+// )(MLModels);
+

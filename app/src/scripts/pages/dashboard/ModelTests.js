@@ -5,6 +5,8 @@ import React, { PropTypes } from 'react';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { prefetch } from 'react-fetcher'
+
 import { loadItemList } from '../../state/itemList';
 import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
@@ -12,7 +14,7 @@ import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
 
-export default class ModelTests extends React.Component {
+class ModelTests extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     items: PropTypes.array,
@@ -27,10 +29,10 @@ export default class ModelTests extends React.Component {
     this.props.dispatch(loadItemList('/api/user/tests', 'dashboardTests'));
   }
 
-  componentDidMount() {
-    this.loadModelTests();
-    this.interval = setInterval(this.loadModelTests.bind(this), POLL_INTERVAL);
-  }
+  // componentDidMount() {
+  //   this.loadModelTests();
+  //   this.interval = setInterval(this.loadModelTests.bind(this), POLL_INTERVAL);
+  // }
 
   componentWillReceiveProps() {
     const { auth } = this.props;
@@ -114,4 +116,7 @@ function select(state) {
   }
 }
 
-export default connect(select)(ModelTests);
+// export default connect(select)(ModelTests);
+const connected = connect(select)(ModelTests);
+export default prefetch(({ dispatch, params, query }) => dispatch(loadItemList('/api/user/tests', 'dashboardTests')))(connected);
+
