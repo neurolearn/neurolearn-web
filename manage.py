@@ -125,5 +125,18 @@ def redo_model_test(pk):
     tasks.test_model(item.id)
 
 
+@manager.command
+def create_glassbrain(pk):
+    from nlweb.models import MLModel
+    from nlweb import tasks
+
+    item = MLModel.query.get(pk)
+
+    if not item:
+        print "Model #%s not found." % pk
+        return
+
+    tasks.create_glassbrain_image(pk)
+
 if __name__ == '__main__':
     manager.run()

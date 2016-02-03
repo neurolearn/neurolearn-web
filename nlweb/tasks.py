@@ -18,13 +18,17 @@ from nlweb.utils import pick
 ALLOWED_COLLECTION_PROPS = ('id', 'name')
 
 
+def model_dir(model_id):
+    return os.path.join(celery.conf.MEDIA_ROOT, str(model_id))
+
+
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
     mlmodel.training_state = MLModel.TRAINING_PROGRESS
     db.session.commit()
 
-    output_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
+    output_dir = model_dir(mlmodel.id)
 
     cache = FileCache(celery.conf.FILE_CACHE_ROOT)
     client = HTTPClient(cache)
@@ -52,6 +56,8 @@ def train_model(self, mlmodel_id):
     mlmodel.output_data = result
 
     db.session.commit()
+
+    create_glassbrain_image(mlmodel_id)
 
 
 def filter_selected_images(image_ids, image_list):
@@ -122,4 +128,30 @@ def test_model(self, model_test_id):
 
     model_test.output_data = result
 
+    db.session.commit()
+
+
+@celery.task(bind=True)
+def create_glassbrain_image(self, mlmodel_id):
+    from nilearn.plotting import plot_glass_brain
+    import pylab as plt
+
+    model = MLModel.query.get(mlmodel_id)
+    if not model:
+        return
+
+    my_dpi = 50
+    fig = plt.figure(figsize=(330.0/my_dpi, 130.0/my_dpi), dpi=my_dpi)
+
+    output_dir = model_dir(mlmodel_id)
+    stat_map_img = os.path.join(output_dir, model.output_data['weightmap'])
+
+    glass_brain = plot_glass_brain(stat_map_img, figure=fig)
+
+    glass_brain_filename = 'glassbrain.png'
+    glass_brain_path = os.path.join(output_dir, glass_brain_filename)
+    glass_brain.savefig(glass_brain_path, dpi=my_dpi)
+
+    model.output_data = dict(glassbrain=glass_brain_filename,
+                             **model.output_data)
     db.session.commit()
