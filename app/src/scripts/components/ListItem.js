@@ -24,9 +24,13 @@ export default class ListItem extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12">
+          {item && item.glassbrain &&
+          <img src={`/media/${item.id}/${item.glassbrain}`} className="img-responsive"/>
+          }
           <h3>{this.itemLink(item)}</h3>
           <p>Created <span className="datetime">{moment(item.created).fromNow()}</span></p>
           <p>{item.user.name}</p>
+          <hr/>
         </div>
       </div>
     );

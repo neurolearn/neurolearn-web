@@ -22,6 +22,8 @@ class MLModelSchema(BaseItemSchema):
     cv = fields.Function(lambda obj: obj.input_data['cv'])
     training_duration = fields.Function(
         lambda obj: obj.output_data.get('duration'))
+    glassbrain = fields.Function(
+        lambda obj: obj.output_data.get('glassbrain'))
 
 
 class ModelTestSchema(BaseItemSchema):
