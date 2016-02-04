@@ -342,7 +342,7 @@ export default class ViewModel extends React.Component {
             </div>
           </div>
           <div className="col-md-4 right-sidebar">
-            <h4>Model Tests</h4>
+            <h4>Recent Model Tests</h4>
             {this.renderEmptyModelTests()}
           </div>
         </div>
