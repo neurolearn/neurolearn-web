@@ -11,4 +11,28 @@
     background: rgba(255, 255, 255, 0.8);
     z-index: 10;
   }
+  .tabs-wrapper {
+    margin-top: 25px;
+  }
+  .weightmap {
+    margin-top: 25px;
+  }
+  .images-number {
+    font-size: 18px;
+  }
+
+  .overview thead tr {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  .right-sidebar {
+    border-left: 1px solid #eee;
+    padding-left: 15px;
+  }
+}
+
+:global li.active > a:focus {
+    outline:0;
 }
