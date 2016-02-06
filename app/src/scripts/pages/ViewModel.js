@@ -258,7 +258,7 @@ export default class ViewModel extends React.Component {
         <thead>
           <tr>
             <th>Image</th>
-            <th>Training Label</th>
+            <th title="Training Label">{inputData.label.name}</th>
           </tr>
         </thead>
         <tbody>
