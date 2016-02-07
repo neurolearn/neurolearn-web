@@ -153,29 +153,6 @@ export default class ViewModel extends React.Component {
         values: scatterplotData(model.output_data.stats)
     }];
 
-    /*
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Algorithm</th>
-              <th>Cross-validation Type</th>
-              <th>Training Duration</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{algorithmNameMap[algorithm]}</td>
-              <td>{cv.type}</td>
-              <td>{Math.floor(model.output_data.duration) + ' sec'}</td>
-              <td>
-                  <span className="datetime">{moment(model.created).fromNow()}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-    */
-
     return (
       <div>
         <div className="row weightmap">
