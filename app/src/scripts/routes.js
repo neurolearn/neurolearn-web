@@ -16,12 +16,18 @@ import TrainingLabel from './components/TrainingLabel';
 import ModelPreferences from './components/ModelPreferences';
 import NotFound from './pages/NotFound';
 
-export default function renderRoutes(history) {
+export default function renderRoutes(store, history) {
+  function requireAuth(nextState, replace) {
+    if (!store.getState().auth.user) {
+      replace({}, '/');
+    }
+  }
+
   return (
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={HomePage}/>
-        <Route path="/dashboard">
+        <Route path="/dashboard" onEnter={requireAuth}>
           <Route path="models" component={MLModels} />
           <Route path="tests" component={ModelTests} />
         </Route>
@@ -30,13 +36,13 @@ export default function renderRoutes(history) {
           <Route path="(:itemType)" component={Explore} />
         </Route>
         <Redirect from="/models/new" to="/models/new/input-data" />
-        <Route path="/models/new" component={TrainModel}>
+        <Route path="/models/new" component={TrainModel} onEnter={requireAuth}>
           <Route path="input-data" component={InputData}/>
           <Route path="training-label" component={TrainingLabel}/>
           <Route path="model-preferences" component={ModelPreferences}/>
         </Route>
         <Route path="/models/:id" component={ViewModel} />
-        <Route path="/tests/new" component={TestModel} />
+        <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
         <Route path="/tests/:id" component={ViewTest} />
         <Route path="*" component={NotFound} />
       </Route>
