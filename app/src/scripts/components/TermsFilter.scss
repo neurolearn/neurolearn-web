@@ -1,4 +1,8 @@
 .root {
+  composes: top-separator from "shared/borders.css";
+  padding-top: 10px;
+  padding-bottom: 15px;
+
   margin-bottom: 10px;
 
   :global .checkbox {

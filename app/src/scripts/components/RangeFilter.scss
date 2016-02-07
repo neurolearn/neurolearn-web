@@ -22,6 +22,7 @@
 }
 
 .root {
+  composes: bottom-separator from "shared/borders.css";
   margin-bottom: 2px;
 }
 
