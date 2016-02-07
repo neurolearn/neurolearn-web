@@ -311,7 +311,7 @@ export default class ViewModel extends React.Component {
                 <tbody>
                   <tr>
                     <td>{algorithmNameMap[model.algorithm]}</td>
-                    <td>PainLevel</td>
+                    <td>{model.input_data.label.name}</td>
                     <td>{model.input_data.data.length} {this.pluralize(model.input_data.data.length, 'image', 'images')}</td>
                   </tr>
                 </tbody>
