@@ -1,9 +1,11 @@
 import moment from 'moment';
 import zipWith from 'lodash/array/zipWith';
+import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
@@ -248,8 +250,12 @@ export default class ViewModel extends React.Component {
     )
   }
 
-  renderEmptyModelTests() {
-    return <p>The model has not been tested yet.</p>
+  renderRecentModelTests(tests) {
+    return (
+      <div>
+        {tests.map(test => <div><Link to={`/tests/${test.id}`}>{test.name}</Link> <span style={{color: 'gray'}}>{test.images_count} {this.pluralize(test.images_count, 'image', 'images')}</span></div>)}
+      </div>
+    );
   }
 
   handleDelete(modelId) {
@@ -320,7 +326,9 @@ export default class ViewModel extends React.Component {
           </div>
           <div className="col-md-4 right-sidebar">
             <h4>Recent Model Tests</h4>
-            {this.renderEmptyModelTests()}
+            {isEmpty(model.tests)
+              ? <p>The model has not been tested yet.</p>
+              : this.renderRecentModelTests(model.tests)}
           </div>
         </div>
         <div className="row tabs-wrapper">

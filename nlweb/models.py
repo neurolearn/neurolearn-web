@@ -128,6 +128,12 @@ class MLModel(db.Model):
     def get_existing_item(cls, pk):
         return cls.get_existing().filter_by(id=pk).first()
 
+    def tests(self):
+        return ModelTest.query.filter(
+            ModelTest.input_data.contains({"modelId": self.id}),
+            ModelTest.state == ModelTest.STATE_SUCCESS
+        ).order_by('created desc').all()
+
     def delete(self):
         self.status = self.STATUS_DELETED
 
