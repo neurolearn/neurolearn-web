@@ -18,6 +18,6 @@ const store = configureStore();
 
 render.render((
   <Provider store={store}>
-    {() => renderRoutes(browserHistory)}
+    {() => renderRoutes(store, browserHistory)}
   </Provider>
 ), document.getElementById('root'));

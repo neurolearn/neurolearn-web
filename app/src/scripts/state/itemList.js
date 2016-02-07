@@ -27,7 +27,7 @@ export function loadItemList(path, key) {
       .then(
         result => dispatch(receiveItemList(result, key)),
         error => {
-          if (token && error && (error.response.status === 400
+          if (error && (error.response.status === 400
                      || error.response.status === 401)) {
             localStorage.removeItem(JWT_KEY_NAME);
             dispatch(logout());
