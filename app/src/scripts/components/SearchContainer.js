@@ -74,34 +74,37 @@ export default class SearchContainer extends React.Component {
           </div>
 
           <div className="col-md-9">
-            <SearchInput
-              value={this.props.query}
-              placeholder="Search NeuroVault Collections"
-              onChange={this.handleSearchInputChange.bind(this)}
-            />
-            <div className="search-meta clearfix">
-              <div className="pull-left HitsCount">Found {this.totalHits(this.props.results)} collections</div>
-              <div className="pull-right">
-                <SortSearchResults
-                  sortType={this.props.sort}
-                  onSelect={this.handleSortSelect.bind(this)}
+            <div className="panel panel-default">
+              <div className="panel-body">
+                <SearchInput
+                  value={this.props.query}
+                  placeholder="Search NeuroVault Collections"
+                  onChange={this.handleSearchInputChange.bind(this)}
                 />
+                <div className="search-meta clearfix">
+                  <div className="pull-left HitsCount">Found {this.totalHits(this.props.results)} collections</div>
+                  <div className="pull-right">
+                    <SortSearchResults
+                      sortType={this.props.sort}
+                      onSelect={this.handleSortSelect.bind(this)}
+                    />
+                  </div>
+                </div>
+                <div className="search-results-wrapper">
+                  <SearchResults
+                    results={this.props.results}
+                    onSearchResultClick={this.props.onSearchResultClick}
+                  />
+                  {this.props.isFetching && <div className="overlay"></div>}
+                </div>
+                { this.totalHits(this.props.results) > RESULTS_PER_PAGE
+                  ? <SearchPagination
+                      totalPages={totalPages(this.totalHits(this.props.results), RESULTS_PER_PAGE)}
+                      activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
+                      onSelect={this.handlePageSelect.bind(this)} />
+                  : false }
               </div>
             </div>
-            <div className="search-results-wrapper">
-              <SearchResults
-                results={this.props.results}
-                onSearchResultClick={this.props.onSearchResultClick}
-              />
-              {this.props.isFetching && <div className="overlay"></div>}
-            </div>
-
-            { this.totalHits(this.props.results) > RESULTS_PER_PAGE
-              ? <SearchPagination
-                  totalPages={totalPages(this.totalHits(this.props.results), RESULTS_PER_PAGE)}
-                  activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                  onSelect={this.handlePageSelect.bind(this)} />
-              : false }
           </div>
         </div>
       </div>
