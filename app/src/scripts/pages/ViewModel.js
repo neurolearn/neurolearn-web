@@ -256,7 +256,12 @@ export default class ViewModel extends React.Component {
   renderRecentModelTests(tests) {
     return (
       <div>
-        {tests.map(test => <div><Link to={`/tests/${test.id}`}>{test.name}</Link> <span style={{color: 'gray'}}>{test.images_count} {this.pluralize(test.images_count, 'image', 'images')}</span></div>)}
+        {tests.map(test => <div>
+            <Link to={`/tests/${test.id}`}>{test.name}</Link>
+            <p>
+            {test.images_count} {this.pluralize(test.images_count, 'image', 'images')} • {test.mean_correlation} mean r
+            </p>
+          </div>)}
       </div>
     );
   }

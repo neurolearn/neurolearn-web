@@ -1,8 +1,18 @@
+import numpy as np
+
 from marshmallow import Schema, fields
 
 
 def count_dict_of_list(di):
     return reduce(lambda acc, li: acc + len(li), di.values(), 0)
+
+
+def mean_correlation(obj):
+    if obj.output_data and obj.output_data['correlation']:
+        return round(np.mean([x['r']
+                              for x in obj.output_data['correlation']]), 2)
+    else:
+        return None
 
 
 class UserSchema(Schema):
@@ -23,6 +33,7 @@ class ModelTestSchema(BaseItemSchema):
     state = fields.String()
     images_count = fields.Function(
         lambda obj: count_dict_of_list(obj.input_data.get('selectedImages')))
+    mean_correlation = fields.Function(mean_correlation)
     test_duration = fields.Function(
         lambda obj: obj.output_data.get('duration'))
 
@@ -38,4 +49,5 @@ class MLModelSchema(BaseItemSchema):
         lambda obj: obj.output_data.get('glassbrain'))
     tests = fields.Nested(ModelTestSchema, many=True, only=('id', 'name',
                                                             'images_count',
+                                                            'mean_correlation',
                                                             'created'))
