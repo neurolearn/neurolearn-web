@@ -242,7 +242,10 @@ export default class ViewModel extends React.Component {
         </thead>
         <tbody>
           {inputData.data.map(row => <tr>
-              <td><a href={`http://neurovault.org/images/${row.id}/`}>{row.id}</a></td>
+              <td>
+                <img src="http://localhost:3000/media/2/glassbrain.png"/>
+                <p><a href={`http://neurovault.org/images/${row.id}/`}>Title {row.id}</a></p>
+              </td>
               <td>{row.target}</td>
             </tr>)}
         </tbody>
