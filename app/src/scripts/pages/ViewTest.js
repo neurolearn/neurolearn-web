@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
+
 import api from '../api';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
 
-function saveCorrelationGroups(modelId, groups) {
+function saveCorrelationGroups(testId, groups) {
   return (dispatch, getState) => {
-    return api.post(`/api/tests/${modelId}/groups`,
+    return api.post(`/api/tests/${testId}/groups`,
       groups,
       getState().auth.token);
   };
@@ -45,17 +47,17 @@ export default class ViewTest extends React.Component {
     this.props.dispatch(saveCorrelationGroups(modelId, groups));
   }
 
-  renderState(model) {
-    switch (model.state) {
+  renderState(test) {
+    switch (test.state) {
       case 'queued':
       case 'progress':
         return this.renderProgress();
       case 'success':
-        return this.renderModel(model);
+        return this.renderTest(test);
       case 'failure':
-        return this.renderFailure(model);
+        return this.renderFailure(test);
       default:
-        throw 'Unknown model state.';
+        throw 'Unknown test state.';
     }
   }
 
@@ -68,32 +70,28 @@ export default class ViewTest extends React.Component {
     );
   }
 
-  renderFailure(model) {
+  renderFailure(test) {
     return (
       <div className="col-md-12">
         <div className="alert alert-danger">
           <h4>Testing Failed</h4>
-          {model.output_data.error}
+          {test.output_data.error}
         </div>
       </div>
     );
   }
 
-  renderModel(model) {
-    const {correlation, groups, collections} = model.output_data;
+  renderTest(test) {
+    const {correlation, groups, collections} = test.output_data;
+    const { modelId } = test.input_data;
 
     return (
       <div className="col-md-12">
-        <p>Result for model test #{model.id}</p>
-
+        <p>Test for <Link to={`/models/${modelId}`}>model #{modelId}</Link></p>
         <ImageBarChart images={correlation}
                        groups={groups}
                        collections={collections}
-                       onGroupsChange={newGroups => this.handleGroupsChange(model.id, newGroups)} />
-
-        <div className='download' style={{marginTop: 20}}>
-          {/*<a className="btn btn-default" href={`/media/${model.id}/Pattern_Expression_correlation.csv`}>Download correlation as CSV</a>*/}
-        </div>
+                       onGroupsChange={newGroups => this.handleGroupsChange(test.id, newGroups)} />
       </div>
     );
   }
