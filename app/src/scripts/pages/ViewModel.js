@@ -10,6 +10,7 @@ import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
+import FallbackImage from '../components/FallbackImage';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
@@ -256,7 +257,7 @@ export default class ViewModel extends React.Component {
         <tbody>
           {inputData.data.map(row => <tr>
               <td>
-                {false && <img src="http://localhost:3000/media/2/glassbrain.png"/>}
+                <FallbackImage src={`http://neurovault.org/media/images/${row.collection_id}/glass_brain_${row.id}.jpg`} />
                 <p><a href={`http://neurovault.org/images/${row.id}/`}>{row.name}</a></p>
                 <p style={{fontSize: 12, color: 'gray'}}>{inputData.collections[row.collection_id].name}</p>
               </td>
