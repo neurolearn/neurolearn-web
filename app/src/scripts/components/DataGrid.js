@@ -55,7 +55,7 @@ export default class DataGrid extends React.Component {
       return findIndex(tableData[0], col => col === colName);
     }
 
-    function columnName (tableData, columnIndex) {
+    function columnName(tableData, columnIndex) {
       return tableData[0][columnIndex];
     }
 
