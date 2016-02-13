@@ -1,16 +1,4 @@
 .root :global {
-  .viewer-wrapper {
-    position: relative
-  }
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 101%;
-    background: rgba(255, 255, 255, 0.8);
-    z-index: 10;
-  }
   .tabs-wrapper {
     margin-top: 25px;
   }
@@ -35,4 +23,14 @@
 
 :global li.active > a:focus {
     outline:0;
+}
+
+:global .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 101%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10;
 }

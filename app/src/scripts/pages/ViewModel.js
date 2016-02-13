@@ -6,7 +6,7 @@ import React, { PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
+import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
 import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
@@ -43,7 +43,8 @@ export default class ViewModel extends React.Component {
     super(props);
     this.state = {
       loadingImages: true,
-      showMPLPlot: false
+      showMPLPlot: false,
+      showViewerModal: false
     };
   }
 
@@ -162,8 +163,8 @@ export default class ViewModel extends React.Component {
             <h3>Weightmap</h3>
             <img style={{marginTop: 15}} src={`/media/${model.id}/${model.output_data.glassbrain}`} className="img-responsive"/>
             <div className="btn-toolbar" style={{marginTop: 10}}>
-              <a className="btn btn-default" href={weightmapUrl}>Open Interactive Viewer</a>
-              <a className="btn btn-link" href={weightmapUrl}><i className="fa fa-download"></i> Download NIfTI file</a>
+            <Button onClick={() => this.setState({showViewerModal: true, loadingImages: true})}>Open Interactive Viewer</Button>
+            <a className="btn btn-link" href={weightmapUrl}><i className="fa fa-download"></i> Download NIfTI file</a>
             </div>
           </div>
 
@@ -211,23 +212,35 @@ export default class ViewModel extends React.Component {
           </div>
         </div>
 
-        <div className="row">
-          {false &&
-          <div className="col-md-6 viewer-wrapper">
-            <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-            <ReactCSSTransitionGroup transitionName="overlay"
-                                     transitionEnterTimeout={100}
-                                     transitionLeaveTimeout={100}>
-              {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
-                                            <Spinner opts={{position: 'absolute'}} />]}
-            </ReactCSSTransitionGroup>
-            <div className='download' style={{marginTop: 20}}>
-              <a className="btn btn-default" href={weightmapUrl}>Download the Weight Map</a>
-            </div>
-          </div>
-          }
-        </div>
+        {this.state.showViewerModal &&
+          this.renderViewerModal(images)
+        }
       </div>
+    );
+  }
+
+  renderViewerModal(images) {
+    const onHide = () => this.setState({showViewerModal: false});
+
+    return (
+      <Modal bsSize='large' show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
+        <Modal.Header closeButton>
+          <Modal.Title id='contained-modal-title-lg'>Weightmap Viewer</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
+          <ReactCSSTransitionGroup transitionName="overlay"
+                                   transitionEnterTimeout={100}
+                                   transitionLeaveTimeout={100}>
+            {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
+                                          <Spinner opts={{position: 'absolute'}} />]}
+          </ReactCSSTransitionGroup>
+          <div className="clearfix"></div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
 
