@@ -63,13 +63,15 @@ export default class DataGrid extends React.Component {
       const tableData = hot.getData();
       const idIndex = findColumnIndex(tableData, 'id');
       const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
+      const nameIndex = findColumnIndex(tableData, 'name');
 
       const trainingData = tableData.slice(1).map(function (row) {
         return {
           'id': row[idIndex],
           'subject_id': row[columnIndex.subjectId],
           target: row[columnIndex.trainingLabel],
-          'collection_id': row[collectionIdIndex]
+          'collection_id': row[collectionIdIndex],
+          'name': row[nameIndex]
         };
       });
 
