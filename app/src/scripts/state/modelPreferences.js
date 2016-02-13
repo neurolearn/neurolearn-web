@@ -66,7 +66,12 @@ export function resetModelTrainData(dispatch) {
    resetModelPreferences].map(action => dispatch(action()));
 }
 
-export function trainModel(name, algorithm, targetData, crossValidation, router) {
+export function trainModel(name,
+                           algorithm,
+                           targetData,
+                           collections,
+                           crossValidation,
+                           router) {
   return (dispatch, getState) => {
     dispatch(requestModelTraining());
 
@@ -74,6 +79,7 @@ export function trainModel(name, algorithm, targetData, crossValidation, router)
       'data': targetData.data,
       'label': targetData.trainingLabel,
       'cv': crossValidation,
+      collections,
       algorithm,
       name
     };

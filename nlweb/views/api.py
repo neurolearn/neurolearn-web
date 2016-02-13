@@ -66,6 +66,7 @@ def create_mlmodel():
     mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
                       training_state=MLModel.TRAINING_QUEUED,
                       input_data={'data': args['data'],
+                                  'collections': args['collections'],
                                   'label': args['label'],
                                   'algorithm': args['algorithm'],
                                   'cv': cv},

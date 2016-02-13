@@ -256,8 +256,9 @@ export default class ViewModel extends React.Component {
         <tbody>
           {inputData.data.map(row => <tr>
               <td>
-                <img src="http://localhost:3000/media/2/glassbrain.png"/>
+                {false && <img src="http://localhost:3000/media/2/glassbrain.png"/>}
                 <p><a href={`http://neurovault.org/images/${row.id}/`}>{row.name}</a></p>
+                <p style={{fontSize: 12, color: 'gray'}}>{inputData.collections[row.collection_id].name}</p>
               </td>
               <td>{row.target}</td>
             </tr>)}

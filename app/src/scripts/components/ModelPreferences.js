@@ -1,4 +1,4 @@
-import { isEmpty, some } from 'lodash';
+import { isEmpty, some, mapValues, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
@@ -16,7 +16,8 @@ export default class ModelPreferences extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     targetData: PropTypes.object.isRequired,
-    modelPreferences: PropTypes.object.isRequired
+    modelPreferences: PropTypes.object.isRequired,
+    collectionsById: PropTypes.object.isRequired
   }
 
   static contextTypes = {
@@ -28,8 +29,14 @@ export default class ModelPreferences extends React.Component {
 
     const { router } = this.context;
     const { modelName, algorithm, cvType } = this.props.modelPreferences;
+    const { collectionsById, targetData } = this.props;
     const cv = {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
-    this.props.dispatch(trainModel(modelName, algorithm, this.props.targetData, cv, router));
+    this.props.dispatch(trainModel(modelName,
+                                   algorithm,
+                                   targetData,
+                                   collectionsById,
+                                   cv,
+                                   router));
   }
 
   submitEnabled() {
@@ -169,8 +176,17 @@ export default class ModelPreferences extends React.Component {
   }
 }
 
+function elasticEntitiesToObjects(collectionsById) {
+  return mapValues(collectionsById, obj => pick(obj._source, ['name']));
+}
+
 function select(state) {
-  return state;
+  return {
+    targetData: state.targetData,
+    modelPreferences: state.modelPreferences,
+    collectionsById: elasticEntitiesToObjects(
+      state.selectedImages.collectionsById)
+  }
 }
 
 export default connect(select)(ModelPreferences);
