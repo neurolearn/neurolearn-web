@@ -71,6 +71,7 @@ def create_mlmodel():
                                   'algorithm': args['algorithm'],
                                   'cv': cv},
                       name=args['name'],
+                      description=args.get('description'),
                       user=current_user)
     db.session.add(mlmodel)
     db.session.commit()

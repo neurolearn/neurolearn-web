@@ -92,6 +92,7 @@ class MLModel(db.Model):
 
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
+    description = Column(db.Text)
 
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)
@@ -155,6 +156,7 @@ class ModelTest(db.Model):
 
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
+    description = Column(db.Text)
 
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import {
   inputModelName,
+  inputDescription,
   inputKfoldParam,
   selectCVType,
   selectAlgorithm,
@@ -28,10 +29,11 @@ export default class ModelPreferences extends React.Component {
     e.preventDefault();
 
     const { router } = this.context;
-    const { modelName, algorithm, cvType } = this.props.modelPreferences;
+    const { modelName, description, algorithm, cvType } = this.props.modelPreferences;
     const { collectionsById, targetData } = this.props;
     const cv = {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
     this.props.dispatch(trainModel(modelName,
+                                   description,
                                    algorithm,
                                    targetData,
                                    collectionsById,
@@ -91,6 +93,15 @@ export default class ModelPreferences extends React.Component {
                        value={modelPreferences.modelName}
                        onChange={this.genHandler('modelName', inputModelName)}
                        ref='modelName'
+                       label=''
+                       className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Description <span style={{color: 'gray'}}>(optional)</span></label>
+                <textarea type='textarea'
+                       value={modelPreferences.description}
+                       onChange={this.genHandler('description', inputDescription)}
+                       ref='description'
                        label=''
                        className="form-control" />
               </div>

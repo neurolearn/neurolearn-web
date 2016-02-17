@@ -326,7 +326,7 @@ export default class ViewModel extends React.Component {
 
         <div className="row">
           <div className="col-sm-8">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec, mattis ac neque. Duis vulputate commodo lectus, ac blandit elit tincidunt id.</p>
+            <p>{model.description}</p>
             <div>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></div>
             <div>
               <table className="table overview" style={{marginTop: 10}}>

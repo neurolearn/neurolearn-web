@@ -24,7 +24,7 @@ class BaseItemSchema(Schema):
     user = fields.Nested(UserSchema)
 
     class Meta:
-        additional = ('id', 'name',
+        additional = ('id', 'name', 'description',
                       'input_data', 'output_data',
                       'created', 'updated')
 
