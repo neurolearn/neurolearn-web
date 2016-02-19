@@ -30,6 +30,7 @@ export default class TestModel extends React.Component {
     search: PropTypes.object,
     testModel: PropTypes.object,
     selectedImages: PropTypes.object,
+    selectImagesModal: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   };
 
