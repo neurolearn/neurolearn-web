@@ -1,3 +1,4 @@
+import values from 'lodash/object/values';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -98,7 +99,9 @@ export default class TestModel extends React.Component {
     e.preventDefault();
     const { router } = this.context;
     const { selectedImages } = this.props;
-    this.props.dispatch(testModel(this.props.testModel.model.id,
+    const name = values(selectedImages.collectionsById).map(c => c._source.name).join(', ');
+    this.props.dispatch(testModel(name,
+                                  this.props.testModel.model.id,
                                   selectedImages.images,
                                   router));
   }

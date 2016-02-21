@@ -32,13 +32,14 @@ function resetModelTestData(dispatch) {
    hideSelectImagesModal].map(action => dispatch(action()));
 }
 
-export function testModel(modelId, selectedImages, router) {
+export function testModel(name, modelId, selectedImages, router) {
   return (dispatch, getState) => {
     dispatch(requestTestModel());
 
     const payload = {
       selectedImages: listImageIds(selectedImages),
-      modelId
+      modelId,
+      name
     };
 
     return api.post('/api/tests', payload, getState().auth.token)

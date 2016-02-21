@@ -129,12 +129,12 @@ def get_test(pk):
 @jwt_required()
 def create_test():
     data = request.json
-    mlmodel = MLModel.query.get_or_404(int(data['modelId']))
+    MLModel.query.get_or_404(int(data['modelId']))
 
     model_test = ModelTest(visibility=ModelTest.VISIBILITY_PUBLIC,
                            state=ModelTest.STATE_QUEUED,
                            input_data=request.json,
-                           name='Test for %s model' % mlmodel.name,
+                           name=data['name'],
                            user=current_user)
     db.session.add(model_test)
     db.session.commit()
