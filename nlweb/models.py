@@ -132,7 +132,8 @@ class MLModel(db.Model):
     def tests(self):
         return ModelTest.query.filter(
             ModelTest.input_data.contains({"modelId": self.id}),
-            ModelTest.state == ModelTest.STATE_SUCCESS
+            ModelTest.state == ModelTest.STATE_SUCCESS,
+            ModelTest.visibility != ModelTest.VISIBILITY_DELETED
         ).order_by('created desc').all()
 
     def delete(self):
