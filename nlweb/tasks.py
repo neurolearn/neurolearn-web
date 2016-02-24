@@ -57,7 +57,8 @@ def train_model(self, mlmodel_id):
 
     db.session.commit()
 
-    create_glassbrain_image(mlmodel_id)
+    if 'error' not in result:
+        create_glassbrain_image(mlmodel_id)
 
 
 def filter_selected_images(image_ids, image_list):
