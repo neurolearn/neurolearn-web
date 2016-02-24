@@ -1,9 +1,12 @@
+import os
 import time
 import logging
 
+import pandas as pd
 import numpy as np
 import nibabel as nb
 from nltools import analysis
+from nltools.data import Brain_Data
 
 
 SUMMARY_PROPS = ('mcr_all', 'mcr_xval', 'rmse_all', 'r_all', 'rmse_xval',
@@ -20,9 +23,9 @@ def to_filename_dict(rows):
     return di
 
 
-def get_summary(predict):
-    return {k: getattr(predict, k, None)
-            for k in SUMMARY_PROPS if getattr(predict, k, None)}
+def get_summary(output):
+    return {k: output.get(k, None)
+            for k in SUMMARY_PROPS if output.get(k, None)}
 
 
 def train_model(image_list, algorithm, cv, output_dir):
@@ -45,7 +48,7 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
-    Y = np.array([int(item['target']) for item in image_list])
+    Y = pd.DataFrame([int(item['target']) for item in image_list])
 
     try:
         holdout = [int(item['subject_id']) for item in image_list]
@@ -57,22 +60,26 @@ def train_model(image_list, algorithm, cv, output_dir):
     elif cv['type'] == 'loso':
         raise ValueError("subject_id is required for a LOSO cross validation.")
 
+    cv['n'] = len(image_list)
+
     extra = {}
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
-    predict = analysis.Predict(dat, Y, algorithm=algorithm,
-                               output_dir=output_dir,
-                               cv_dict=cv,
-                               **extra)
+    dat = Brain_Data(data=dat, Y=Y)
 
-    predict.predict()
+    output = dat.predict(algorithm=algorithm, cv_dict=cv, plot=False, **extra)
+
+    weightmap_filename = '%s_weightmap.nii.gz' % algorithm
+    output['weight_map'].write(os.path.join(output_dir, weightmap_filename))
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
-    return {'weightmap': '%s_weightmap.nii.gz' % algorithm,
+
+    return {'weightmap': weightmap_filename,
             'scatterplot': '%s_scatterplot.png ' % algorithm,
-            'stats': predict.stats_output.to_dict('list'),
-            'summary': get_summary(predict)}
+            'stats': {key: output[key].tolist()
+                      for key in ('Y', 'yfit_xval', 'yfit_all')},
+            'summary': get_summary(output)}
 
 
 def set_pattern_expression(pexpc, image_list):
