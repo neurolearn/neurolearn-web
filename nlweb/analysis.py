@@ -76,6 +76,7 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
     return {'weightmap': weightmap_filename,
+            'intercept': output['intercept'],
             'scatterplot': '%s_scatterplot.png ' % algorithm,
             'stats': {key: output[key].tolist()
                       for key in ('Y', 'yfit_xval', 'yfit_all')},
