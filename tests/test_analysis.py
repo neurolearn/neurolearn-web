@@ -55,8 +55,33 @@ def test_model_test(tmpdir):
                        name='name %s' % item['id'],
                        **item) for item in image_list]
 
-    # XXX: Better to check for weightmap shape and image shape
-    # and adjust weightmap if needed
     image_list = resample_images(cache, image_list, output_dir)
 
-    analysis.apply_mask(image_list, weight_map_filename)
+    pexpc = analysis.apply_mask(image_list, weight_map_filename)
+
+    sample_pexpc = {
+        'correlation': [
+            {
+                'collection_id': u'504',
+                'r': 0.2330972654524327,
+                'id': 7537,
+                'name': 'name 7537',
+                'thumbnail': 'image.png'
+            },
+            {
+                'collection_id': u'504',
+                'r': 0.1818355871927386,
+                'id': 7543,
+                'name': 'name 7543',
+                'thumbnail': 'image.png'
+            },
+            {
+                'collection_id': u'504',
+                'r': 0.031224460893702718,
+                'id': 7511,
+                'name': 'name 7511',
+                'thumbnail': 'image.png'
+            }
+        ]}
+
+    assert sample_pexpc == pexpc
