@@ -95,6 +95,18 @@ def set_pattern_expression(pexpc, image_list):
     return result
 
 
+def set_correlation(correlation_array, image_list):
+    result = []
+    for index, r in enumerate(correlation_array):
+        image = image_list[index]
+        result.append({'r': r,
+                       'id': image['id'],
+                       'thumbnail': image['thumbnail'],
+                       'collection_id': image['collection_id'],
+                       'name': image['name']})
+    return result
+
+
 def apply_mask(image_list, weight_map_filename):
     tic = time.time()  # Start Timer
 
@@ -106,11 +118,11 @@ def apply_mask(image_list, weight_map_filename):
 
     weight_map = nb.load(weight_map_filename)
 
-    pexpc = analysis.apply_mask(data=dat, weight_map=weight_map,
-                                method='correlation')
+    dat = Brain_Data(data=dat)
+    r = dat.similarity(weight_map)
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
     return {
-        'correlation': set_pattern_expression(pexpc, image_list)
+        'correlation': set_correlation(r, image_list)
     }

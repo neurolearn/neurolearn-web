@@ -84,4 +84,52 @@ def test_model_test(tmpdir):
             }
         ]}
 
+    new_r = {
+        'correlation': [
+            {
+                'collection_id': u'504',
+                'r': 0.031224460893702718,
+                'id': 7537,
+                'name': 'name 7537',
+                'thumbnail': 'image.png'},
+            {
+                'collection_id': u'504',
+                'r': 0.044327475967550586,
+                'id': 7543,
+                'name': 'name 7543',
+                'thumbnail': 'image.png'},
+            {
+                'collection_id': u'504',
+                'r': 0.032338158630642856,
+                'id': 7511,
+                'name': 'name 7511',
+                'thumbnail': 'image.png'
+            }]
+    }
+
+    brain_data_r = {
+        'correlation': [
+            {
+                'collection_id': u'504',
+                'r': 0.012057360342555903,
+                'id': 7537,
+                'name': 'name 7537',
+                'thumbnail': 'image.png'
+            },
+            {
+                'collection_id': u'504',
+                'r': 0.027106497728782354,
+                'id': 7543,
+                'name': 'name 7543',
+                'thumbnail': 'image.png'
+            },
+            {
+                'collection_id': u'504',
+                'r': -0.0034995624079957747,
+                'id': 7511,
+                'name': 'name 7511',
+                'thumbnail': 'image.png'
+            }]
+    }
+
     assert sample_pexpc == pexpc
