@@ -195,5 +195,8 @@ class ModelTest(db.Model):
     def delete(self):
         self.visibility = self.VISIBILITY_DELETED
 
+    def model(self):
+        return MLModel.query.filter_by(id=self.input_data['modelId']).one()
+
     def __unicode__(self):
         return self.name

@@ -36,6 +36,7 @@ class ModelTestSchema(BaseItemSchema):
     mean_correlation = fields.Function(mean_correlation)
     test_duration = fields.Function(
         lambda obj: obj.output_data.get('duration'))
+    model = fields.Nested('MLModelSchema', only=('id', 'name'))
 
 
 class MLModelSchema(BaseItemSchema):

@@ -87,7 +87,7 @@ export default class ViewTest extends React.Component {
 
     return (
       <div className="col-md-12">
-        <p>Test for <Link to={`/models/${modelId}`}>model #{modelId}</Link></p>
+        <p>Test for <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
         <ImageBarChart images={correlation}
                        groups={groups}
                        collections={collections}
