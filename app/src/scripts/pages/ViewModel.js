@@ -183,24 +183,24 @@ export default class ViewModel extends React.Component {
                 </tbody>
               </table>
             </div>
+            <div className="row tabs-wrapper">
+              <div className="col-md-12">
+                <Tabs defaultActiveKey={1} animation={false}>
+                  <Tab eventKey={1} title="Model">
+                    { model && this.renderState(model) }
+                  </Tab>
+                  <Tab eventKey={2} title="Training Data">
+                    <ModelTrainingData inputData={model.input_data} />
+                  </Tab>
+                </Tabs>
+              </div>
+            </div>
           </div>
           <div className="col-md-4 right-sidebar">
             <h4>Recent Model Tests</h4>
             {isEmpty(model.tests)
               ? <p>The model has not been tested yet.</p>
               : <RecentModelTests tests={model.tests} />}
-          </div>
-        </div>
-        <div className="row tabs-wrapper">
-          <div className="col-md-8">
-            <Tabs defaultActiveKey={1} animation={false}>
-              <Tab eventKey={1} title="Model">
-                { model && this.renderState(model) }
-              </Tab>
-              <Tab eventKey={2} title="Training Data">
-                <ModelTrainingData inputData={model.input_data} />
-              </Tab>
-            </Tabs>
           </div>
         </div>
       </div>
