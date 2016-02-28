@@ -1,4 +1,5 @@
 export const summaryPropsNameMap = {
+  'method': 'Method',
   'mcr_all': 'Accuracy',
   'mcr_xval': 'CV Accuracy',
   'rmse_all': 'Root Mean Squared Error',
@@ -8,6 +9,7 @@ export const summaryPropsNameMap = {
 };
 
 export const propOrder = [
+  'method',
   'mcr_all',
   'mcr_xval',
   'rmse_all',

@@ -15,16 +15,11 @@ function scatterplotData(stats) {
   });
 }
 
-function renderCvSummaryProp(summary, propName) {
-  return (
-    <tr key={propName}>
-      <th>{summaryPropsNameMap[propName]}</th>
-      <td>{summary[propName].toFixed(2)}</td>
-    </tr>
-  );
+function formatProp(val) {
+  return val.toFixed === undefined ? val : val.toFixed(2);
 }
 
-function renderCvSummary(summary) {
+function renderCvSummary(propOrder, summary) {
   return (
     <table style={{marginTop: 10}} className="table">
       <thead>
@@ -40,7 +35,7 @@ function renderCvSummary(summary) {
         <tr>
         {propOrder.map(propName => {
           return summary[propName]
-          ? <td>{summary[propName].toFixed(2)}</td>
+          ? <td>{formatProp(summary[propName])}</td>
           : false;
         })}
         </tr>
@@ -55,12 +50,13 @@ const CrossValidation = ({label, cv, summary, stats}) => {
       values: scatterplotData(stats)
   }];
 
+  const cvMeta = Object.assign({}, summary, {method: cv.type});
+
   return (
     <div>
       <h3>Cross Validation</h3>
-      <p>Method: <strong>{cv.type}</strong></p>
 
-      {renderCvSummary(summary)}
+      {renderCvSummary(propOrder, cvMeta)}
 
       <h4>Actual vs. Predicted</h4>
       <ScatterPlot data={spData}
