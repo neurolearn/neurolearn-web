@@ -2,19 +2,18 @@ import moment from 'moment';
 import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
-import Spinner from '../components/Spinner';
-import NSViewer from '../components/NSViewer';
-import FallbackImage from '../components/FallbackImage';
+import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
+import Spinner from '../components/Spinner';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
 import TaskStateLabel from '../components/TaskStateLabel';
 import RecentModelTests from '../components/RecentModelTests';
 import CrossValidation from '../components/CrossValidation';
+import ImageViewerModal from '../components/ImageViewerModal';
+import ModelTrainingData from '../components/ModelTrainingData';
 import { pluralize } from '../utils.js';
 
 import styles from './ViewModel.scss';
@@ -43,6 +42,21 @@ export default class ViewModel extends React.Component {
     const { id } = this.props.params;
     this.props.dispatch(
       loadItemDetail(`/api/models/${parseInt(id)}`, 'model'));
+  }
+
+  handleDelete(modelId) {
+    const { router } = this.context;
+
+    this.props.dispatch(deleteItem(`/api/models/${modelId}`,
+      () => router.push('/dashboard/models')
+    ));
+  }
+
+  handleTestModel(model) {
+    const { router } = this.context;
+
+    this.props.dispatch(setTestModel(model));
+    router.push('/tests/new');
   }
 
   renderState(model) {
@@ -79,31 +93,8 @@ export default class ViewModel extends React.Component {
     );
   }
 
-  handleImagesLoaded() {
-    this.setState({loadingImages: false});
-  }
-
   renderModel(model) {
-      const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
-      const images = [
-      {
-        id: 'anatomical',
-        json: false,
-        name: 'anatomical',
-        colorPalette: 'grayscale',
-        cache: true,
-        download: '/static/data/anatomical.nii.gz',
-        url: '/static/data/anatomical.nii.gz'
-      },
-      {
-        'url': weightmapUrl,
-        'name': 'weight map',
-        'colorPalette': 'intense red-blue',
-        'intent': 'z-score:',
-        'opacity': 0.8,
-        'sign': 'both'
-      }
-    ];
+    const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
 
     const { summary, stats } = model.output_data;
     const { algorithm, cv, label } = model.input_data;
@@ -137,74 +128,13 @@ export default class ViewModel extends React.Component {
         </div>
 
         {this.state.showViewerModal &&
-          this.renderViewerModal(images)
+          <ImageViewerModal weightmapUrl={weightmapUrl}
+                            loadingImages={this.state.loadingImages}
+                            onHide={() => this.setState({showViewerModal: false})}
+                            onImagesLoaded={() => this.setState({loadingImages: false})} />
         }
       </div>
     );
-  }
-
-  renderViewerModal(images) {
-    const onHide = () => this.setState({showViewerModal: false});
-
-    return (
-      <Modal bsSize='large' show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
-        <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-lg'>Weightmap Viewer</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <NSViewer images={images} onImagesLoaded={this.handleImagesLoaded.bind(this)}/>
-          <ReactCSSTransitionGroup transitionName="overlay"
-                                   transitionEnterTimeout={100}
-                                   transitionLeaveTimeout={100}>
-            {this.state.loadingImages && [<div className="overlay">&nbsp;</div>,
-                                          <Spinner opts={{position: 'absolute'}} />]}
-          </ReactCSSTransitionGroup>
-          <div className="clearfix"></div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  renderTrainingData(inputData) {
-    return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th title="Training Label">{inputData.label.name}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {inputData.data.map(row => <tr>
-              <td>
-                <FallbackImage src={`http://neurovault.org/media/images/${row.collection_id}/glass_brain_${row.id}.jpg`} />
-                <p><a href={`http://neurovault.org/images/${row.id}/`}>{row.name}</a></p>
-                <p style={{fontSize: 12, color: 'gray'}}>{inputData.collections[row.collection_id].name}</p>
-              </td>
-              <td>{row.target}</td>
-            </tr>)}
-        </tbody>
-      </table>
-    )
-  }
-
-  handleDelete(modelId) {
-    const { router } = this.context;
-
-    this.props.dispatch(deleteItem(`/api/models/${modelId}`,
-      () => router.push('/dashboard/models')
-    ));
-  }
-
-
-  handleTestModel(model) {
-    const { router } = this.context;
-
-    this.props.dispatch(setTestModel(model));
-    router.push('/tests/new');
   }
 
   render() {
@@ -268,7 +198,7 @@ export default class ViewModel extends React.Component {
                 { model && this.renderState(model) }
               </Tab>
               <Tab eventKey={2} title="Training Data">
-                { this.renderTrainingData(model.input_data) }
+                <ModelTrainingData inputData={model.input_data} />
               </Tab>
             </Tabs>
           </div>
