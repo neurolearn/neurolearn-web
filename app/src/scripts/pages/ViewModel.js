@@ -16,6 +16,8 @@ import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 import TaskStateLabel from '../components/TaskStateLabel';
+import RecentModelTests from '../components/RecentModelTests';
+import { pluralize } from '../utils.js';
 
 import styles from './ViewModel.scss';
 
@@ -268,19 +270,6 @@ export default class ViewModel extends React.Component {
     )
   }
 
-  renderRecentModelTests(tests) {
-    return (
-      <div>
-        {tests.map(test => <div>
-            <Link to={`/tests/${test.id}`}>{test.name}</Link>
-            <p>
-            {test.images_count} {this.pluralize(test.images_count, 'image', 'images')} • {test.mean_correlation} mean r
-            </p>
-          </div>)}
-      </div>
-    );
-  }
-
   handleDelete(modelId) {
     const { router } = this.context;
 
@@ -289,9 +278,6 @@ export default class ViewModel extends React.Component {
     ));
   }
 
-  pluralize(n, singular, plural) {
-    return (n !== 1) ? plural : singular;
-  }
 
   handleTestModel(model) {
     const { router } = this.context;
@@ -341,7 +327,7 @@ export default class ViewModel extends React.Component {
                   <tr>
                     <td>{algorithmNameMap[model.algorithm]}</td>
                     <td>{model.input_data.label.name}</td>
-                    <td>{model.input_data.data.length} {this.pluralize(model.input_data.data.length, 'image', 'images')}</td>
+                    <td>{model.input_data.data.length} {pluralize(model.input_data.data.length, 'image', 'images')}</td>
                   </tr>
                 </tbody>
               </table>
@@ -351,7 +337,7 @@ export default class ViewModel extends React.Component {
             <h4>Recent Model Tests</h4>
             {isEmpty(model.tests)
               ? <p>The model has not been tested yet.</p>
-              : this.renderRecentModelTests(model.tests)}
+              : <RecentModelTests tests={model.tests} />}
           </div>
         </div>
         <div className="row tabs-wrapper">
