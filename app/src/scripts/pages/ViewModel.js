@@ -127,12 +127,6 @@ export default class ViewModel extends React.Component {
           </div>
         </div>
 
-        <div className="row weightmap">
-          <div className='col-md-12' style={{marginTop: 20}}>
-              <p>Training duration: {Math.floor(model.output_data.duration) + ' sec'}</p>
-          </div>
-        </div>
-
         {this.state.showViewerModal &&
           <ImageViewerModal weightmapUrl={weightmapUrl}
                             loadingImages={this.state.loadingImages}
