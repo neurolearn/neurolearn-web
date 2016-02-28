@@ -46,7 +46,6 @@ export default class ViewModel extends React.Component {
     super(props);
     this.state = {
       loadingImages: true,
-      showMPLPlot: false,
       showViewerModal: false
     };
   }
@@ -192,20 +191,6 @@ export default class ViewModel extends React.Component {
               xAxis={{label: label.name}}
               yAxis={{label: `Predicted ${label.name}`}}
             />
-            {!this.state.showMPLPlot &&
-            <Button onClick={() => this.setState({showMPLPlot: true})}>
-              Debug: Show matplotlib Scatterplot
-            </Button>
-            }
-            {this.state.showMPLPlot &&
-              <div>
-              <hr />
-              <img src={`/media/${model.id}/${model.output_data.scatterplot}`}/>
-              <Button onClick={() => this.setState({showMPLPlot: false})}>
-                Hide matplotlib Scatterplot
-              </Button>
-              </div>
-            }
           </div>
         </div>
 
