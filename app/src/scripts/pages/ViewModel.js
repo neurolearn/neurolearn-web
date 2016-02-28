@@ -102,16 +102,22 @@ export default class ViewModel extends React.Component {
     return (
       <div>
         <div className="row weightmap">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <h3>Weightmap</h3>
-            <img style={{marginTop: 15}} src={`/media/${model.id}/${model.output_data.glassbrain}`} className="img-responsive"/>
-            <div className="btn-toolbar" style={{marginTop: 10}}>
-            <Button onClick={() => this.setState({showViewerModal: true, loadingImages: true})}>Open Interactive Viewer</Button>
-            <a className="btn btn-link" href={weightmapUrl}><i className="fa fa-download"></i> Download NIfTI file</a>
-            </div>
-          </div>
+            <table>
+              <tr>
+                <td className="col-md-6"><img style={{marginTop: 15}} src={`/media/${model.id}/${model.output_data.glassbrain}`} className="img-responsive"/></td>
+                <td className="col-md-6" style={{textAlign: 'center'}}>
+                  <div>
+                   <Button onClick={() => this.setState({showViewerModal: true, loadingImages: true})}>Open Interactive Viewer</Button>
+                  </div>
+                  <div>
+                    <a className="btn btn-link" href={weightmapUrl}><i className="fa fa-download"></i> Download NIfTI file</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
 
-          <div className="col-md-6">
           </div>
         </div>
 
