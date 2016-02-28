@@ -1,5 +1,4 @@
 import moment from 'moment';
-import zipWith from 'lodash/array/zipWith';
 import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
@@ -7,28 +6,18 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
-import ScatterPlot from '../components/ScatterPlot';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
 import FallbackImage from '../components/FallbackImage';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
 import { setTestModel } from '../state/testModel';
 import { algorithmNameMap } from '../constants/Algorithms';
-import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 import TaskStateLabel from '../components/TaskStateLabel';
 import RecentModelTests from '../components/RecentModelTests';
+import CrossValidation from '../components/CrossValidation';
 import { pluralize } from '../utils.js';
 
 import styles from './ViewModel.scss';
-
-function scatterplotData(stats) {
-  const {Y, yfit_xval, yfit_all} = stats;
-  const yfit = yfit_xval || yfit_all;
-
-  return zipWith(Y, yfit_xval, (acc, value) => {
-        return { x: acc, y: value };
-  });
-}
 
 export default class ViewModel extends React.Component {
   static propTypes = {
@@ -90,40 +79,6 @@ export default class ViewModel extends React.Component {
     );
   }
 
-  renderCvSummaryProp(summary, propName) {
-    return (
-      <tr key={propName}>
-        <th>{summaryPropsNameMap[propName]}</th>
-        <td>{summary[propName].toFixed(2)}</td>
-      </tr>
-    );
-  }
-
-  renderCvSummary(summary) {
-    return (
-      <table style={{marginTop: 10}} className="table">
-        <thead>
-          <tr>
-          {propOrder.map(propName => {
-            return summary[propName]
-            ? <th>{summaryPropsNameMap[propName]}</th>
-            : false;
-          })}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-          {propOrder.map(propName => {
-            return summary[propName]
-            ? <td>{summary[propName].toFixed(2)}</td>
-            : false;
-          })}
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
-
   handleImagesLoaded() {
     this.setState({loadingImages: false});
   }
@@ -150,13 +105,8 @@ export default class ViewModel extends React.Component {
       }
     ];
 
-    const { summary } = model.output_data;
+    const { summary, stats } = model.output_data;
     const { algorithm, cv, label } = model.input_data;
-
-    const spData = [{
-        label: label.name,
-        values: scatterplotData(model.output_data.stats)
-    }];
 
     return (
       <div>
@@ -171,26 +121,12 @@ export default class ViewModel extends React.Component {
           </div>
 
           <div className="col-md-6">
-            <h4></h4>
           </div>
         </div>
 
         <div className="row weightmap">
           <div className='col-md-12' style={{marginTop: 20}}>
-            <h3>Cross Validation</h3>
-            <p>Method: <strong>{cv.type}</strong></p>
-
-            {this.renderCvSummary(summary)}
-
-            <h4>Actual vs. Predicted</h4>
-            <ScatterPlot
-              data={spData}
-              width={500}
-              height={400}
-              margin={{top: 10, bottom: 30, left: 30, right: 0}}
-              xAxis={{label: label.name}}
-              yAxis={{label: `Predicted ${label.name}`}}
-            />
+            {CrossValidation({label, cv, summary, stats})}
           </div>
         </div>
 
