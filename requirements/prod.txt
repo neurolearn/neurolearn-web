@@ -52,6 +52,6 @@ pandas==0.16.1
 matplotlib==1.4.3
 seaborn==0.5.1
 
-git+https://github.com/burnash/neurolearn.git@f1e7036cd6ad17ea46b42679c6d0b1a60731f375#egg=nltools
+git+https://github.com/burnash/neurolearn.git@cc4f495cdada04537679f0ee8543687fa7113231#egg=nltools
 
 dotenv==0.0.5
