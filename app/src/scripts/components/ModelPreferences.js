@@ -118,7 +118,6 @@ export default class ModelPreferences extends React.Component {
                     <option value="logistic">Logistic Regression</option>
                     <option value="ridgeClassifier">Ridge Classifier</option>
                     <option value="ridgeClassifierCV">Ridge Classifier CV</option>
-                    <option value="randomforestClassifier">Random Forest Classifier</option>
                   </optgroup>
                   <optgroup label="Predict">
                     <option value="svr">SVR</option>
@@ -127,7 +126,6 @@ export default class ModelPreferences extends React.Component {
                     <option value="lassoCV">Lasso CV</option>
                     <option value="ridge">Ridge</option>
                     <option value="ridgeCV">Ridge CV</option>
-                    <option value="randomforest">Random Forest</option>
                   </optgroup>
                 </select>
               </div>
