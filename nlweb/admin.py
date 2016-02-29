@@ -84,6 +84,22 @@ def _user_id_formatter(view, context, model, name):
     return Markup(id_val)
 
 
+def _task_state_formatter(view, context, model, name):
+    state = getattr(model, name)
+    pk = model.id
+    state_html = u"<form class='form-inline' " \
+        "method='POST' action='restart'>%s " \
+        "<input type='hidden' name='id' value='%s' />" \
+        "<input type='hidden' name='secret' value='%s' />" \
+        "<input type='hidden' name='next' value='%s' />" \
+        "<button type='submit' " \
+        "class='btn btn-default " \
+        "btn-xs'>restart</button></form>" % (state, pk,
+                                             secret_hash(str(pk)),
+                                             flask.request.path)
+    return Markup(state_html)
+
+
 class ModelView(sqla.ModelView):
     column_default_sort = ('created', True)
 
@@ -139,8 +155,30 @@ class MLModelAdmin(ModelView):
         'output_data': JSONEditorField
     }
 
+    column_formatters = {
+        'training_state': _task_state_formatter
+    }
+
     create_template = 'admin/jsoneditor_edit.html'
     edit_template = 'admin/jsoneditor_edit.html'
+
+    @admin.expose('/restart', methods=('POST',))
+    def restart_task(self):
+        from nlweb import tasks
+
+        pk = int(flask.request.form['id'])
+        secret = flask.request.form['secret']
+        nexturl = flask.request.form.get('next', '/admin/')
+
+        if secret_hash(str(pk)) == secret:
+            model = MLModel.query.get_or_404(pk)
+            tasks.train_model.delay(model.id)
+
+            return flask.redirect(nexturl)
+        else:
+            flask.abort(404)
+
+        return flask.redirect('/admin')
 
 
 class ModelTestAdmin(MLModelAdmin):
