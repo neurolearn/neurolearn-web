@@ -8,7 +8,7 @@ def count_dict_of_list(di):
 
 
 def mean_correlation(obj):
-    if obj.output_data and obj.output_data['correlation']:
+    if obj.output_data and obj.output_data.get('correlation'):
         return round(np.mean([x['r']
                               for x in obj.output_data['correlation']]), 2)
     else:
