@@ -5,7 +5,6 @@ import logging
 import pandas as pd
 import numpy as np
 import nibabel as nb
-from nltools import analysis
 from nltools.data import Brain_Data
 
 
@@ -23,9 +22,13 @@ def to_filename_dict(rows):
     return di
 
 
+def valid_value(val):
+    return val and not np.isnan(val)
+
+
 def get_summary(output):
-    return {k: output.get(k, None)
-            for k in SUMMARY_PROPS if output.get(k, None)}
+    return {k: output[k]
+            for k in SUMMARY_PROPS if valid_value(output.get(k, None))}
 
 
 def train_model(image_list, algorithm, cv, output_dir):
@@ -76,7 +79,7 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
     return {'weightmap': weightmap_filename,
-            'intercept': output['intercept'],
+            'intercept': float(output['intercept']),
             'scatterplot': '%s_scatterplot.png ' % algorithm,
             'stats': {key: output[key].tolist()
                       for key in ('Y', 'yfit_xval', 'yfit_all')},
