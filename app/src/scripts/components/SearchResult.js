@@ -3,6 +3,8 @@ import styles from './SearchResult.scss';
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import FallbackImage from './FallbackImage';
+import { pluralize } from '../utils.js';
+
 
 export default class SearchResult extends React.Component {
   static propTypes = {
@@ -28,7 +30,7 @@ export default class SearchResult extends React.Component {
           </div>
           <div className="images">
             <FallbackImage src={thumbnail} className="img-responsive" />
-            <div className="number-of-images">{number_of_images} images</div>
+            <div className="number-of-images">{number_of_images} {pluralize(number_of_images, 'image', 'images')}</div>
           </div>
           <div className="button">
             <Button bsStyle='default' onClick={this.props.onClick}>Select Images</Button>
