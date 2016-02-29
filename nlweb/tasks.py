@@ -47,18 +47,17 @@ def train_model(self, mlmodel_id):
                                       mlmodel.input_data['algorithm'],
                                       mlmodel.input_data['cv'],
                                       output_dir)
+        result['duration'] = time.time() - tic
     except Exception as e:
         result = {'error': unicode(e)}
         mlmodel.training_state = MLModel.TRAINING_FAILURE
+        raise
+    finally:
+        mlmodel.output_data = result
+        db.session.commit()
 
-    result['duration'] = time.time() - tic
-
-    mlmodel.output_data = result
-
-    db.session.commit()
-
-    if 'error' not in result:
-        create_glassbrain_image(mlmodel_id)
+        if 'error' not in result:
+            create_glassbrain_image(mlmodel_id)
 
 
 def filter_selected_images(image_ids, image_list):
@@ -120,16 +119,15 @@ def test_model(self, model_test_id):
     try:
         result = analysis.apply_mask(image_list,
                                      weight_map_filename)
+        result['collections'] = collections
+        result['duration'] = time.time() - tic
     except Exception as e:
         result = {'error': unicode(e)}
         model_test.state = ModelTest.STATE_FAILURE
-
-    result['duration'] = time.time() - tic
-    result['collections'] = collections
-
-    model_test.output_data = result
-
-    db.session.commit()
+        raise
+    finally:
+        model_test.output_data = result
+        db.session.commit()
 
 
 @celery.task(bind=True)
