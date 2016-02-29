@@ -1,3 +1,18 @@
 @import 'vendor/bootstrap-nav-wizard.css';
 @import 'vendor/jquery-ui.css';
 @import 'NSViewer.css';
+
+.hero {
+    text-align: center;
+    padding: 65px;
+}
+
+.hero h1 {
+    font-size: 58px;
+    font-weight: 300;
+}
+
+.hero p {
+    font-size: 21px;
+    padding: 10px 50px 10px 50px;
+}
