@@ -3,7 +3,6 @@ import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
 import Spinner from '../components/Spinner';
