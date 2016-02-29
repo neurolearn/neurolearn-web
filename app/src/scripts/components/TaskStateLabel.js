@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
-const TaskStateLabel = props => {
-  switch (props.state) {
+const TaskStateLabel = ({state}) => {
+  switch (state) {
     case 'queued':
       return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
     case 'progress':
