@@ -76,7 +76,7 @@ export default class ViewModel extends React.Component {
   renderProgress() {
     return (
       <div className="col-md-12" >
-        <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
+        <div style={{'paddingTop': 65, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
         <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Model training is in progress…</div>
       </div>
     );
