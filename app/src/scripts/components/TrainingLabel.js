@@ -44,7 +44,7 @@ export default class TrainingLabel extends React.Component {
   renderDataGrid(data, targetData) {
     return (
       <div>
-        <p>Select a column for training labels and (optionally) a column with subject IDs. Right click a corresponding columns.</p>
+        <p>Select a column for training labels and (optionally) a column with subject IDs. Right click corresponding columns.</p>
         <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} targetData={targetData} />
       </div>
     );
