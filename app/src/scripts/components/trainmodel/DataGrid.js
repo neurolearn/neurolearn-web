@@ -1,4 +1,5 @@
 import findIndex from 'lodash/array/findIndex';
+import isString from 'lodash/lang/isString';
 import React, { PropTypes } from 'react';
 
 require('handsontable');
@@ -59,6 +60,19 @@ export default class DataGrid extends React.Component {
       return tableData[0][columnIndex];
     }
 
+    // Kudos to jeanmarc78
+    // https://github.com/handsontable/handsontable/issues/2645#issuecomment-122209231
+    function parseCellValue(row, col) {
+      const cellId = hot.plugin.utils.translateCellCoords({row, col});
+      const inputValue = hot.getDataAtCell(row, col);
+      if (isString(inputValue) && inputValue.charAt(0) === '=') {
+        const formula = inputValue.substr(1).toUpperCase();
+        return hot.plugin.parse(formula, {row, col, id: cellId});
+      } else {
+        return inputValue;
+      }
+    }
+
     function getTargetData(columnIndex) {
       const tableData = hot.getData();
       const idIndex = findColumnIndex(tableData, 'id');
@@ -67,14 +81,19 @@ export default class DataGrid extends React.Component {
 
       const trainingData = tableData
         .slice(1)
-        .filter(row => row[idIndex] && row[collectionIdIndex])
+        .filter(row => {
+          console.log(row[idIndex] && row[collectionIdIndex]);
+          return row[idIndex] && row[collectionIdIndex]
+        })
         .map((row, i) => {
-          // Fetch target value from cell to get calculated value
-          const targetEl = hot.getCell(i + 1, columnIndex.trainingLabel);
+          const parsed = parseCellValue(i + 1, columnIndex.trainingLabel);
+          if (parsed.error) {
+            throw 'Cell Error';
+          }
           return {
             'id': row[idIndex],
             'subject_id': row[columnIndex.subjectId],
-            target: parseFloat(targetEl.innerText),
+            target: parsed.result,
             'collection_id': row[collectionIdIndex],
             'name': row[nameIndex]
           };
@@ -90,9 +109,15 @@ export default class DataGrid extends React.Component {
     }
 
     function useColumnAs(name, col) {
+      const prevCol = selectedColumns[name];
       selectedColumns[name] = col;
       if (selectedColumns.trainingLabel !== null ) {
-        _this.props.onSelectTarget(getTargetData(selectedColumns));
+        try {
+          _this.props.onSelectTarget(getTargetData(selectedColumns));
+        } catch(e) {
+          alert('Error while parsing cells. Please check cell values.');
+          selectedColumns[name] = prevCol;
+        }
       }
 
       hot.render();
