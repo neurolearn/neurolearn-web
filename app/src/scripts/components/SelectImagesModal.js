@@ -10,7 +10,7 @@ import styles from './SelectImagesModal.scss';
 export default class SelectImagesModal extends React.Component {
   static propTypes = {
     collection: PropTypes.object.isRequired,
-    selectedImages: PropTypes.object.isRequired,
+    selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
     onToggleAll: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired
