@@ -4,7 +4,7 @@ import SortSearchResults from './SortSearchResults';
 import SearchResults from './SearchResults';
 import SearchPagination from './Pagination';
 import RefineSearchResults from './RefineSearchResults';
-import { RESULTS_PER_PAGE } from '../constants/Search';
+import { RESULTS_PER_PAGE } from '../../constants/Search';
 
 import {
   loadSearchResults,
@@ -12,7 +12,7 @@ import {
   selectSearchOffset,
   selectSortType,
   changeFilter,
-} from '../state/search';
+} from '../../state/search';
 
 
 import styles from './SearchContainer.scss';

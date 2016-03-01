@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import SearchContainer from '../components/SearchContainer';
+import SearchContainer from '../components/search/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 import { Link } from 'react-router';

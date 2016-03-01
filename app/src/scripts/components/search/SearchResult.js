@@ -2,8 +2,8 @@ import styles from './SearchResult.scss';
 
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import FallbackImage from './FallbackImage';
-import { pluralize } from '../utils.js';
+import FallbackImage from '../FallbackImage';
+import { pluralize } from '../../utils.js';
 
 
 export default class SearchResult extends React.Component {

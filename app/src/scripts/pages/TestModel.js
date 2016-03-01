@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
-import SearchContainer from '../components/SearchContainer';
+import SearchContainer from '../components/search/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 

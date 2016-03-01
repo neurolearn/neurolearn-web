@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
-import SearchSortTypes from '../constants/SearchSortTypes';
+import SearchSortTypes from '../../constants/SearchSortTypes';
 
 import styles from './SortSearchResults.scss';
 
