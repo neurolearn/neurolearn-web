@@ -69,7 +69,7 @@ export default class DataGrid extends React.Component {
         const formula = inputValue.substr(1).toUpperCase();
         return hot.plugin.parse(formula, {row, col, id: cellId});
       } else {
-        return inputValue;
+        return {result: inputValue};
       }
     }
 
@@ -81,10 +81,7 @@ export default class DataGrid extends React.Component {
 
       const trainingData = tableData
         .slice(1)
-        .filter(row => {
-          console.log(row[idIndex] && row[collectionIdIndex]);
-          return row[idIndex] && row[collectionIdIndex]
-        })
+        .filter(row => row[idIndex] && row[collectionIdIndex])
         .map((row, i) => {
           const parsed = parseCellValue(i + 1, columnIndex.trainingLabel);
           if (parsed.error) {
