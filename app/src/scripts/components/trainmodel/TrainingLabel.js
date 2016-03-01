@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import DataGrid from './DataGrid';
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
-import { loadImagesMetadata } from '../state/imagesMetadata';
-import { setTargetData } from '../state/targetData';
+import { loadImagesMetadata } from '../../state/imagesMetadata';
+import { setTargetData } from '../../state/targetData';
 
 export default class TrainingLabel extends React.Component {
   static propTypes = {

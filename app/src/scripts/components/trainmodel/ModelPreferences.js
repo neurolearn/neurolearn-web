@@ -10,7 +10,7 @@ import {
   selectCVType,
   selectAlgorithm,
   trainModel,
-} from '../state/modelPreferences';
+} from '../../state/modelPreferences';
 
 
 export default class ModelPreferences extends React.Component {

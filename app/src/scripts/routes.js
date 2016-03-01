@@ -11,9 +11,9 @@ import TrainModel from './pages/TrainModel';
 import ViewModel from './pages/ViewModel';
 import TestModel from './pages/TestModel';
 import ViewTest from './pages/ViewTest';
-import InputData from './components/InputData';
-import TrainingLabel from './components/TrainingLabel';
-import ModelPreferences from './components/ModelPreferences';
+import InputData from './components/trainmodel/InputData';
+import TrainingLabel from './components/trainmodel/TrainingLabel';
+import ModelPreferences from './components/trainmodel/ModelPreferences';
 import NotFound from './pages/NotFound';
 
 export default function renderRoutes(store, history) {
