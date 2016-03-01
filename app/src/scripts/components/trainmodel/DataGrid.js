@@ -65,14 +65,19 @@ export default class DataGrid extends React.Component {
       const collectionIdIndex = findColumnIndex(tableData, 'collection_id');
       const nameIndex = findColumnIndex(tableData, 'name');
 
-      const trainingData = tableData.slice(1).map(function (row) {
-        return {
-          'id': row[idIndex],
-          'subject_id': row[columnIndex.subjectId],
-          target: row[columnIndex.trainingLabel],
-          'collection_id': row[collectionIdIndex],
-          'name': row[nameIndex]
-        };
+      const trainingData = tableData
+        .slice(1)
+        .filter(row => row[idIndex] && row[collectionIdIndex])
+        .map((row, i) => {
+          // Fetch target value from cell to get calculated value
+          const targetEl = hot.getCell(i + 1, columnIndex.trainingLabel);
+          return {
+            'id': row[idIndex],
+            'subject_id': row[columnIndex.subjectId],
+            target: parseFloat(targetEl.innerText),
+            'collection_id': row[collectionIdIndex],
+            'name': row[nameIndex]
+          };
       });
 
       return {
