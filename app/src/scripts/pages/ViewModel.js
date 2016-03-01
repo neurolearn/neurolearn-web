@@ -83,7 +83,7 @@ export default class ViewModel extends React.Component {
 
   renderFailure(model) {
     return (
-      <div className="col-md-12">
+      <div className="col-md-12" style={{padding: 20}}>
         <div className="alert alert-danger">
           <h4>Training Failed</h4>
           {model.output_data.error}
