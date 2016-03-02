@@ -26,7 +26,7 @@ export default class ListItem extends React.Component {
 
   renderTestSummary(item) {
     return (
-      <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {item.mean_correlation} mean r</p>
+      <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {item.mean_correlation} mean <var>r</var></p>
     );
   }
 
