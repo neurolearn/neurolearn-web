@@ -23,8 +23,10 @@ def model_dir(model_id):
 
 
 def save_roc_figure(roc, algorithm, output_dir):
+    filename = '%s_roc_plot.png' % algorithm
     fig = roc.plot()
-    fig.savefig(os.path.join(output_dir, algorithm + '_roc_plot.png'))
+    fig.savefig(os.path.join(output_dir, filename))
+    return filename
 
 
 @celery.task(bind=True)
@@ -56,8 +58,8 @@ def train_model(self, mlmodel_id):
                                       output_dir)
 
         if 'roc' in result:
-            save_roc_figure(result.pop('roc'), algorithm, output_dir)
-
+            result['roc_plot'] = save_roc_figure(result.pop('roc'), algorithm,
+                                                 output_dir)
         result['duration'] = time.time() - tic
     except Exception as e:
         result = {'error': unicode(e)}
