@@ -1,10 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+import Footer from '../components/Footer';
+
 const FAQ = () => (
-  <div style={{paddingBottom: 100}}>
+  <div style={{paddingBottom: 50}}>
     <h1 className="page-header">Frequently Asked Questions</h1>
-    <div className="row">
+    <div className="row" style={{paddingBottom: 50}}>
       <div className="col-md-8">
         <ul>
           <li><a href="#q1">What is Neuro-learn.org?</a></li>
@@ -88,6 +90,7 @@ const FAQ = () => (
         <p>Please send any feedback and suggestions to <a href="mailto:neurolearnweb@gmail.com">neurolearnweb@gmail.com</a>, or start an issue on our github sites.  We encourage interested developers to contribute pull requests to our github repositories.</p>
       </div>
     </div>
+    <Footer />
   </div>
 );
 

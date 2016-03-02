@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+import Footer from '../components/Footer';
+
 const LoggedOut = () => (
   <div>
     <div className="hero">
@@ -19,12 +21,8 @@ const LoggedOut = () => (
     <div className="text-center" style={{paddingTop: 20, paddingBottom: 20}}>
       <p className="lead">There are currently <Link to="/explore/models">12 models</Link> and <Link to="/explore/tests">9 tests</Link> being shared.</p>
     </div>
-    <hr/>
-    <footer className="footer text-center">
-      <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev. Supported by NIH award R01DA035484-02S1</p>
-    </footer>
+    <Footer />
   </div>
 );
-
 
 export default LoggedOut;
