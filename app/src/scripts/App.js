@@ -81,6 +81,9 @@ export default class App extends React.Component {
             <LinkContainer to="/explore">
               <NavItem eventKey={1} active={router.isActive('/explore')}>Explore</NavItem>
             </LinkContainer>
+            <LinkContainer to="/faq">
+              <NavItem eventKey={1} active={router.isActive('/faq')}>FAQ</NavItem>
+            </LinkContainer>
           </Nav>
           <Nav right>
             { auth.user
