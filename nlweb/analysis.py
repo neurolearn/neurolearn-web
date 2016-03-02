@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 import nibabel as nb
 from nltools.data import Brain_Data
-import matplotlib.pyplot as plt
 
 SUMMARY_PROPS = ('mcr_all', 'mcr_xval', 'rmse_all', 'r_all', 'rmse_xval',
                  'r_xval')
