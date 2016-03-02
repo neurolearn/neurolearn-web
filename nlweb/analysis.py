@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import nibabel as nb
 from nltools.data import Brain_Data
-
+import matplotlib.pyplot as plt
 
 SUMMARY_PROPS = ('mcr_all', 'mcr_xval', 'rmse_all', 'r_all', 'rmse_xval',
                  'r_xval')
@@ -71,12 +71,16 @@ def train_model(image_list, algorithm, cv, output_dir):
 
     dat = Brain_Data(data=dat, Y=Y)
 
-    output = dat.predict(algorithm=algorithm, cv_dict=cv, plot=False, **extra)
+    output = dat.predict(algorithm=algorithm, cv_dict=cv, plot=True, **extra)
 
     weightmap_filename = '%s_weightmap.nii.gz' % algorithm
     output['weight_map'].write(os.path.join(output_dir, weightmap_filename))
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
+
+    import pudb; pudb.set_trace()
+    fig = output['roc'].plot()
+    plt.savefig(os.path.join(output_dir, algorithm + '_roc_plot.png'))
 
     return {'weightmap': weightmap_filename,
             'intercept': float(output['intercept']),
