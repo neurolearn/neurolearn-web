@@ -11,11 +11,13 @@ export default class ExploreItems extends React.Component {
     const { items, itemType } = this.props;
 
     return (
-      <div>
-      {items.map(item =>
-        <ListItem key={item.id}
-                  itemType={itemType}
-                  item={item} />)}
+      <div className="row" style={{paddingTop: 10}}>
+        <div className="col-lg-8">
+        {items.map(item =>
+          <ListItem key={item.id}
+                    itemType={itemType}
+                    item={item} />)}
+        </div>
       </div>
     );
   }

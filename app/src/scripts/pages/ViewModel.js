@@ -7,13 +7,12 @@ import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
 import { loadItemDetail, deleteItem } from '../state/itemDetail';
 import Spinner from '../components/Spinner';
 import { setTestModel } from '../state/testModel';
-import { algorithmNameMap } from '../constants/Algorithms';
 import TaskStateLabel from '../components/TaskStateLabel';
 import RecentModelTests from '../components/RecentModelTests';
 import CrossValidation from '../components/CrossValidation';
 import ImageViewerModal from '../components/ImageViewerModal';
 import ModelTrainingData from '../components/ModelTrainingData';
-import { pluralize } from '../utils.js';
+import ModelOverview from '../components/ModelOverview';
 
 import styles from './ViewModel.scss';
 
@@ -162,26 +161,9 @@ export default class ViewModel extends React.Component {
 
         <div className="row">
           <div className="col-sm-8">
-            <p>{model.description}</p>
             <div>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></div>
-            <div>
-              <table className="table overview" style={{marginTop: 10}}>
-                <thead>
-                  <tr>
-                    <td className="col-md-4">Algorithm</td>
-                    <td className="col-md-4">Training Label</td>
-                    <td className="col-md-4">Training Dataset</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{algorithmNameMap[model.algorithm]}</td>
-                    <td>{model.input_data.label.name}</td>
-                    <td>{model.input_data.data.length} {pluralize(model.input_data.data.length, 'image', 'images')}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <p>{model.description}</p>
+            <ModelOverview model={model}/>
             <div className="row tabs-wrapper">
               <div className="col-md-12">
                 <Tabs defaultActiveKey={1} animation={false}>

@@ -1,0 +1,17 @@
+.root :global {
+
+  h3 {
+    font-size: 18px;
+    line-height: 130%;
+    margin-top: 0;
+  }
+}
+
+.root {
+  composes: top-separator from "shared/borders.css";
+  padding: 10px;
+}
+
+.root:first-child {
+  border-top: none;
+}
