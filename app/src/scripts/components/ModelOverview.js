@@ -16,8 +16,8 @@ const ModelOverview = ({model}) => (
       <tbody>
         <tr>
           <td>{algorithmNameMap[model.algorithm]}</td>
-          <td>{model.input_data.label.name}</td>
-          <td>{model.input_data.data.length} {pluralize(model.input_data.data.length, 'image', 'images')}</td>
+          <td>{model.label_name}</td>
+          <td>{model.images_count} {pluralize(model.images_count, 'image', 'images')}</td>
         </tr>
       </tbody>
     </table>

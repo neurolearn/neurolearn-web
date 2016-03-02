@@ -11,7 +11,7 @@ export default class ExploreItems extends React.Component {
     const { items, itemType } = this.props;
 
     return (
-      <div>
+      <div style={{paddingTop: 10}}>
       {items.map(item =>
         <ListItem key={item.id}
                   itemType={itemType}

@@ -1,6 +1,12 @@
+import styles from './ListItem.scss';
+
 import moment from 'moment';
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+
+import { algorithmNameMap } from '../constants/Algorithms';
+import { pluralize } from '../utils.js';
+
 
 const BASE_URL = {
   'MLModel': 'models',
@@ -22,15 +28,20 @@ export default class ListItem extends React.Component {
     const { item } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-md-12">
-          {item && item.glassbrain &&
-          <img src={`/media/${item.id}/${item.glassbrain}`} className="img-responsive"/>
-          }
-          <h3>{this.itemLink(item)}</h3>
-          <p>Created <span className="datetime">{moment(item.created).fromNow()}</span></p>
-          <p>{item.user.name}</p>
-          <hr/>
+      <div className={styles.root}>
+        <div className="row" style={{paddingTop: 20, paddingBottom: 20 }}>
+          <div className="col-sm-6">
+            <p>{item.user.name} <span style={{color: 'gray'}}>created <span className="datetime">{moment(item.created).fromNow()}</span></span></p>
+            <h3 style={{fontSize: 18}}>{this.itemLink(item)}</h3>
+            {this.props.itemType === 'MLModel' &&
+            <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {algorithmNameMap[item.algorithm]} • <span style={{color: 'gray'}}>Training label:</span> {item.label_name}</p>
+            }
+          </div>
+          <div className="col-sm-6">
+            {item && item.glassbrain &&
+              <img src={`/media/${item.id}/${item.glassbrain}`} className="img-responsive"/> }
+
+          </div>
         </div>
       </div>
     );
