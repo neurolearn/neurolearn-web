@@ -16,9 +16,9 @@ const LoggedOut = () => (
         <p>Ultimately, we hope that this tool will contribute to accelerating the development and validation cycle of brain-based markers of psychological states and will aid in promoting a more open and transparent study of the human mind.</p>
       </div>
     </div>
-      <div className="text-center" style={{paddingTop: 20, paddingBottom: 5}}>
-        <p className="lead">There are currently <Link to="/explore/models">12 models</Link> and <Link to="/explore/tests">9 tests</Link> being shared.</p>
-      </div>
+    <div className="text-center" style={{paddingTop: 20, paddingBottom: 20}}>
+      <p className="lead">There are currently <Link to="/explore/models">12 models</Link> and <Link to="/explore/tests">9 tests</Link> being shared.</p>
+    </div>
     <hr/>
     <footer className="footer text-center">
       <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev. Supported by NIH award R01DA035484-02S1</p>
