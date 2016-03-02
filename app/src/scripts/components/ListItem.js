@@ -24,6 +24,18 @@ export default class ListItem extends React.Component {
     return <Link to={`/${baseURL}/${item.id}`}>{item.name}</Link>;
   }
 
+  renderTestSummary(item) {
+    return (
+      <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {item.mean_correlation} mean r</p>
+    );
+  }
+
+  renderModelSummary(item) {
+    return (
+      <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {algorithmNameMap[item.algorithm]} • <span style={{color: 'gray'}}>Training label:</span> {item.label_name}</p>
+    );
+  }
+
   render() {
     const { item } = this.props;
 
@@ -33,9 +45,7 @@ export default class ListItem extends React.Component {
           <div className="col-sm-6">
             <p>{item.user.name} <span style={{color: 'gray'}}>created <span className="datetime">{moment(item.created).fromNow()}</span></span></p>
             <h3 style={{fontSize: 18}}>{this.itemLink(item)}</h3>
-            {this.props.itemType === 'MLModel' &&
-            <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {algorithmNameMap[item.algorithm]} • <span style={{color: 'gray'}}>Training label:</span> {item.label_name}</p>
-            }
+            {this.props.itemType === 'MLModel' ? this.renderModelSummary(item) : this.renderTestSummary(item) }
           </div>
           <div className="col-sm-6">
             {item && item.glassbrain &&
