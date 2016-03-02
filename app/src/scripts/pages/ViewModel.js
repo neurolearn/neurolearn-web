@@ -94,7 +94,7 @@ export default class ViewModel extends React.Component {
   renderModel(model) {
     const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
 
-    const { summary, stats } = model.output_data;
+    const { summary, stats, glassbrain, roc_plot } = model.output_data;
     const { algorithm, cv, label } = model.input_data;
 
     return (
@@ -103,8 +103,9 @@ export default class ViewModel extends React.Component {
           <div className="col-md-12">
             <h3>Weightmap</h3>
             <table>
+              <tbody>
               <tr>
-                <td className="col-md-6"><img style={{marginTop: 15}} src={`/media/${model.id}/${model.output_data.glassbrain}`} className="img-responsive"/></td>
+                <td className="col-md-6"><img style={{marginTop: 15}} src={`/media/${model.id}/${glassbrain}`} className="img-responsive"/></td>
                 <td className="col-md-6" style={{textAlign: 'center'}}>
                   <div>
                    <Button onClick={() => this.setState({showViewerModal: true, loadingImages: true})}>Open Interactive Viewer</Button>
@@ -114,6 +115,7 @@ export default class ViewModel extends React.Component {
                   </div>
                 </td>
               </tr>
+              </tbody>
             </table>
 
           </div>
@@ -121,7 +123,7 @@ export default class ViewModel extends React.Component {
 
         <div className="row weightmap">
           <div className='col-md-12' style={{marginTop: 20}}>
-            {CrossValidation({label, cv, summary, stats})}
+            {CrossValidation({modelId: model.id, label, cv, summary, stats, roc_plot})}
           </div>
         </div>
 

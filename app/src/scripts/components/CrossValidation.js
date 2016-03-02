@@ -44,12 +44,38 @@ function renderCvSummary(propOrder, summary) {
   );
 }
 
-const CrossValidation = ({label, cv, summary, stats}) => {
+function renderScatterplot(label, stats) {
   const spData = [{
       label: label.name,
       values: scatterplotData(stats)
   }];
+  return (
+    <div>
+      <h4>Actual vs. Predicted</h4>
 
+      <ScatterPlot data={spData}
+                        width={500}
+                        height={400}
+                        margin={{top: 10, bottom: 30, left: 30, right: 0}}
+                        xAxis={{label: label.name}}
+                        yAxis={{label: `Predicted ${label.name}`}} />
+    </div>
+  );
+}
+
+function renderROCPlot(modelId, plotFilename) {
+  const plotUrl = `/media/${modelId}/${plotFilename}`;
+  return (
+    <div className="row">
+      <div className="col-md-8">
+        <h4>ROC</h4>
+        <img style={{marginTop: 15}} src={plotUrl} className="img-responsive"/>
+      </div>
+    </div>
+  );
+}
+
+const CrossValidation = ({modelId, label, cv, summary, stats, roc_plot}) => {
   const cvMeta = Object.assign({}, summary, {method: cv.type});
 
   return (
@@ -57,14 +83,9 @@ const CrossValidation = ({label, cv, summary, stats}) => {
       <h3>Cross Validation</h3>
 
       {renderCvSummary(propOrder, cvMeta)}
-
-      <h4>Actual vs. Predicted</h4>
-      <ScatterPlot data={spData}
-                   width={500}
-                   height={400}
-                   margin={{top: 10, bottom: 30, left: 30, right: 0}}
-                   xAxis={{label: label.name}}
-                   yAxis={{label: `Predicted ${label.name}`}} />
+      {roc_plot
+        ? renderROCPlot(modelId, roc_plot)
+        : renderScatterplot(label, stats)}
     </div>
   );
 };
