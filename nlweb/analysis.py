@@ -78,16 +78,17 @@ def train_model(image_list, algorithm, cv, output_dir):
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
 
-    import pudb; pudb.set_trace()
-    fig = output['roc'].plot()
-    plt.savefig(os.path.join(output_dir, algorithm + '_roc_plot.png'))
+    result = {'weightmap': weightmap_filename,
+              'intercept': float(output['intercept']),
+              'scatterplot': '%s_scatterplot.png ' % algorithm,
+              'stats': {key: output[key].tolist()
+                        for key in ('Y', 'yfit_xval', 'yfit_all')},
+              'summary': get_summary(output)}
 
-    return {'weightmap': weightmap_filename,
-            'intercept': float(output['intercept']),
-            'scatterplot': '%s_scatterplot.png ' % algorithm,
-            'stats': {key: output[key].tolist()
-                      for key in ('Y', 'yfit_xval', 'yfit_all')},
-            'summary': get_summary(output)}
+    if 'roc' in output:
+        result['roc'] = output['roc']
+
+    return result
 
 
 def set_pattern_expression(pexpc, image_list):

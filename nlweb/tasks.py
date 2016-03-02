@@ -22,6 +22,11 @@ def model_dir(model_id):
     return os.path.join(celery.conf.MEDIA_ROOT, str(model_id))
 
 
+def save_roc_figure(roc, algorithm, output_dir):
+    fig = roc.plot()
+    fig.savefig(os.path.join(output_dir, algorithm + '_roc_plot.png'))
+
+
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
@@ -42,11 +47,17 @@ def train_model(self, mlmodel_id):
 
     tic = time.time()
 
+    algorithm = mlmodel.input_data['algorithm']
+
     try:
         result = analysis.train_model(image_list,
-                                      mlmodel.input_data['algorithm'],
+                                      algorithm,
                                       mlmodel.input_data['cv'],
                                       output_dir)
+
+        if 'roc' in result:
+            save_roc_figure(result.pop('roc'), algorithm, output_dir)
+
         result['duration'] = time.time() - tic
     except Exception as e:
         result = {'error': unicode(e)}

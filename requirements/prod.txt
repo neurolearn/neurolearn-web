@@ -50,8 +50,8 @@ scikit-learn==0.17.1
 nilearn==0.2.3
 pandas==0.16.1
 matplotlib==1.4.3
-seaborn==0.5.1
+seaborn>=0.7.0
 
-git+https://github.com/burnash/neurolearn.git@38a79178dbbb5a822f3e2ad79c6b4c1196116929#egg=nltools
+git+https://github.com/burnash/neurolearn.git@bf65f229c2c996dc39234c3a2683540a8e5305ad#egg=nltools
 
 dotenv==0.0.5
