@@ -44,8 +44,14 @@ export default class TrainingLabel extends React.Component {
   renderDataGrid(data, targetData) {
     return (
       <div>
-        <p className="lead">Select a column for training labels and (optionally) a column with subject IDs.</p>
-        <p>You can use formulas and functions in the cells.</p>
+        <p className="lead">Select the column you would like to use for training labels by right clicking
+ (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
+        <p>
+          <ul>
+            <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
+            <li>You can use formulas and functions in the cells.</li>
+          </ul>
+        </p>
         <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} targetData={targetData} />
       </div>
     );
