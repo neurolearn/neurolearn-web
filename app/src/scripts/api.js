@@ -41,13 +41,13 @@ function fetchJSON(path, params, options = {}) {
 
 const api = {
   get: (path, token) => {
-    return fetchJSON(path, null, {
+    return fetchJSON(path, undefined, {
       token
     });
   },
 
   delete: (path, token) => {
-    return callAPI(path, null, {
+    return callAPI(path, undefined, {
       method: 'DELETE',
       token
     });
