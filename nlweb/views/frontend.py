@@ -1,9 +1,16 @@
 import requests
 
-from flask import Blueprint, render_template, current_app
-from flask import Response, send_from_directory
+from flask import Blueprint, render_template, current_app, request
+from flask import Response, send_from_directory, redirect
 
 blueprint = Blueprint('frontend', __name__)
+
+
+def browser_supported(request):
+    browser = request.user_agent.browser
+    if browser == 'msie' or browser == 'firefox':
+        return False
+    return True
 
 
 @blueprint.route('/')
@@ -12,12 +19,15 @@ blueprint = Blueprint('frontend', __name__)
 @blueprint.route('/models/<path:path>')
 @blueprint.route('/tests/<path:path>')
 def home(path=None):
+    if not browser_supported(request):
+        return redirect('/notsupported.html')
+
     return render_template('index.html')
 
 
-@blueprint.route('/about')
-def about():
-    return render_template('about.html')
+@blueprint.route('/notsupported.html')
+def notsupported():
+    return render_template('notsupported.html')
 
 
 @blueprint.route('/nvproxy/<path:path>')
