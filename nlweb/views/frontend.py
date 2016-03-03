@@ -8,7 +8,7 @@ blueprint = Blueprint('frontend', __name__)
 
 def browser_supported(request):
     browser = request.user_agent.browser
-    if browser == 'msie' or browser == 'firefox':
+    if browser == 'msie':
         return False
     return True
 
