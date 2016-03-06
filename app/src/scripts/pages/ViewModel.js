@@ -159,12 +159,12 @@ export default class ViewModel extends React.Component {
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
           <h1>{model.name}</h1>
+          <p>{model.description}</p>
+          <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>
 
         <div className="row">
           <div className="col-sm-8">
-            <div>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></div>
-            <p>{model.description}</p>
             <ModelOverview model={model}/>
             <div className="row tabs-wrapper">
               <div className="col-md-12">
