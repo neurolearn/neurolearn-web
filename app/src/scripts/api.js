@@ -1,6 +1,10 @@
 import 'whatwg-fetch';
 
-const HOST = window.location.origin;
+function locationOrigin(loc) {
+  return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;;
+}
+
+const HOST = locationOrigin(window.location);
 const DEFAULT_HEADERS = {'Accept': 'application/json',
                          'Content-Type': 'application/json'};
 
