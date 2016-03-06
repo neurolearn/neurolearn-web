@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -87,7 +89,9 @@ export default class ViewTest extends React.Component {
 
     return (
       <div className="col-md-12">
-        <p>Test for <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
+        <div>{test.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time></div>
+
+        <p>Model: <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
         <ImageBarChart images={correlation}
                        groups={groups}
                        collections={collections}
