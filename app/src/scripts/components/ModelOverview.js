@@ -5,7 +5,7 @@ import { pluralize } from '../utils.js';
 
 const ModelOverview = ({model}) => (
   <div>
-    <table className="table overview" style={{marginTop: 10}}>
+    <table className="table overview">
       <thead>
         <tr>
           <td className="col-md-4">Algorithm</td>
