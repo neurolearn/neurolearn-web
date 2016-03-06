@@ -8,7 +8,12 @@ blueprint = Blueprint('frontend', __name__)
 
 def browser_supported(request):
     browser = request.user_agent.browser
-    if browser == 'msie':
+    try:
+        version = (request.user_agent.version
+                   and int(request.user_agent.version.split('.')[0]))
+        if browser == 'msie' and version < 9:
+            return False
+    except ValueError:
         return False
     return True
 
