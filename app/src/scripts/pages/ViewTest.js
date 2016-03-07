@@ -89,8 +89,6 @@ export default class ViewTest extends React.Component {
 
     return (
       <div className="col-md-12">
-        <div>{test.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time></div>
-
         <p>Model: <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
         <ImageBarChart images={correlation}
                        groups={groups}
@@ -119,6 +117,7 @@ export default class ViewTest extends React.Component {
                       onClick={() => this.handleDelete(item.id)}>Delete</Button>}
           </ButtonToolbar>
           <h1>{item && item.name}</h1>
+          <div>{item.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(item.created).fromNow()}</time></div>
         </div>
         <div className="row">
         { item && this.renderState(item) }
