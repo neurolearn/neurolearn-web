@@ -10,11 +10,13 @@ from nlweb import tasks
 
 from ..models import db, MLModel, ModelTest
 
-from ..schemas import MLModelSchema, ModelTestSchema
+from ..schemas import UserSchema, MLModelSchema, ModelTestSchema
 
 from . import not_found
 
 blueprint = Blueprint('api', __name__)
+
+user_schema = UserSchema()
 
 mlmodel_schema = MLModelSchema()
 
@@ -31,6 +33,12 @@ public_tests_schema = ModelTestSchema(
 
 own_tests_schema = ModelTestSchema(
     many=True, exclude=('input_data', 'output_data'))
+
+
+@blueprint.route('/user', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    return jsonify(data=user_schema.dump(current_user).data)
 
 
 @blueprint.route('/user/models', methods=['GET'])
