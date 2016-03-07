@@ -1,0 +1,18 @@
+.root :global {
+  .col-md-4 {
+    border-right: 1px solid #ddd;
+  }
+
+  .col-md-4:last-child {
+    border-right: 0;
+  }
+
+  .attribute-label {
+    text-transform: uppercase;
+    color: #9b9b9b;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 180%;
+  }
+}
+
