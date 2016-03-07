@@ -1,5 +1,7 @@
 import 'whatwg-fetch';
 
+import { getAuthToken } from './utils';
+
 function locationOrigin(loc) {
   return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;;
 }
@@ -9,8 +11,10 @@ const DEFAULT_HEADERS = {'Accept': 'application/json',
                          'Content-Type': 'application/json'};
 
 function callAPI(path, params, options) {
-  const headers = options.token
-    ? {'Authorization': 'Bearer ' + options.token, ...DEFAULT_HEADERS}
+  const token = getAuthToken();
+
+  const headers = token
+    ? {'Authorization': 'Bearer ' + token, ...DEFAULT_HEADERS}
     : DEFAULT_HEADERS;
 
   const body = params && JSON.stringify(params);
@@ -44,24 +48,14 @@ function fetchJSON(path, params, options = {}) {
 }
 
 const api = {
-  get: (path, token) => {
-    return fetchJSON(path, undefined, {
-      token
-    });
+  get: fetchJSON,
+
+  delete: (path) => {
+    return callAPI(path, undefined, {method: 'DELETE'});
   },
 
-  delete: (path, token) => {
-    return callAPI(path, undefined, {
-      method: 'DELETE',
-      token
-    });
-  },
-
-  post: (path, payload, token) => {
-    return fetchJSON(path, payload, {
-      method: 'POST',
-      token
-    });
+  post: (path, payload) => {
+    return fetchJSON(path, payload, {method: 'POST'});
   }
 };
 
