@@ -8,6 +8,7 @@ import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME, NEUROVAULT_CLIENT_IDS } from './constants/auth';
+import { fetchAuthenticatedUser } from './state/auth';
 
 export default class App extends React.Component {
   static propTypes = {
@@ -19,13 +20,6 @@ export default class App extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
-  }
-
-  componentWillMount() {
-    const jwt = localStorage.getItem(JWT_KEY_NAME);
-    if (jwt) {
-      this.props.dispatch(loginSuccess(jwt));
-    }
   }
 
   handleLogout(e) {
@@ -61,14 +55,14 @@ export default class App extends React.Component {
     const { router } = this.context;
     return (
       <Nav>
-        <LinkContainer to="/" active={router.isActive('/dashboard')}>
+        <LinkContainer to="/dashboard" active={router.isActive('/dashboard')}>
           <NavItem eventKey={0}>Dashboard</NavItem>
         </LinkContainer>
       </Nav>
     );
   }
 
-  render () {
+  renderApp () {
     const { auth, alertMessages, dispatch } = this.props;
     const { router } = this.context;
 
@@ -99,6 +93,15 @@ export default class App extends React.Component {
         </div>
       </div>
     );
+  }
+
+  render () {
+    const { auth, alertMessages, dispatch } = this.props;
+    const { router } = this.context;
+
+    return auth.isFetching
+      ? false
+      : this.renderApp();
   }
 }
 

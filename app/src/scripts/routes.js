@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Route, Redirect } from 'react-router';
 
 import App from './App';
-import HomePage from './pages/HomePage';
+import LoggedOut from './pages/LoggedOut';
 import Explore from './pages/Explore';
 import MLModels from './pages/dashboard/MLModels';
 import ModelTests from './pages/dashboard/ModelTests';
@@ -17,18 +17,37 @@ import ModelPreferences from './components/trainmodel/ModelPreferences';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
 
+import { fetchAuthenticatedUser } from './state/auth';
+import { getAuthToken } from './utils';
+
 export default function renderRoutes(store, history) {
-  function requireAuth(nextState, replace) {
-    if (!store.getState().auth.user) {
+  const requireAuth = (nextState, replace) => {
+    const { auth } = store.getState();
+    if (!auth.user) {
       replace({}, '/');
+    }
+  }
+
+  const checkAuth = (nextState, replace, callback) => {
+    const { auth } = store.getState();
+    const { dispatch } = store;
+
+    if (!auth.user) {
+      const token = getAuthToken();
+      if (token) {
+        dispatch(fetchAuthenticatedUser(callback));
+      } else {
+        callback();
+      }
     }
   }
 
   return (
     <Router history={history}>
-      <Route component={App}>
-        <Route path="/" component={HomePage}/>
+      <Route component={App} onEnter={checkAuth}>
+        <Route path="/" component={LoggedOut} />
         <Route path="/faq" component={FAQ}/>
+        <Redirect from="/dashboard" to="/dashboard/models"/>
         <Route path="/dashboard" onEnter={requireAuth}>
           <Route path="models" component={MLModels}/>
           <Route path="tests" component={ModelTests}/>
