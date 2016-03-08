@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Route, Redirect } from 'react-router';
 
 import App from './App';
-import LoggedOut from './pages/LoggedOut';
+import HomePage from './pages/HomePage';
 import Explore from './pages/Explore';
 import MLModels from './pages/dashboard/MLModels';
 import ModelTests from './pages/dashboard/ModelTests';
@@ -45,7 +45,7 @@ export default function renderRoutes(store, history) {
   return (
     <Router history={history}>
       <Route component={App} onEnter={checkAuth}>
-        <Route path="/" component={LoggedOut} />
+        <Route path="/" component={HomePage} />
         <Route path="/faq" component={FAQ}/>
         <Redirect from="/dashboard" to="/dashboard/models"/>
         <Route path="/dashboard" onEnter={requireAuth}>

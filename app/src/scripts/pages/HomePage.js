@@ -7,7 +7,11 @@ export default class HomePage extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     history: PropTypes.object
-  }
+  };
+
+  static propTypes = {
+    auth: PropTypes.object.isRequired
+  };
 
   componentWillReceiveProps() {
     const { auth } = this.props;
