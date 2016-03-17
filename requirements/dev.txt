@@ -7,9 +7,5 @@ WebTest==2.0.18
 factory-boy==2.5.2
 fake-factory==0.5.2
 
-# Management script
-Flask-Script
-Flask-Failsafe==0.2
-
 dotenv==0.0.5
 ipdb
