@@ -40,7 +40,10 @@ def _create_app():
     from nlweb.app import create_app
     return create_app()
 
-update_environment(os.path.join(HERE, ENV_FILE_NAME))
+try:
+    update_environment(os.path.join(HERE, ENV_FILE_NAME))
+except IOError:
+    print "Can't update environment from %s; Skipping..." % ENV_FILE_NAME
 
 manager = Manager(_create_app)  # pylint: disable=invalid-name
 
