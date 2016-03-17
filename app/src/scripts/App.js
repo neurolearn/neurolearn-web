@@ -7,8 +7,21 @@ import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-boo
 import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
-import { JWT_KEY_NAME, NEUROVAULT_CLIENT_IDS } from './constants/auth';
+import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
 import { fetchAuthenticatedUser } from './state/auth';
+
+function nvAuthLink(loc) {
+    const { protocol, host } = loc;
+    const redirectUri = `${protocol}//${host}/signin/authorized`;
+    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+}
+
+function authLink(loc) {
+    const { host }= loc;
+    return /^localhost\b/.test(host)
+      ? nvAuthLink(host)
+      : '/signin';
+}
 
 export default class App extends React.Component {
   static propTypes = {
@@ -29,15 +42,8 @@ export default class App extends React.Component {
     this.context.router.push('/');
   }
 
-  authLink() {
-    const host = window.location.host;
-    const clientId = NEUROVAULT_CLIENT_IDS[/^localhost\b/.test(host) ? 'development' : 'production'];
-    const redirectUri = `${window.location.protocol}//${host}/signin/authorized`;
-    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-  }
-
   renderLoginLink() {
-    return <NavItem href={this.authLink()}>Sign in with NeuroVault</NavItem>;
+    return <NavItem href={authLink(window.location)}>Sign in with NeuroVault</NavItem>;
   }
 
   renderUserDropdown(user) {
