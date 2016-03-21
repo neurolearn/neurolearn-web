@@ -22,21 +22,6 @@ from nlweb.utils import friendly_time
 from flask_admin_jsoneditor import JSONEditorField
 
 
-def check_auth(username, password):
-    return (username == 'admin' and password == 'admin')
-
-
-def authenticate():
-    return flask.Response(
-        'Please login with proper credentials', 401,
-        {'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-
-def is_authenticated():
-    auth = flask.request.authorization
-    return auth and check_auth(auth.username, auth.password)
-
-
 def hexdigest(*args):
     h = hashlib.sha256()
     h.update(''.join(args))

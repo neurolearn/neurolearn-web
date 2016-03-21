@@ -4,7 +4,6 @@ import os
 
 from flask import Flask, render_template, session
 from flask_admin import helpers as admin_helpers
-from flask.ext.security.utils import verify_and_update_password
 
 from .admin import admin
 
@@ -84,14 +83,6 @@ def init_extensions(app):
 
 
 def register_jwt_handlers(jwt):
-    @jwt.authentication_handler
-    def authenticate(email, password):
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            return False
-        if verify_and_update_password(password, user):
-            return user
-
     @jwt.user_handler
     def load_user(payload):
         return User.query.get(payload['user_id'])
