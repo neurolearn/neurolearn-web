@@ -3,7 +3,11 @@ import { Link } from 'react-router';
 
 import Footer from '../components/Footer';
 
-const LoggedOut = () => (
+const Stats = ({stats}) => (
+  <p className="lead">There are currently <Link to="/explore/models">{stats.models_count} models</Link> and <Link to="/explore/tests">{stats.tests_count} tests</Link> being shared.</p>
+);
+
+const LoggedOut = ({stats}) => (
   <div>
     <div className="hero">
       <h1 className="hero-header">Neurolearn</h1>
@@ -19,7 +23,7 @@ const LoggedOut = () => (
       </div>
     </div>
     <div className="text-center" style={{paddingTop: 20, paddingBottom: 20}}>
-      <p className="lead">There are currently <Link to="/explore/models">12 models</Link> and <Link to="/explore/tests">9 tests</Link> being shared.</p>
+    { stats && <Stats stats={stats} /> }
     </div>
     <Footer />
   </div>

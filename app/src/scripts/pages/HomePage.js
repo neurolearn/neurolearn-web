@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MLModels from './dashboard/MLModels';
 import LoggedOut from './LoggedOut';
+import { fetchJSON } from '../state/fetched';
 
 export default class HomePage extends React.Component {
   static contextTypes = {
@@ -10,8 +11,18 @@ export default class HomePage extends React.Component {
   };
 
   static propTypes = {
-    auth: PropTypes.object.isRequired
+    dispatch: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    fetched: PropTypes.object
   };
+
+  componentWillMount() {
+    const { auth, dispatch } = this.props;
+
+    if (!auth.user) {
+      dispatch(fetchJSON('/api/stats', 'stats'));
+    }
+  }
 
   componentWillReceiveProps() {
     const { auth } = this.props;
@@ -23,8 +34,8 @@ export default class HomePage extends React.Component {
   }
 
   render() {
-    const { auth } = this.props;
-    return auth.user ? <MLModels /> : <LoggedOut />;
+    const { auth, fetched } = this.props;
+    return auth.user ? <MLModels /> : <LoggedOut stats={fetched.stats} />;
   }
 }
 
