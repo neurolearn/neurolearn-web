@@ -35,6 +35,14 @@ own_tests_schema = ModelTestSchema(
     many=True, exclude=('input_data', 'output_data'))
 
 
+@blueprint.route('/stats', methods=['GET'])
+def get_stats():
+    models_count = MLModel.get_public().count()
+    tests_count = ModelTest.get_public().count()
+    return jsonify(data={'models_count': models_count,
+                         'tests_count': tests_count})
+
+
 @blueprint.route('/user', methods=['GET'])
 @jwt_required()
 def get_current_user():
