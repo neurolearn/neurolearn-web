@@ -11,6 +11,7 @@ import testModel from '../state/testModel';
 import alertMessages from '../state/alertMessages';
 import itemList from '../state/itemList';
 import itemDetail from '../state/itemDetail';
+import fetched from '../state/fetched';
 
 const rootReducer = combineReducers({
   auth,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   testModel,
   itemList,
   itemDetail,
+  fetched,
   alertMessages
 });
 
