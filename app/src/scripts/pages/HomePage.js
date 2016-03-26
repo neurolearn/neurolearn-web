@@ -12,30 +12,18 @@ export default class HomePage extends React.Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     fetched: PropTypes.object
   };
 
   componentWillMount() {
-    const { auth, dispatch } = this.props;
+    const { dispatch } = this.props;
 
-    if (!auth.user) {
-      dispatch(fetchJSON('/api/stats', 'stats'));
-    }
-  }
-
-  componentWillReceiveProps() {
-    const { auth } = this.props;
-    const { router, history } = this.context;
-
-    if (auth.user) {
-      router.push('/dashboard/models');
-    }
+    dispatch(fetchJSON('/api/stats', 'stats'));
   }
 
   render() {
-    const { auth, fetched } = this.props;
-    return auth.user ? <MLModels /> : <LoggedOut stats={fetched.stats} />;
+    const { fetched } = this.props;
+    return <LoggedOut stats={fetched.stats} />;
   }
 }
 

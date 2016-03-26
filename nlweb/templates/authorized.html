@@ -7,7 +7,7 @@
         var jwt = {{ token | tojson | safe }};
         function setToken() {
             localStorage.setItem('jwt', jwt);
-            window.location = "/";
+            window.location = "/dashboard/models";
         }
     </script>
 </head>
