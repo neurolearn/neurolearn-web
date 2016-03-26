@@ -145,7 +145,7 @@ export default class ViewModel extends React.Component {
       return <div>Loading model...</div>;
     }
 
-    const userIsOwner = (model && user && model.user.id === user.user_id);
+    const userIsOwner = (model && user && model.user.id === user.id);
 
     return (
       <div className={styles.root}>

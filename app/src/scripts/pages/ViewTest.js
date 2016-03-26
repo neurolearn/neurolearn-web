@@ -106,7 +106,7 @@ export default class ViewTest extends React.Component {
       return <div>Loading test...</div>;
     }
 
-    const userIsOwner = (item && user && item.user.id === user.user_id);
+    const userIsOwner = (item && user && item.user.id === user.id);
 
     return (
       <div>
