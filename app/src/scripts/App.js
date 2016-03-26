@@ -19,7 +19,7 @@ function nvAuthLink(loc) {
 function authLink(loc) {
     const { host }= loc;
     return /^localhost\b/.test(host)
-      ? nvAuthLink(host)
+      ? nvAuthLink(loc)
       : '/signin';
 }
 
