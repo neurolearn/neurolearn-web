@@ -49,9 +49,8 @@ export default class ModelPreferences extends React.Component {
       kfoldsParam
     } = this.props.modelPreferences;
 
-    return !some([modelName, algorithm], isEmpty)
-           && (cvType === 'kfolds' && !isEmpty(kfoldsParam)
-               || cvType === 'loso');
+    const cvTypeInvalid = (cvType === 'kfolds' && isEmpty(kfoldsParam));
+    return !(some([modelName, algorithm], isEmpty) || cvTypeInvalid);
   }
 
   genHandler(refName, action) {
@@ -131,6 +130,18 @@ export default class ModelPreferences extends React.Component {
               </div>
               <div className="form-group">
                 <label>Cross Validation</label>
+                <div className="radio">
+                  <label>
+                    <input type="radio"
+                           ref="cvType"
+                           onChange={this.handleRadioChange.bind(this)}
+                           name="cvType"
+                           value=""
+                           checked={modelPreferences.cvType === ''} />
+                    None
+                  </label>
+                </div>
+
                 <div className="radio">
                   <label>
                     <input type="radio"

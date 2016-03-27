@@ -69,7 +69,7 @@ const initialState = {
   modelName: '',
   description: '',
   algorithm: '',
-  cvType: null,
+  cvType: '',
   kfoldsParam: '',
   losoParam: ''
 };
