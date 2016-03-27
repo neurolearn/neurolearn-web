@@ -27,6 +27,13 @@ export function fetchJSON(path, key) {
   };
 }
 
+export function deleteItem(path, success) {
+  return (dispatch) => {
+    return api.delete(path)
+      .then(success, error => dispatch(apiError(error)));
+  };
+}
+
 const initialState = {
   isFetching: false
 };
