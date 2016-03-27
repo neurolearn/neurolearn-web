@@ -37,23 +37,25 @@ export default class ViewModel extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.params;
-    this.props.dispatch(
+    const { dispatch, params: { id }} = this.props;
+    dispatch(
       loadItemDetail(`/api/models/${parseInt(id)}`, 'model'));
   }
 
   handleDelete(modelId) {
     const { router } = this.context;
+    const { dispatch } = this.props;
 
-    this.props.dispatch(deleteItem(`/api/models/${modelId}`,
+    dispatch(deleteItem(`/api/models/${modelId}`,
       () => router.push('/dashboard/models')
     ));
   }
 
   handleTestModel(model) {
     const { router } = this.context;
+    const { dispatch } = this.props;
 
-    this.props.dispatch(setTestModel(model));
+    dispatch(setTestModel(model));
     router.push('/tests/new');
   }
 
