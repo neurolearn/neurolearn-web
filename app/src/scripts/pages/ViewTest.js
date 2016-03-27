@@ -9,7 +9,7 @@ import api from '../api';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
-import { loadItemDetail, deleteItem } from '../state/itemDetail';
+import { fetchJSON, deleteItem } from '../state/fetched';
 
 function saveCorrelationGroups(testId, groups) {
   return (dispatch, getState) => {
@@ -22,8 +22,9 @@ function saveCorrelationGroups(testId, groups) {
 export default class ViewTest extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    itemDetail: PropTypes.object,
+    test: PropTypes.object,
     user: PropTypes.object,
+    isFetching: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -34,7 +35,7 @@ export default class ViewTest extends React.Component {
   componentDidMount() {
     const { id } = this.props.params;
     this.props.dispatch(
-      loadItemDetail(`/api/tests/${parseInt(id)}`, 'test'));
+      fetchJSON(`/api/tests/${parseInt(id)}`, 'test'));
   }
 
   handleDelete(testId) {
@@ -99,14 +100,13 @@ export default class ViewTest extends React.Component {
   }
 
   render() {
-    const { itemDetail, user } = this.props;
-    const item = itemDetail.item.test;
+    const { user, test, isFetching } = this.props;
 
-    if (!item || itemDetail.isFetching) {
+    if (!test || isFetching) {
       return <div>Loading test...</div>;
     }
 
-    const userIsOwner = (item && user && item.user.id === user.id);
+    const userIsOwner = (test && user && test.user.id === user.id);
 
     return (
       <div>
@@ -114,13 +114,13 @@ export default class ViewTest extends React.Component {
           <ButtonToolbar className="pull-right">
             {userIsOwner &&
               <Button bsStyle="danger"
-                      onClick={() => this.handleDelete(item.id)}>Delete</Button>}
+                      onClick={() => this.handleDelete(test.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{item && item.name}</h1>
-          <div>{item.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(item.created).fromNow()}</time></div>
+          <h1>{test && test.name}</h1>
+          <div>{test.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time></div>
         </div>
         <div className="row">
-        { item && this.renderState(item) }
+        { test && this.renderState(test) }
         </div>
       </div>
     );
@@ -129,7 +129,8 @@ export default class ViewTest extends React.Component {
 
 function select(state) {
   return {
-    itemDetail: state.itemDetail,
+    test: state.fetched.test,
+    isFetching: state.fetched.isFetching,
     user: state.auth.user
   };
 }

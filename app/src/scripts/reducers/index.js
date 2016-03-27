@@ -10,7 +10,6 @@ import modelPreferences from '../state/modelPreferences';
 import testModel from '../state/testModel';
 import alertMessages from '../state/alertMessages';
 import itemList from '../state/itemList';
-import itemDetail from '../state/itemDetail';
 import fetched from '../state/fetched';
 
 const rootReducer = combineReducers({
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
   modelPreferences,
   testModel,
   itemList,
-  itemDetail,
   fetched,
   alertMessages
 });
