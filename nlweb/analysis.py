@@ -57,12 +57,14 @@ def train_model(image_list, algorithm, cv, output_dir):
     except KeyError:
         holdout = None
 
-    if holdout:
-        cv['subject_id'] = holdout
-    elif cv['type'] == 'loso':
-        raise ValueError("subject_id is required for a LOSO cross validation.")
+    if cv:
+        if holdout:
+            cv['subject_id'] = holdout
+        elif cv['type'] == 'loso':
+            raise ValueError(
+                "subject_id is required for a LOSO cross validation.")
 
-    cv['n'] = len(image_list)
+        cv['n'] = len(image_list)
 
     extra = {}
     if algorithm in ('svr', 'svm'):

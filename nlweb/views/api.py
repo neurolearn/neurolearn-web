@@ -67,9 +67,14 @@ def list_public_models():
     return jsonify(data=result.data)
 
 
-def parse_cv_param(cv):
+def parse_cv_param(args):
+    cv = args.get('cv')
+
+    if not cv:
+        return None
     if cv['type'] == 'kfolds':
         cv['n_folds'] = int(cv.pop('value'))
+
     return cv
 
 
@@ -77,7 +82,7 @@ def parse_cv_param(cv):
 @jwt_required()
 def create_mlmodel():
     args = request.json
-    cv = parse_cv_param(args['cv'])
+    cv = parse_cv_param(args)
 
     mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
                       training_state=MLModel.TRAINING_QUEUED,
