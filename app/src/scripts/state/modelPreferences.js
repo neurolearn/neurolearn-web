@@ -57,7 +57,7 @@ export function trainModel(name,
     return api.post('/api/models', payload, getState().auth.token)
       .then(
         () => {
-          router.push('/');
+          router.push('/dashboard/models');
           resetModelTrainData(dispatch);
         }
     );
