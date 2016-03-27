@@ -4,7 +4,8 @@ import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
-import { loadItemDetail, deleteItem } from '../state/itemDetail';
+import { deleteItem } from '../state/itemDetail';
+import { fetchJSON } from '../state/fetched';
 import Spinner from '../components/Spinner';
 import { setTestModel } from '../state/testModel';
 import TaskStateLabel from '../components/TaskStateLabel';
@@ -19,8 +20,9 @@ import styles from './ViewModel.scss';
 export default class ViewModel extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
-    itemDetail: PropTypes.object,
+    model: PropTypes.object,
     user: PropTypes.object,
+    isFetching: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -38,8 +40,7 @@ export default class ViewModel extends React.Component {
 
   componentDidMount() {
     const { dispatch, params: { id }} = this.props;
-    dispatch(
-      loadItemDetail(`/api/models/${parseInt(id)}`, 'model'));
+    dispatch(fetchJSON(`/api/models/${parseInt(id)}`, 'model'));
   }
 
   handleDelete(modelId) {
@@ -140,10 +141,9 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { itemDetail, user } = this.props;
-    const model = itemDetail.item.model;
+    const { user, model, isFetching } = this.props;
 
-    if (!model || itemDetail.isFetching) {
+    if (!model || isFetching) {
       return <div>Loading model...</div>;
     }
 
@@ -195,7 +195,8 @@ export default class ViewModel extends React.Component {
 
 function select(state) {
   return {
-    itemDetail: state.itemDetail,
+    model: state.fetched.model,
+    isFetching: state.fetched.isFetching,
     user: state.auth.user
   };
 }
