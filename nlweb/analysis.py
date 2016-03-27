@@ -78,12 +78,12 @@ def train_model(image_list, algorithm, cv, output_dir):
     output['weight_map'].write(os.path.join(output_dir, weightmap_filename))
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
-
     result = {'weightmap': weightmap_filename,
               'intercept': float(output['intercept']),
               'scatterplot': '%s_scatterplot.png ' % algorithm,
               'stats': {key: output[key].tolist()
-                        for key in ('Y', 'yfit_xval', 'yfit_all')},
+                        for key in ('Y', 'yfit_xval', 'yfit_all')
+                        if key in output},
               'summary': get_summary(output)}
 
     if 'roc' in output:
