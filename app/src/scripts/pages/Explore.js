@@ -4,7 +4,7 @@ import NavItem from '../components/NavItem';
 import ExploreItems from '../components/ExploreItems';
 import { connect } from 'react-redux';
 
-import { loadItemList } from '../state/itemList';
+import { fetchJSON } from '../state/fetched';
 
 const ITEM_TYPE_MAPPING = {
   'models': {
@@ -23,12 +23,12 @@ export class Explore extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     route: PropTypes.object.isRequired,
-    itemList: PropTypes.object,
+    fetched: PropTypes.object,
     params: PropTypes.object.isRequired
   };
 
   loadItems(itemType) {
-    this.props.dispatch(loadItemList(`/api/${itemType}`, keyName(itemType)));
+    this.props.dispatch(fetchJSON(`/api/${itemType}`, keyName(itemType)));
   }
 
   componentDidMount() {
@@ -39,9 +39,7 @@ export class Explore extends React.Component {
   render() {
     const { itemType } = this.props.params;
     const { serverItemType } = ITEM_TYPE_MAPPING[itemType];
-    const { items } = this.props.itemList;
-
-    const exploreItems = items[keyName(itemType)];
+    const exploreItems = this.props.fetched[keyName(itemType)];
 
     if (!exploreItems) {
       return null;

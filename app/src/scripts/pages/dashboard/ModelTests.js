@@ -5,7 +5,8 @@ import React, { PropTypes } from 'react';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadItemList } from '../../state/itemList';
+import { fetchJSON } from '../../state/fetched';
+
 import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
 import styles from './MLModels.scss';
@@ -24,21 +25,12 @@ export default class ModelTests extends React.Component {
   }
 
   loadModelTests() {
-    this.props.dispatch(loadItemList('/api/user/tests', 'dashboardTests'));
+    this.props.dispatch(fetchJSON('/api/user/tests', 'dashboardTests'));
   }
 
   componentDidMount() {
     this.loadModelTests();
     this.interval = setInterval(this.loadModelTests.bind(this), POLL_INTERVAL);
-  }
-
-  componentWillReceiveProps() {
-    const { auth } = this.props;
-    const { router } = this.context;
-
-    if (!auth.user) {
-      router.push('/');
-    }
   }
 
   componentWillUnmount() {
@@ -109,7 +101,7 @@ export default class ModelTests extends React.Component {
 
 function select(state) {
   return {
-    items: state.itemList.items.dashboardTests,
+    items: state.fetched.dashboardTests,
     auth: state.auth
   }
 }

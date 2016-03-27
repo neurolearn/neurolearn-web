@@ -6,8 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadItemList } from '../../state/itemList';
-
+import { fetchJSON } from '../../state/fetched';
 
 import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
@@ -29,21 +28,12 @@ export default class MLModels extends React.Component {
   }
 
   loadAuthUserMLModels() {
-    this.props.dispatch(loadItemList('/api/user/models', 'dashboardModels'));
+    this.props.dispatch(fetchJSON('/api/user/models', 'dashboardModels'));
   }
 
   componentDidMount() {
     this.loadAuthUserMLModels();
     this.interval = setInterval(this.loadAuthUserMLModels.bind(this), POLL_INTERVAL);
-  }
-
-  componentWillReceiveProps() {
-    const { auth } = this.props;
-    const { router } = this.context;
-
-    if (!auth.user) {
-      router.push('/');
-    }
   }
 
   componentWillUnmount() {
@@ -128,7 +118,7 @@ export default class MLModels extends React.Component {
 
 function select(state) {
   return {
-    items: state.itemList.items.dashboardModels,
+    items: state.fetched.dashboardModels,
     auth: state.auth
   }
 }
