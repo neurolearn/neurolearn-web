@@ -70,7 +70,7 @@ export default class MLModels extends React.Component {
                   <TaskStateLabel state={model.state}/>
                 </td>
                 <td>{algorithmNameMap[model.algorithm]}</td>
-                <td>{model.cv.type}</td>
+                <td>{model.cv ? model.cv.type : ''}</td>
                 <td>
                   { model.training_duration &&
                    (Math.floor(model.training_duration) + ' sec')}

@@ -31,7 +31,8 @@ export default class ModelPreferences extends React.Component {
     const { router } = this.context;
     const { modelName, description, algorithm, cvType } = this.props.modelPreferences;
     const { collectionsById, targetData } = this.props;
-    const cv = {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+    const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+
     this.props.dispatch(trainModel(modelName,
                                    description,
                                    algorithm,

@@ -123,11 +123,12 @@ export default class ViewModel extends React.Component {
           </div>
         </div>
 
+        {cv &&
         <div className="row weightmap">
           <div className='col-md-12' style={{marginTop: 20}}>
             {CrossValidation({modelId: model.id, label, cv, summary, stats, roc_plot})}
           </div>
-        </div>
+        </div>}
 
         {this.state.showViewerModal &&
           <ImageViewerModal weightmapUrl={weightmapUrl}
