@@ -55,7 +55,7 @@ def train_model(self, mlmodel_id):
             image_list=image_list,
             algorithm=algorithm,
             cross_validation=mlmodel.input_data['cv'],
-            output_file=output_dir,
+            output_dir=output_dir,
             file_path_key='original_file'
         )
 
