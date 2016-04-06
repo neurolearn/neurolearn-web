@@ -30,7 +30,8 @@ def get_summary(output):
             for k in SUMMARY_PROPS if valid_value(output.get(k, None))}
 
 
-def train_model(image_list, algorithm, cv, output_dir):
+def train_model(image_list, algorithm, cross_validation, output_dir,
+                file_path_key='resampled_file'):
     """
     :param image_list: A list of dictionaries of the form
         {
@@ -44,7 +45,7 @@ def train_model(image_list, algorithm, cv, output_dir):
     log.info("Concatenating Images...")
     tic = time.time()  # Start Timer
 
-    dat = nb.funcs.concat_images([item['resampled_file']
+    dat = nb.funcs.concat_images([item[file_path_key]
                                   for item in image_list])
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
@@ -57,14 +58,14 @@ def train_model(image_list, algorithm, cv, output_dir):
     except KeyError:
         holdout = None
 
-    if cv:
+    if cross_validation:
         if holdout:
-            cv['subject_id'] = holdout
-        elif cv['type'] == 'loso':
+            cross_validation['subject_id'] = holdout
+        elif cross_validation['type'] == 'loso':
             raise ValueError(
                 "subject_id is required for a LOSO cross validation.")
 
-        cv['n'] = len(image_list)
+        cross_validation['n'] = len(image_list)
 
     extra = {}
     if algorithm in ('svr', 'svm'):
@@ -72,7 +73,10 @@ def train_model(image_list, algorithm, cv, output_dir):
 
     dat = Brain_Data(data=dat, Y=Y)
 
-    output = dat.predict(algorithm=algorithm, cv_dict=cv, plot=True, **extra)
+    output = dat.predict(algorithm=algorithm,
+                         cv_dict=cross_validation,
+                         plot=True,
+                         **extra)
 
     weightmap_filename = '%s_weightmap.nii.gz' % algorithm
     output['weight_map'].write(os.path.join(output_dir, weightmap_filename))

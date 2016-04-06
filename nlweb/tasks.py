@@ -43,7 +43,6 @@ def train_model(self, mlmodel_id):
     target_data = mlmodel.input_data['data']
 
     image_list = download_images(client, target_data, output_dir)
-    image_list = resample_images(cache, image_list, output_dir)
 
     mlmodel.training_state = MLModel.TRAINING_SUCCESS
 
@@ -52,10 +51,13 @@ def train_model(self, mlmodel_id):
     algorithm = mlmodel.input_data['algorithm']
 
     try:
-        result = analysis.train_model(image_list,
-                                      algorithm,
-                                      mlmodel.input_data['cv'],
-                                      output_dir)
+        result = analysis.train_model(
+            image_list=image_list,
+            algorithm=algorithm,
+            cross_validation=mlmodel.input_data['cv'],
+            output_file=output_dir,
+            file_path_key='original_file'
+        )
 
         if 'roc' in result:
             result['roc_plot'] = save_roc_figure(result.pop('roc'), algorithm,
