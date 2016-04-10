@@ -18,6 +18,11 @@ export default class TrainingLabel extends React.Component {
     targetData: PropTypes.object
   };
 
+  constructor(props) {
+    super(props);
+    this.handleTargetSelection = this.handleTargetSelection.bind(this);
+  }
+
   componentDidMount() {
     const images = pick(this.props.selectedImages.images,
                         this.countSelectedImages);
@@ -47,7 +52,7 @@ export default class TrainingLabel extends React.Component {
     return (
       <div>
         <p className="lead">Select the column you would like to use for training labels</p>
-        <SelectTargetColumn data={data} targetData={targetData} />
+        <SelectTargetColumn data={data} targetData={targetData} onSelectTarget={this.handleTargetSelection} />
 
         <p className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
         <p>
@@ -57,14 +62,14 @@ export default class TrainingLabel extends React.Component {
           </ul>
         </p>
 
-        <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} targetData={targetData} />
+        <DataGrid onSelectTarget={this.handleTargetSelection} data={data} targetData={targetData} />
       </div>
     );
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.imagesMetadata !== this.props.imagesMetadata;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   return nextProps.imagesMetadata !== this.props.imagesMetadata;
+  // }
 
   renderLoading() {
     return (

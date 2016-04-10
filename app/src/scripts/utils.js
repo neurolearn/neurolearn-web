@@ -3,6 +3,7 @@ import isEmpty from 'lodash/lang/isEmpty';
 import every from 'lodash/collection/every';
 import pick from 'lodash/object/pick';
 import take from 'lodash/array/take';
+import findIndex from 'lodash/array/findIndex';
 
 export function pluralize(n, singular, plural) {
   return (n !== 1) ? plural : singular;
@@ -52,4 +53,8 @@ export function parseColumns(data) {
       'sampleValues': take(values, 3)
     }
   });
+}
+
+export function findColumnIndex(tableData, colName) {
+  return findIndex(tableData[0], col => col === colName);
 }

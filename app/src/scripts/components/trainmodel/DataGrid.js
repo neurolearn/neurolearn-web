@@ -1,6 +1,7 @@
-import findIndex from 'lodash/array/findIndex';
 import isString from 'lodash/lang/isString';
 import React, { PropTypes } from 'react';
+
+import { findColumnIndex } from '../../utils';
 
 require('handsontable');
 window.Formula = require('formula.js');
@@ -52,9 +53,6 @@ export default class DataGrid extends React.Component {
       makeBackground(col, td);
     }
 
-    function findColumnIndex(tableData, colName) {
-      return findIndex(tableData[0], col => col === colName);
-    }
 
     function columnName(tableData, columnIndex) {
       return tableData[0][columnIndex];
