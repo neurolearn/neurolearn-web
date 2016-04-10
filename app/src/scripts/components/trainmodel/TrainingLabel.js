@@ -1,37 +1,14 @@
-import { isEmpty, every, pick, take } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import DataGrid from './DataGrid';
+import SelectTargetColumn from '../SelectTargetColumn';
 import Spinner from '../Spinner';
 
 import { loadImagesMetadata } from '../../state/imagesMetadata';
 import { setTargetData } from '../../state/targetData';
 
-function columnValues(data, index) {
-  return data.slice(1).map((row, i) => row[index]);
-}
-
-// Thanks, jQuery
-function isNumeric(obj) {
-  const type = typeof(obj);
-  return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
-}
-
-function guessType(values) {
-  return every(values, isNumeric) ? 'Number' : 'Categorical';
-}
-
-function parseColumns(data) {
-  return data[0].map((column, i) => {
-    const values = columnValues(data, i);
-    return {
-      'name': column,
-      'dataType': guessType(values),
-      'sampleValues': take(values, 3)
-    }
-  });
-}
 
 export default class TrainingLabel extends React.Component {
   static propTypes = {
@@ -67,49 +44,18 @@ export default class TrainingLabel extends React.Component {
   }
 
   renderDataGrid(data, targetData) {
-    const columns = parseColumns(data);
-
     return (
       <div>
-        <p className="lead">Select the column you would like to use for training labels by right clicking
- (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
+        <p className="lead">Select the column you would like to use for training labels</p>
+        <SelectTargetColumn data={data} targetData={targetData} />
+
+        <p className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
         <p>
           <ul>
             <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
             <li>You can use formulas and functions in the cells.</li>
           </ul>
         </p>
-
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>Target</th>
-              <th>Name</th>
-              <th>Data Type</th>
-              <th>Sample Field Values</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              columns.map(column =>
-                <tr key={column.name}>
-                  <td>
-                    <input type="radio" checked={false}/>
-                  </td>
-                  <td>
-                    {column.name}
-                  </td>
-                  <td>
-                    {column.dataType}
-                  </td>
-                  <td>
-                    {column.sampleValues.join(', ')}
-                  </td>
-                </tr>
-              )
-            }
-          </tbody>
-        </table>
 
         <DataGrid onSelectTarget={this.handleTargetSelection.bind(this)} data={data} targetData={targetData} />
       </div>
