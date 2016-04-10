@@ -5,6 +5,7 @@ import { Input, Button } from 'react-bootstrap';
 import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
+import { filterImagesByName } from '../utils';
 
 export default class ImageBarChart extends React.Component {
   static propTypes = {
@@ -21,6 +22,7 @@ export default class ImageBarChart extends React.Component {
       groups: this.props.groups || [],
       filterText: ''
     };
+    this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   collectionNameById(id) {
@@ -150,15 +152,6 @@ export default class ImageBarChart extends React.Component {
     });
   }
 
-  filterImages(filterText, images) {
-    if (isEmpty(filterText)) {
-      return images;
-    } else {
-      const regex = new RegExp(filterText, 'i');
-      return images.filter(image => image.name.search(regex) > -1);
-    }
-  }
-
   renderEmptyImageList() {
     return (
       <div>No images matched your criteria.</div>
@@ -166,8 +159,8 @@ export default class ImageBarChart extends React.Component {
   }
 
   render() {
-    const images = this.setCollectionName(this.filterImages(this.state.filterText,
-                                                            this.props.images));
+    const images = this.setCollectionName(filterImagesByName(this.state.filterText,
+                                                             this.props.images));
     const groups = this.setCorrelation(this.state.groups);
 
     return (

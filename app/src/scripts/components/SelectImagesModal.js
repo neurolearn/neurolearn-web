@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
 
+import { filterImagesByName } from '../utils';
 import ImageItem from './ImageItem';
 
 import styles from './SelectImagesModal.scss';
@@ -13,7 +14,23 @@ export default class SelectImagesModal extends React.Component {
     selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
     onToggleAll: PropTypes.func.isRequired,
-    onHide: PropTypes.func.isRequired
+    onHide: PropTypes.func.isRequired,
+    children: React.PropTypes.element
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: ''
+    };
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.toggleAll = this.toggleAll.bind(this);
+  }
+
+  handleFilterChange() {
+    this.setState({
+      filterText: this.refs.filterText.getValue()
+    });
   }
 
   isImageSelected(key) {
@@ -57,12 +74,19 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id='contained-modal-title-lg'>Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <Input type="text"
+          placeholder="Filter Images"
+          value={this.state.filterText}
+          ref="filterText"
+          onChange={this.handleFilterChange} />
+
         <div className={styles.root}>
+
           <table className="table">
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" checked={isAllSelected} onChange={this.toggleAll.bind(this)} />
+                  <input type="checkbox" checked={isAllSelected} onChange={this.toggleAll} />
                 </th>
                 <th className="col-md-4">Name</th>
                 <th className="col-md-2">Image Type</th>
@@ -70,7 +94,7 @@ export default class SelectImagesModal extends React.Component {
                 <th className="col-md-4"></th>
               </tr>
             </thead>
-            {collection && this.renderImages(collection._source.images)}
+            {collection && this.renderImages(filterImagesByName(this.state.filterText, collection._source.images))}
           </table>
           </div>
         </Modal.Body>
