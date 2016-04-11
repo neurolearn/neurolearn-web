@@ -54,7 +54,7 @@ export default class TrainingLabel extends React.Component {
         <p className="lead">Select the column you would like to use for training labels</p>
         <SelectTargetColumn data={data} targetData={targetData} onSelectTarget={this.handleTargetSelection} />
 
-        <p className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
+        <p style={{marginTop: 50}} className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
         <p>
           <ul>
             <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
