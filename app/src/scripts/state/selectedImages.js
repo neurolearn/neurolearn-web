@@ -13,11 +13,10 @@ export function toggleImage(collectionId, imageId) {
   };
 }
 
-export function toggleAllImages(collectionId, imageList, checked) {
+export function toggleAllImages(collectionId, checked) {
   return {
     type: TOGGLE_ALL_IMAGES,
     collectionId,
-    imageList,
     checked
   };
 }
@@ -71,8 +70,7 @@ export default function reducer(state = initialState, action) {
       return imageToggle(state, action.collectionId, action.imageId);
 
     case TOGGLE_ALL_IMAGES:
-      return allImagesToggle(state, action.collectionId, action.imageList,
-                             action.checked);
+      return allImagesToggle(state, action.collectionId, action.checked);
 
     case RESET_SELECTED_IMAGES:
       return initialState;
