@@ -61,6 +61,7 @@ export default class SelectImagesModal extends React.Component {
 
   render() {
     const { collection, selectedImages } = this.props;
+    const filteredImages = collection && filterImagesByName(this.state.filterText, collection._source.images);
     const selectedCount = selectedImages && Object.keys(selectedImages).reduce(function (accum, key) {
       return selectedImages[key] ? accum + 1 : accum;
     }, 0);
@@ -94,7 +95,7 @@ export default class SelectImagesModal extends React.Component {
                 <th className="col-md-4"></th>
               </tr>
             </thead>
-            {collection && this.renderImages(filterImagesByName(this.state.filterText, collection._source.images))}
+            {filteredImages && this.renderImages(filteredImages)}
           </table>
           </div>
         </Modal.Body>
