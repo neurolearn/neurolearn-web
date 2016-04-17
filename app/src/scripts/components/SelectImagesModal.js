@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
+import every from 'lodash/collection/every';
 
 import { filterImagesByName } from '../utils';
 import ImageItem from './ImageItem';
@@ -67,12 +68,10 @@ export default class SelectImagesModal extends React.Component {
   render() {
     const { collection, selectedImages } = this.props;
     const filteredImages = collection && filterImagesByName(this.state.filterText, collection._source.images);
-    const selectedCount = selectedImages && Object.keys(selectedImages).reduce(function (accum, key) {
-      return selectedImages[key] ? accum + 1 : accum;
-    }, 0);
 
-    const isAllSelected = collection
-                        && (collection._source.images.length === selectedCount);
+    const allFilteredAreSelected = selectedImages && every(filteredImages, image => {
+      return selectedImages[image.url];
+    });
 
     return (
       <Modal {...this.props} bsSize='large' aria-labelledby='contained-modal-title-lg'>
@@ -92,7 +91,7 @@ export default class SelectImagesModal extends React.Component {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" checked={isAllSelected} onChange={e => this.toggleList(e, filteredImages)} />
+                  <input type="checkbox" checked={allFilteredAreSelected} onChange={e => this.toggleList(e, filteredImages)} />
                 </th>
                 <th className="col-md-4">Name</th>
                 <th className="col-md-2">Image Type</th>
