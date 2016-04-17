@@ -14,6 +14,7 @@ export default class SelectImagesModal extends React.Component {
     selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
     onToggleAll: PropTypes.func.isRequired,
+    onToggleList: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
     children: React.PropTypes.element
   }
@@ -43,6 +44,10 @@ export default class SelectImagesModal extends React.Component {
 
   toggleAll(e) {
     this.props.onToggleAll(this.props.collection, e.target.checked);
+  }
+
+  toggleList(e, filteredImages) {
+    this.props.onToggleList(this.props.collection, filteredImages, e.target.checked);
   }
 
   renderImages(images) {
@@ -87,7 +92,7 @@ export default class SelectImagesModal extends React.Component {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" checked={isAllSelected} onChange={this.toggleAll} />
+                  <input type="checkbox" checked={isAllSelected} onChange={e => this.toggleList(e, filteredImages)} />
                 </th>
                 <th className="col-md-4">Name</th>
                 <th className="col-md-2">Image Type</th>
