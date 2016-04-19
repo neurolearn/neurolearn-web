@@ -50,7 +50,7 @@ function imageListToggle(state, collection, images, checked) {
   }, {});
 
   return update(state, {
-    images: {[collection._id]: {$set: imagesUpdate}},
+    images: {[collection._id]: {[state.images[collection._id] ? '$merge' : '$set']: imagesUpdate}},
     collectionsById: {$merge: {[collection._id]: cloneDeep(collection)}}
   });
 }
