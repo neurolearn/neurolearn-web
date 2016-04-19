@@ -15,7 +15,6 @@ import {
 
 import {
   toggleImage,
-  toggleAllImages,
   toggleImageList
 } from '../../state/selectedImages';
 
@@ -42,11 +41,6 @@ class InputData extends React.Component {
 
   handleImageToggle(collection, imageId) {
     this.props.dispatch(toggleImage(collection, imageId));
-    this.props.dispatch(resetImagesMetadata());
-  }
-
-  handleToggleAll(collection, checked) {
-    this.props.dispatch(toggleAllImages(collection, checked));
     this.props.dispatch(resetImagesMetadata());
   }
 
@@ -134,8 +128,6 @@ class InputData extends React.Component {
             show={selectImagesModal.display}
             onToggle={(collection, imageId) =>
                         this.handleImageToggle(collection, imageId)}
-            onToggleAll={(collection, checked) =>
-                        this.handleToggleAll(collection, checked)}
             onToggleList={(collection, images, checked) =>
                         this.handleImageListToggle(collection, images,
                                                    checked)}

@@ -14,7 +14,6 @@ export default class SelectImagesModal extends React.Component {
     collection: PropTypes.object.isRequired,
     selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
-    onToggleAll: PropTypes.func.isRequired,
     onToggleList: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
     children: React.PropTypes.element
@@ -26,7 +25,6 @@ export default class SelectImagesModal extends React.Component {
       filterText: ''
     };
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.toggleAll = this.toggleAll.bind(this);
   }
 
   handleFilterChange() {
@@ -41,10 +39,6 @@ export default class SelectImagesModal extends React.Component {
       return selectedImages[key];
     }
     return false;
-  }
-
-  toggleAll(e) {
-    this.props.onToggleAll(this.props.collection, e.target.checked);
   }
 
   toggleList(e, filteredImages) {
