@@ -1,3 +1,4 @@
+import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import SearchInput from './SearchInput';
 import SortSearchResults from './SortSearchResults';
@@ -31,6 +32,7 @@ export default class SearchContainer extends React.Component {
     query: PropTypes.string,
     filter: PropTypes.object,
     results: PropTypes.object,
+    from: PropTypes.number,
     sort: PropTypes.string,
     onSearchResultClick: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
@@ -62,13 +64,15 @@ export default class SearchContainer extends React.Component {
   }
 
   render() {
+    const { isFetching, results, filter, query, sort } = this.props;
+
     return (
       <div className={styles.root}>
         <div className="row">
           <div className="col-md-3">
             <RefineSearchResults
-              results={this.props.results}
-              filter={this.props.filter}
+              results={results}
+              filter={filter}
               onChange={this.handleFilterChange.bind(this)}
             />
           </div>
@@ -77,29 +81,30 @@ export default class SearchContainer extends React.Component {
             <div className="panel panel-default">
               <div className="panel-body">
                 <SearchInput
-                  value={this.props.query}
+                  value={query}
                   placeholder="Search NeuroVault Collections"
                   onChange={this.handleSearchInputChange.bind(this)}
                 />
                 <div className="search-meta clearfix">
-                  <div className="pull-left HitsCount">Found {this.totalHits(this.props.results)} collections</div>
+                  <div className="pull-left HitsCount">Found {this.totalHits(results)} collections</div>
                   <div className="pull-right">
                     <SortSearchResults
-                      sortType={this.props.sort}
+                      sortType={sort}
                       onSelect={this.handleSortSelect.bind(this)}
                     />
                   </div>
                 </div>
                 <div className="search-results-wrapper">
+                  {results &&
                   <SearchResults
-                    results={this.props.results}
+                    results={results}
                     onSearchResultClick={this.props.onSearchResultClick}
-                  />
-                  {this.props.isFetching && <div className="overlay"></div>}
+                  />}
+                  {isFetching && <div className="overlay"></div>}
                 </div>
-                { this.totalHits(this.props.results) > RESULTS_PER_PAGE
+                { this.totalHits(results) > RESULTS_PER_PAGE
                   ? <SearchPagination
-                      totalPages={totalPages(this.totalHits(this.props.results), RESULTS_PER_PAGE)}
+                      totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
                       activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
                       onSelect={this.handlePageSelect.bind(this)} />
                   : false }
