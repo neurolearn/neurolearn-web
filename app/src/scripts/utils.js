@@ -40,17 +40,16 @@ function isNumeric(obj) {
   return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
 }
 
-function guessType(values) {
+export function guessType(values) {
   return every(values, isNumeric) ? 'Number' : 'Categorical';
 }
 
-export function parseColumns(data) {
+export function getArrayColumns(data) {
   return data[0].map((column, i) => {
     const values = columnValues(data, i);
     return {
       'name': column,
-      'dataType': guessType(values),
-      'sampleValues': take(values, 3)
+      'values': values
     }
   });
 }

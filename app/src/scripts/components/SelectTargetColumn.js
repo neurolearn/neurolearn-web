@@ -1,6 +1,9 @@
+import includes from 'lodash/collection/includes';
+import take from 'lodash/array/take';
 import React, { PropTypes } from 'react';
-import { parseColumns } from '../utils';
-import { findColumnIndex } from '../utils';
+import { getArrayColumns, guessType, findColumnIndex } from '../utils';
+
+const excludeColumns = ['id', 'collection_id', 'file', 'url', 'file_size'];
 
 function getTargetData(data, columnName) {
   const idIndex = findColumnIndex(data, 'id');
@@ -50,7 +53,19 @@ export default class SelectTargetColumn extends React.Component {
 
   render() {
     const { data, targetData: { trainingLabel } } = this.props;
-    const columns = parseColumns(data);
+    const columns = getArrayColumns(
+      data
+    ).filter(
+      column => !includes(excludeColumns, column.name)
+    ).map(
+      column => {
+        return {
+          name: column.name,
+          dataType: guessType(column.values),
+          sampleValues: take(column.values, 3)
+        };
+      }
+    );
 
     return (
       <table className="table table-hover">
