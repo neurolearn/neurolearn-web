@@ -44,7 +44,7 @@ export function guessType(values) {
   return every(values, isNumeric) ? 'Number' : 'Categorical';
 }
 
-export function getArrayColumns(data) {
+export function getColumnsFromArray(data) {
   return data[0].map((column, i) => {
     const values = columnValues(data, i);
     return {
