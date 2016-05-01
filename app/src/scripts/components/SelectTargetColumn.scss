@@ -1,0 +1,11 @@
+.root :global {
+  .action {
+    padding: 0px 10px;
+    color: #777;
+  }
+
+  .action:hover {
+    color: #333;
+    cursor: pointer;
+  }
+}
