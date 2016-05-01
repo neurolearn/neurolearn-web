@@ -5,14 +5,19 @@ import isEmpty from 'lodash/lang/isEmpty';
 import pluck from 'lodash/collection/pluck';
 import keys from 'lodash/object/keys';
 import difference from 'lodash/array/difference';
+import zip from 'lodash/array/zip';
 import union from 'lodash/array/union';
 
+import { createAction } from 'redux-actions';
+
+import { findColumnIndex } from '../utils';
 import api from '../api';
 import { apiError } from './alertMessages';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
 export const REQUEST_IMAGES_METADATA = 'REQUEST_IMAGES_METADATA';
 export const RECEIVE_IMAGES_METADATA = 'RECEIVE_IMAGES_METADATA';
+export const SAVE_IMAGES_METADATA_COLUMN = 'SAVE_IMAGES_METADATA_COLUMN';
 
 const excludeProps = ['collection', 'cognitive_paradigm_cogatlas_id', 'description', 'add_date', 'is_thresholded',
                       'perc_bad_voxels', 'brain_coverage', 'perc_voxels_outside', 'reduced_representation', 'thumbnail',
@@ -40,6 +45,8 @@ function receiveImagesMetadata(items) {
     items
   };
 }
+
+export const saveImagesMetadataColumn = createAction(SAVE_IMAGES_METADATA_COLUMN);
 
 function filterImages(imageMap, imageList) {
   return imageList.filter(image => imageMap[image.url]);
@@ -127,6 +134,22 @@ export default function reducer(state = {
         data: convertToArrayOfArrays(
           action.items.map((item) => pick(item, pickedProps)))
       };
+
+    case SAVE_IMAGES_METADATA_COLUMN:
+      const { data } = state;
+      const { name, values } = action.payload;
+      const columnIndex = findColumnIndex(data, name);
+
+      return columnIndex > -1
+        ? {...state,
+            data: [data[0]].concat(
+              zip(data.slice(1), values)
+              .map(x => update(x[0], {$splice: [[columnIndex, 1, x[1]]]}))
+            )}
+        : {...state,
+            data: zip(data, [name].concat(values))
+                  .map(x => x[0].concat(x[1]))};
+
     default:
       return state;
   }
