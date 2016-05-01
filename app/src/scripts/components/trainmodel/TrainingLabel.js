@@ -2,11 +2,13 @@ import { isEmpty, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import DataGrid from './DataGrid';
 import SelectTargetColumn from '../SelectTargetColumn';
 import Spinner from '../Spinner';
 
-import { loadImagesMetadata } from '../../state/imagesMetadata';
+import {
+  loadImagesMetadata,
+  saveImagesMetadataColumn
+} from '../../state/imagesMetadata';
 import { setTargetData } from '../../state/targetData';
 
 
@@ -21,6 +23,7 @@ export default class TrainingLabel extends React.Component {
   constructor(props) {
     super(props);
     this.handleTargetSelection = this.handleTargetSelection.bind(this);
+    this.handleColumnSave = this.handleColumnSave.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +45,10 @@ export default class TrainingLabel extends React.Component {
     this.props.dispatch(setTargetData(targetData));
   }
 
+  handleColumnSave(name, values) {
+    this.props.dispatch(saveImagesMetadataColumn({name, values}))
+  }
+
   prependRowWithColumnNames(data) {
     let firstRow = {};
     Object.keys(data[0]).map(key => firstRow[key] = key);
@@ -52,17 +59,23 @@ export default class TrainingLabel extends React.Component {
     return (
       <div>
         <p className="lead">Select the column you would like to use for training labels</p>
-        <SelectTargetColumn data={data} targetData={targetData} onSelectTarget={this.handleTargetSelection} />
+        <SelectTargetColumn
+          data={data}
+          targetData={targetData}
+          onSelectTarget={this.handleTargetSelection}
+          onColumnSave={this.handleColumnSave} />
 
+        {/*
         <p style={{marginTop: 50}} className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
-        <p>
-          <ul>
-            <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
-            <li>You can use formulas and functions in the cells.</li>
-          </ul>
-        </p>
+              <p>
+                <ul>
+                  <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
+                  <li>You can use formulas and functions in the cells.</li>
+                </ul>
+              </p>
 
-        <DataGrid onSelectTarget={this.handleTargetSelection} data={data} targetData={targetData} />
+              <DataGrid onSelectTarget={this.handleTargetSelection} data={data} targetData={targetData} />
+        */}
       </div>
     );
   }
@@ -92,7 +105,9 @@ export default class TrainingLabel extends React.Component {
           this.renderDataGrid(imagesMetadata.data, targetData) }
 
         <hr/>
-        <Link disabled={false} className="btn btn-primary continue-button" to="/models/new/model-preferences">Continue to Model Preferences</Link>
+        <Link disabled={false}
+              className="btn btn-primary continue-button"
+              to="/models/new/model-preferences">Continue to Model Preferences</Link>
       </div>
     );
   }
