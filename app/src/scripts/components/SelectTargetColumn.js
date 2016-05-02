@@ -48,7 +48,8 @@ export default class SelectTargetColumn extends React.Component {
     data: PropTypes.array,
     targetData: PropTypes.object,
     onSelectTarget: PropTypes.func.isRequired,
-    onColumnSave: PropTypes.func.isRequired
+    onColumnSave: PropTypes.func.isRequired,
+    onColumnDelete: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -93,6 +94,10 @@ export default class SelectTargetColumn extends React.Component {
         ['id', 'collection_id', 'name', columnName]
       )
     });
+  }
+
+  handleColumnDelete(e, columnName) {
+    confirm(`Delete "${columnName}"?`) && this.props.onColumnDelete(columnName);
   }
 
   handleEditColumnModalHide() {
@@ -148,7 +153,7 @@ export default class SelectTargetColumn extends React.Component {
                 </td>
                 <td style={{textAlign: 'right'}}>
                  <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
-                 <span className="action"><i className="fa fa-trash"></i> Delete</span>
+                 <span className="action" onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
                 </td>
               </tr>
             )

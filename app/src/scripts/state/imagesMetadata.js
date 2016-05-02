@@ -18,6 +18,7 @@ export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
 export const REQUEST_IMAGES_METADATA = 'REQUEST_IMAGES_METADATA';
 export const RECEIVE_IMAGES_METADATA = 'RECEIVE_IMAGES_METADATA';
 export const SAVE_IMAGES_METADATA_COLUMN = 'SAVE_IMAGES_METADATA_COLUMN';
+export const DELETE_IMAGES_METADATA_COLUMN = 'DELETE_IMAGES_METADATA_COLUMN';
 
 const excludeProps = ['collection', 'cognitive_paradigm_cogatlas_id', 'description', 'add_date', 'is_thresholded',
                       'perc_bad_voxels', 'brain_coverage', 'perc_voxels_outside', 'reduced_representation', 'thumbnail',
@@ -47,6 +48,7 @@ function receiveImagesMetadata(items) {
 }
 
 export const saveImagesMetadataColumn = createAction(SAVE_IMAGES_METADATA_COLUMN);
+export const deleteImagesMetadataColumn = createAction(DELETE_IMAGES_METADATA_COLUMN);
 
 function filterImages(imageMap, imageList) {
   return imageList.filter(image => imageMap[image.url]);
@@ -149,6 +151,16 @@ export default function reducer(state = {
         : {...state,
             data: zip(data, [name].concat(values))
                   .map(x => x[0].concat(x[1]))};
+
+    case DELETE_IMAGES_METADATA_COLUMN:
+      const { data } = state;
+
+      const columnIndex = findColumnIndex(data, action.payload);
+
+      return {
+        ...state,
+        data: data.map(x => update(x, {$splice: [[columnIndex, 1]]}))
+      };
 
     default:
       return state;

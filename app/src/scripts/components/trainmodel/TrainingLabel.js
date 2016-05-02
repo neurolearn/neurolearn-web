@@ -7,7 +7,8 @@ import Spinner from '../Spinner';
 
 import {
   loadImagesMetadata,
-  saveImagesMetadataColumn
+  saveImagesMetadataColumn,
+  deleteImagesMetadataColumn
 } from '../../state/imagesMetadata';
 import { setTargetData } from '../../state/targetData';
 
@@ -24,6 +25,7 @@ export default class TrainingLabel extends React.Component {
     super(props);
     this.handleTargetSelection = this.handleTargetSelection.bind(this);
     this.handleColumnSave = this.handleColumnSave.bind(this);
+    this.handleColumnDelete = this.handleColumnDelete.bind(this);
   }
 
   componentDidMount() {
@@ -46,7 +48,11 @@ export default class TrainingLabel extends React.Component {
   }
 
   handleColumnSave(name, values) {
-    this.props.dispatch(saveImagesMetadataColumn({name, values}))
+    this.props.dispatch(saveImagesMetadataColumn({name, values}));
+  }
+
+  handleColumnDelete(name) {
+    this.props.dispatch(deleteImagesMetadataColumn(name));
   }
 
   prependRowWithColumnNames(data) {
@@ -63,7 +69,8 @@ export default class TrainingLabel extends React.Component {
           data={data}
           targetData={targetData}
           onSelectTarget={this.handleTargetSelection}
-          onColumnSave={this.handleColumnSave} />
+          onColumnSave={this.handleColumnSave}
+          onColumnDelete={this.handleColumnDelete} />
 
         {/*
         <p style={{marginTop: 50}} className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
