@@ -42,16 +42,7 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
             'original_file': 'path/to/the/original/file.nii.gz'
         }
     """
-    log.info("Concatenating Images...")
     tic = time.time()  # Start Timer
-
-    dat = nb.funcs.concat_images([item[file_path_key]
-                                  for item in image_list])
-
-    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
-    tic = time.time()  # Start Timer
-
-    Y = pd.DataFrame([int(item['target']) for item in image_list])
 
     try:
         holdout = [int(item['subject_id']) for item in image_list]
@@ -71,7 +62,10 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
-    dat = Brain_Data(data=dat, Y=Y)
+    Y = pd.DataFrame([int(item['target']) for item in image_list])
+    file_path_list = [item[file_path_key] for item in image_list]
+
+    dat = Brain_Data(data=file_path_list, Y=Y)
 
     output = dat.predict(algorithm=algorithm,
                          cv_dict=cross_validation,

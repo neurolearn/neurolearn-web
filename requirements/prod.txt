@@ -54,6 +54,6 @@ nilearn==0.2.3
 matplotlib==1.4.3
 seaborn>=0.7.0
 
-git+https://github.com/burnash/neurolearn.git@bf65f229c2c996dc39234c3a2683540a8e5305ad#egg=nltools
+git+https://github.com/burnash/neurolearn.git@11159fd2ab2a103a4104e035023901ea4ae54d85#egg=nltools
 
 dotenv==0.0.5
