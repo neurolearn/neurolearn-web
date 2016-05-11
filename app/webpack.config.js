@@ -44,10 +44,7 @@ module.exports = {
     ],
     noParse: [
       'handsontable.full.js',
-      'nsviewer.js',
-      'parser.js',
-      'ruleJS.js',
-      'handsontable.formula.js'
+      'nsviewer.js'
     ].map(vendorRegExpPath)
   },
   postcss: [
