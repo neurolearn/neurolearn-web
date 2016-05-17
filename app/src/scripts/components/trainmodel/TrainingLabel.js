@@ -64,7 +64,7 @@ export default class TrainingLabel extends React.Component {
   renderDataGrid(data, targetData) {
     return (
       <div>
-        <p className="lead">Select the column you would like to use for training labels</p>
+        <p className="lead">Select a column you would like to use for training labels</p>
         <SelectTargetColumn
           data={data}
           targetData={targetData}
