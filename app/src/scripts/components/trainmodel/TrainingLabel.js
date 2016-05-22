@@ -91,15 +91,6 @@ export default class TrainingLabel extends React.Component {
             </label>
           </div>
         </div>
-        {/*
-          When the users selects regression we allow any values,
-          and show regression algos on the next step
-
-          when the user selects classification we validate values
-          so only two classes are present
-          and show classification algos on the next step
-        */}
-
         <SelectTargetColumn
           data={data}
           targetData={targetData}
@@ -107,25 +98,9 @@ export default class TrainingLabel extends React.Component {
           onSelectTarget={this.handleTargetSelection}
           onColumnSave={this.handleColumnSave}
           onColumnDelete={this.handleColumnDelete} />
-
-        {/*
-        <p style={{marginTop: 50}} className="lead">Select the column you would like to use for training labels by right clicking (control-click) on the column and selecting ‘Use&nbsp;as&nbsp;training&nbsp;label’.</p>
-              <p>
-                <ul>
-                  <li>You can also optionally select a column indicating the subject labels to ensure they are held out together when using cross-validation.</li>
-                  <li>You can use formulas and functions in the cells.</li>
-                </ul>
-              </p>
-
-              <DataGrid onSelectTarget={this.handleTargetSelection} data={data} targetData={targetData} />
-        */}
       </div>
     );
   }
-
-  // shouldComponentUpdate(nextProps) {
-  //   return nextProps.imagesMetadata !== this.props.imagesMetadata;
-  // }
 
   renderLoading() {
     return (
