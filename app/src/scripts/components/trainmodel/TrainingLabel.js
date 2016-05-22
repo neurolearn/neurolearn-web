@@ -22,7 +22,7 @@ import { setTargetData } from '../../state/targetData';
 
 function validate(targetData, analysisType) {
   if (!targetData.trainingLabel.index) {
-    return 'A data field is required.';
+    return 'A data field selection is required.';
   }
 
   if (analysisType === AnalysisTypes.classification &&
