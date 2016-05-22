@@ -49,7 +49,7 @@ export default class EditColumnModal extends React.Component {
     return (
       <Modal {...this.props} aria-labelledby='contained-modal-title-lg'>
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-lg'>Edit Column</Modal.Title>
+          <Modal.Title id='contained-modal-title-lg'>Edit Field</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <div className="form-group">

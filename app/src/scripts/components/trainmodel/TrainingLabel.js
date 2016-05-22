@@ -1,4 +1,6 @@
 import { isEmpty, pick } from 'lodash';
+import classNames from 'classnames';
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -15,6 +17,11 @@ import {
 } from '../../state/imagesMetadata';
 import { setTargetData } from '../../state/targetData';
 
+function validate(targetData) {
+  if (!targetData.trainingLabel.index) {
+    return 'A data field is required';
+  }
+}
 
 export default class TrainingLabel extends React.Component {
   static propTypes = {
@@ -27,10 +34,16 @@ export default class TrainingLabel extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      errors: null
+    };
+
     this.handleTargetSelection = this.handleTargetSelection.bind(this);
     this.handleColumnSave = this.handleColumnSave.bind(this);
     this.handleColumnDelete = this.handleColumnDelete.bind(this);
     this.handleAnalysisTypeChange = this.handleAnalysisTypeChange.bind(this);
+    this.handleContinueClick = this.handleContinueClick.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +77,16 @@ export default class TrainingLabel extends React.Component {
     this.props.dispatch(deleteImagesMetadataColumn(name));
   }
 
+  handleContinueClick(e) {
+    const { targetData } = this.props;
+
+    const errors = validate(targetData);
+    if (errors) {
+      e.preventDefault();
+      this.setState({ errors: errors });
+    }
+  }
+
   prependRowWithColumnNames(data) {
     let firstRow = {};
     Object.keys(data[0]).map(key => firstRow[key] = key);
@@ -71,9 +94,11 @@ export default class TrainingLabel extends React.Component {
   }
 
   renderDataGrid(data, targetData, modelPreferences) {
+    const { errors } = this.state;
+
     return (
       <div>
-        <p className="lead">Select a column you would like to use for training labels</p>
+        <p className="lead">Select a data field you would like to use for training labels</p>
         <div className="form-group">
           <label>Analysis type</label>
           <div className="radio">
@@ -91,13 +116,18 @@ export default class TrainingLabel extends React.Component {
             </label>
           </div>
         </div>
-        <SelectTargetColumn
-          data={data}
-          targetData={targetData}
-          modelPreferences={modelPreferences}
-          onSelectTarget={this.handleTargetSelection}
-          onColumnSave={this.handleColumnSave}
-          onColumnDelete={this.handleColumnDelete} />
+        <div className={classNames('form-group', errors && 'has-error')}>
+          <label className="control-label">Data fields</label>
+
+          <SelectTargetColumn
+            data={data}
+            targetData={targetData}
+            modelPreferences={modelPreferences}
+            onSelectTarget={this.handleTargetSelection}
+            onColumnSave={this.handleColumnSave}
+            onColumnDelete={this.handleColumnDelete} />
+          {errors && <div className="help-block">{errors}</div>}
+        </div>
       </div>
     );
   }
@@ -123,8 +153,7 @@ export default class TrainingLabel extends React.Component {
           this.renderDataGrid(imagesMetadata.data, targetData, modelPreferences) }
 
         <hr/>
-        <Link disabled={false}
-              className="btn btn-primary continue-button"
+        <Link onClick={this.handleContinueClick} className="btn btn-primary continue-button"
               to="/models/new/model-preferences">Continue to Model Preferences</Link>
       </div>
     );

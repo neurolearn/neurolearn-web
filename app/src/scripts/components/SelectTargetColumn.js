@@ -58,7 +58,7 @@ export default class SelectTargetColumn extends React.Component {
       showEditColumnModal: false,
       editColumnName: null,
       editColumnData: undefined
-    }
+    };
     this.handleColumnSelect = this.handleColumnSelect.bind(this);
     this.handleNewColumnAdd = this.handleNewColumnAdd.bind(this);
     this.handleEditColumnModalHide = this.handleEditColumnModalHide.bind(this);
@@ -125,7 +125,7 @@ export default class SelectTargetColumn extends React.Component {
       <div className={styles.root}>
         <table className="table table-hover">
           <thead>
-            <tr>
+            <tr style={{ color: '#777777' }}>
               <th>Target</th>
               <th>Name</th>
               <th>Data Type</th>
@@ -162,7 +162,7 @@ export default class SelectTargetColumn extends React.Component {
             <tr>
               <td></td>
               <td colSpan="4">
-                <a href="#" onClick={this.handleNewColumnAdd}>Add new column</a>
+                <a href="#" onClick={this.handleNewColumnAdd}>Add new field</a>
               </td>
             </tr>
           </tbody>
