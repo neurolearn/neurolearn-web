@@ -63,8 +63,7 @@ export default class ModelPreferences extends React.Component {
   }
 
   handleRadioChange(e) {
-    const cvType = e.target.value;
-    this.props.dispatch(selectCVType(cvType));
+    this.props.dispatch(selectCVType(e.target.value));
   }
 
   handleAlgorithmChange() {
