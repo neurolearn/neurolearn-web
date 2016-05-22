@@ -1,8 +1,9 @@
 import includes from 'lodash/collection/includes';
 import take from 'lodash/array/take';
 import React, { PropTypes } from 'react';
-import { getColumnsFromArray, guessType, findColumnIndex } from '../utils';
 import EditColumnModal from './EditColumnModal';
+
+import { getColumnsFromArray, guessType, findColumnIndex } from '../utils';
 
 import styles from './SelectTargetColumn.scss';
 
@@ -39,7 +40,6 @@ function getTargetData(data, columnName) {
 
 function pickColumns(data, columnNames) {
   const indexes = columnNames.map(name => findColumnIndex(data, name));
-
   return data.map(row => indexes.map(index => row[index]));
 }
 
@@ -59,12 +59,12 @@ export default class SelectTargetColumn extends React.Component {
       editColumnName: null,
       editColumnData: undefined
     }
-    this.handleRadioChange = this.handleRadioChange.bind(this);
+    this.handleColumnSelect = this.handleColumnSelect.bind(this);
     this.handleNewColumnAdd = this.handleNewColumnAdd.bind(this);
     this.handleEditColumnModalHide = this.handleEditColumnModalHide.bind(this);
   }
 
-  handleRadioChange(e) {
+  handleColumnSelect(e) {
     const columnName = e.target.value;
     const { onSelectTarget, data } = this.props;
     onSelectTarget(getTargetData(data, columnName));
@@ -106,6 +106,7 @@ export default class SelectTargetColumn extends React.Component {
 
   render() {
     const { data, targetData: { trainingLabel } } = this.props;
+
     const columns = getColumnsFromArray(
       data
     ).filter(
@@ -122,58 +123,58 @@ export default class SelectTargetColumn extends React.Component {
 
     return (
       <div className={styles.root}>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Target</th>
-            <th>Name</th>
-            <th>Data Type</th>
-            <th>Sample Field Values</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            columns.map(column =>
-              <tr key={column.name}>
-                <td>
-                  <input type="radio"
-                         value={column.name}
-                         onChange={this.handleRadioChange}
-                         checked={column.name === trainingLabel.name}/>
-                </td>
-                <td>
-                  {column.name}
-                </td>
-                <td>
-                  {column.dataType}
-                </td>
-                <td>
-                  {column.sampleValues.join(', ')}
-                </td>
-                <td style={{textAlign: 'right'}}>
-                 <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
-                 <span className="action" onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
-                </td>
-              </tr>
-            )
-          }
-          <tr>
-            <td></td>
-            <td colSpan="4">
-              <a href="#" onClick={this.handleNewColumnAdd}>Add new column</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      {this.state.editColumnData &&
-        <EditColumnModal
-          data={this.state.editColumnData}
-          name={this.state.editColumnName}
-          show={this.state.showEditColumnModal}
-          onHide={this.handleEditColumnModalHide}
-          onSave={this.props.onColumnSave}
-          />}
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Target</th>
+              <th>Name</th>
+              <th>Data Type</th>
+              <th>Sample Field Values</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              columns.map(column =>
+                <tr key={column.name}>
+                  <td>
+                    <input type="radio"
+                           value={column.name}
+                           onChange={this.handleColumnSelect}
+                           checked={column.name === trainingLabel.name}/>
+                  </td>
+                  <td>
+                    {column.name}
+                  </td>
+                  <td>
+                    {column.dataType}
+                  </td>
+                  <td>
+                    {column.sampleValues.join(', ')}
+                  </td>
+                  <td style={{textAlign: 'right'}}>
+                   <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
+                   <span className="action" onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
+                  </td>
+                </tr>
+              )
+            }
+            <tr>
+              <td></td>
+              <td colSpan="4">
+                <a href="#" onClick={this.handleNewColumnAdd}>Add new column</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {this.state.editColumnData &&
+          <EditColumnModal
+            data={this.state.editColumnData}
+            name={this.state.editColumnName}
+            show={this.state.showEditColumnModal}
+            onHide={this.handleEditColumnModalHide}
+            onSave={this.props.onColumnSave}
+            />}
       </div>
     );
   }
