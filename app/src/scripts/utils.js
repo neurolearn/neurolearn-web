@@ -2,6 +2,7 @@ import { JWT_KEY_NAME } from './constants/auth';
 import isEmpty from 'lodash/lang/isEmpty';
 import every from 'lodash/collection/every';
 import pick from 'lodash/object/pick';
+import keys from 'lodash/object/keys';
 import take from 'lodash/array/take';
 import findIndex from 'lodash/array/findIndex';
 
@@ -42,6 +43,22 @@ function isNumeric(obj) {
 
 export function guessType(values) {
   return every(values, isNumeric) ? 'Number' : 'Categorical';
+}
+
+export function isBinaryCollection(values) {
+  const unique = {};
+  for (let i = 0; i < values.length; i += 1) {
+    unique[values[i]] = 1;
+    if (keys(unique).length > 2) {
+      return false;
+    }
+  }
+
+  if (keys(unique).length < 2) {
+    return false;
+  }
+
+  return true;
 }
 
 export function getColumnsFromArray(data) {

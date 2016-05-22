@@ -1,4 +1,4 @@
-import { isEmpty, pick } from 'lodash';
+import { isEmpty, pick, pluck } from 'lodash';
 import classNames from 'classnames';
 
 import React, { PropTypes } from 'react';
@@ -10,6 +10,8 @@ import Spinner from '../Spinner';
 import AnalysisTypes from '../../constants/AnalysisTypes';
 import { selectAnalysisType } from '../../state/modelPreferences';
 
+import { isBinaryCollection } from '../../utils';
+
 import {
   loadImagesMetadata,
   saveImagesMetadataColumn,
@@ -17,9 +19,15 @@ import {
 } from '../../state/imagesMetadata';
 import { setTargetData } from '../../state/targetData';
 
-function validate(targetData) {
+
+function validate(targetData, analysisType) {
   if (!targetData.trainingLabel.index) {
-    return 'A data field is required';
+    return 'A data field is required.';
+  }
+
+  if (analysisType === AnalysisTypes.classification &&
+      !isBinaryCollection(pluck(targetData.data, 'target'))) {
+    return `“${targetData.trainingLabel.name}” field contains more than two classes. Classification requires binary data field.`;
   }
 }
 
@@ -78,9 +86,9 @@ export default class TrainingLabel extends React.Component {
   }
 
   handleContinueClick(e) {
-    const { targetData } = this.props;
+    const { targetData, modelPreferences } = this.props;
 
-    const errors = validate(targetData);
+    const errors = validate(targetData, modelPreferences.analysisType);
     if (errors) {
       e.preventDefault();
       this.setState({ errors: errors });
