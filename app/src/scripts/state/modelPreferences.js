@@ -1,5 +1,7 @@
 import { createAction } from 'redux-actions';
 
+import AnalysisTypes from '../constants/AnalysisTypes';
+
 import api from '../api';
 
 import { resetSearch } from './search';
@@ -12,6 +14,7 @@ export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_DESCRIPTION = 'INPUT_DESCRIPTION';
 export const INPUT_KFOLD_PARAM = 'INPUT_KFOLD_PARAM';
 export const SELECT_CV_TYPE = 'SELECT_CV_TYPE';
+export const SELECT_ANALYSIS_TYPE = 'SELECT_ANALYSIS_TYPE';
 export const SELECT_ALGORITHM = 'SELECT_ALGORITHM';
 export const REQUEST_MODEL_TRAINING = 'REQUEST_MODEL_TRAINING';
 export const RESET_MODEL_PREFERENCES = 'RESET_MODEL_PREFERENCES';
@@ -20,6 +23,7 @@ export const inputModelName = createAction(INPUT_MODEL_NAME);
 export const inputDescription  = createAction(INPUT_DESCRIPTION);
 export const inputKfoldParam = createAction(INPUT_KFOLD_PARAM);
 export const selectCVType = createAction(SELECT_CV_TYPE);
+export const selectAnalysisType = createAction(SELECT_ANALYSIS_TYPE);
 export const selectAlgorithm = createAction(SELECT_ALGORITHM);
 
 const requestModelTraining = createAction(REQUEST_MODEL_TRAINING);
@@ -71,7 +75,8 @@ const initialState = {
   algorithm: '',
   cvType: '',
   kfoldsParam: '',
-  losoParam: ''
+  losoParam: '',
+  analysisType: AnalysisTypes.regression
 };
 
 export default function reducer(state = initialState, action) {
@@ -87,6 +92,10 @@ export default function reducer(state = initialState, action) {
     case INPUT_KFOLD_PARAM:
       return Object.assign({}, state, {
         kfoldsParam: action.payload
+      });
+    case SELECT_ANALYSIS_TYPE:
+      return Object.assign({}, state, {
+        analysisType: action.payload
       });
     case SELECT_CV_TYPE:
       return Object.assign({}, state, {

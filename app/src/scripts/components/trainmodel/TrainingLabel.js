@@ -5,6 +5,9 @@ import { Link } from 'react-router';
 import SelectTargetColumn from '../SelectTargetColumn';
 import Spinner from '../Spinner';
 
+import AnalysisTypes from '../../constants/AnalysisTypes';
+import { selectAnalysisType } from '../../state/modelPreferences';
+
 import {
   loadImagesMetadata,
   saveImagesMetadataColumn,
@@ -18,7 +21,8 @@ export default class TrainingLabel extends React.Component {
     dispatch: PropTypes.func.isRequired,
     selectedImages: PropTypes.object,
     imagesMetadata: PropTypes.object,
-    targetData: PropTypes.object
+    targetData: PropTypes.object,
+    modelPreferences: PropTypes.object
   };
 
   constructor(props) {
@@ -26,6 +30,7 @@ export default class TrainingLabel extends React.Component {
     this.handleTargetSelection = this.handleTargetSelection.bind(this);
     this.handleColumnSave = this.handleColumnSave.bind(this);
     this.handleColumnDelete = this.handleColumnDelete.bind(this);
+    this.handleAnalysisTypeChange = this.handleAnalysisTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +46,10 @@ export default class TrainingLabel extends React.Component {
     return Object.keys(collection).reduce((accum, key) =>
       collection[key] ? accum + 1 : accum,
     0);
+  }
+
+  handleAnalysisTypeChange(e) {
+    this.props.dispatch(selectAnalysisType(e.target.value));
   }
 
   handleTargetSelection(targetData) {
@@ -61,13 +70,40 @@ export default class TrainingLabel extends React.Component {
     return [firstRow].concat(data);
   }
 
-  renderDataGrid(data, targetData) {
+  renderDataGrid(data, targetData, modelPreferences) {
     return (
       <div>
         <p className="lead">Select a column you would like to use for training labels</p>
+        <div className="form-group">
+          <label>Analysis type</label>
+          <div className="radio">
+            <label className="checkbox-inline">
+              <input type="radio"
+                     value="regression"
+                     onChange={this.handleAnalysisTypeChange}
+                     checked={modelPreferences.analysisType === AnalysisTypes.regression}/>Regression
+            </label>
+            <label className="checkbox-inline">
+              <input type="radio"
+                     value="classification"
+                     onChange={this.handleAnalysisTypeChange}
+                     checked={modelPreferences.analysisType === AnalysisTypes.classification}/>Classification
+            </label>
+          </div>
+        </div>
+        {/*
+          When the users selects regression we allow any values,
+          and show regression algos on the next step
+
+          when the user selects classification we validate values
+          so only two classes are present
+          and show classification algos on the next step
+        */}
+
         <SelectTargetColumn
           data={data}
           targetData={targetData}
+          modelPreferences={modelPreferences}
           onSelectTarget={this.handleTargetSelection}
           onColumnSave={this.handleColumnSave}
           onColumnDelete={this.handleColumnDelete} />
@@ -103,13 +139,13 @@ export default class TrainingLabel extends React.Component {
   }
 
   render() {
-    const { imagesMetadata, targetData } = this.props;
+    const { imagesMetadata, targetData, modelPreferences } = this.props;
     return (
       <div>
         <h1 className="page-header">Training Label</h1>
         { imagesMetadata.isFetching && this.renderLoading() }
         { !isEmpty(imagesMetadata.data) &&
-          this.renderDataGrid(imagesMetadata.data, targetData) }
+          this.renderDataGrid(imagesMetadata.data, targetData, modelPreferences) }
 
         <hr/>
         <Link disabled={false}
