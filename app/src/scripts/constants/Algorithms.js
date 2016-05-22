@@ -1,3 +1,5 @@
+import AnalysisTypes from './AnalysisTypes';
+
 export const algorithmNameMap = {
   'svm': 'SVM',
   'logistic': 'Logistic Regression',
@@ -15,8 +17,16 @@ export const algorithmNameMap = {
 };
 
 export const algorithmGroups = {
-  'classify': ['svm', 'logistic', 'ridgeClassifier', 'ridgeClassifierCV',
-               'randomforestClassifier'],
-  'predict': ['svr', 'linear', 'lasso', 'lassoCV', 'ridge', 'ridgeCV',
-              'randomforest']
+  [AnalysisTypes.classification]: ['svm',
+                                   'logistic',
+                                   'ridgeClassifier',
+                                   'ridgeClassifierCV',
+                                   'randomforestClassifier'],
+  [AnalysisTypes.regression]: ['svr',
+                               'linear',
+                               'lasso',
+                               'lassoCV',
+                               'ridge',
+                               'ridgeCV',
+                               'randomforest']
 };

@@ -2,6 +2,11 @@ import { isEmpty, some, mapValues, pick } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
+import {
+  algorithmGroups,
+  algorithmNameMap
+} from '../../constants/Algorithms';
+
 import { connect } from 'react-redux';
 import {
   inputModelName,
@@ -19,10 +24,18 @@ export default class ModelPreferences extends React.Component {
     targetData: PropTypes.object.isRequired,
     modelPreferences: PropTypes.object.isRequired,
     collectionsById: PropTypes.object.isRequired
-  }
+  };
 
   static contextTypes = {
     router: PropTypes.object.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
+    this.handleCVTypeChange = this.handleCVTypeChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(e) {
@@ -62,13 +75,12 @@ export default class ModelPreferences extends React.Component {
     };
   }
 
-  handleRadioChange(e) {
+  handleCVTypeChange(e) {
     this.props.dispatch(selectCVType(e.target.value));
   }
 
-  handleAlgorithmChange() {
-    const algorithm = this.refs.algorithm.value;
-    this.props.dispatch(selectAlgorithm(algorithm));
+  handleAlgorithmChange(e) {
+    this.props.dispatch(selectAlgorithm(e.target.value));
   }
 
   render() {
@@ -85,7 +97,7 @@ export default class ModelPreferences extends React.Component {
         <h1 className="page-header">Model Preferences</h1>
         <div className="row">
           <div className="col-md-6">
-            <form onSubmit={this.handleSubmit.bind(this)}>
+            <form onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <label>Model Name</label>
                 <input type='text'
@@ -105,28 +117,18 @@ export default class ModelPreferences extends React.Component {
                        className="form-control" />
               </div>
               <div className="form-group">
-                <label>Algorithm Type</label>
-                <select className="form-control"
-                        value={modelPreferences.algorithm}
-                        ref="algorithm"
-                        onChange={this.handleAlgorithmChange.bind(this)}
-                        style={{marginRight: 10}}>
-                  <option value="">Select an Algorithm</option>
-                  <optgroup label="Classify">
-                    <option value="svm">SVM</option>
-                    <option value="logistic">Logistic Regression</option>
-                    <option value="ridgeClassifier">Ridge Classifier</option>
-                    <option value="ridgeClassifierCV">Ridge Classifier CV</option>
-                  </optgroup>
-                  <optgroup label="Predict">
-                    <option value="svr">SVR</option>
-                    <option value="linear">Linear Regression</option>
-                    <option value="lasso">Lasso</option>
-                    <option value="lassoCV">Lasso CV</option>
-                    <option value="ridge">Ridge</option>
-                    <option value="ridgeCV">Ridge CV</option>
-                  </optgroup>
-                </select>
+                <label>Algorithm</label>
+                {algorithmGroups[modelPreferences.analysisType].map(type =>
+                  <div className="radio" key={type}>
+                    <label>
+                      <input type="radio"
+                             onChange={this.handleAlgorithmChange}
+                             value={type}
+                             checked={type === modelPreferences.algorithm} />
+                      {algorithmNameMap[type]}
+                    </label>
+                  </div>
+                )}
               </div>
               <div className="form-group">
                 <label>Cross Validation</label>
@@ -134,7 +136,7 @@ export default class ModelPreferences extends React.Component {
                   <label>
                     <input type="radio"
                            ref="cvType"
-                           onChange={this.handleRadioChange.bind(this)}
+                           onChange={this.handleCVTypeChange}
                            name="cvType"
                            value=""
                            checked={modelPreferences.cvType === ''} />
@@ -146,7 +148,7 @@ export default class ModelPreferences extends React.Component {
                   <label>
                     <input type="radio"
                            ref="cvType"
-                           onChange={this.handleRadioChange.bind(this)}
+                           onChange={this.handleCVTypeChange}
                            name="cvType"
                            value="kfolds"
                            checked={modelPreferences.cvType === 'kfolds'} />
@@ -173,7 +175,7 @@ export default class ModelPreferences extends React.Component {
                   <label>
                     <input type="radio"
                            ref="cvType"
-                           onChange={this.handleRadioChange.bind(this)}
+                           onChange={this.handleCVTypeChange}
                            name="cvType"
                            value="loso"
                            checked={modelPreferences.cvType === 'loso'} />
