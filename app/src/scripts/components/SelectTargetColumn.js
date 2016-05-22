@@ -162,7 +162,7 @@ export default class SelectTargetColumn extends React.Component {
             <tr>
               <td></td>
               <td colSpan="4">
-                <a href="#" onClick={this.handleNewColumnAdd}>Add new field</a>
+                <a href="#" onClick={this.handleNewColumnAdd}>Add new field…</a>
               </td>
             </tr>
           </tbody>
