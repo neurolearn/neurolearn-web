@@ -1,4 +1,4 @@
-import { isEmpty, some, mapValues, pick } from 'lodash';
+import { isEmpty, some, mapValues, pick, zipWith } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
@@ -59,13 +59,19 @@ export default class ModelPreferences extends React.Component {
 
     const { router } = this.context;
     const { modelName, description, algorithm, cvType } = this.props.modelPreferences;
-    const { collectionsById, targetData } = this.props;
+    const { collectionsById, targetData, subjectIdData } = this.props;
     const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+
+    const targetWithSubjectId = {
+      field: targetData.field,
+      data: zipWith(targetData.data, subjectIdData.data,
+        (accumulator, value) => Object.assign({}, accumulator, {subject_id: value.target}))
+    }
 
     this.props.dispatch(trainModel(modelName,
                                    description,
                                    algorithm,
-                                   targetData,
+                                   targetWithSubjectId,
                                    collectionsById,
                                    cv,
                                    router));
