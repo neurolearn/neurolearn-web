@@ -117,6 +117,17 @@ export default class ModelPreferences extends React.Component {
     this.props.dispatch(deleteImagesMetadataColumn(name));
   }
 
+  renderSelectTargetColumn(imagesData, subjectIdData) {
+    return (
+      <SelectTargetColumn
+                      data={imagesData}
+                      targetData={subjectIdData}
+                      onSelectTarget={this.handleSubjectIdSelection}
+                      onColumnSave={this.handleColumnSave}
+                      onColumnDelete={this.handleColumnDelete} />
+    );
+  }
+
   render() {
     const {
       modelPreferences, targetData,
@@ -195,17 +206,23 @@ export default class ModelPreferences extends React.Component {
               </label>
             </div>
 
-            <div className={classNames('form-horizontal', 'well', (modelPreferences.cvType !== 'kfolds') && 'hide')}>
+            <div className={classNames( 'well', (modelPreferences.cvType !== 'kfolds') && 'hide')}>
               <fieldset disabled={modelPreferences.cvType !== 'kfolds'}>
-                <div className="form-group">
-                  <label className="col-sm-2 control-label">Number of Divisions (k)</label>
-                  <div className="col-sm-4">
-                    <input type="text"
-                           ref="kfoldsParam"
-                           onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
-                           value={modelPreferences.kfoldsParam}
-                           className="form-control" />
+                <div className="row">
+                  <div className="form-group col-md-6">
+                    <label className="control-label">Number of Divisions (k)</label>
+                    <div>
+                      <input type="text"
+                             ref="kfoldsParam"
+                             onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
+                             value={modelPreferences.kfoldsParam}
+                             className="form-control" />
+                    </div>
                   </div>
+                </div>
+                <div className="form-group">
+                  <label className="control-label">Select a field with Subject IDs <span style={{color: 'gray'}}>(optional)</span></label>
+                  {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                 </div>
               </fieldset>
             </div>
@@ -224,12 +241,7 @@ export default class ModelPreferences extends React.Component {
               <fieldset disabled={modelPreferences.cvType !== 'loso'}>
                 <div className="form-group">
                   <label className="control-label">Select a field with Subject IDs</label>
-                  <SelectTargetColumn
-                    data={imagesData}
-                    targetData={subjectIdData}
-                    onSelectTarget={this.handleSubjectIdSelection}
-                    onColumnSave={this.handleColumnSave}
-                    onColumnDelete={this.handleColumnDelete} />
+                  {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                 </div>
               </fieldset>
             </div>
