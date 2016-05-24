@@ -9,6 +9,8 @@ import {
   algorithmNameMap
 } from '../../constants/Algorithms';
 
+import CVTypes from '../../constants/CrossValidationTypes';
+
 import { connect } from 'react-redux';
 import {
   inputModelName,
@@ -29,6 +31,16 @@ import {
 } from '../../state/subjectIdData';
 
 
+function validate(cv, subjectIdData) {
+  const errors = {};
+
+  if (cv.type === CVTypes.loso && subjectIdData.field.index === null) {
+    errors.loso = 'Subject ID is required for this type of cross validation.';
+  }
+
+  return errors;
+}
+
 export default class ModelPreferences extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -46,6 +58,10 @@ export default class ModelPreferences extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      errors: {}
+    };
+
     this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
     this.handleCVTypeChange = this.handleCVTypeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,9 +74,22 @@ export default class ModelPreferences extends React.Component {
     e.preventDefault();
 
     const { router } = this.context;
-    const { modelName, description, algorithm, cvType } = this.props.modelPreferences;
+    const {
+      modelName,
+      description,
+      algorithm,
+      cvType
+    } = this.props.modelPreferences;
+
     const { collectionsById, targetData, subjectIdData } = this.props;
     const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+
+    const errors = validate(cv, subjectIdData);
+
+    if (!isEmpty(errors)) {
+      this.setState({errors});
+      return;
+    }
 
     const targetWithSubjectId = {
       field: targetData.field,
@@ -85,7 +114,7 @@ export default class ModelPreferences extends React.Component {
       kfoldsParam
     } = this.props.modelPreferences;
 
-    const cvTypeInvalid = (cvType === 'kfolds' && isEmpty(kfoldsParam));
+    const cvTypeInvalid = (cvType === CVTypes.kfolds && isEmpty(kfoldsParam));
     return !(some([modelName, algorithm], isEmpty) || cvTypeInvalid);
   }
 
@@ -133,6 +162,8 @@ export default class ModelPreferences extends React.Component {
       modelPreferences, targetData,
       subjectIdData, imagesData
     } = this.props;
+
+    const { errors } = this.state;
 
     const classes = classNames({
       'btn': true,
@@ -200,14 +231,14 @@ export default class ModelPreferences extends React.Component {
                        ref="cvType"
                        onChange={this.handleCVTypeChange}
                        name="cvType"
-                       value="kfolds"
-                       checked={modelPreferences.cvType === 'kfolds'} />
+                       value={CVTypes.kfolds}
+                       checked={modelPreferences.cvType === CVTypes.kfolds} />
                 k-fold
               </label>
             </div>
 
-            <div className={classNames( 'well', (modelPreferences.cvType !== 'kfolds') && 'hide')}>
-              <fieldset disabled={modelPreferences.cvType !== 'kfolds'}>
+            <div className={classNames( 'well', (modelPreferences.cvType !== CVTypes.kfolds) && 'hide')}>
+              <fieldset>
                 <div className="row">
                   <div className="form-group col-md-6">
                     <label className="control-label">Number of Divisions (k)</label>
@@ -232,16 +263,17 @@ export default class ModelPreferences extends React.Component {
                        ref="cvType"
                        onChange={this.handleCVTypeChange}
                        name="cvType"
-                       value="loso"
-                       checked={modelPreferences.cvType === 'loso'} />
+                       value={CVTypes.loso}
+                       checked={modelPreferences.cvType === CVTypes.loso} />
                 Leave One Subject Out
               </label>
             </div>
-            <div className={classNames('well', (modelPreferences.cvType !== 'loso') && 'hide')}>
-              <fieldset disabled={modelPreferences.cvType !== 'loso'}>
-                <div className="form-group">
+            <div className={classNames('well', (modelPreferences.cvType !== CVTypes.loso) && 'hide')}>
+              <fieldset>
+                <div className={classNames('form-group', errors.loso && 'has-error')}>
                   <label className="control-label">Select a field with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
+                  {errors.loso && <div className="help-block">{errors.loso}</div>}
                 </div>
               </fieldset>
             </div>

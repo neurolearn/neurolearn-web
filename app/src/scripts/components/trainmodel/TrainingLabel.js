@@ -21,7 +21,7 @@ import { setTargetData } from '../../state/targetData';
 
 
 function validate(targetData, analysisType) {
-  if (!targetData.field.index) {
+  if (targetData.field.index === null) {
     return 'A data field selection is required.';
   }
 
@@ -106,7 +106,6 @@ export default class TrainingLabel extends React.Component {
 
     return (
       <div>
-        <p className="lead">Select a data field you would like to use for training labels</p>
         <div className="form-group">
           <label>Analysis type</label>
           <div className="radio">
@@ -125,8 +124,7 @@ export default class TrainingLabel extends React.Component {
           </div>
         </div>
         <div className={classNames('form-group', errors && 'has-error')}>
-          <label className="control-label">Data fields</label>
-
+          <label className="control-label">Select the row with the variable you would like to use for training labels</label>
           <SelectTargetColumn
             data={data}
             targetData={targetData}
