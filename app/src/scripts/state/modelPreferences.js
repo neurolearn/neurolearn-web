@@ -50,7 +50,7 @@ export function trainModel(name,
 
     const payload = {
       'data': targetData.data,
-      'label': targetData.trainingLabel,
+      'label': targetData.field,
       'cv': crossValidation,
       collections,
       algorithm,

@@ -10,31 +10,30 @@ import styles from './SelectTargetColumn.scss';
 const excludeColumns = ['id', 'collection_id', 'name', 'file',
                         'url', 'file_size'];
 
-function getTargetData(data, columnName) {
+function getFieldData(data, fieldName) {
   const idIndex = findColumnIndex(data, 'id');
   const collectionIdIndex = findColumnIndex(data, 'collection_id');
   const nameIndex = findColumnIndex(data, 'name');
-  const targetIndex = findColumnIndex(data, columnName);
+  const fieldIndex = findColumnIndex(data, fieldName);
 
-  const trainingData = data
+  const fieldData = data
     .slice(1)
     .filter(row => row[idIndex] && row[collectionIdIndex])
     .map(row => {
       return {
         'id': row[idIndex],
-        'subject_id': undefined,
-        'target': row[targetIndex],
+        'target': row[fieldIndex],
         'collection_id': row[collectionIdIndex],
         'name': row[nameIndex]
       };
   });
 
   return {
-    trainingLabel: {
-      index: targetIndex,
-      name: columnName
+    field: {
+      index: fieldIndex,
+      name: fieldName
     },
-    data: trainingData
+    data: fieldData
   };
 }
 
@@ -67,7 +66,7 @@ export default class SelectTargetColumn extends React.Component {
   handleColumnSelect(e) {
     const columnName = e.target.value;
     const { onSelectTarget, data } = this.props;
-    onSelectTarget(getTargetData(data, columnName));
+    onSelectTarget(getFieldData(data, columnName));
   }
 
   handleNewColumnAdd(e) {
@@ -105,7 +104,7 @@ export default class SelectTargetColumn extends React.Component {
   }
 
   render() {
-    const { data, targetData: { trainingLabel } } = this.props;
+    const { data, targetData: { field } } = this.props;
 
     const columns = getColumnsFromArray(
       data
@@ -141,7 +140,7 @@ export default class SelectTargetColumn extends React.Component {
                     <input type="radio"
                            value={column.name}
                            onChange={this.handleColumnSelect}
-                           checked={column.name === trainingLabel.name}/>
+                           checked={column.name === field.name}/>
                   </td>
                   <td>
                     {column.name}

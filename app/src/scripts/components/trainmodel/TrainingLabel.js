@@ -21,13 +21,13 @@ import { setTargetData } from '../../state/targetData';
 
 
 function validate(targetData, analysisType) {
-  if (!targetData.trainingLabel.index) {
+  if (!targetData.field.index) {
     return 'A data field selection is required.';
   }
 
   if (analysisType === AnalysisTypes.classification &&
       !isBinaryCollection(pluck(targetData.data, 'target'))) {
-    return `“${targetData.trainingLabel.name}” field contains more than two classes. Classification requires binary data field.`;
+    return `“${targetData.field.name}” field contains more than two classes. Classification requires binary data field.`;
   }
 }
 

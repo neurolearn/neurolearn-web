@@ -15,7 +15,7 @@ export function resetTargetData() {
 }
 
 const initialState = {
-  trainingLabel: {
+  field: {
     index: null
   }
 };
