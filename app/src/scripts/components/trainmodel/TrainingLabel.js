@@ -27,7 +27,7 @@ function validate(targetData, analysisType) {
 
   if (analysisType === AnalysisTypes.classification &&
       !isBinaryCollection(pluck(targetData.data, 'target'))) {
-    return `“${targetData.field.name}” field contains more than two classes. Classification requires binary data field.`;
+    return `“${targetData.field.name}” field contains more than two classes. Classification requires binary data. You might consider editing this field, selecting a different categorical field, or adding a new field.`;
   }
 }
 
