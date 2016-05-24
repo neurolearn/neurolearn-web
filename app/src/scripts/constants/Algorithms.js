@@ -5,7 +5,6 @@ export const algorithmNameMap = {
   'logistic': 'Logistic Regression',
   'ridgeClassifier': 'Ridge Classifier',
   'ridgeClassifierCV': 'Ridge Classifier CV',
-  'randomforestClassifier': 'Random Forest Classifier',
 
   'svr': 'SVR',
   'linear': 'Linear Regression',
@@ -13,20 +12,17 @@ export const algorithmNameMap = {
   'lassoCV': 'Lasso CV',
   'ridge': 'Ridge',
   'ridgeCV': 'Ridge CV',
-  'randomforest': 'Random Forest'
 };
 
 export const algorithmGroups = {
   [AnalysisTypes.classification]: ['svm',
                                    'logistic',
                                    'ridgeClassifier',
-                                   'ridgeClassifierCV',
-                                   'randomforestClassifier'],
+                                   'ridgeClassifierCV'],
   [AnalysisTypes.regression]: ['svr',
                                'linear',
                                'lasso',
                                'lassoCV',
                                'ridge',
-                               'ridgeCV',
-                               'randomforest']
+                               'ridgeCV']
 };
