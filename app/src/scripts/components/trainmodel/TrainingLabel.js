@@ -130,7 +130,6 @@ export default class TrainingLabel extends React.Component {
           <SelectTargetColumn
             data={data}
             targetData={targetData}
-            modelPreferences={modelPreferences}
             onSelectTarget={this.handleTargetSelection}
             onColumnSave={this.handleColumnSave}
             onColumnDelete={this.handleColumnDelete} />
