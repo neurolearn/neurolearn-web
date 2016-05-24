@@ -9,6 +9,7 @@ import { resetImagesMetadata } from './imagesMetadata';
 import { resetSelectedImages } from './selectedImages';
 import { hideSelectImagesModal } from './selectImagesModal';
 import { resetTargetData } from './targetData';
+import { resetsubjectIdData } from './subjectIdData';
 
 export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_DESCRIPTION = 'INPUT_DESCRIPTION';
@@ -35,6 +36,7 @@ export function resetModelTrainData(dispatch) {
    resetSelectedImages,
    hideSelectImagesModal,
    resetTargetData,
+   resetsubjectIdData,
    resetModelPreferences].map(action => dispatch(action()));
 }
 
