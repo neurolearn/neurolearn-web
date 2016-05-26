@@ -56,7 +56,7 @@ manager.add_command('db', MigrateCommand)
 def start_celery():
     import subprocess
 
-    subprocess.call(['celery', 'worker', '-B', '--app', 'nlweb'])
+    subprocess.call(['celery', 'worker', '--app', 'nlweb'])
 
 
 @manager.command
