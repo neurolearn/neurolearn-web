@@ -42,7 +42,7 @@ function validate(cv, subjectIdData, modelPreferences) {
   if (cv.type == CVTypes.kfolds &&
       modelPreferences.kfoldUseSubjectIDs &&
       subjectIdData.field.index === null) {
-    errors.kfoldSubjectId = 'Select the row with Subject IDs';
+    errors.kfoldSubjectId = 'Subject ID is required';
   }
 
   return errors;
@@ -169,6 +169,10 @@ export default class ModelPreferences extends React.Component {
     );
   }
 
+  renderError(error) {
+    return error && <div className="help-block">{error}</div>
+  }
+
   render() {
     const {
       modelPreferences, targetData,
@@ -275,6 +279,7 @@ export default class ModelPreferences extends React.Component {
                                            errors.kfoldSubjectId && 'has-error')}>
                   <label className="control-label">Select the row with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
+                  {this.renderError(errors.kfoldSubjectId)}
                 </div>
               </fieldset>
             </div>
@@ -294,7 +299,7 @@ export default class ModelPreferences extends React.Component {
                 <div className={classNames('form-group', errors.loso && 'has-error')}>
                   <label className="control-label">Select the row with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
-                  {errors.loso && <div className="help-block">{errors.loso}</div>}
+                  {this.renderError(errors.loso)}
                 </div>
               </fieldset>
             </div>
