@@ -19,6 +19,7 @@ export const SELECT_ANALYSIS_TYPE = 'SELECT_ANALYSIS_TYPE';
 export const SELECT_ALGORITHM = 'SELECT_ALGORITHM';
 export const REQUEST_MODEL_TRAINING = 'REQUEST_MODEL_TRAINING';
 export const RESET_MODEL_PREFERENCES = 'RESET_MODEL_PREFERENCES';
+export const SET_KFOLD_USE_SUBJECT_IDS = 'SET_KFOLD_USE_SUBJECT_IDS';
 
 export const inputModelName = createAction(INPUT_MODEL_NAME);
 export const inputDescription  = createAction(INPUT_DESCRIPTION);
@@ -26,6 +27,7 @@ export const inputKfoldParam = createAction(INPUT_KFOLD_PARAM);
 export const selectCVType = createAction(SELECT_CV_TYPE);
 export const selectAnalysisType = createAction(SELECT_ANALYSIS_TYPE);
 export const selectAlgorithm = createAction(SELECT_ALGORITHM);
+export const setKfoldUseSubjectIds = createAction(SET_KFOLD_USE_SUBJECT_IDS);
 
 const requestModelTraining = createAction(REQUEST_MODEL_TRAINING);
 const resetModelPreferences = createAction(RESET_MODEL_PREFERENCES);
@@ -78,6 +80,7 @@ const initialState = {
   cvType: '',
   kfoldsParam: '',
   losoParam: '',
+  kfoldUseSubjectIDs: false,
   analysisType: AnalysisTypes.regression
 };
 
@@ -106,6 +109,10 @@ export default function reducer(state = initialState, action) {
     case SELECT_ALGORITHM:
       return Object.assign({}, state, {
         algorithm: action.payload
+      });
+    case SET_KFOLD_USE_SUBJECT_IDS:
+      return Object.assign({}, state, {
+        kfoldUseSubjectIDs: action.payload
       });
     case REQUEST_MODEL_TRAINING:
       return Object.assign({}, state, {

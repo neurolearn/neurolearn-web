@@ -18,6 +18,7 @@ import {
   inputKfoldParam,
   selectCVType,
   selectAlgorithm,
+  setKfoldUseSubjectIds,
   trainModel,
 } from '../../state/modelPreferences';
 
@@ -68,6 +69,7 @@ export default class ModelPreferences extends React.Component {
     this.handleColumnSave = this.handleColumnSave.bind(this);
     this.handleColumnDelete = this.handleColumnDelete.bind(this);
     this.handleSubjectIdSelection = this.handleSubjectIdSelection.bind(this);
+    this.handleKfoldUseSubjectIdsClick = this.handleKfoldUseSubjectIdsClick.bind(this);
   }
 
   handleSubmit(e) {
@@ -138,6 +140,10 @@ export default class ModelPreferences extends React.Component {
     this.props.dispatch(setSubjectIdData(fieldData));
   }
 
+  handleKfoldUseSubjectIdsClick(e) {
+    this.props.dispatch(setKfoldUseSubjectIds(e.target.checked));
+  }
+
   handleColumnSave(name, values) {
     this.props.dispatch(saveImagesMetadataColumn({name, values}));
   }
@@ -163,7 +169,7 @@ export default class ModelPreferences extends React.Component {
       subjectIdData, imagesData
     } = this.props;
 
-    const { errors } = this.state;
+    const { errors, cvSubjectIds } = this.state;
 
     const classes = classNames({
       'btn': true,
@@ -251,8 +257,17 @@ export default class ModelPreferences extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="form-group">
-                  <label className="control-label">Select a field with Subject IDs <span style={{color: 'gray'}}>(optional)</span></label>
+                <div className="checkbox">
+                  <label>
+                    <input type="checkbox"
+                           checked={modelPreferences.kfoldUseSubjectIDs}
+                           onChange={this.handleKfoldUseSubjectIdsClick}/> Use Subject IDs
+                  </label>
+                </div>
+                <div className={classNames('form-group',
+                                           !modelPreferences.kfoldUseSubjectIDs && 'hide',
+                                           errors.loso && 'has-error')}>
+                  <label className="control-label">Select the row with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                 </div>
               </fieldset>
@@ -271,7 +286,7 @@ export default class ModelPreferences extends React.Component {
             <div className={classNames('well', (modelPreferences.cvType !== CVTypes.loso) && 'hide')}>
               <fieldset>
                 <div className={classNames('form-group', errors.loso && 'has-error')}>
-                  <label className="control-label">Select a field with Subject IDs</label>
+                  <label className="control-label">Select the row with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                   {errors.loso && <div className="help-block">{errors.loso}</div>}
                 </div>
