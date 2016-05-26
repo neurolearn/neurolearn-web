@@ -32,11 +32,17 @@ import {
 } from '../../state/subjectIdData';
 
 
-function validate(cv, subjectIdData) {
+function validate(cv, subjectIdData, modelPreferences) {
   const errors = {};
 
   if (cv.type === CVTypes.loso && subjectIdData.field.index === null) {
     errors.loso = 'Subject ID is required for this type of cross validation.';
+  }
+
+  if (cv.type == CVTypes.kfolds &&
+      modelPreferences.kfoldUseSubjectIDs &&
+      subjectIdData.field.index === null) {
+    errors.kfoldSubjectId = 'Select the row with Subject IDs';
   }
 
   return errors;
@@ -86,7 +92,7 @@ export default class ModelPreferences extends React.Component {
     const { collectionsById, targetData, subjectIdData } = this.props;
     const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
 
-    const errors = validate(cv, subjectIdData);
+    const errors = validate(cv, subjectIdData, this.props.modelPreferences);
 
     if (!isEmpty(errors)) {
       this.setState({errors});
@@ -266,7 +272,7 @@ export default class ModelPreferences extends React.Component {
                 </div>
                 <div className={classNames('form-group',
                                            !modelPreferences.kfoldUseSubjectIDs && 'hide',
-                                           errors.loso && 'has-error')}>
+                                           errors.kfoldSubjectId && 'has-error')}>
                   <label className="control-label">Select the row with Subject IDs</label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                 </div>
