@@ -34,6 +34,19 @@ import {
 
 function validate(cv, subjectIdData, modelPreferences) {
   const errors = {};
+  const { modelName, algorithm, kfoldsParam } = modelPreferences;
+
+  if (!modelName || !modelName.trim()) {
+    errors.modelName = 'Required field.';
+  }
+
+  if (!algorithm) {
+    errors.algorithm = 'Required field.';
+  }
+
+  if (cv.type === CVTypes.kfolds && isEmpty(kfoldsParam)) {
+    errors.kfoldsParam = 'Required field.';
+  }
 
   if (cv.type === CVTypes.loso && subjectIdData.field.index === null) {
     errors.loso = 'Subject ID is required for this type of cross validation.';
@@ -42,7 +55,7 @@ function validate(cv, subjectIdData, modelPreferences) {
   if (cv.type == CVTypes.kfolds &&
       modelPreferences.kfoldUseSubjectIDs &&
       subjectIdData.field.index === null) {
-    errors.kfoldSubjectId = 'Subject ID is required';
+    errors.kfoldSubjectId = 'Subject ID is required.';
   }
 
   return errors;
@@ -114,18 +127,6 @@ export default class ModelPreferences extends React.Component {
                                    router));
   }
 
-  submitEnabled() {
-    const {
-      modelName,
-      algorithm,
-      cvType,
-      kfoldsParam
-    } = this.props.modelPreferences;
-
-    const cvTypeInvalid = (cvType === CVTypes.kfolds && isEmpty(kfoldsParam));
-    return !(some([modelName, algorithm], isEmpty) || cvTypeInvalid);
-  }
-
   genHandler(refName, action) {
     const _this = this;
     return () => {
@@ -179,27 +180,24 @@ export default class ModelPreferences extends React.Component {
       subjectIdData, imagesData
     } = this.props;
 
-    const { errors, cvSubjectIds } = this.state;
-
-    const classes = classNames({
-      'btn': true,
-      'btn-primary': true,
-      'disabled': !this.submitEnabled()
-    });
+    const { errors } = this.state;
 
     return (
       <div>
         <h1 className="page-header">Model Preferences</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="row">
-            <div className="form-group col-md-6">
-              <label>Model Name</label>
+            <div className={classNames('form-group',
+                                       'col-md-6',
+                                       errors.modelName && 'has-error')}>
+              <label className="control-label">Model Name</label>
               <input type='text'
                      value={modelPreferences.modelName}
                      onChange={this.genHandler('modelName', inputModelName)}
                      ref='modelName'
                      label=''
                      className="form-control" />
+              {this.renderError(errors.modelName)}
             </div>
           </div>
           <div className="row">
@@ -213,8 +211,9 @@ export default class ModelPreferences extends React.Component {
                     className="form-control" />
               </div>
           </div>
-          <div className="form-group">
-            <label>Algorithm</label>
+          <div className={classNames('form-group',
+                                     errors.algorithm && 'has-error')}>
+            <label className="control-label">Algorithm</label>
             {algorithmGroups[modelPreferences.analysisType].map(type =>
               <div className="radio" key={type}>
                 <label>
@@ -226,6 +225,7 @@ export default class ModelPreferences extends React.Component {
                 </label>
               </div>
             )}
+            {this.renderError(errors.algorithm)}
           </div>
           <div className="form-group">
             <label>Cross Validation</label>
@@ -253,10 +253,14 @@ export default class ModelPreferences extends React.Component {
               </label>
             </div>
 
-            <div className={classNames( 'well', (modelPreferences.cvType !== CVTypes.kfolds) && 'hide')}>
+            <div className={classNames('well',
+                                       (modelPreferences.cvType !== CVTypes.kfolds) && 'hide')}>
               <fieldset>
                 <div className="row">
-                  <div className="form-group col-md-6">
+                  <div className={classNames('form-group',
+                                             'col-md-6',
+                                             errors.kfoldsParam && 'has-error')}>
+
                     <label className="control-label">Number of Divisions (k)</label>
                     <div>
                       <input type="text"
@@ -265,6 +269,7 @@ export default class ModelPreferences extends React.Component {
                              value={modelPreferences.kfoldsParam}
                              className="form-control" />
                     </div>
+                    {this.renderError(errors.kfoldsParam)}
                   </div>
                 </div>
                 <div className="checkbox">
@@ -306,7 +311,7 @@ export default class ModelPreferences extends React.Component {
           </div>
 
           <button type="submit"
-                  className={classes}
+                  className="btn btn-primary"
                   disabled={modelPreferences.isFetching}>{
                     modelPreferences.isFetching
                     ? 'Please wait…'
