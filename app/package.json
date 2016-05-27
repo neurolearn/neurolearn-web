@@ -78,6 +78,7 @@
     "redux": "^1.0.1",
     "redux-actions": "^0.9.1",
     "redux-logger": "^1.0.0",
+    "redux-persist": "^3.1.1",
     "redux-thunk": "^0.1.0",
     "spin.js": "^2.3.2",
     "underscore.string": "^3.1.1",
