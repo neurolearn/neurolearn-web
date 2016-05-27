@@ -10,6 +10,11 @@ from nltools.data import Brain_Data
 SUMMARY_PROPS = ('mcr_all', 'mcr_xval', 'rmse_all', 'r_all', 'rmse_xval',
                  'r_xval')
 
+CLASSIFICATION_ALGORITHMS = ('svm',
+                             'logistic',
+                             'ridgeClassifier',
+                             'ridgeClassifierCV')
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -28,6 +33,14 @@ def valid_value(val):
 def get_summary(output):
     return {k: output[k]
             for k in SUMMARY_PROPS if valid_value(output.get(k, None))}
+
+
+def is_int(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
 
 
 def train_model(image_list, algorithm, cross_validation, output_dir,
@@ -62,6 +75,16 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
+    if (algorithm in CLASSIFICATION_ALGORITHMS
+       and not is_int(image_list[0]['target'])):
+        classes = {item['target'] for item in image_list}
+        assert len(classes) == 2, ('More than two classes. '
+                                   'Classification requires binary data.')
+        categorical_mapping = {cls: index for index, cls in enumerate(classes)}
+
+        for image in image_list:
+            image['target'] = categorical_mapping[image['target']]
+
     Y = pd.DataFrame([int(item['target']) for item in image_list])
     file_path_list = [item[file_path_key] for item in image_list]
 
@@ -82,6 +105,7 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
               'stats': {key: output[key].tolist()
                         for key in ('Y', 'yfit_xval', 'yfit_all')
                         if key in output},
+              'categorical_mapping': categorical_mapping,
               'summary': get_summary(output)}
 
     if 'roc' in output:
