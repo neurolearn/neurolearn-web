@@ -206,12 +206,17 @@ def save_groups(test_id):
     return 'Created', 201
 
 
-@blueprint.route('/deletes/models', methods=['POST'])
+@blueprint.route('/deletes/<object_type>', methods=['POST'])
 @jwt_required()
-def delete_item_list():
+def delete_item_list(object_type):
     data = request.json
 
-    item_list = [MLModel.query.get(item_id) for item_id in data]
+    class_ = {'models': MLModel, 'tests': ModelTest}.get(object_type)
+
+    if not class_:
+        return not_found()
+
+    item_list = [class_.query.get(item_id) for item_id in data]
 
     for item in item_list:
         if item.user != current_user:
