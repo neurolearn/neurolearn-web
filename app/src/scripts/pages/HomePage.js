@@ -11,8 +11,7 @@ const Stats = ({stats}) => (
 
 export default class HomePage extends React.Component {
   static contextTypes = {
-    router: PropTypes.object.isRequired,
-    history: PropTypes.object
+    router: PropTypes.object.isRequired
   };
 
   static propTypes = {

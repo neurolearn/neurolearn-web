@@ -12,9 +12,11 @@ import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
 import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
+import Table from '../../components/Table';
+import Column from '../../components/Column';
 import styles from './MLModels.scss';
 
-const POLL_INTERVAL = 2500;
+const POLL_INTERVAL = 12500;
 
 export default class MLModels extends React.Component {
   static propTypes = {
@@ -33,6 +35,7 @@ export default class MLModels extends React.Component {
       selectedRows: {}
     };
     this.handleTrainNewModel = this.handleTrainNewModel.bind(this);
+    this.handleToggleRow = this.handleToggleRow.bind(this);
     this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
   }
 
@@ -49,15 +52,11 @@ export default class MLModels extends React.Component {
     clearInterval(this.interval);
   }
 
-  handleToggleRow(e, key) {
+  handleToggleRow(key, value) {
     const { selectedRows } = this.state;
     this.setState({
-      selectedRows: Object.assign({}, selectedRows, {[key]: e.target.checked})
+      selectedRows: Object.assign({}, selectedRows, {[key]: value})
     });
-  }
-
-  isSelected(key) {
-    return this.state.selectedRows[key];
   }
 
   handleTrainNewModel() {
@@ -72,52 +71,29 @@ export default class MLModels extends React.Component {
 
     const itemKeys = keys(pick(selectedRows, identity));
 
-    dispatch(deleteItemList('/api/deletes/models', itemKeys));
+    dispatch(deleteItemList('/api/deletes/models', itemKeys,
+      () => this.setState({selectedRows: {}})
+    ));
   }
 
   renderMLModels(items) {
     return (
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>
-              <input type="checkbox" checked={false} />
-            </th>
-
-            <th className="col-md-3">Name</th>
-            <th>Status</th>
-            <th>Algorithm</th>
-            <th>Cross-validation Type</th>
-            <th>Training Duration</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            items.map(model =>
-              <tr key={model.id}>
-                <td>
-                  <input type="checkbox" checked={this.isSelected(model.id)} onChange={e => this.handleToggleRow(e, model.id)} />
-                </td>
-                <td>
-                  <Link to={`/models/${model.id}`}>{model.name}</Link>
-                </td>
-                <td style={{height: 40}}>
-                  <TaskStateLabel state={model.state}/>
-                </td>
-                <td>{algorithmNameMap[model.algorithm]}</td>
-                <td>{model.cv ? model.cv.type : ''}</td>
-                <td>
-                  { model.training_duration &&
-                   (Math.floor(model.training_duration) + ' sec')}
-                </td>
-                <td>
-                  <span className="datetime">{moment(model.created).fromNow()}</span>
-                </td>
-              </tr>)
-          }
-        </tbody>
-      </table>
+      <Table data={items} selectedRows={this.state.selectedRows} onSelect={this.handleToggleRow} onSelectAll={e => e}>
+        <Column header="Name"
+                cell={x => <Link to={`/models/${x.id}`}>{x.name}</Link>} />
+        <Column header="Status"
+                cell={x => <TaskStateLabel state={x.state}/>} />
+        <Column header="Algorithm"
+                cell={x => algorithmNameMap[x.algorithm]} />
+        <Column header="Cross-validation Type"
+                cell={x => x.cv ? x.cv.type : ''} />
+        <Column header="Training Duration"
+                cell={x => x.training_duration
+                           && (Math.floor(x.training_duration)
+                           + ' sec')} />
+        <Column header="Created"
+                cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>} />
+      </Table>
     );
   }
 
