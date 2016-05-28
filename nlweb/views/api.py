@@ -204,3 +204,19 @@ def save_groups(test_id):
     db.session.commit()
 
     return 'Created', 201
+
+
+@blueprint.route('/deletes/models', methods=['POST'])
+@jwt_required()
+def delete_item_list():
+    data = request.json
+
+    item_list = [MLModel.query.get(item_id) for item_id in data]
+
+    for item in item_list:
+        if item.user != current_user:
+            return not_found()
+        item.delete()
+
+    db.session.commit()
+    return 'No Content', 204

@@ -1,12 +1,12 @@
-import { values, sortByOrder, isEmpty } from 'lodash';
+import { values, keys, some, pick, isEmpty, identity } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { fetchJSON } from '../../state/fetched';
+import { fetchJSON, deleteItemList } from '../../state/fetched';
 
 import { resetModelTrainData } from '../../state/modelPreferences';
 import { algorithmNameMap } from '../../constants/Algorithms';
@@ -27,6 +27,15 @@ export default class MLModels extends React.Component {
     router: PropTypes.object.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedRows: {}
+    };
+    this.handleTrainNewModel = this.handleTrainNewModel.bind(this);
+    this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
+  }
+
   loadAuthUserMLModels() {
     this.props.dispatch(fetchJSON('/api/user/models', 'dashboardModels'));
   }
@@ -40,10 +49,30 @@ export default class MLModels extends React.Component {
     clearInterval(this.interval);
   }
 
+  handleToggleRow(e, key) {
+    const { selectedRows } = this.state;
+    this.setState({
+      selectedRows: Object.assign({}, selectedRows, {[key]: e.target.checked})
+    });
+  }
+
+  isSelected(key) {
+    return this.state.selectedRows[key];
+  }
+
   handleTrainNewModel() {
     const { router } = this.context;
     resetModelTrainData(this.props.dispatch);
     router.push('/models/new');
+  }
+
+  handleDeleteSelected() {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+
+    const itemKeys = keys(pick(selectedRows, identity));
+
+    dispatch(deleteItemList('/api/deletes/models', itemKeys));
   }
 
   renderMLModels(items) {
@@ -51,6 +80,10 @@ export default class MLModels extends React.Component {
       <table className="table table-hover">
         <thead>
           <tr>
+            <th>
+              <input type="checkbox" checked={false} />
+            </th>
+
             <th className="col-md-3">Name</th>
             <th>Status</th>
             <th>Algorithm</th>
@@ -63,6 +96,9 @@ export default class MLModels extends React.Component {
           {
             items.map(model =>
               <tr key={model.id}>
+                <td>
+                  <input type="checkbox" checked={this.isSelected(model.id)} onChange={e => this.handleToggleRow(e, model.id)} />
+                </td>
                 <td>
                   <Link to={`/models/${model.id}`}>{model.name}</Link>
                 </td>
@@ -96,12 +132,19 @@ export default class MLModels extends React.Component {
   render() {
     const { items } = this.props;
 
+    const { selectedRows } = this.state;
+    const someSelected = !some(values(selectedRows));
+
     return (
       <div className={styles.root}>
         <DashboardNav>
+          <ButtonToolbar className="pull-right">
+
           <Button bsStyle="primary"
-                  className="pull-right"
-                  onClick={this.handleTrainNewModel.bind(this)}><i className="fa fa-plus"></i> New Model</Button>
+                  onClick={this.handleTrainNewModel}><i className="fa fa-plus"></i> New Model</Button>
+          <Button disabled={someSelected}
+                  onClick={this.handleDeleteSelected}><i className="fa fa-trash"></i> Delete</Button>
+          </ButtonToolbar>
         </DashboardNav>
 
         <div className="row">

@@ -34,6 +34,13 @@ export function deleteItem(path, success) {
   };
 }
 
+export function deleteItemList(path, itemKeys, success) {
+  return (dispatch) => {
+    return api.post(path, itemKeys)
+      .then(success, error => dispatch(apiError(error)));
+  };
+}
+
 const initialState = {
   isFetching: false
 };
