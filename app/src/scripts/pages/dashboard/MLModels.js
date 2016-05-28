@@ -16,7 +16,7 @@ import Table from '../../components/Table';
 import Column from '../../components/Column';
 import styles from './MLModels.scss';
 
-const POLL_INTERVAL = 12500;
+const POLL_INTERVAL = 2500;
 
 export default class MLModels extends React.Component {
   static propTypes = {
@@ -83,7 +83,7 @@ export default class MLModels extends React.Component {
     ));
   }
 
-  renderMLModels(items) {
+  renderItems(items) {
     return (
       <Table data={items}
              selectedRows={this.state.selectedRows}
@@ -137,7 +137,7 @@ export default class MLModels extends React.Component {
           <div className="col-md-12">
             { isEmpty(items)
               ? this.renderEmptyState()
-              : this.renderMLModels(items) }
+              : this.renderItems(items) }
           </div>
         </div>
       </div>
