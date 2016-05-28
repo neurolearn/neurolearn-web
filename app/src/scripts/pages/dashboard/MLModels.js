@@ -1,4 +1,4 @@
-import { values, keys, some, pick, isEmpty, identity } from 'lodash';
+import { values, keys, some, pick, isEmpty, identity, zipObject } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
@@ -36,6 +36,7 @@ export default class MLModels extends React.Component {
     };
     this.handleTrainNewModel = this.handleTrainNewModel.bind(this);
     this.handleToggleRow = this.handleToggleRow.bind(this);
+    this.handleToggleAll = this.handleToggleAll.bind(this);
     this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
   }
 
@@ -59,6 +60,12 @@ export default class MLModels extends React.Component {
     });
   }
 
+  handleToggleAll(checked) {
+    const { selectedRows } = this.state;
+    const { items } = this.props;
+    this.setState({ selectedRows: zipObject(items.map(x => [x.id, checked])) })
+  }
+
   handleTrainNewModel() {
     const { router } = this.context;
     resetModelTrainData(this.props.dispatch);
@@ -78,7 +85,10 @@ export default class MLModels extends React.Component {
 
   renderMLModels(items) {
     return (
-      <Table data={items} selectedRows={this.state.selectedRows} onSelect={this.handleToggleRow} onSelectAll={e => e}>
+      <Table data={items}
+             selectedRows={this.state.selectedRows}
+             onSelect={this.handleToggleRow}
+             onSelectAll={this.handleToggleAll}>
         <Column header="Name"
                 cell={x => <Link to={`/models/${x.id}`}>{x.name}</Link>} />
         <Column header="Status"

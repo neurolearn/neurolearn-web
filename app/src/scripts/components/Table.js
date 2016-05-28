@@ -1,3 +1,5 @@
+import { keys, every } from 'lodash';
+
 import React, { PropTypes, cloneElement, createElement } from 'react';
 
 
@@ -19,15 +21,24 @@ export default class Table extends React.Component {
     return this.props.selectedRows[key];
   }
 
+  isAllSelected() {
+    const { data, selectedRows } = this.props;
+    return (keys(selectedRows).length === data.length) && every(selectedRows);
+  }
+
   renderSelectAllCheckbox() {
     return (
-      <input type="checkbox" checked={false} />
+      <input type="checkbox"
+             checked={this.isAllSelected()}
+             onChange={e => this.props.onSelectAll(e.target.checked)} />
     );
   }
 
   renderSelectCheckbox(item) {
     return (
-      <input type="checkbox" checked={this.isSelected(item.id)} onChange={e => this.props.onSelect(item.id, e.target.checked)} />
+      <input type="checkbox"
+             checked={this.isSelected(item.id)}
+             onChange={e => this.props.onSelect(item.id, e.target.checked)} />
     );
   }
 
