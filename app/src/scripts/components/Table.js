@@ -1,7 +1,8 @@
-import { keys, every } from 'lodash';
+import { keys, every, reduce } from 'lodash';
 
-import React, { PropTypes, cloneElement, createElement } from 'react';
+import React, { PropTypes } from 'react';
 
+import IndeterminableCheckbox from './IndeterminableCheckbox';
 
 export default class Table extends React.Component {
   static propTypes = {
@@ -23,14 +24,20 @@ export default class Table extends React.Component {
 
   isAllSelected() {
     const { data, selectedRows } = this.props;
-    return (keys(selectedRows).length === data.length) && every(selectedRows);
+
+    const count = reduce(selectedRows,
+                         (accum, value) => accum + (value ? 1 : 0));
+
+    return count === data.length
+      ? true
+      : (count > 0 ? 'indeterminate' : false);
   }
 
   renderSelectAllCheckbox() {
     return (
-      <input type="checkbox"
-             checked={this.isAllSelected()}
-             onChange={e => this.props.onSelectAll(e.target.checked)} />
+      <IndeterminableCheckbox checked={this.isAllSelected()}
+                              onChange={e => this.props.onSelectAll(
+                                e.target.checked)} />
     );
   }
 
