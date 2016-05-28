@@ -81,7 +81,7 @@ export default class ModelTests extends React.Component {
              selectedRows={this.state.selectedRows}
              onSelect={this.handleToggleRow}
              onSelectAll={this.handleToggleAll}>
-        <Column header="Name"
+        <Column header={{name: 'Name', tdClassName: 'col-md-4'}}
                 cell={x => <Link to={`/tests/${x.id}`}>{x.name}</Link>} />
         <Column header="Status"
                 cell={x => <TaskStateLabel state={x.state}/>} />

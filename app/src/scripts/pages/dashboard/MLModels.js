@@ -89,7 +89,7 @@ export default class MLModels extends React.Component {
              selectedRows={this.state.selectedRows}
              onSelect={this.handleToggleRow}
              onSelectAll={this.handleToggleAll}>
-        <Column header="Name"
+        <Column header={{name: 'Name', tdClassName: 'col-md-3'}}
                 cell={x => <Link to={`/models/${x.id}`}>{x.name}</Link>} />
         <Column header="Status"
                 cell={x => <TaskStateLabel state={x.state}/>} />

@@ -34,11 +34,12 @@ export default class Table extends React.Component {
   }
 
   renderSelectAllCheckbox() {
-    return (
-      <IndeterminableCheckbox checked={this.isAllSelected()}
-                              onChange={e => this.props.onSelectAll(
-                                e.target.checked)} />
-    );
+    return {
+      component: <IndeterminableCheckbox
+                    checked={this.isAllSelected()}
+                    onChange={e => this.props.onSelectAll(e.target.checked)} />,
+      tdStyle: { width: 28, maxWidth: 28 }
+    };
   }
 
   renderSelectCheckbox(item) {
@@ -75,8 +76,10 @@ export default class Table extends React.Component {
         <thead>
           <tr>
           {headers.map((header, key) =>
-            <th key={key}>
-              {header}
+            <th key={key}
+                className={header.tdClassName}
+                style={header.tdStyle}>
+              {header.name || header.component || header}
             </th>
           )}
           </tr>
