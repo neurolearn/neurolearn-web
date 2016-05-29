@@ -17,6 +17,7 @@ import Column from '../../components/Column';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
+const FETCHED_KEY = 'dashboardModels';
 
 export default class MLModels extends React.Component {
   static propTypes = {
@@ -41,7 +42,7 @@ export default class MLModels extends React.Component {
   }
 
   loadAuthUserMLModels() {
-    this.props.dispatch(fetchJSON('/api/user/models', 'dashboardModels'));
+    this.props.dispatch(fetchJSON('/api/user/models', FETCHED_KEY));
   }
 
   componentDidMount() {
@@ -78,7 +79,7 @@ export default class MLModels extends React.Component {
 
     const itemKeys = keys(pick(selectedRows, identity));
 
-    dispatch(deleteItemList('/api/deletes/models', 'dashboardModels', itemKeys,
+    dispatch(deleteItemList('/api/deletes/models', FETCHED_KEY, itemKeys,
       () => this.setState({selectedRows: {}})
     ));
   }
@@ -148,7 +149,7 @@ export default class MLModels extends React.Component {
 
 function select(state) {
   return {
-    items: state.fetched.dashboardModels,
+    items: state.fetched[FETCHED_KEY],
     auth: state.auth
   }
 }

@@ -16,6 +16,8 @@ import Column from '../../components/Column';
 import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
+const FETCHED_KEY = 'dashboardTests';
+
 
 export default class ModelTests extends React.Component {
   static propTypes = {
@@ -39,7 +41,7 @@ export default class ModelTests extends React.Component {
   }
 
   loadModelTests() {
-    this.props.dispatch(fetchJSON('/api/user/tests', 'dashboardTests'));
+    this.props.dispatch(fetchJSON('/api/user/tests', FETCHED_KEY));
   }
 
   componentDidMount() {
@@ -70,7 +72,7 @@ export default class ModelTests extends React.Component {
 
     const itemKeys = keys(pick(selectedRows, identity));
 
-    dispatch(deleteItemList('/api/deletes/tests', itemKeys,
+    dispatch(deleteItemList('/api/deletes/tests', FETCHED_KEY, itemKeys,
       () => this.setState({selectedRows: {}})
     ));
   }
@@ -131,7 +133,7 @@ export default class ModelTests extends React.Component {
 
 function select(state) {
   return {
-    items: state.fetched.dashboardTests,
+    items: state.fetched[FETCHED_KEY],
     auth: state.auth
   }
 }
