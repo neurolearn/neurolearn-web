@@ -5,8 +5,10 @@ import { apiError } from './alertMessages';
 
 export const REQUEST_DATA = 'REQUEST_DATA';
 export const RECEIVE_DATA = 'RECEIVE_DATA';
+export const DELETE_LOCAL_ITEMS = 'DELETE_LOCAL_ITEMS';
 
 const requestData = createAction(REQUEST_DATA);
+const deleteLocalItems = createAction(DELETE_LOCAL_ITEMS);
 
 function receiveData(payload, key) {
   return {
@@ -34,8 +36,9 @@ export function deleteItem(path, success) {
   };
 }
 
-export function deleteItemList(path, itemKeys, success) {
+export function deleteItemList(path, key, itemKeys, success) {
   return (dispatch) => {
+    dispatch(deleteLocalItems({key, itemKeys}));
     return api.post(path, itemKeys)
       .then(success, error => dispatch(apiError(error)));
   };
@@ -55,6 +58,13 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, {
         isFetching: false,
         [action.meta.key]: action.payload.data
+      });
+    case DELETE_LOCAL_ITEMS:
+      const { key, itemKeys } = action.payload;
+      const mappedKeys = itemKeys.reduce((accum, x) => {accum[x] = true; return accum}, {})
+
+      return Object.assign({}, state, {
+        [key]: state[key].filter(x => !mappedKeys[x.id])
       });
     default:
       return state;

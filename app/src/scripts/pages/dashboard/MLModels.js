@@ -78,7 +78,7 @@ export default class MLModels extends React.Component {
 
     const itemKeys = keys(pick(selectedRows, identity));
 
-    dispatch(deleteItemList('/api/deletes/models', itemKeys,
+    dispatch(deleteItemList('/api/deletes/models', 'dashboardModels', itemKeys,
       () => this.setState({selectedRows: {}})
     ));
   }
