@@ -88,7 +88,8 @@ export default class MLModels extends React.Component {
       <Table data={items}
              selectedRows={this.state.selectedRows}
              onSelect={this.handleToggleRow}
-             onSelectAll={this.handleToggleAll}>
+             onSelectAll={this.handleToggleAll}
+             className="table table-hover">
         <Column header={{name: 'Name', tdClassName: 'col-md-3'}}
                 cell={x => <Link to={`/models/${x.id}`}>{x.name}</Link>} />
         <Column header="Status"

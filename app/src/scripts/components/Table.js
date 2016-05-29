@@ -10,7 +10,8 @@ export default class Table extends React.Component {
     data: React.PropTypes.array,
     selectedRows: React.PropTypes.object,
     onSelect: PropTypes.func,
-    onSelectAll: PropTypes.func
+    onSelectAll: PropTypes.func,
+    className: PropTypes.string
   };
 
   constructor(props) {
@@ -38,8 +39,9 @@ export default class Table extends React.Component {
       component: <IndeterminableCheckbox
                     checked={this.isAllSelected()}
                     onChange={e => this.props.onSelectAll(e.target.checked)} />,
-      tdStyle: { width: 28, maxWidth: 28 }
+      tdStyle: { width: 30, maxWidth: 30 }
     };
+
   }
 
   renderSelectCheckbox(item) {
@@ -51,7 +53,13 @@ export default class Table extends React.Component {
   }
 
   render() {
-    const { children, data, onSelect, onSelectAll } = this.props;
+    const {
+      children,
+      data,
+      onSelect,
+      onSelectAll,
+      className
+    } = this.props;
 
     const isSelectable = onSelect || onSelectAll;
 
@@ -72,7 +80,7 @@ export default class Table extends React.Component {
     )
 
     return (
-      <table className="table table-hover">
+      <table className={className}>
         <thead>
           <tr>
           {headers.map((header, key) =>
