@@ -99,7 +99,7 @@ export default class App extends React.Component {
           </Nav>
         </Navbar>
 
-        <div className="container">
+        <div className="container" style={{marginBottom: 50}}>
           <AlertMessages messages={alertMessages}
                          {...bindActionCreators({dismissAlert}, dispatch)} />
           {this.props.children}
