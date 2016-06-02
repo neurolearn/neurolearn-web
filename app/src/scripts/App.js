@@ -104,6 +104,9 @@ export default class App extends React.Component {
                          {...bindActionCreators({dismissAlert}, dispatch)} />
           {this.props.children}
         </div>
+        <div style={{position: 'fixed', bottom: 20, right: 20 , zIndex: 1000 }}>
+          <a style={{borderRadius: '999rem'}} className="btn btn-info" target="_blank" href="https://github.com/neurolearn/neurolearn-web/issues"><i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback</a>
+        </div>
       </div>
     );
   }
