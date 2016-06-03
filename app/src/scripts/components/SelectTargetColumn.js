@@ -1,5 +1,6 @@
 import includes from 'lodash/collection/includes';
 import take from 'lodash/array/take';
+import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import EditColumnModal from './EditColumnModal';
 
@@ -103,6 +104,16 @@ export default class SelectTargetColumn extends React.Component {
     this.setState({ showEditColumnModal: false });
   }
 
+  renderEmptyState() {
+    return (
+      <tr>
+        <td colSpan="5" className="text-center" style={{padding: 30}}>
+          No valid variables are currently available for this dataset. Please create a new one by selecting “Add new field”.
+        </td>
+      </tr>
+    );
+  }
+
   render() {
     const { data, targetData: { field } } = this.props;
 
@@ -133,6 +144,7 @@ export default class SelectTargetColumn extends React.Component {
             </tr>
           </thead>
           <tbody>
+            { isEmpty(columns) && this.renderEmptyState() }
             {
               columns.map(column =>
                 <tr key={column.name}>
