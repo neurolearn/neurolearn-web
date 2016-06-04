@@ -21,7 +21,7 @@ const ImageViewerModal = ({weightmapUrl, onHide, onImagesLoaded, loadingImages})
       'url': weightmapUrl,
       'name': 'weight map',
       'colorPalette': 'intense red-blue',
-      'intent': 'z-score:',
+      'intent': 'Feature weight:',
       'opacity': 0.8,
       'sign': 'both'
     }
