@@ -121,7 +121,6 @@ def test_model(self, model_test_id):
             images))
 
     image_list = download_images(client, image_list, output_dir)
-    image_list = resample_images(cache, image_list, output_dir)
 
     model_test.state = ModelTest.STATE_SUCCESS
 
@@ -133,7 +132,8 @@ def test_model(self, model_test_id):
 
     try:
         result = analysis.apply_mask(image_list,
-                                     weight_map_filename)
+                                     weight_map_filename,
+                                     file_path_key='original_file')
         result['collections'] = collections
         result['duration'] = time.time() - tic
     except Exception as e:

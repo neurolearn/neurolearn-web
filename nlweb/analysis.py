@@ -114,18 +114,17 @@ def set_correlation(correlation_array, image_list):
     return result
 
 
-def apply_mask(image_list, weight_map_filename):
+def apply_mask(image_list, weight_map_filename,
+               file_path_key='resampled_file'):
     tic = time.time()  # Start Timer
-
-    dat = nb.funcs.concat_images([item['resampled_file']
-                                  for item in image_list])
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
     tic = time.time()  # Start Timer
 
     weight_map = nb.load(weight_map_filename)
+    file_path_list = [item[file_path_key] for item in image_list]
 
-    dat = Brain_Data(data=dat)
+    dat = Brain_Data(data=file_path_list)
     r = dat.similarity(weight_map)
 
     log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
