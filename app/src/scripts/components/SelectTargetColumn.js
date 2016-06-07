@@ -1,4 +1,5 @@
 import includes from 'lodash/collection/includes';
+import some from 'lodash/collection/some';
 import take from 'lodash/array/take';
 import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
@@ -123,10 +124,14 @@ export default class SelectTargetColumn extends React.Component {
       column => !includes(excludeColumns, column.name)
     ).map(
       column => {
+        const hasNullValues = some(column.values, x => !x);
         return {
           name: column.name,
-          dataType: guessType(column.values),
-          sampleValues: take(column.values, 3)
+          dataType: guessType(hasNullValues
+                              ? column.values.filter(x => x)
+                              : column.values),
+          sampleValues: take(column.values, 3),
+          hasNullValues
         };
       }
     );
@@ -162,6 +167,7 @@ export default class SelectTargetColumn extends React.Component {
                   </td>
                   <td>
                     {column.sampleValues.join(', ')}
+                    {column.hasNullValues && <span style={{color: 'gray'}}> has null values</span>}
                   </td>
                   <td style={{textAlign: 'right'}}>
                    <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
