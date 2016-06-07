@@ -18,7 +18,7 @@ import {
 
 import {
   toggleImage,
-  toggleAllImages,
+  toggleImageList,
 } from '../state/selectedImages';
 
 import {
@@ -37,6 +37,12 @@ export default class TestModel extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleImageToggle = this.handleImageToggle.bind(this);
+    this.handleImageListToggle = this.handleImageListToggle.bind(this);
   }
 
   componentDidMount() {
@@ -91,8 +97,8 @@ export default class TestModel extends React.Component {
     this.props.dispatch(toggleImage(collection, imageId));
   }
 
-  handleToggleAll(collection, checked) {
-    this.props.dispatch(toggleAllImages(collection, checked));
+  handleImageListToggle(collection, images, checked) {
+    this.props.dispatch(toggleImageList(collection, images, checked));
   }
 
   handleTestModelClick(e) {
@@ -159,10 +165,8 @@ export default class TestModel extends React.Component {
         {selectImagesModal.collectionId &&
           <SelectImagesModal
             show={selectImagesModal.display}
-            onToggle={(collection, imageId) =>
-                        this.handleImageToggle(collection, imageId)}
-            onToggleAll={(collection, checked) =>
-                        this.handleToggleAll(collection, checked)}
+            onToggle={this.handleImageToggle}
+            onToggleList={this.handleImageListToggle}
             collection={this.getCollection(selectImagesModal.collectionId,
                                            selectedImages.collectionsById)}
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
