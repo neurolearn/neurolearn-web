@@ -90,8 +90,8 @@ export default class ModelTests extends React.Component {
         <Column header="Status"
                 cell={x => <TaskStateLabel state={x.state}/>} />
         <Column header="Test Duration"
-                cell={x => x.training_duration
-                           && (Math.floor(x.training_duration)
+                cell={x => x.test_duration
+                           && (Math.floor(x.test_duration)
                            + ' sec')} />
         <Column header="Created"
                 cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>} />
