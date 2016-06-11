@@ -75,6 +75,7 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
 
+    categorical_mapping = None
     if algorithm in CLASSIFICATION_ALGORITHMS:
         classes = {item['target'] for item in image_list}
         assert len(classes) == 2, ('More than two classes. '
