@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
 
+import { neuroVaultImageURL } from '../utils';
+
 import styles from './ImageLabel.scss';
 
 export default class ImageLabel extends React.Component {
@@ -21,7 +23,7 @@ export default class ImageLabel extends React.Component {
                  checked={this.props.isChecked(item.id)}
                  onChange={e => this.props.onChange(item.id, e.target.checked)}/>
         }
-        <div className="image-name">{item.name}</div>
+        <div className="image-name"><a href={neuroVaultImageURL(item.id)}>{item.name}</a></div>
         <p className="collection-name">{item.collectionName}</p>
       </div>
     );

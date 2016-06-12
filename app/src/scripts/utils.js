@@ -21,3 +21,7 @@ export function filterImagesByName(text, images) {
     return images.filter(image => image.name.search(regex) > -1);
   }
 }
+
+export function neuroVaultImageURL(imageId) {
+  return `http://neurovault.org/images/${imageId}/`;
+}
