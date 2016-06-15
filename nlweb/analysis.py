@@ -77,7 +77,7 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
         for image in image_list:
             image['target'] = categorical_mapping[image['target']]
 
-    Y = pd.DataFrame([int(item['target']) for item in image_list])
+    Y = pd.DataFrame([float(item['target']) for item in image_list])
     file_path_list = [item[file_path_key] for item in image_list]
 
     dat = Brain_Data(data=file_path_list, Y=Y)
