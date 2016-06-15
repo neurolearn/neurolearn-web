@@ -35,14 +35,6 @@ def get_summary(output):
             for k in SUMMARY_PROPS if valid_value(output.get(k, None))}
 
 
-def is_int(value):
-    try:
-        int(value)
-        return True
-    except ValueError:
-        return False
-
-
 def train_model(image_list, algorithm, cross_validation, output_dir,
                 file_path_key='resampled_file'):
     """
