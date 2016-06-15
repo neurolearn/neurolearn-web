@@ -94,6 +94,7 @@ def test():
 
     Alternative:
     ENV=test py.test -s --verbose tests
+    ENV=test py.test -s --verbose tests/test_analysis.py
     """
     import pytest
     exit_code = pytest.main([TEST_PATH, '--verbose'])
