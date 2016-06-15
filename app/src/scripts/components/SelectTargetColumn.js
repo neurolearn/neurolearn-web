@@ -3,6 +3,8 @@ import some from 'lodash/collection/some';
 import take from 'lodash/array/take';
 import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+
 import EditColumnModal from './EditColumnModal';
 
 import { getColumnsFromArray, guessType, findColumnIndex } from '../utils';
@@ -43,6 +45,10 @@ function pickColumns(data, columnNames) {
   const indexes = columnNames.map(name => findColumnIndex(data, name));
   return data.map(row => indexes.map(index => row[index]));
 }
+
+const tooltip = (
+  <Tooltip>This field contains null values. Corresponding images will be excluded from the analysis.</Tooltip>
+);
 
 export default class SelectTargetColumn extends React.Component {
   static propTypes = {
@@ -167,7 +173,11 @@ export default class SelectTargetColumn extends React.Component {
                   </td>
                   <td>
                     {column.sampleValues.join(', ')}
-                    {column.hasNullValues && <span style={{color: 'gray'}}> has null values</span>}
+                    {column.hasNullValues &&
+                      <OverlayTrigger overlay={tooltip} placement="top" delayShow={300} delayHide={150}>
+                        <span style={{color: 'gray', marginLeft: 10}}><i className="fa fa-exclamation-triangle"></i> Null values</span>
+                      </OverlayTrigger>
+                    }
                   </td>
                   <td style={{textAlign: 'right'}}>
                    <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
