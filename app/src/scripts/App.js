@@ -23,6 +23,14 @@ function authLink(loc) {
       : '/signin';
 }
 
+const logoBetaStyle = {
+  fontStyle: 'italic',
+  color: '#A2A2A2',
+  marginLeft: 2,
+  fontFamily: 'Georgia, serif'
+};
+
+
 export default class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
@@ -75,7 +83,7 @@ export default class App extends React.Component {
     return (
       <div>
         <Navbar staticTop>
-          <NavBrand><Link to="/">Neurolearn</Link></NavBrand>
+          <NavBrand><Link to="/">Neurolearn<sup style={logoBetaStyle}>beta</sup></Link></NavBrand>
           { auth.user && this.renderAuthenticatedNav() }
           <Nav>
             <LinkContainer to="/explore">
