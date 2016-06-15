@@ -39,7 +39,8 @@ def train_model(self, mlmodel_id):
     cache = FileCache(celery.conf.FILE_CACHE_ROOT)
     client = HTTPClient(cache)
 
-    target_data = mlmodel.input_data['data']
+    target_data = [x for x in mlmodel.input_data['data']
+                   if x['target'].strip()]
 
     image_list = download_images(client, target_data, output_dir)
 
