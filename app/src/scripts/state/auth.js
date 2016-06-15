@@ -13,6 +13,10 @@ export const loginSuccess = createAction(LOGIN_SUCCESS);
 const loginFailed = createAction(LOGIN_FAILED);
 export const logout = createAction(LOGOUT);
 
+function heapId(user) {
+  return `${user.id}/${user.name}`;
+}
+
 export function fetchAuthenticatedUser(callback) {
   return dispatch => {
     dispatch(requestAuthenticatedUser());
@@ -20,6 +24,9 @@ export function fetchAuthenticatedUser(callback) {
       .then(
         result => {
           dispatch(loginSuccess(result.data));
+          if (window.heap) {
+            window.heap.identify(heapId(result.data));
+          }
           if (callback) {
             callback();
           }
