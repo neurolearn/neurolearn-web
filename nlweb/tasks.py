@@ -7,8 +7,7 @@ from nlweb.app import celery
 from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
-from nlweb.image_utils import (download_images, resample_images,
-                               fetch_collection,
+from nlweb.image_utils import (download_images, fetch_collection,
                                fetch_collection_images)
 
 from nlweb.models import MLModel, ModelTest, db
