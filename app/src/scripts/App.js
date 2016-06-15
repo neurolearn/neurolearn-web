@@ -8,7 +8,6 @@ import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
-import { fetchAuthenticatedUser } from './state/auth';
 
 function nvAuthLink(loc) {
     const { protocol, host } = loc;
