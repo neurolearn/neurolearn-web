@@ -13,7 +13,7 @@ export default class SearchResult extends React.Component {
   }
 
   render() {
-    var { name, number_of_images, images, authors } = this.props.hit._source;
+    var { id, name, number_of_images, images, authors } = this.props.hit._source;
 
     var thumbnail;
 
@@ -27,6 +27,7 @@ export default class SearchResult extends React.Component {
           <div className="title">
             <h3>{name}</h3>
             <p>{authors}</p>
+            <p><a href={`http://neurovault.org/collections/${id}/`} target="_blank"><i style={{paddingRight: 2}} className="fa fa-external-link"></i>NeuroVault</a></p>
           </div>
           <div className="images">
             <FallbackImage src={thumbnail} className="img-responsive" />
