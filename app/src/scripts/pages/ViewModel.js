@@ -97,7 +97,7 @@ export default class ViewModel extends React.Component {
     const weightmapUrl = `/media/${model.id}/${model.output_data.weightmap}`;
 
     const { summary, stats, glassbrain, roc_plot } = model.output_data;
-    const { algorithm, cv, label } = model.input_data;
+    const { cv, label } = model.input_data;
 
     return (
       <div>
