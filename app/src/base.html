@@ -4,10 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neurolearn</title>
+    <style>
+        p.loading {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-align: center;
+            margin-top: 10vh;
+        }
+    </style>
     {% block extrahead %}{% endblock %}
   </head>
   <body>
     <div id='root'>
+        <p class="loading">Loading…</p>
     </div>
     {% block scripts %}
     {% endblock %}
