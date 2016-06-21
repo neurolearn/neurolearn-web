@@ -3,7 +3,7 @@ import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonToolbar, Tabs, Tab } from 'react-bootstrap';
+import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
 import { fetchJSON, deleteItem } from '../state/fetched';
 import Spinner from '../components/Spinner';
 import { setTestModel } from '../state/testModel';
@@ -33,8 +33,11 @@ export default class ViewModel extends React.Component {
     super(props);
     this.state = {
       loadingImages: true,
-      showViewerModal: false
+      showViewerModal: false,
+      showSelectAlgorithmModal: false
     };
+
+    this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
   }
 
   componentDidMount() {
@@ -57,6 +60,11 @@ export default class ViewModel extends React.Component {
 
     dispatch(setTestModel(model));
     router.push('/tests/new');
+  }
+
+  handleAlgorithmClick(e) {
+    e.preventDefault();
+    this.setState({ showSelectAlgorithmModal: true });
   }
 
   renderState(model) {
@@ -90,6 +98,23 @@ export default class ViewModel extends React.Component {
           {model.output_data.error}
         </div>
       </div>
+    );
+  }
+
+  renderModalDialog({title, body, actionButton, onHide}) {
+    return (
+      <Modal bsSize='large' show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
+        <Modal.Header closeButton>
+          <Modal.Title id='contained-modal-title-lg'>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {body}
+        </Modal.Body>
+        <Modal.Footer>
+          {actionButton}
+          <Button onClick={onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
 
@@ -167,7 +192,9 @@ export default class ViewModel extends React.Component {
 
         <div className="row">
           <div className="col-sm-8">
-            <ModelOverview model={model}/>
+            <ModelOverview model={model}
+                           user={user}
+                           onAlgorithmClick={this.handleAlgorithmClick} />
             <div className="row tabs-wrapper">
               <div className="col-md-12">
                 <Tabs defaultActiveKey={1} animation={false}>
@@ -188,6 +215,13 @@ export default class ViewModel extends React.Component {
               : <RecentModelTests tests={model.tests} />}
           </div>
         </div>
+        {this.state.showSelectAlgorithmModal
+          && this.renderModalDialog({
+            title: 'Edit Algorithm',
+            body: <p>text</p>,
+            actionButton: <Button bsStyle="primary" onClick={() => console.log('click')}>Save & Re-train the model</Button>,
+            onHide: () => this.setState({showSelectAlgorithmModal: false}),
+          })}
       </div>
     );
   }
