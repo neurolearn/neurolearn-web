@@ -13,6 +13,12 @@ import CrossValidation from '../components/CrossValidation';
 import ImageViewerModal from '../components/ImageViewerModal';
 import ModelTrainingData from '../components/ModelTrainingData';
 import ModelOverview from '../components/ModelOverview';
+import RadioGroup from '../components/RadioGroup';
+
+import {
+  algorithmGroups,
+  algorithmNameMap
+} from '../constants/Algorithms';
 
 import styles from './ViewModel.scss';
 
@@ -101,9 +107,9 @@ export default class ViewModel extends React.Component {
     );
   }
 
-  renderModalDialog({title, body, actionButton, onHide}) {
+  renderModalDialog({title, body, actionButton, onHide, bsSize}) {
     return (
-      <Modal bsSize='large' show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
+      <Modal bsSize={bsSize} show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
         <Modal.Header closeButton>
           <Modal.Title id='contained-modal-title-lg'>{title}</Modal.Title>
         </Modal.Header>
@@ -116,6 +122,14 @@ export default class ViewModel extends React.Component {
         </Modal.Footer>
       </Modal>
     );
+  }
+
+  renderAlgorithmSelection(algorithm) {
+    const items = algorithmGroups['regression'].map(
+      type => ({value: type, name: algorithmNameMap[type]}));
+    return (<RadioGroup items={items}
+                           selected={algorithm}
+                           onChange={(e) => console.log(e.target.value)} />);
   }
 
   renderModel(model) {
@@ -218,7 +232,7 @@ export default class ViewModel extends React.Component {
         {this.state.showSelectAlgorithmModal
           && this.renderModalDialog({
             title: 'Edit Algorithm',
-            body: <p>text</p>,
+            body: this.renderAlgorithmSelection(model.algorithm),
             actionButton: <Button bsStyle="primary" onClick={() => console.log('click')}>Save & Re-train the model</Button>,
             onHide: () => this.setState({showSelectAlgorithmModal: false}),
           })}
