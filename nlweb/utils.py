@@ -43,3 +43,9 @@ def pick(dictionary, *keys):
     Create a shallow clone of dictionary specified keys only.
     """
     return {k: dictionary[k] for k in keys}
+
+
+def merge_two_dicts(a, b):
+    c = a.copy()
+    c.update(b)
+    return c

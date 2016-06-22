@@ -11,6 +11,7 @@ from nlweb import tasks
 from ..models import db, MLModel, ModelTest
 
 from ..schemas import UserSchema, MLModelSchema, ModelTestSchema
+from ..utils import merge_two_dicts
 
 from . import not_found
 
@@ -124,6 +125,24 @@ def delete_mlmodel(pk):
 
     item.delete()
     db.session.commit()
+
+    return 'No Content', 204
+
+
+@blueprint.route('/models/<int:pk>/retrain', methods=['POST'])
+def retrain_mlmodel(pk):
+    item = MLModel.get_existing_item(pk)
+    if not item:
+        return not_found()
+
+    args = request.json
+
+    item.training_state = MLModel.TRAINING_QUEUED
+
+    item.input_data = merge_two_dicts(item.input_data, args)
+    db.session.commit()
+
+    tasks.train_model.delay(item.id)
 
     return 'No Content', 204
 

@@ -16,6 +16,8 @@ import ModelOverview from '../components/ModelOverview';
 import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
 
+import { retrainModelWith } from '../state/modelPreferences';
+
 import {
   algorithmGroups,
   algorithmNameMap
@@ -47,6 +49,7 @@ export default class ViewModel extends React.Component {
 
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
+    this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +84,15 @@ export default class ViewModel extends React.Component {
   }
 
   handleSaveAndRetrain() {
-    console.log('save and retrain');
+    const { algorithm } = this.state;
+    const { model, dispatch } = this.props;
+    const { router } = this.context;
+
+    dispatch(retrainModelWith(
+      model.id,
+      {algorithm},
+      () => router.push('/dashboard/models'))
+    );
   }
 
   renderState(model) {

@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 import AnalysisTypes from '../constants/AnalysisTypes';
 
 import api from '../api';
+import { apiError } from './alertMessages';
 
 import { resetSearch } from './search';
 import { resetImagesMetadata } from './imagesMetadata';
@@ -70,6 +71,15 @@ export function trainModel(name,
         }
     );
   };
+}
+
+export function retrainModelWith(modelId, params, success) {
+  return dispatch => {
+    dispatch(requestModelTraining());
+
+    return api.post(`/api/models/${modelId}/retrain`, params)
+      .then(success, error => dispatch(apiError(error)));
+  }
 }
 
 const initialState = {
