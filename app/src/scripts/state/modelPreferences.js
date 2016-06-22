@@ -50,7 +50,7 @@ export function trainModel(name,
                            collections,
                            crossValidation,
                            router) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(requestModelTraining());
 
     const payload = {
@@ -63,7 +63,7 @@ export function trainModel(name,
       name
     };
 
-    return api.post('/api/models', payload, getState().auth.token)
+    return api.post('/api/models', payload)
       .then(
         () => {
           router.push('/dashboard/models');
