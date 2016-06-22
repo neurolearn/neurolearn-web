@@ -14,6 +14,7 @@ import ImageViewerModal from '../components/ImageViewerModal';
 import ModelTrainingData from '../components/ModelTrainingData';
 import ModelOverview from '../components/ModelOverview';
 import RadioGroup from '../components/RadioGroup';
+import ModalDialog from '../components/ModalDialog';
 
 import {
   algorithmGroups,
@@ -40,10 +41,12 @@ export default class ViewModel extends React.Component {
     this.state = {
       loadingImages: true,
       showViewerModal: false,
-      showSelectAlgorithmModal: false
+      showSelectAlgorithmModal: false,
+      algorithm: null
     };
 
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
+    this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +74,14 @@ export default class ViewModel extends React.Component {
   handleAlgorithmClick(e) {
     e.preventDefault();
     this.setState({ showSelectAlgorithmModal: true });
+  }
+
+  handleChangeAlgorithm(e) {
+    this.setState({ algorithm: e.target.value });
+  }
+
+  handleSaveAndRetrain() {
+    console.log('save and retrain');
   }
 
   renderState(model) {
@@ -107,29 +118,12 @@ export default class ViewModel extends React.Component {
     );
   }
 
-  renderModalDialog({title, body, actionButton, onHide, bsSize}) {
-    return (
-      <Modal bsSize={bsSize} show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
-        <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-lg'>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        {body}
-        </Modal.Body>
-        <Modal.Footer>
-          {actionButton}
-          <Button onClick={onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
   renderAlgorithmSelection(algorithm) {
     const items = algorithmGroups['regression'].map(
       type => ({value: type, name: algorithmNameMap[type]}));
     return (<RadioGroup items={items}
-                           selected={algorithm}
-                           onChange={(e) => console.log(e.target.value)} />);
+                        selected={this.state.algorithm || algorithm}
+                        onChange={this.handleChangeAlgorithm} />);
   }
 
   renderModel(model) {
@@ -230,12 +224,10 @@ export default class ViewModel extends React.Component {
           </div>
         </div>
         {this.state.showSelectAlgorithmModal
-          && this.renderModalDialog({
-            title: 'Edit Algorithm',
-            body: this.renderAlgorithmSelection(model.algorithm),
-            actionButton: <Button bsStyle="primary" onClick={() => console.log('click')}>Save & Re-train the model</Button>,
-            onHide: () => this.setState({showSelectAlgorithmModal: false}),
-          })}
+          && <ModalDialog title='Edit Algorithm'
+                          body={this.renderAlgorithmSelection(model.algorithm)}
+                          actionButton={<Button bsStyle="primary" disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)} onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
+                          onHide={() => this.setState({showSelectAlgorithmModal: false})} />}
       </div>
     );
   }
