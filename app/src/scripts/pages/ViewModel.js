@@ -23,6 +23,8 @@ import {
   algorithmNameMap
 } from '../constants/Algorithms';
 
+import { analysisTypeOfAlgorithm } from '../utils';
+
 import styles from './ViewModel.scss';
 
 export default class ViewModel extends React.Component {
@@ -130,7 +132,8 @@ export default class ViewModel extends React.Component {
   }
 
   renderAlgorithmSelection(algorithm) {
-    const items = algorithmGroups['regression'].map(
+    const analysisType = analysisTypeOfAlgorithm(algorithm);
+    const items = algorithmGroups[analysisType].map(
       type => ({value: type, name: algorithmNameMap[type]}));
     return (<RadioGroup items={items}
                         selected={this.state.algorithm || algorithm}

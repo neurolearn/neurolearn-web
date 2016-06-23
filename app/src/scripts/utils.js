@@ -1,5 +1,7 @@
 import { JWT_KEY_NAME } from './constants/auth';
+import { algorithmGroups } from './constants/Algorithms';
 import isEmpty from 'lodash/lang/isEmpty';
+import findKey from 'lodash/object/findKey';
 import every from 'lodash/collection/every';
 import pick from 'lodash/object/pick';
 import keys from 'lodash/object/keys';
@@ -73,4 +75,8 @@ export function getColumnsFromArray(data) {
 
 export function findColumnIndex(tableData, colName) {
   return findIndex(tableData[0], col => col === colName);
+}
+
+export function analysisTypeOfAlgorithm(algorithm) {
+  return findKey(algorithmGroups, x => x.indexOf(algorithm) > -1);
 }
