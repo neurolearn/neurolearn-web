@@ -16,7 +16,7 @@ import {
   inputModelName,
   inputDescription,
   inputKfoldParam,
-  selectAccessLevel,
+  setPrivate,
   selectCVType,
   selectAlgorithm,
   setKfoldUseSubjectIds,
@@ -142,7 +142,7 @@ export default class ModelPreferences extends React.Component {
   }
 
   handleAccessLevelChange(e) {
-    this.props.dispatch(selectAccessLevel(e.target.value === 'true'))
+    this.props.dispatch(setPrivate(e.target.value === 'private'))
   }
 
   handleAlgorithmChange(e) {
@@ -224,9 +224,8 @@ export default class ModelPreferences extends React.Component {
               <label>
                 <input type="radio"
                        onChange={this.handleAccessLevelChange}
-                       name="public"
-                       value="true"
-                       checked={modelPreferences.public} />
+                       value="public"
+                       checked={!modelPreferences.private} />
                 Public (anyone can see this model)
               </label>
             </div>
@@ -234,9 +233,8 @@ export default class ModelPreferences extends React.Component {
               <label>
                 <input type="radio"
                        onChange={this.handleAccessLevelChange}
-                       name="public"
-                       value="false"
-                       checked={!modelPreferences.public} />
+                       value="private"
+                       checked={modelPreferences.private} />
                 Private
               </label>
             </div>
