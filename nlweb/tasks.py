@@ -31,7 +31,7 @@ def save_roc_figure(roc, algorithm, output_dir):
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
-    mlmodel.training_state = MLModel.TRAINING_PROGRESS
+    mlmodel.training_state = MLModel.STATE_PROGRESS
     db.session.commit()
 
     output_dir = model_dir(mlmodel.id)
@@ -44,7 +44,7 @@ def train_model(self, mlmodel_id):
 
     image_list = download_images(client, target_data, output_dir)
 
-    mlmodel.training_state = MLModel.TRAINING_SUCCESS
+    mlmodel.training_state = MLModel.STATE_SUCCESS
 
     tic = time.time()
 
@@ -65,7 +65,7 @@ def train_model(self, mlmodel_id):
         result['duration'] = time.time() - tic
     except Exception as e:
         result = {'error': unicode(e)}
-        mlmodel.training_state = MLModel.TRAINING_FAILURE
+        mlmodel.training_state = MLModel.STATE_FAILURE
         raise
     finally:
         mlmodel.output_data = result

@@ -44,12 +44,12 @@ def test_create_mlmodel(testapp, user):
                                  headers=headers)
     assert response.status_code == 201
     model = MLModel.query.filter_by(name=name).first()
-    assert model.training_state == MLModel.TRAINING_SUCCESS
+    assert model.training_state == MLModel.STATE_SUCCESS
 
 
 def create_test_mlmodel(user, output_data):
     return MLModel(status=MLModel.STATUS_PUBLIC,
-                   training_state=MLModel.TRAINING_QUEUED,
+                   training_state=MLModel.STATE_QUEUED,
                    output_data=output_data,
                    name='Test %s' % uuid.uuid4(),
                    user=user)

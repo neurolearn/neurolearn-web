@@ -128,7 +128,7 @@ class MLModel(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
     def get_public(cls):
         return cls.query.filter(cls.deleted == None,
                                 cls.private == False,
-                                cls.training_state == cls.TRAINING_SUCCESS)
+                                cls.training_state == cls.STATE_SUCCESS)
 
     def tests(self):
         return ModelTest.query.filter(
