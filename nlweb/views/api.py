@@ -85,8 +85,7 @@ def create_mlmodel():
     args = request.json
     cv = parse_cv_param(args)
 
-    mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
-                      training_state=MLModel.STATE_QUEUED,
+    mlmodel = MLModel(training_state=MLModel.STATE_QUEUED,
                       input_data={'data': args['data'],
                                   'collections': args['collections'],
                                   'label': args['label'],
@@ -94,6 +93,7 @@ def create_mlmodel():
                                   'cv': cv},
                       name=args['name'],
                       description=args.get('description'),
+                      private=args.get('private'),
                       user=current_user)
     db.session.add(mlmodel)
     db.session.commit()

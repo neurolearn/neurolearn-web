@@ -98,11 +98,9 @@ export default class ModelPreferences extends React.Component {
 
     const { router } = this.context;
     const {
-      modelName,
-      description,
-      algorithm,
-      cvType
-    } = this.props.modelPreferences;
+      modelPreferences: prefs,
+      modelPreferences: { cvType }
+    } = this.props;
 
     const { collectionsById, targetData, subjectIdData } = this.props;
     const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
@@ -120,9 +118,10 @@ export default class ModelPreferences extends React.Component {
         (accumulator, value) => Object.assign({}, accumulator, {subject_id: value.target}))
     }
 
-    this.props.dispatch(trainModel(modelName,
-                                   description,
-                                   algorithm,
+    this.props.dispatch(trainModel(prefs.modelName,
+                                   prefs.description,
+                                   prefs.private,
+                                   prefs.algorithm,
                                    targetWithSubjectId,
                                    collectionsById,
                                    cv,

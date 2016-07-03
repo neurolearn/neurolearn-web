@@ -48,8 +48,7 @@ def test_create_mlmodel(testapp, user):
 
 
 def create_test_mlmodel(user, output_data):
-    return MLModel(status=MLModel.STATUS_PUBLIC,
-                   training_state=MLModel.STATE_QUEUED,
+    return MLModel(training_state=MLModel.STATE_QUEUED,
                    output_data=output_data,
                    name='Test %s' % uuid.uuid4(),
                    user=user)
