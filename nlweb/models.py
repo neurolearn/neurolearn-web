@@ -132,9 +132,9 @@ class MLModel(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
 
     def tests(self):
         return ModelTest.query.filter(
-            ModelTest.input_data.contains({"modelId": self.id}),
+            ModelTest.input_data.contains({'modelId': self.id}),
             ModelTest.state == ModelTest.STATE_SUCCESS,
-            ModelTest.visibility != ModelTest.VISIBILITY_DELETED
+            ModelTest.deleted == None
         ).order_by('created desc').all()
 
     def __unicode__(self):

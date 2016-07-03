@@ -171,8 +171,7 @@ def create_test():
     data = request.json
     MLModel.query.get_or_404(int(data['modelId']))
 
-    model_test = ModelTest(visibility=ModelTest.VISIBILITY_PUBLIC,
-                           state=ModelTest.STATE_QUEUED,
+    model_test = ModelTest(state=ModelTest.STATE_QUEUED,
                            input_data=request.json,
                            name=data['name'],
                            user=current_user)

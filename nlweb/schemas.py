@@ -41,7 +41,7 @@ class ModelTestSchema(BaseItemSchema):
 
 class MLModelSchema(BaseItemSchema):
     state = fields.String(attribute='training_state')
-    visibility = fields.String(attribute='status')
+    private = fields.Boolean()
     algorithm = fields.Function(lambda obj: obj.input_data['algorithm'])
     label_name = fields.Function(lambda obj: obj.input_data['label']['name'])
     images_count = fields.Function(lambda obj: len(obj.input_data['data']))
