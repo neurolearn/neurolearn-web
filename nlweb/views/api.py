@@ -86,7 +86,7 @@ def create_mlmodel():
     cv = parse_cv_param(args)
 
     mlmodel = MLModel(status=MLModel.STATUS_PUBLIC,
-                      training_state=MLModel.TRAINING_QUEUED,
+                      training_state=MLModel.STATE_QUEUED,
                       input_data={'data': args['data'],
                                   'collections': args['collections'],
                                   'label': args['label'],
@@ -137,7 +137,7 @@ def retrain_mlmodel(pk):
 
     args = request.json
 
-    item.training_state = MLModel.TRAINING_QUEUED
+    item.training_state = MLModel.STATE_QUEUED
 
     item.input_data = merge_two_dicts(item.input_data, args)
     db.session.commit()

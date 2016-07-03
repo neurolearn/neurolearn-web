@@ -37,10 +37,18 @@ class SoftDelete(object):
     def get_existing(cls):
         return cls.query.filter_by(deleted=None)
 
+    @classmethod
+    def get_existing_item(cls, pk):
+        return cls.get_existing().filter_by(id=pk).first()
+
 
 class TimestampMixin(object):
     created = Column(db.DateTime, default=datetime.utcnow)
     updated = Column(db.DateTime, onupdate=datetime.utcnow)
+
+
+class PrivateMixin(object):
+    private = db.Column(db.Boolean(), default=False, nullable=False)
 
 
 class User(db.Model, UserMixin, TimestampMixin):
@@ -89,17 +97,13 @@ class Connection(db.Model, TimestampMixin):
     profile_url = db.Column(db.String)
 
 
-class MLModel(db.Model, TimestampMixin, SoftDelete):
+class MLModel(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
     __tablename__ = 'mlmodels'
 
-    STATUS_PRIVATE = 'private'
-    STATUS_PUBLIC = 'public'
-    STATUS_DELETED = 'deleted'
-
-    TRAINING_QUEUED = 'queued'
-    TRAINING_PROGRESS = 'progress'
-    TRAINING_SUCCESS = 'success'
-    TRAINING_FAILURE = 'failure'
+    STATE_QUEUED = 'queued'
+    STATE_PROGRESS = 'progress'
+    STATE_SUCCESS = 'success'
+    STATE_FAILURE = 'failure'
 
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
@@ -110,14 +114,10 @@ class MLModel(db.Model, TimestampMixin, SoftDelete):
                            foreign_keys=[user_id],
                            backref=db.backref('mlmodels', lazy='dynamic'))
 
-    status = Column(db.Enum(STATUS_PRIVATE, STATUS_PUBLIC, STATUS_DELETED,
-                            name='status_types'),
-                    nullable=False)
-
-    training_state = Column(db.Enum(TRAINING_QUEUED,
-                                    TRAINING_PROGRESS,
-                                    TRAINING_SUCCESS,
-                                    TRAINING_FAILURE,
+    training_state = Column(db.Enum(STATE_QUEUED,
+                                    STATE_PROGRESS,
+                                    STATE_SUCCESS,
+                                    STATE_FAILURE,
                             name='training_state_types'),
                             nullable=False)
 
@@ -127,12 +127,8 @@ class MLModel(db.Model, TimestampMixin, SoftDelete):
     @classmethod
     def get_public(cls):
         return cls.query.filter(cls.deleted == None,
-                                cls.status == cls.STATUS_PUBLIC,
+                                cls.private == False,
                                 cls.training_state == cls.TRAINING_SUCCESS)
-
-    @classmethod
-    def get_existing_item(cls, pk):
-        return cls.get_existing().filter_by(id=pk).first()
 
     def tests(self):
         return ModelTest.query.filter(
@@ -145,12 +141,8 @@ class MLModel(db.Model, TimestampMixin, SoftDelete):
         return self.name
 
 
-class ModelTest(db.Model, TimestampMixin, SoftDelete):
+class ModelTest(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
     __tablename__ = 'modeltests'
-
-    VISIBILITY_PRIVATE = 'private'
-    VISIBILITY_PUBLIC = 'public'
-    VISIBILITY_DELETED = 'deleted'
 
     STATE_QUEUED = 'queued'
     STATE_PROGRESS = 'progress'
@@ -166,12 +158,6 @@ class ModelTest(db.Model, TimestampMixin, SoftDelete):
                            foreign_keys=[user_id],
                            backref=db.backref('model_tests', lazy='dynamic'))
 
-    visibility = Column(db.Enum(VISIBILITY_PRIVATE,
-                                VISIBILITY_PUBLIC,
-                                VISIBILITY_DELETED,
-                                name='status_types'),
-                        nullable=False)
-
     state = Column(db.Enum(STATE_QUEUED,
                            STATE_PROGRESS,
                            STATE_SUCCESS,
@@ -185,7 +171,7 @@ class ModelTest(db.Model, TimestampMixin, SoftDelete):
     @classmethod
     def get_public(cls):
         return cls.query.filter(cls.deleted == None,
-                                cls.visibility == cls.VISIBILITY_PUBLIC,
+                                cls.private == False,
                                 cls.state == cls.STATE_SUCCESS)
 
     def model(self):
