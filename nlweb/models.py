@@ -27,15 +27,29 @@ class Role(db.Model, RoleMixin):
         return self.name
 
 
-class User(db.Model, UserMixin):
+class SoftDelete(object):
+    deleted = Column(db.DateTime)
+
+    def soft_delete(self, session=None):
+        self.deleted = datetime.utcnow()
+
+    @classmethod
+    def get_existing(cls):
+        return cls.query.filter_by(deleted=None)
+
+
+class TimestampMixin(object):
+    created = Column(db.DateTime, default=datetime.utcnow)
+    updated = Column(db.DateTime, onupdate=datetime.utcnow)
+
+
+class User(db.Model, UserMixin, TimestampMixin):
     __tablename__ = 'users'
 
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String(255))
     email = Column(db.String(255), unique=True, nullable=False)
     password = Column(db.String(255))
-    created = Column(db.DateTime, default=datetime.utcnow)
-    updated = Column(db.DateTime, onupdate=datetime.utcnow)
     active = db.Column(db.Boolean(), default=True)
 
     last_login_at = Column(db.DateTime())
@@ -54,7 +68,7 @@ class User(db.Model, UserMixin):
         return self.email
 
 
-class Connection(db.Model):
+class Connection(db.Model, TimestampMixin):
     __tablename__ = 'connections'
 
     NEUROVAULT = 'neurovault'
@@ -74,11 +88,8 @@ class Connection(db.Model):
     display_name = db.Column(db.String(255))
     profile_url = db.Column(db.String)
 
-    created = Column(db.DateTime, default=datetime.utcnow)
-    updated = Column(db.DateTime, onupdate=datetime.utcnow)
 
-
-class MLModel(db.Model):
+class MLModel(db.Model, TimestampMixin, SoftDelete):
     __tablename__ = 'mlmodels'
 
     STATUS_PRIVATE = 'private'
@@ -93,9 +104,6 @@ class MLModel(db.Model):
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
     description = Column(db.Text)
-
-    created = Column(db.DateTime, default=datetime.utcnow)
-    updated = Column(db.DateTime, onupdate=datetime.utcnow)
 
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',
@@ -117,12 +125,9 @@ class MLModel(db.Model):
     output_data = db.Column(JSONB)
 
     @classmethod
-    def get_existing(cls):
-        return cls.query.filter(cls.status != cls.STATUS_DELETED)
-
-    @classmethod
     def get_public(cls):
-        return cls.query.filter(cls.status == cls.STATUS_PUBLIC,
+        return cls.query.filter(cls.deleted == None,
+                                cls.status == cls.STATUS_PUBLIC,
                                 cls.training_state == cls.TRAINING_SUCCESS)
 
     @classmethod
@@ -136,14 +141,11 @@ class MLModel(db.Model):
             ModelTest.visibility != ModelTest.VISIBILITY_DELETED
         ).order_by('created desc').all()
 
-    def delete(self):
-        self.status = self.STATUS_DELETED
-
     def __unicode__(self):
         return self.name
 
 
-class ModelTest(db.Model):
+class ModelTest(db.Model, TimestampMixin, SoftDelete):
     __tablename__ = 'modeltests'
 
     VISIBILITY_PRIVATE = 'private'
@@ -158,9 +160,6 @@ class ModelTest(db.Model):
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String, nullable=False)
     description = Column(db.Text)
-
-    created = Column(db.DateTime, default=datetime.utcnow)
-    updated = Column(db.DateTime, onupdate=datetime.utcnow)
 
     user_id = Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',
@@ -184,16 +183,10 @@ class ModelTest(db.Model):
     output_data = db.Column(JSONB)
 
     @classmethod
-    def get_existing(cls):
-        return cls.query.filter(cls.visibility != cls.VISIBILITY_DELETED)
-
-    @classmethod
     def get_public(cls):
-        return cls.query.filter(cls.visibility == cls.VISIBILITY_PUBLIC,
+        return cls.query.filter(cls.deleted == None,
+                                cls.visibility == cls.VISIBILITY_PUBLIC,
                                 cls.state == cls.STATE_SUCCESS)
-
-    def delete(self):
-        self.visibility = self.VISIBILITY_DELETED
 
     def model(self):
         return MLModel.query.filter_by(id=self.input_data['modelId']).one()

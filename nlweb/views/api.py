@@ -123,7 +123,7 @@ def delete_mlmodel(pk):
     if item.user != current_user:
         return not_found()
 
-    item.delete()
+    item.soft_delete()
     db.session.commit()
 
     return 'No Content', 204
@@ -204,7 +204,7 @@ def delete_test(pk):
     if item.user != current_user:
         return not_found()
 
-    item.delete()
+    item.soft_delete()
     db.session.commit()
 
     return 'No Content', 204
@@ -240,7 +240,7 @@ def delete_item_list(object_type):
     for item in item_list:
         if item.user != current_user:
             return not_found()
-        item.delete()
+        item.soft_delete()
 
     db.session.commit()
     return 'No Content', 204

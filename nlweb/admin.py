@@ -134,14 +134,17 @@ class UserAdmin(ModelView):
 
 class MLModelAdmin(ModelView):
     column_list = ('id', 'name', 'user', 'training_state', 'status',
-                   'created')
+                   'created', 'deleted')
+
+    column_formatters = {
+        'training_state': _task_state_formatter,
+        'created': _date_formatter,
+        'deleted': _date_formatter
+    }
+
     form_overrides = {
         'input_data': JSONEditorField,
         'output_data': JSONEditorField
-    }
-
-    column_formatters = {
-        'training_state': _task_state_formatter
     }
 
     create_template = 'admin/jsoneditor_edit.html'
@@ -168,7 +171,11 @@ class MLModelAdmin(ModelView):
 
 class ModelTestAdmin(MLModelAdmin):
     column_list = ('id', 'name', 'user', 'state', 'visibility',
-                   'created')
+                   'created', 'deleted')
+    column_formatters = {
+        'created': _date_formatter,
+        'deleted': _date_formatter
+    }
 
 
 class RoleAdmin(ModelView):
