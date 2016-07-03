@@ -16,10 +16,11 @@ import {
   inputModelName,
   inputDescription,
   inputKfoldParam,
+  selectAccessLevel,
   selectCVType,
   selectAlgorithm,
   setKfoldUseSubjectIds,
-  trainModel,
+  trainModel
 } from '../../state/modelPreferences';
 
 import {
@@ -84,6 +85,7 @@ export default class ModelPreferences extends React.Component {
 
     this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
     this.handleCVTypeChange = this.handleCVTypeChange.bind(this);
+    this.handleAccessLevelChange = this.handleAccessLevelChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleColumnSave = this.handleColumnSave.bind(this);
     this.handleColumnDelete = this.handleColumnDelete.bind(this);
@@ -137,6 +139,10 @@ export default class ModelPreferences extends React.Component {
 
   handleCVTypeChange(e) {
     this.props.dispatch(selectCVType(e.target.value));
+  }
+
+  handleAccessLevelChange(e) {
+    this.props.dispatch(selectAccessLevel(e.target.value === 'true'))
   }
 
   handleAlgorithmChange(e) {
@@ -211,6 +217,31 @@ export default class ModelPreferences extends React.Component {
                     className="form-control" />
               </div>
           </div>
+
+          <div className="form-group">
+            <label>Access level</label>
+            <div className="radio">
+              <label>
+                <input type="radio"
+                       onChange={this.handleAccessLevelChange}
+                       name="public"
+                       value="true"
+                       checked={modelPreferences.public} />
+                Public (anyone can see this model)
+              </label>
+            </div>
+            <div className="radio">
+              <label>
+                <input type="radio"
+                       onChange={this.handleAccessLevelChange}
+                       name="public"
+                       value="false"
+                       checked={!modelPreferences.public} />
+                Private
+              </label>
+            </div>
+          </div>
+
           <div className={classNames('form-group',
                                      errors.algorithm && 'has-error')}>
             <label className="control-label">Algorithm</label>
