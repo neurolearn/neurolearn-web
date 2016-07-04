@@ -207,7 +207,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{model.name}</h1>
+          <h1>{model.name}{model.private && <span style={{marginLeft: 7, padding: '4px 5px 3px', fontSize: 11, textTransform: 'uppercase', display: 'inline-block', verticalAlign: 'middle', backgroundColor: '#f0ad4e', borderRadius: 3}}>private</span>}</h1>
           <p>{model.description}</p>
           <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>

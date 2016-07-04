@@ -92,7 +92,8 @@ export default class MLModels extends React.Component {
              onSelectAll={this.handleToggleAll}
              className="table table-hover">
         <Column header={{name: 'Name', tdClassName: 'col-md-3'}}
-                cell={x => <Link to={`/models/${x.id}`}>{x.name}</Link>} />
+                cell={x => [<Link to={`/models/${x.id}`}>{x.name}</Link>,
+                            x.private && <i title="Private model" className="fa fa-lock" style={{marginLeft: 4, color: 'gray'}} aria-hidden="true"></i>]} />
         <Column header="Status"
                 cell={x => <TaskStateLabel state={x.state}/>} />
         <Column header="Algorithm"
