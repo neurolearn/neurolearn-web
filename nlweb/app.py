@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+from functools import wraps
 
 from flask import Flask, render_template, session
 from flask_admin import helpers as admin_helpers
+from flask_jwt import verify_jwt, JWTError
 
 from .admin import admin
 
@@ -39,6 +41,19 @@ def configure_app(app):
             app.config.from_pyfile('../config/local.cfg')
         except IOError:
             pass
+
+
+def jwt_optional(realm=None):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            try:
+                verify_jwt(realm)
+            except JWTError:
+                pass
+            return fn(*args, **kwargs)
+        return decorator
+    return wrapper
 
 
 def create_app():

@@ -7,6 +7,7 @@ from flask import jsonify, abort
 from flask_jwt import jwt_required, current_user
 
 from nlweb import tasks
+from ..app import jwt_optional
 
 from ..models import db, MLModel, ModelTest
 
@@ -104,9 +105,10 @@ def create_mlmodel():
 
 
 @blueprint.route('/models/<int:pk>', methods=['GET'])
+@jwt_optional()
 def get_mlmodel(pk):
     item = MLModel.get_existing_item(pk)
-    if not item:
+    if not item or (item.private and item.user != current_user):
         return not_found()
 
     result = mlmodel_schema.dump(item)
