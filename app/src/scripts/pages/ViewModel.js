@@ -15,6 +15,7 @@ import ModelTrainingData from '../components/ModelTrainingData';
 import ModelOverview from '../components/ModelOverview';
 import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
+import NotFound from './NotFound';
 
 import { retrainModelWith } from '../state/modelPreferences';
 
@@ -33,6 +34,7 @@ export default class ViewModel extends React.Component {
     model: PropTypes.object,
     user: PropTypes.object,
     isFetching: PropTypes.bool.isRequired,
+    isNotFound: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -188,10 +190,14 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { user, model, isFetching } = this.props;
+    const { user, model, isFetching, isNotFound } = this.props;
 
-    if (!model || isFetching) {
+    if (isFetching) {
       return <div>Loading model...</div>;
+    }
+
+    if (!model) {
+      return isNotFound ? <NotFound /> : null;
     }
 
     const userIsOwner = (model && user && model.user.id === user.id);
@@ -251,7 +257,8 @@ function select(state) {
   return {
     model: state.fetched.model,
     isFetching: state.fetched.isFetching,
-    user: state.auth.user
+    user: state.auth.user,
+    isNotFound: state.fetched.isNotFound
   };
 }
 

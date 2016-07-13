@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import api from '../api';
-import { apiError } from './alertMessages';
+import { apiError, API_ERROR } from './alertMessages';
 
 export const REQUEST_DATA = 'REQUEST_DATA';
 export const RECEIVE_DATA = 'RECEIVE_DATA';
@@ -65,6 +65,11 @@ export default function reducer(state = initialState, action) {
 
       return Object.assign({}, state, {
         [key]: state[key].filter(x => !mappedKeys[x.id])
+      });
+    case API_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false,
+        isNotFound: action.payload.response && action.payload.response.status === 404
       });
     default:
       return state;
