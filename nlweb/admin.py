@@ -133,8 +133,8 @@ class UserAdmin(ModelView):
 
 
 class MLModelAdmin(ModelView):
-    column_list = ('id', 'name', 'user', 'training_state', 'status',
-                   'created', 'deleted')
+    column_list = ('id', 'name', 'user', 'training_state', 'created',
+                   'deleted')
 
     column_formatters = {
         'training_state': _task_state_formatter,
@@ -170,8 +170,7 @@ class MLModelAdmin(ModelView):
 
 
 class ModelTestAdmin(MLModelAdmin):
-    column_list = ('id', 'name', 'user', 'state', 'visibility',
-                   'created', 'deleted')
+    column_list = ('id', 'name', 'user', 'state', 'created', 'deleted')
     column_formatters = {
         'created': _date_formatter,
         'deleted': _date_formatter
