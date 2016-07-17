@@ -132,9 +132,13 @@ def delete_mlmodel(pk):
 
 
 @blueprint.route('/models/<int:pk>/retrain', methods=['POST'])
+@jwt_required()
 def retrain_mlmodel(pk):
     item = MLModel.get_existing_item(pk)
     if not item:
+        return not_found()
+
+    if item.user != current_user:
         return not_found()
 
     args = request.json
