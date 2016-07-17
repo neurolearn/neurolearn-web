@@ -211,12 +211,14 @@ export default class ViewModel extends React.Component {
   render() {
     const { user, model, isFetching, isNotFound } = this.props;
 
-    if (isFetching) {
-      return <div>Loading model...</div>;
-    }
-
     if (!model) {
-      return isNotFound ? <NotFound /> : null;
+      if (isFetching) {
+        return <div>Loading model…</div>;
+      } else if (isNotFound) {
+        return <NotFound />;
+      } else {
+        return null;
+      }
     }
 
     const userIsOwner = (model && user && model.user.id === user.id);
@@ -232,7 +234,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{model.name}{userIsOwner && <VisibilityLabel onClick={this.handleVisibilityClick} />}</h1>
+          <h1>{model.name}{userIsOwner && <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityClick} />}</h1>
           <p>{model.description}</p>
           <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>
@@ -268,7 +270,7 @@ export default class ViewModel extends React.Component {
                           actionButton={<Button bsStyle="primary" disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)} onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
                           onHide={() => this.setState({showModal: null})} />}
         {this.state.showModal == 'visibility'
-          && <ModalDialog title='Model Visibility'
+          && <ModalDialog title='Change Model Visibility'
                           body={this.renderVisibilityToggle(model)}
                           onHide={() => this.setState({showModal: null})} />}
       </div>
