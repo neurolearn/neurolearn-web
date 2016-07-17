@@ -53,7 +53,7 @@ export default class ViewModel extends React.Component {
     };
 
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
-    this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
+    this.handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
     this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
@@ -85,7 +85,7 @@ export default class ViewModel extends React.Component {
     this.setState({ showModal: 'algorithm' });
   }
 
-  handleVisibilityClick(e) {
+  handleVisibilityLabelClick(e) {
     e.preventDefault();
     this.setState({ showModal: 'visibility' });
   }
@@ -156,7 +156,7 @@ export default class ViewModel extends React.Component {
 
     return (
       <div className="text-center">
-        <Button bsStyle="primary"><i className={visibility.iconClass}></i> Make this model {visibility.status}</Button>
+        <Button bsStyle="primary" onClick={this.handleVisibilityToggle}><i className={visibility.iconClass}></i> Make this model {visibility.status}</Button>
       </div>
     );
   }
@@ -187,7 +187,6 @@ export default class ViewModel extends React.Component {
               </tr>
               </tbody>
             </table>
-
           </div>
         </div>
 
@@ -234,7 +233,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{model.name}{userIsOwner && <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityClick} />}</h1>
+          <h1>{model.name}{userIsOwner && <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityLabelClick} />}</h1>
           <p>{model.description}</p>
           <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>
@@ -267,7 +266,9 @@ export default class ViewModel extends React.Component {
         {this.state.showModal == 'algorithm'
           && <ModalDialog title='Edit Algorithm'
                           body={this.renderAlgorithmSelection(model.algorithm)}
-                          actionButton={<Button bsStyle="primary" disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)} onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
+                          actionButton={<Button bsStyle="primary"
+                                                disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)}
+                                                onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
                           onHide={() => this.setState({showModal: null})} />}
         {this.state.showModal == 'visibility'
           && <ModalDialog title='Change Model Visibility'
