@@ -4,7 +4,7 @@ import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
-import { fetchJSON, deleteItem } from '../state/fetched';
+import { fetchJSON, patchItem, deleteItem } from '../state/fetched';
 import Spinner from '../components/Spinner';
 import { setTestModel } from '../state/testModel';
 import TaskStateLabel from '../components/TaskStateLabel';
@@ -54,6 +54,7 @@ export default class ViewModel extends React.Component {
 
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
     this.handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
+    this.handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
     this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
@@ -88,6 +89,14 @@ export default class ViewModel extends React.Component {
   handleVisibilityLabelClick(e) {
     e.preventDefault();
     this.setState({ showModal: 'visibility' });
+  }
+
+  handleVisibilityToggle() {
+    const { model, dispatch } = this.props;
+    const newValue = !model.private;
+
+    dispatch(patchItem(`/api/models/${model.id}`, 'model', {'private': newValue}));
+    this.setState({showModal: null});
   }
 
   handleChangeAlgorithm(e) {
@@ -156,7 +165,8 @@ export default class ViewModel extends React.Component {
 
     return (
       <div className="text-center">
-        <Button bsStyle="primary" onClick={this.handleVisibilityToggle}><i className={visibility.iconClass}></i> Make this model {visibility.status}</Button>
+        <Button bsStyle="primary"
+                onClick={this.handleVisibilityToggle}><i className={visibility.iconClass}></i> Make this model {visibility.status}</Button>
       </div>
     );
   }

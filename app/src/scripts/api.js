@@ -56,6 +56,10 @@ const api = {
 
   post: (path, payload) => {
     return fetchJSON(path, payload, {method: 'POST'});
+  },
+
+  patch: (path, payload) => {
+    return fetchJSON(path, payload, {method: 'PATCH'});
   }
 };
 

@@ -131,6 +131,25 @@ def delete_mlmodel(pk):
     return 'No Content', 204
 
 
+@blueprint.route('/models/<int:pk>', methods=['PATCH'])
+@jwt_required()
+def update_mlmodel(pk):
+    item = MLModel.get_existing_item(pk)
+    if not item:
+        return not_found()
+
+    if item.user != current_user:
+        return not_found()
+
+    args = request.json
+
+    item.private = args.get('private', item.private)
+    db.session.commit()
+
+    result = mlmodel_schema.dump(item)
+    return jsonify(data=result.data)
+
+
 @blueprint.route('/models/<int:pk>/retrain', methods=['POST'])
 @jwt_required()
 def retrain_mlmodel(pk):
