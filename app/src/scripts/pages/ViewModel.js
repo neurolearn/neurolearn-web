@@ -15,6 +15,7 @@ import ModelTrainingData from '../components/ModelTrainingData';
 import ModelOverview from '../components/ModelOverview';
 import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
+import VisibilityLabel from '../components/VisibilityLabel';
 import NotFound from './NotFound';
 
 import { retrainModelWith } from '../state/modelPreferences';
@@ -47,11 +48,12 @@ export default class ViewModel extends React.Component {
     this.state = {
       loadingImages: true,
       showViewerModal: false,
-      showSelectAlgorithmModal: false,
+      showModal: null,
       algorithm: null
     };
 
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
+    this.handleVisibilityClick = this.handleVisibilityClick.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
     this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
@@ -80,7 +82,12 @@ export default class ViewModel extends React.Component {
 
   handleAlgorithmClick(e) {
     e.preventDefault();
-    this.setState({ showSelectAlgorithmModal: true });
+    this.setState({ showModal: 'algorithm' });
+  }
+
+  handleVisibilityClick(e) {
+    e.preventDefault();
+    this.setState({ showModal: 'visibility' });
   }
 
   handleChangeAlgorithm(e) {
@@ -140,6 +147,18 @@ export default class ViewModel extends React.Component {
     return (<RadioGroup items={items}
                         selected={this.state.algorithm || algorithm}
                         onChange={this.handleChangeAlgorithm} />);
+  }
+
+  renderVisibilityToggle(model) {
+    const visibility = model.private
+      ? { iconClass: 'fa fa-unlock', status: 'public' }
+      : { iconClass: 'fa fa-lock', status: 'private' }
+
+    return (
+      <div className="text-center">
+        <Button bsStyle="primary"><i className={visibility.iconClass}></i> Make this model {visibility.status}</Button>
+      </div>
+    );
   }
 
   renderModel(model) {
@@ -213,7 +232,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{model.name}{model.private && <span style={{marginLeft: 7, padding: '4px 5px 3px', fontSize: 11, textTransform: 'uppercase', display: 'inline-block', verticalAlign: 'middle', backgroundColor: '#f0ad4e', borderRadius: 3}}>private</span>}</h1>
+          <h1>{model.name}{userIsOwner && <VisibilityLabel onClick={this.handleVisibilityClick} />}</h1>
           <p>{model.description}</p>
           <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>
@@ -243,11 +262,15 @@ export default class ViewModel extends React.Component {
               : <RecentModelTests tests={model.tests} />}
           </div>
         </div>
-        {this.state.showSelectAlgorithmModal
+        {this.state.showModal == 'algorithm'
           && <ModalDialog title='Edit Algorithm'
                           body={this.renderAlgorithmSelection(model.algorithm)}
                           actionButton={<Button bsStyle="primary" disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)} onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
-                          onHide={() => this.setState({showSelectAlgorithmModal: false})} />}
+                          onHide={() => this.setState({showModal: null})} />}
+        {this.state.showModal == 'visibility'
+          && <ModalDialog title='Model Visibility'
+                          body={this.renderVisibilityToggle(model)}
+                          onHide={() => this.setState({showModal: null})} />}
       </div>
     );
   }

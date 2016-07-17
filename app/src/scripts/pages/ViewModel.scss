@@ -19,6 +19,29 @@
     border-left: 1px solid #eee;
     padding-left: 15px;
   }
+
+  .visibility-label {
+    margin-left: 7px;
+    padding: 4px 5px 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 3px;
+  }
+
+  .visibility-label:hover {
+    cursor: pointer;
+  }
+
+  .visibility-private {
+    background-color: #f0ad4e;
+  }
+
+  .visibility-public {
+    border: solid 1px #969;
+  }
+
 }
 
 :global li.active > a:focus {
