@@ -47,7 +47,10 @@ export function deleteItemList(path, key, itemKeys, success) {
 export function patchItem(path, key, payload, success) {
   return dispatch => {
     return api.patch(path, payload)
-      .then(success, error => dispatch(apiError(error)));
+      .then(
+        result => dispatch(receiveData(result, key)),
+        error => dispatch(apiError(error))
+      );
   }
 }
 
