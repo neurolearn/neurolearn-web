@@ -10,6 +10,7 @@ import InputWithSelectedText from './InputWithSelectedText';
 export default class EditableText extends React.Component {
   static propTypes = {
     value: PropTypes.string,
+    modalTitle: PropTypes.string,
     onChange: PropTypes.func.isRequired
   }
 
@@ -21,8 +22,8 @@ export default class EditableText extends React.Component {
     };
 
     this.handleTextClick = this.handleTextClick.bind(this);
-    this.handleChangeValue = this.handleChangeValue.bind(this);
-    this.handleSaveModelName = this.handleSaveModelName.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSave = this.handleSave.bind(this);
     this.handleHide = this.handleHide.bind(this);
   }
 
@@ -39,7 +40,7 @@ export default class EditableText extends React.Component {
     this.setState({ showModal: false });
   }
 
-  handleSaveModelName(e) {
+  handleSave(e) {
     e.preventDefault();
 
     const value = this.state.value.trim();
@@ -50,18 +51,18 @@ export default class EditableText extends React.Component {
     }
   }
 
-  handleChangeValue(e) {
+  handleChange(e) {
     this.setState({ value: e.target.value });
   }
 
-  renderEditModelName() {
+  renderModalBody() {
     return (
-      <form onSubmit={this.handleSaveModelName}>
+      <form onSubmit={this.handleSave}>
         <InputWithSelectedText
           autoFocus
           type="text"
           value={this.state.value}
-          onChange={this.handleChangeValue}
+          onChange={this.handleChange}
           className="form-control"
         />
       </form>
@@ -69,17 +70,17 @@ export default class EditableText extends React.Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { value, modalTitle } = this.props;
     return (
       <span>
         <span className="editable-text-label" onClick={this.handleTextClick}>{value}</span>
         {this.state.showModal &&
           <ModalDialog
-            title='Rename Model'
-            body={this.renderEditModelName()}
+            title={modalTitle}
+            body={this.renderModalBody()}
             actionButton={<Button bsStyle="primary"
                                   disabled={!this.state.value || (value == this.state.value)}
-                                  onClick={this.handleSaveModelName}>Save</Button>}
+                                  onClick={this.handleSave}>Save</Button>}
             onHide={this.handleHide} />
         }
       </span>
