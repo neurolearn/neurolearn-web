@@ -218,12 +218,20 @@ export default class ViewModel extends React.Component {
   }
 
   render() {
-    const { user, model, isFetching, isNotFound } = this.props;
+    const {
+      user,
+      model,
+      isFetching,
+      isNotFound,
+      params: { id: loadingModelId }
+    } = this.props;
+
+    if (isFetching && !(model && loadingModelId == model.id)) {
+      return <div>Loading model…</div>;
+    }
 
     if (!model) {
-      if (isFetching) {
-        return <div>Loading model…</div>;
-      } else if (isNotFound) {
+      if (isNotFound) {
         return <NotFound />;
       } else {
         return null;
