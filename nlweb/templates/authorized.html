@@ -3,6 +3,13 @@
 <head>
     <meta charset="utf-8">
     <title>Neurolearn</title>
+    <style>
+        p.loading {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-align: center;
+            margin-top: 10vh;
+        }
+    </style>
     <script>
         var jwt = {{ token | tojson | safe }};
         function setToken() {
@@ -12,8 +19,6 @@
     </script>
 </head>
 <body onload="window.setTimeout(setToken, 1);">
-    <p>
-        Loading…
-    </p>
+    <p class="loading">Loading…</p>
 </body>
 </html>
