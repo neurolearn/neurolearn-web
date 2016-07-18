@@ -42,6 +42,16 @@
     border: solid 1px #969696;
   }
 
+  .editable-text-label {
+    padding: 3px;
+    margin-left: -3px;
+    border-radius: 3px;
+  }
+
+  .editable-text-label:hover {
+    background-color: #eee;
+    cursor: pointer;
+  }
 }
 
 :global li.active > a:focus {

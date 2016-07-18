@@ -196,11 +196,11 @@ export default class ModelPreferences extends React.Component {
                                        'col-md-6',
                                        errors.modelName && 'has-error')}>
               <label className="control-label">Model Name</label>
-              <input type='text'
+              <input type="text"
                      value={modelPreferences.modelName}
                      onChange={this.genHandler('modelName', inputModelName)}
-                     ref='modelName'
-                     label=''
+                     ref="modelName"
+                     label=""
                      className="form-control" />
               {this.renderError(errors.modelName)}
             </div>

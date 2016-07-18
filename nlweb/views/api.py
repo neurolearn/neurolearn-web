@@ -131,7 +131,7 @@ def delete_mlmodel(pk):
     return 'No Content', 204
 
 
-@blueprint.route('/models/<int:pk>', methods=['PATCH'])
+@blueprint.route('/models/<int:pk>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_mlmodel(pk):
     item = MLModel.get_existing_item(pk)
@@ -143,6 +143,7 @@ def update_mlmodel(pk):
 
     args = request.json
 
+    item.name = args.get('name', item.name)
     item.private = args.get('private', item.private)
     db.session.commit()
 

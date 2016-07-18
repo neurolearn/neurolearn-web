@@ -2,6 +2,7 @@ import moment from 'moment';
 import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Tabs, Tab, Modal } from 'react-bootstrap';
 import { fetchJSON, patchItem, deleteItem } from '../state/fetched';
@@ -16,6 +17,7 @@ import ModelOverview from '../components/ModelOverview';
 import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
 import VisibilityLabel from '../components/VisibilityLabel';
+import InputWithSelectedText from '../components/InputWithSelectedText';
 import NotFound from './NotFound';
 
 import { retrainModelWith } from '../state/modelPreferences';
@@ -35,7 +37,7 @@ export default class ViewModel extends React.Component {
     model: PropTypes.object,
     user: PropTypes.object,
     isFetching: PropTypes.bool.isRequired,
-    isNotFound: PropTypes.bool.isRequired,
+    isNotFound: PropTypes.bool,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -49,13 +51,17 @@ export default class ViewModel extends React.Component {
       loadingImages: true,
       showViewerModal: false,
       showModal: null,
-      algorithm: null
+      algorithm: null,
+      name: ''
     };
 
+    this.handleModelNameClick = this.handleModelNameClick.bind(this);
     this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
     this.handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
     this.handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
+    this.handleChangeModelName = this.handleChangeModelName.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
+    this.handleSaveModelName = this.handleSaveModelName.bind(this);
     this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
 
@@ -89,6 +95,33 @@ export default class ViewModel extends React.Component {
   handleVisibilityLabelClick(e) {
     e.preventDefault();
     this.setState({ showModal: 'visibility' });
+  }
+
+  handleModelNameClick(e) {
+    e.preventDefault();
+
+    const { model: { name }} = this.props;
+
+    this.setState({
+      showModal: 'modelName',
+      name
+    });
+  }
+
+  handleChangeModelName(e) {
+    this.setState({ name: e.target.value });
+  }
+
+  handleSaveModelName(e) {
+    e.preventDefault();
+
+    const { model, dispatch } = this.props;
+    const name = this.state.name.trim();
+
+    if (name) {
+      dispatch(patchItem(`/api/models/${model.id}`, 'model', {'name': name}));
+      this.setState({showModal: null});
+    }
   }
 
   handleVisibilityToggle() {
@@ -146,6 +179,21 @@ export default class ViewModel extends React.Component {
           {model.output_data.error}
         </div>
       </div>
+    );
+  }
+
+  renderEditModelName(name) {
+    return (
+      <form onSubmit={this.handleSaveModelName}>
+        <InputWithSelectedText
+          autoFocus
+          type="text"
+          value={this.state.name}
+          onChange={this.handleChangeModelName}
+          onSubmit={e => console.log(e)}
+          className="form-control"
+        />
+      </form>
     );
   }
 
@@ -217,6 +265,18 @@ export default class ViewModel extends React.Component {
     );
   }
 
+  renderModelNameWithLabel(model, userIsOwner) {
+    return userIsOwner
+      ? [<span
+            className="editable-text-label"
+            onClick={this.handleModelNameClick}>{model.name}</span>,
+         <VisibilityLabel
+            isPrivate={model.private}
+            onClick={this.handleVisibilityLabelClick}
+         />]
+      : model.name;
+  }
+
   render() {
     const {
       user,
@@ -251,7 +311,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{model.name}{userIsOwner && <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityLabelClick} />}</h1>
+          <h1>{this.renderModelNameWithLabel(model, userIsOwner)}</h1>
           <p>{model.description}</p>
           <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
         </div>
@@ -281,16 +341,23 @@ export default class ViewModel extends React.Component {
               : <RecentModelTests tests={model.tests} />}
           </div>
         </div>
+        {this.state.showModal == 'modelName'
+          && <ModalDialog title='Rename Model'
+                          body={this.renderEditModelName(model.name)}
+                          actionButton={<Button bsStyle="primary"
+                                                disabled={!this.state.name || (model.name == this.state.name)}
+                                                onClick={this.handleSaveModelName}>Save</Button>}
+                          onHide={() => this.setState({showModal: null})} />}
+        {this.state.showModal == 'visibility'
+          && <ModalDialog title='Change Model Visibility'
+                          body={this.renderVisibilityToggle(model)}
+                          onHide={() => this.setState({showModal: null})} />}
         {this.state.showModal == 'algorithm'
           && <ModalDialog title='Edit Algorithm'
                           body={this.renderAlgorithmSelection(model.algorithm)}
                           actionButton={<Button bsStyle="primary"
                                                 disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)}
                                                 onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
-                          onHide={() => this.setState({showModal: null})} />}
-        {this.state.showModal == 'visibility'
-          && <ModalDialog title='Change Model Visibility'
-                          body={this.renderVisibilityToggle(model)}
                           onHide={() => this.setState({showModal: null})} />}
       </div>
     );
