@@ -252,7 +252,7 @@ export default class ViewModel extends React.Component {
             allowBlank
             value={description}
             onChange={this.handleSaveDescription}
-            modalTitle="Change Description"
+            modalTitle="Edit Description"
           >{description || <em style={{color: '#777'}}>Edit the description…</em>}</EditableText>
         : description;
   }
