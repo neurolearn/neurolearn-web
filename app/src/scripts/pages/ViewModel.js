@@ -249,6 +249,7 @@ export default class ViewModel extends React.Component {
   renderModelDescription(description, userIsOwner) {
     return userIsOwner
         ? <EditableText
+            allowBlank
             value={description}
             onChange={this.handleSaveDescription}
             modalTitle="Change Description"

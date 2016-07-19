@@ -11,6 +11,7 @@ export default class EditableText extends React.Component {
   static propTypes = {
     value: PropTypes.string,
     modalTitle: PropTypes.string,
+    allowBlank: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     children: PropTypes.node
   }
@@ -46,7 +47,7 @@ export default class EditableText extends React.Component {
 
     const value = this.state.value.trim();
 
-    if (value) {
+    if (this.isValid()) {
       this.props.onChange(value);
       this.setState({ showModal: false });
     }
@@ -54,6 +55,15 @@ export default class EditableText extends React.Component {
 
   handleChange(e) {
     this.setState({ value: e.target.value });
+  }
+
+  isValid() {
+    if (this.props.allowBlank) {
+      return true;
+    }
+
+    const value = this.state.value.trim();
+    return value && (value != this.props.value)
   }
 
   renderModalBody() {
@@ -80,7 +90,7 @@ export default class EditableText extends React.Component {
             title={modalTitle}
             body={this.renderModalBody()}
             actionButton={<Button bsStyle="primary"
-                                  disabled={!this.state.value || (value == this.state.value)}
+                                  disabled={!this.isValid()}
                                   onClick={this.handleSave}>Save</Button>}
             onHide={this.handleHide} />
         }
