@@ -11,7 +11,8 @@ export default class EditableText extends React.Component {
   static propTypes = {
     value: PropTypes.string,
     modalTitle: PropTypes.string,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    children: PropTypes.node
   }
 
   constructor(props) {
@@ -70,10 +71,10 @@ export default class EditableText extends React.Component {
   }
 
   render() {
-    const { value, modalTitle } = this.props;
+    const { value, modalTitle, children } = this.props;
     return (
       <span>
-        <span className="editable-text-label" onClick={this.handleTextClick}>{value}</span>
+        <span className="editable-text-label" onClick={this.handleTextClick}>{children || value}</span>
         {this.state.showModal &&
           <ModalDialog
             title={modalTitle}

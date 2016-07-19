@@ -60,6 +60,7 @@ export default class ViewModel extends React.Component {
     this.handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
     this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
     this.handleSaveModelName = this.handleSaveModelName.bind(this);
+    this.handleSaveDescription = this.handleSaveDescription.bind(this);
     this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
 
@@ -98,6 +99,11 @@ export default class ViewModel extends React.Component {
   handleSaveModelName(name) {
     const { model, dispatch } = this.props;
     dispatch(patchItem(`/api/models/${model.id}`, 'model', {name}));
+  }
+
+  handleSaveDescription(description) {
+    const { model, dispatch } = this.props;
+    dispatch(patchItem(`/api/models/${model.id}`, 'model', {description}));
   }
 
   handleVisibilityToggle() {
@@ -240,6 +246,26 @@ export default class ViewModel extends React.Component {
       : model.name;
   }
 
+  renderModelDescription(description, userIsOwner) {
+    return userIsOwner
+        ? <EditableText
+            value={description}
+            onChange={this.handleSaveDescription}
+            modalTitle="Change Description"
+          >{description || <em style={{color: '#777'}}>Edit the description…</em>}</EditableText>
+        : description;
+  }
+
+  renderModelMeta(model, userIsOwner) {
+    return (
+      <div>
+        <h1>{this.renderModelNameWithLabel(model, userIsOwner)}</h1>
+        <p>{this.renderModelDescription(model.description, userIsOwner)}</p>
+        <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
+      </div>
+    );
+  }
+
   render() {
     const {
       user,
@@ -274,9 +300,7 @@ export default class ViewModel extends React.Component {
               <Button bsStyle="danger"
                       onClick={() => this.handleDelete(model.id)}>Delete</Button>}
           </ButtonToolbar>
-          <h1>{this.renderModelNameWithLabel(model, userIsOwner)}</h1>
-          <p>{model.description}</p>
-          <p>{model.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time></p>
+          {this.renderModelMeta(model, userIsOwner)}
         </div>
 
         <div className="row">

@@ -144,6 +144,7 @@ def update_mlmodel(pk):
     args = request.json
 
     item.name = args.get('name', item.name)
+    item.description = args.get('description', item.description)
     item.private = args.get('private', item.private)
     db.session.commit()
 
