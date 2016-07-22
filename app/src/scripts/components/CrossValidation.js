@@ -21,32 +21,30 @@ function formatProp(val) {
   return val.toFixed === undefined ? val : val.toFixed(2);
 }
 
-function renderCvSummary(propOrder, summary) {
-  return (
-    <table style={{marginTop: 10}} className="table">
-      <thead>
-        <tr>
-        {propOrder.map(propName => {
-          return summary[propName]
-          ? <th>{summaryPropsNameMap[propName]}</th>
-          : false;
-        })}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-        {propOrder.map(propName => {
-          return summary[propName]
-          ? <td>{formatProp(summary[propName])}</td>
-          : false;
-        })}
-        </tr>
-      </tbody>
-    </table>
-  );
-}
+const CvSummary = ({propOrder, summary} : {propOrder: string[], summary: Object}) => (
+  <table style={{marginTop: 10}} className="table">
+    <thead>
+      <tr>
+      {propOrder.map(propName => {
+        return summary[propName]
+        ? <th>{summaryPropsNameMap[propName]}</th>
+        : false;
+      })}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      {propOrder.map(propName => {
+        return summary[propName]
+        ? <td>{formatProp(summary[propName])}</td>
+        : false;
+      })}
+      </tr>
+    </tbody>
+  </table>
+);
 
-function renderScatterplot(label, stats) {
+const Scatterplot = ({label, stats}: {label: Object, stats: Object}) => {
   const spData = [{
       label: label.name,
       values: scatterplotData(stats)
@@ -65,7 +63,7 @@ function renderScatterplot(label, stats) {
   );
 }
 
-function renderROCPlot(modelId: number, plotFilename: string) {
+const ROCPlot = ({modelId, plotFilename} : {modelId: number, plotFilename: string}) => {
   const plotUrl = `/media/${modelId}/${plotFilename}`;
   return (
     <div className="row">
@@ -92,10 +90,10 @@ const CrossValidation = (
     <div>
       <h3>Cross Validation</h3>
 
-      {renderCvSummary(propOrder, cvMeta)}
+      <CvSummary propOrder={propOrder} summary={cvMeta} />
       {roc_plot
-        ? renderROCPlot(modelId, roc_plot)
-        : renderScatterplot(label, stats)}
+        ? <ROCPlot modelId={modelId} plotFilename={roc_plot} />
+        : <Scatterplot label={label} stats={stats} />}
     </div>
   );
 };
