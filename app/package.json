@@ -21,6 +21,7 @@
     "exports-loader": "0.6.2",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "0.5.1",
+    "flow-bin": "^0.29.0",
     "gulp": "3.8.11",
     "gulp-nunjucks-render": "git://github.com/carlosl/gulp-nunjucks-render.git#c68263b1c080c16fba1b2f0af799d3d13aae6cab",
     "gulp-rename": "1.2.0",
