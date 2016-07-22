@@ -1,3 +1,5 @@
+// @flow
+
 import { JWT_KEY_NAME } from './constants/auth';
 import { algorithmGroups } from './constants/Algorithms';
 import isEmpty from 'lodash/lang/isEmpty';
@@ -8,7 +10,12 @@ import keys from 'lodash/object/keys';
 import take from 'lodash/array/take';
 import findIndex from 'lodash/array/findIndex';
 
-export function pluralize(n, singular, plural) {
+export function pluralize(
+  n: number,
+  singular: string,
+  plural: string
+) : string
+{
   return (n !== 1) ? plural : singular;
 }
 
@@ -16,11 +23,11 @@ export function getAuthToken() {
   return localStorage.getItem(JWT_KEY_NAME);
 }
 
-export function removeAuthToken() {
-  return localStorage.removeItem(JWT_KEY_NAME);
+export function removeAuthToken(): void {
+  localStorage.removeItem(JWT_KEY_NAME);
 }
 
-export function filterImagesByName(text, images) {
+export function filterImagesByName(text: string, images: Array<Object>) {
   if (isEmpty(text)) {
     return images;
   } else {
@@ -29,7 +36,7 @@ export function filterImagesByName(text, images) {
   }
 }
 
-export function neuroVaultImageURL(imageId) {
+export function neuroVaultImageURL(imageId: string) {
   return `http://neurovault.org/images/${imageId}/`;
 }
 
@@ -43,12 +50,13 @@ function isNumeric(obj) {
   return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
 }
 
-export function guessType(values) {
+export function guessType(values: mixed[]): string {
   return every(values, isNumeric) ? 'Number' : 'Categorical';
 }
 
-export function isBinaryCollection(values) {
-  const unique = {};
+export function isBinaryCollection<T>(values: T[]): boolean {
+  const unique: { [key: T]: number } = {};
+
   for (let i = 0; i < values.length; i += 1) {
     unique[values[i]] = 1;
     if (keys(unique).length > 2) {
@@ -63,7 +71,7 @@ export function isBinaryCollection(values) {
   return true;
 }
 
-export function getColumnsFromArray(data) {
+export function getColumnsFromArray(data: mixed[][]): Array<Object> {
   return data[0].map((column, i) => {
     const values = columnValues(data, i);
     return {
@@ -73,10 +81,12 @@ export function getColumnsFromArray(data) {
   });
 }
 
-export function findColumnIndex(tableData, colName) {
+export function findColumnIndex(
+  tableData: Array<mixed>, colName: string
+): number {
   return findIndex(tableData[0], col => col === colName);
 }
 
-export function analysisTypeOfAlgorithm(algorithm) {
+export function analysisTypeOfAlgorithm(algorithm: string) {
   return findKey(algorithmGroups, x => x.indexOf(algorithm) > -1);
 }

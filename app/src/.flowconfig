@@ -1,6 +1,11 @@
 [ignore]
+.*/fbjs/.*
+.*/regenerator/node_modules/.*
+.*/node_modules/npmconf/.*
+.*/node_modules/yargs/node_modules/.*
 
 [include]
+../node_modules/
 
 [libs]
 
