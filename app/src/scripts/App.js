@@ -9,20 +9,8 @@ import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-boo
 import AlertMessages from './components/AlertMessages';
 import { logout, loginSuccess } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
-import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
-
-function nvAuthLink(loc): string {
-    const { protocol, host } = loc;
-    const redirectUri = `${protocol}//${host}/signin/authorized`;
-    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-}
-
-function authLink(loc): string {
-    const { host }= loc;
-    return /^localhost\b/.test(host)
-      ? nvAuthLink(loc)
-      : '/signin';
-}
+import { JWT_KEY_NAME } from './constants/auth';
+import { authLink } from './utils';
 
 const logoBetaStyle = {
   fontStyle: 'italic',

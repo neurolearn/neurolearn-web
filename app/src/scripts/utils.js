@@ -1,6 +1,6 @@
 // @flow
 
-import { JWT_KEY_NAME } from './constants/auth';
+import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
 import { algorithmGroups } from './constants/Algorithms';
 import isEmpty from 'lodash/lang/isEmpty';
 import findKey from 'lodash/object/findKey';
@@ -9,6 +9,8 @@ import pick from 'lodash/object/pick';
 import keys from 'lodash/object/keys';
 import take from 'lodash/array/take';
 import findIndex from 'lodash/array/findIndex';
+
+type WindowLocation = { protocol: string, host: string};
 
 export function pluralize(
   n: number,
@@ -25,6 +27,19 @@ export function getAuthToken() {
 
 export function removeAuthToken(): void {
   localStorage.removeItem(JWT_KEY_NAME);
+}
+
+function nvAuthLink(loc: WindowLocation): string {
+    const { protocol, host } = loc;
+    const redirectUri = `${protocol}//${host}/signin/authorized`;
+    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+}
+
+export function authLink(loc: WindowLocation): string {
+    const { host }= loc;
+    return /^localhost\b/.test(host)
+      ? nvAuthLink(loc)
+      : '/signin';
 }
 
 export function filterImagesByName(text: string, images: Array<Object>) {
