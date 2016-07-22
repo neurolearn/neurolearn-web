@@ -1,3 +1,5 @@
+/* @flow */
+
 import { values, keys, some, pick, isEmpty, identity, zipObject } from 'lodash';
 import moment from 'moment';
 
@@ -19,7 +21,11 @@ import styles from './MLModels.scss';
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardModels';
 
-export default class MLModels extends React.Component {
+class MLModels extends React.Component {
+  state: {
+    selectedRows: Object
+  };
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     items: PropTypes.array,
@@ -30,15 +36,18 @@ export default class MLModels extends React.Component {
     router: PropTypes.object.isRequired
   }
 
+  interval: number;
+
   constructor(props) {
     super(props);
     this.state = {
       selectedRows: {}
     };
-    this.handleTrainNewModel = this.handleTrainNewModel.bind(this);
-    this.handleToggleRow = this.handleToggleRow.bind(this);
-    this.handleToggleAll = this.handleToggleAll.bind(this);
-    this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
+
+    (this:any).handleTrainNewModel = this.handleTrainNewModel.bind(this);
+    (this:any).handleToggleRow = this.handleToggleRow.bind(this);
+    (this:any).handleToggleAll = this.handleToggleAll.bind(this);
+    (this:any).handleDeleteSelected = this.handleDeleteSelected.bind(this);
   }
 
   loadAuthUserMLModels() {
