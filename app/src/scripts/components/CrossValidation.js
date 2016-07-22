@@ -8,7 +8,7 @@ import ScatterPlot from './ScatterPlot';
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 
 
-function scatterplotData(stats) {
+function scatterplotData(stats: Object) {
   const {Y, yfit_xval, yfit_all} = stats;
   const yfit = yfit_xval || yfit_all;
 
@@ -17,7 +17,7 @@ function scatterplotData(stats) {
   });
 }
 
-function formatProp(val) {
+function formatProp(val: number | string) {
   return val.toFixed === undefined ? val : val.toFixed(2);
 }
 
@@ -61,7 +61,7 @@ const Scatterplot = ({label, stats}: {label: Object, stats: Object}) => {
                         yAxis={{label: `Predicted ${label.name}`}} />
     </div>
   );
-}
+};
 
 const ROCPlot = ({modelId, plotFilename} : {modelId: number, plotFilename: string}) => {
   const plotUrl = `/media/${modelId}/${plotFilename}`;
@@ -73,7 +73,7 @@ const ROCPlot = ({modelId, plotFilename} : {modelId: number, plotFilename: strin
       </div>
     </div>
   );
-}
+};
 
 const CrossValidation = (
   {modelId, label, cv, summary, stats, roc_plot}
