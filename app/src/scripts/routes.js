@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 
 import { Router, Route, Redirect } from 'react-router';
@@ -20,7 +22,7 @@ import NotFound from './pages/NotFound';
 import { fetchAuthenticatedUser } from './state/auth';
 import { getAuthToken } from './utils';
 
-export default function renderRoutes(store, history) {
+export default function renderRoutes(store: Object, history: Object) {
   const requireAuth = (nextState, replace) => {
     const { auth } = store.getState();
     if (!auth.user) {

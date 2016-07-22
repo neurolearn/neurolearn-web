@@ -1,8 +1,18 @@
+/* @flow */
+
 import { pluck, round } from 'lodash';
 import React, { PropTypes } from 'react';
 
 import styles from './BarChartRowContainer.scss';
 
+type ChartRow = {
+  id: number,
+  name: string,
+  r: number,
+  collectionName: string,
+  collection_id: number,
+  thumbnail: string
+};
 
 const AXIS_PIXEL_WIDTH = 100;
 
@@ -13,11 +23,11 @@ export default class BarChartRowContainer extends React.Component {
     label: PropTypes.func.isRequired
   }
 
-  absMax(array) {
+  absMax(array: number[]) {
     return Math.max.apply(null, array.map(Math.abs));
   }
 
-  rangeMax(array) {
+  rangeMax(array: number[]) {
     const m = 10;
     const span = this.absMax(array);
     let step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
@@ -35,11 +45,11 @@ export default class BarChartRowContainer extends React.Component {
     return Math.floor(span / step) * step + step * .5;
   }
 
-  scaleWidth(width, scaleMax, value) {
+  scaleWidth(width: number, scaleMax: number, value: number) {
     return width * Math.abs(value) / scaleMax;
   }
 
-  renderRow(key, item, bound) {
+  renderRow(key: number, item: ChartRow, bound: number) {
     const r = round(item.r, 2);
     const maxTick = isNaN(bound) ? 1 : bound;
 
