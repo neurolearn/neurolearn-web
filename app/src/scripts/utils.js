@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 
 import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
 import { algorithmGroups } from './constants/Algorithms';
