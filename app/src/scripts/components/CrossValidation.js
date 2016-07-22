@@ -1,3 +1,5 @@
+/* @flow */
+
 import zipWith from 'lodash/array/zipWith';
 
 import React, { PropTypes } from 'react';
@@ -63,7 +65,7 @@ function renderScatterplot(label, stats) {
   );
 }
 
-function renderROCPlot(modelId, plotFilename) {
+function renderROCPlot(modelId: number, plotFilename: string) {
   const plotUrl = `/media/${modelId}/${plotFilename}`;
   return (
     <div className="row">
@@ -75,7 +77,15 @@ function renderROCPlot(modelId, plotFilename) {
   );
 }
 
-const CrossValidation = ({modelId, label, cv, summary, stats, roc_plot}) => {
+const CrossValidation = (
+  {modelId, label, cv, summary, stats, roc_plot}
+: { modelId: number,
+    label: { name: string },
+    cv: { type: string },
+    summary: Object,
+    stats: Object,
+    roc_plot: string }
+) => {
   const cvMeta = Object.assign({}, summary, {method: cv.type});
 
   return (
