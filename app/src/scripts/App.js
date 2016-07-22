@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
@@ -9,13 +11,13 @@ import { logout, loginSuccess } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
 
-function nvAuthLink(loc) {
+function nvAuthLink(loc): string {
     const { protocol, host } = loc;
     const redirectUri = `${protocol}//${host}/signin/authorized`;
     return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 }
 
-function authLink(loc) {
+function authLink(loc): string {
     const { host }= loc;
     return /^localhost\b/.test(host)
       ? nvAuthLink(loc)
@@ -30,7 +32,7 @@ const logoBetaStyle = {
 };
 
 
-export default class App extends React.Component {
+class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
     auth: PropTypes.object,
@@ -116,7 +118,7 @@ export default class App extends React.Component {
     const { router } = this.context;
 
     return auth.isFetching
-      ? false
+      ? null
       : this.renderApp();
   }
 }
