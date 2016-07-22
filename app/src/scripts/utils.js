@@ -71,7 +71,7 @@ export function isBinaryCollection<T>(values: T[]): boolean {
   return true;
 }
 
-export function getColumnsFromArray(data: mixed[][]): Array<Object> {
+export function getColumnsFromArray(data: Array<Array<string | number>>): Array<Object> {
   return data[0].map((column, i) => {
     const values = columnValues(data, i);
     return {
