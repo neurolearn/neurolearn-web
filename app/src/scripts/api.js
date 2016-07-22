@@ -1,3 +1,5 @@
+// @flow
+
 import 'whatwg-fetch';
 
 import { getAuthToken } from './utils';
@@ -30,7 +32,8 @@ function callAPI(path, params, options) {
       return response;
     } else {
       return response.text().then(text => {
-        let error = new Error(text);
+        // XXX: Find better type for this
+        let error: any = new Error(text);
         error.response = response;
         throw error;
       });
@@ -38,7 +41,7 @@ function callAPI(path, params, options) {
   });
 }
 
-function fetchJSON(path, params, options = {}) {
+function fetchJSON(path: string, params: Object, options: Object = {}) {
   return callAPI(path, params, options).then(response => {
     if (response.status === 200) {
       return response.json();
@@ -50,15 +53,15 @@ function fetchJSON(path, params, options = {}) {
 const api = {
   get: fetchJSON,
 
-  delete: (path) => {
+  delete: (path: string) => {
     return callAPI(path, undefined, {method: 'DELETE'});
   },
 
-  post: (path, payload) => {
+  post: (path: string, payload: Object) => {
     return fetchJSON(path, payload, {method: 'POST'});
   },
 
-  patch: (path, payload) => {
+  patch: (path: string, payload: Object) => {
     return fetchJSON(path, payload, {method: 'PATCH'});
   }
 };
