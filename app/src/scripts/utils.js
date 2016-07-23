@@ -51,7 +51,7 @@ export function filterImagesByName(text: string, images: Array<Object>) {
   }
 }
 
-export function neuroVaultImageURL(imageId: string) {
+export function neuroVaultImageURL(imageId: number) {
   return `http://neurovault.org/images/${imageId}/`;
 }
 

@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Input } from 'react-bootstrap';
 
@@ -5,27 +7,31 @@ import { neuroVaultImageURL } from '../utils';
 
 import styles from './ImageLabel.scss';
 
-export default class ImageLabel extends React.Component {
-  static propTypes = {
-    item: PropTypes.object.isRequired,
-    showCheckbox: PropTypes.bool,
-    isChecked: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired
-  }
+const ImageLabel = (
+  { item, showCheckbox, isChecked, onChange }
+: { item: {id: number,
+           name: string,
+           collectionName: string },
+    showCheckbox: boolean,
+    isChecked: (id: number) => boolean,
+    onChange: (id: number, checked: boolean) => void }
+) => (
+  <div className={styles.root}>
+    {showCheckbox &&
+      <Input type='checkbox'
+             checked={isChecked(item.id)}
+             onChange={e => onChange(item.id, e.target.checked)}/>
+    }
+    <div className="image-name"><a href={neuroVaultImageURL(item.id)}>{item.name}</a></div>
+    <p className="collection-name">{item.collectionName}</p>
+  </div>
+);
 
-  render() {
-    const { item, showCheckbox } = this.props;
+ImageLabel.propTypes = {
+  item: PropTypes.object.isRequired,
+  showCheckbox: PropTypes.bool,
+  isChecked: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
+};
 
-    return (
-      <div className={styles.root}>
-        {showCheckbox &&
-          <Input type='checkbox'
-                 checked={this.props.isChecked(item.id)}
-                 onChange={e => this.props.onChange(item.id, e.target.checked)}/>
-        }
-        <div className="image-name"><a href={neuroVaultImageURL(item.id)}>{item.name}</a></div>
-        <p className="collection-name">{item.collectionName}</p>
-      </div>
-    );
-  }
-}
+export default ImageLabel;
