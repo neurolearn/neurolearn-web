@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -13,11 +15,11 @@ export default class Checkbox extends React.Component {
     this.update(this.props.checked);
   }
 
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps(props: Object) {
     this.update(props.checked);
   }
 
-  update(checked) {
+  update(checked: boolean) {
     ReactDOM.findDOMNode(this).indeterminate = checked === 'indeterminate';
   }
 

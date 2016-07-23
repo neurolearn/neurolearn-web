@@ -13,3 +13,4 @@
 esproposal.class_static_fields=enable
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/scripts/FlowModuleStub.js'
 module.name_mapper='^handsontable.full.js$' -> '<PROJECT_ROOT>/scripts/FlowModuleStub.js'
+module.name_mapper='^nsviewer.js$' -> '<PROJECT_ROOT>/scripts/FlowModuleStub.js'

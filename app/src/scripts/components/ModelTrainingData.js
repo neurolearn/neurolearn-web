@@ -1,9 +1,23 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import FallbackImage from '../components/FallbackImage';
 
 import { neuroVaultImageURL } from '../utils';
 
-const ModelTrainingData = ({inputData}) => (
+type TrainingDataItem = {
+  id: number,
+  name: string,
+  target: Object,
+  collection_id: number
+};
+
+const ModelTrainingData = (
+  { inputData }
+: { inputData: { label: { name: string },
+                 collections: Object,
+                 data: Array<TrainingDataItem>} }
+) => (
   <table className="table">
     <thead>
       <tr>

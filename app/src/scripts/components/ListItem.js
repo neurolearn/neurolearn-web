@@ -1,3 +1,5 @@
+/* @flow */
+
 import styles from './ListItem.scss';
 
 import moment from 'moment';
@@ -19,18 +21,18 @@ export default class ListItem extends React.Component {
     itemType: PropTypes.string.isRequired
   };
 
-  itemLink(item) {
+  itemLink(item: {id: number, name: string}) {
     const baseURL = BASE_URL[this.props.itemType];
     return <Link to={`/${baseURL}/${item.id}`}>{item.name}</Link>;
   }
 
-  renderTestSummary(item) {
+  renderTestSummary(item: {images_count: number, mean_correlation: number}) {
     return (
       <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {item.mean_correlation} mean <var>r</var></p>
     );
   }
 
-  renderModelSummary(item) {
+  renderModelSummary(item: {images_count: number, label_name: string, algorithm: string}) {
     return (
       <p>{item.images_count} {pluralize(item.images_count, 'image', 'images')} • {algorithmNameMap[item.algorithm]} • <span style={{color: 'gray'}}>Training label:</span> {item.label_name}</p>
     );

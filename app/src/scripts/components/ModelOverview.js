@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 
 import { algorithmNameMap } from '../constants/Algorithms';
@@ -5,8 +7,23 @@ import { pluralize } from '../utils.js';
 
 import styles from './ModelOverview.scss';
 
-const ModelOverview = ({model, user, onAlgorithmClick}) => {
+type UserType = {
+  id: number
+};
 
+type ModelType = {
+  user: UserType,
+  images_count: number,
+  label_name: string,
+  algorithm: string
+};
+
+const ModelOverview = (
+  { model, user, onAlgorithmClick }
+: { model: ModelType,
+    user: UserType,
+    onAlgorithmClick: () => void }
+) => {
   const userIsOwner = (user && model.user.id === user.id);
   const algorithmName = algorithmNameMap[model.algorithm];
 
@@ -28,7 +45,6 @@ const ModelOverview = ({model, user, onAlgorithmClick}) => {
     </div>
   );
 }
-
 
 ModelOverview.propTypes = {
   model: PropTypes.object.isRequired,

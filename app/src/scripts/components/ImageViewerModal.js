@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -6,7 +8,13 @@ import { Button, Modal } from 'react-bootstrap';
 import Spinner from '../components/Spinner';
 import NSViewer from '../components/NSViewer';
 
-const ImageViewerModal = ({weightmapUrl, onHide, onImagesLoaded, loadingImages}) => {
+const ImageViewerModal = (
+  { weightmapUrl, onHide, onImagesLoaded, loadingImages }
+: { weightmapUrl: string,
+    onHide: () => void,
+    onImagesLoaded: () => void,
+    loadingImages: boolean }
+) => {
   const images = [
     {
       id: 'anatomical',

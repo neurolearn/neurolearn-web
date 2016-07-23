@@ -1,7 +1,16 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-const ModalDialog = ({title, body, actionButton, onHide, bsSize}) => (
+const ModalDialog = (
+  { title, body, actionButton, onHide, bsSize }
+: { title: string,
+    body: React$Element<any>,
+    actionButton: React$Element<any>,
+    onHide: () => void,
+    bsSize?: string }
+) => (
   <Modal bsSize={bsSize} show={true} onHide={onHide}>
     <Modal.Header closeButton>
       <Modal.Title>{title}</Modal.Title>
@@ -16,6 +25,7 @@ const ModalDialog = ({title, body, actionButton, onHide, bsSize}) => (
 
 ModalDialog.propTypes = {
   onHide: PropTypes.func,
+  bsSize: PropTypes.string
 }
 
 export default ModalDialog;
