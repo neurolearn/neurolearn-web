@@ -1,3 +1,5 @@
+/* @flow */
+
 export const summaryPropsNameMap = {
   'method': 'Method',
   'mcr_all': 'Accuracy',

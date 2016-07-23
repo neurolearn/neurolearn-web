@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 const VisibilityLabel = (
   { isPrivate, onClick }
-: { isPrivate: boolean, onClick: () => void }
+: { isPrivate: boolean, onClick: (e: SyntheticEvent) => void }
 ) => {
     const visibility = isPrivate
     ? { iconClass: 'fa fa-lock', title: 'private', spanClass: 'visibility-private' }

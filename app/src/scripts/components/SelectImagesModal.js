@@ -23,7 +23,7 @@ export default class SelectImagesModal extends React.Component {
     onToggle: PropTypes.func.isRequired,
     onToggleList: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
-    children: React.PropTypes.element
+    children: React.PropTypes.node
   }
 
   constructor(props: Object) {

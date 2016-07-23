@@ -7,7 +7,7 @@ const ModalDialog = (
   { title, body, actionButton, onHide, bsSize }
 : { title: string,
     body: React$Element<any>,
-    actionButton: React$Element<any>,
+    actionButton?: React$Element<any>,
     onHide: () => void,
     bsSize?: string }
 ) => (
@@ -24,6 +24,9 @@ const ModalDialog = (
 )
 
 ModalDialog.propTypes = {
+  title: PropTypes.string,
+  body: PropTypes.node,
+  actionButton: PropTypes.node,
   onHide: PropTypes.func,
   bsSize: PropTypes.string
 }

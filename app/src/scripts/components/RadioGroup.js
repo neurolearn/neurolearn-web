@@ -11,7 +11,7 @@ const RadioGroup = (
   { items, selected, onChange }
 : { items: Array<Item>,
     selected: string,
-    onChange: () => void }
+    onChange: (e: SyntheticEvent) => void }
 ) => (
   <div>
     {items.map(item =>

@@ -1,3 +1,5 @@
+/* @flow */
+
 import { isEmpty, zipObject, identity, keys, pick, some, values } from 'lodash';
 import moment from 'moment';
 
@@ -19,7 +21,13 @@ const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardTests';
 
 
-export default class ModelTests extends React.Component {
+class ModelTests extends React.Component {
+  state: {
+    selectedRows: Object
+  };
+
+  interval: number;
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     items: PropTypes.array,
@@ -30,14 +38,14 @@ export default class ModelTests extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       selectedRows: {}
     };
-    this.handleToggleRow = this.handleToggleRow.bind(this);
-    this.handleToggleAll = this.handleToggleAll.bind(this);
-    this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
+    (this:any).handleToggleRow = this.handleToggleRow.bind(this);
+    (this:any).handleToggleAll = this.handleToggleAll.bind(this);
+    (this:any).handleDeleteSelected = this.handleDeleteSelected.bind(this);
   }
 
   loadModelTests() {

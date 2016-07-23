@@ -1,3 +1,5 @@
+/* @flow */
+
 export default {
   MOST_IMAGES: {
     title: 'Most images',

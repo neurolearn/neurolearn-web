@@ -38,7 +38,7 @@ class MLModels extends React.Component {
 
   interval: number;
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       selectedRows: {}

@@ -1,3 +1,5 @@
+/* @flow */
+
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
@@ -19,7 +21,7 @@ function saveCorrelationGroups(testId, groups) {
   };
 }
 
-export default class ViewTest extends React.Component {
+class ViewTest extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     test: PropTypes.object,

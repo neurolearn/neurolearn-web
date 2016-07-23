@@ -1,3 +1,5 @@
+/* @flow */
+
 import capitalize from 'lodash/string/capitalize';
 import React, { PropTypes } from 'react';
 import NavItem from '../components/NavItem';
@@ -15,7 +17,7 @@ const ITEM_TYPE_MAPPING = {
   }
 };
 
-function keyName(itemType) {
+function keyName(itemType: string) {
   return `explore${capitalize(itemType)}`;
 }
 
@@ -27,7 +29,7 @@ export class Explore extends React.Component {
     params: PropTypes.object.isRequired
   };
 
-  loadItems(itemType) {
+  loadItems(itemType: string) {
     this.props.dispatch(fetchJSON(`/api/${itemType}`, keyName(itemType)));
   }
 

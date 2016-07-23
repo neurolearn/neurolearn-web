@@ -1,3 +1,5 @@
+/* @flow */
+
 import moment from 'moment';
 import isEmpty from 'lodash/lang/isEmpty';
 
@@ -19,6 +21,7 @@ import ModalDialog from '../components/ModalDialog';
 import VisibilityLabel from '../components/VisibilityLabel';
 import EditableText from '../components/EditableText';
 import NotFound from './NotFound';
+import Events from '../utils/events';
 
 import { retrainModelWith } from '../state/modelPreferences';
 
@@ -31,7 +34,15 @@ import { analysisTypeOfAlgorithm } from '../utils';
 
 import styles from './ViewModel.scss';
 
-export default class ViewModel extends React.Component {
+class ViewModel extends React.Component {
+  state: {
+    loadingImages: boolean,
+    showViewerModal: boolean,
+    showModal?: string,
+    algorithm: string,
+    name: string
+  };
+
   static propTypes = {
     params: PropTypes.object.isRequired,
     model: PropTypes.object,
@@ -45,23 +56,23 @@ export default class ViewModel extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       loadingImages: true,
       showViewerModal: false,
-      showModal: null,
-      algorithm: null,
+      showModal: undefined,
+      algorithm: '',
       name: ''
     };
 
-    this.handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
-    this.handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
-    this.handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
-    this.handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
-    this.handleSaveModelName = this.handleSaveModelName.bind(this);
-    this.handleSaveDescription = this.handleSaveDescription.bind(this);
-    this.handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
+    (this:any).handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
+    (this:any).handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
+    (this:any).handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
+    (this:any).handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
+    (this:any).handleSaveModelName = this.handleSaveModelName.bind(this);
+    (this:any).handleSaveDescription = this.handleSaveDescription.bind(this);
+    (this:any).handleSaveAndRetrain = this.handleSaveAndRetrain.bind(this);
   }
 
   componentDidMount() {
@@ -86,17 +97,17 @@ export default class ViewModel extends React.Component {
     router.push('/tests/new');
   }
 
-  handleAlgorithmClick(e) {
+  handleAlgorithmClick(e: SyntheticEvent) {
     e.preventDefault();
     this.setState({ showModal: 'algorithm' });
   }
 
-  handleVisibilityLabelClick(e) {
+  handleVisibilityLabelClick(e: SyntheticEvent) {
     e.preventDefault();
     this.setState({ showModal: 'visibility' });
   }
 
-  handleSaveModelName(name) {
+  handleSaveModelName(name: string) {
     const { model, dispatch } = this.props;
     dispatch(patchItem(`/api/models/${model.id}`, 'model', {name}));
   }
@@ -111,11 +122,11 @@ export default class ViewModel extends React.Component {
     const newValue = !model.private;
 
     dispatch(patchItem(`/api/models/${model.id}`, 'model', {'private': newValue}));
-    this.setState({showModal: null});
+    this.setState({showModal: undefined});
   }
 
-  handleChangeAlgorithm(e) {
-    this.setState({ algorithm: e.target.value });
+  handleChangeAlgorithm(e: SyntheticEvent) {
+    this.setState({ algorithm: Events.target(e, HTMLInputElement).value });
   }
 
   handleSaveAndRetrain() {
@@ -332,14 +343,14 @@ export default class ViewModel extends React.Component {
         {this.state.showModal == 'visibility'
           && <ModalDialog title='Change Model Visibility'
                           body={this.renderVisibilityToggle(model)}
-                          onHide={() => this.setState({showModal: null})} />}
+                          onHide={() => this.setState({showModal: undefined})} />}
         {this.state.showModal == 'algorithm'
           && <ModalDialog title='Edit Algorithm'
                           body={this.renderAlgorithmSelection(model.algorithm)}
                           actionButton={<Button bsStyle="primary"
                                                 disabled={!this.state.algorithm || (model.algorithm == this.state.algorithm)}
                                                 onClick={this.handleSaveAndRetrain}>Save & Re-train the model</Button>}
-                          onHide={() => this.setState({showModal: null})} />}
+                          onHide={() => this.setState({showModal: undefined})} />}
       </div>
     );
   }

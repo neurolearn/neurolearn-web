@@ -1,3 +1,5 @@
+/* @flow */
+
 import values from 'lodash/object/values';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -26,7 +28,7 @@ import {
   inputSearchQuery,
 } from '../state/search';
 
-export default class TestModel extends React.Component {
+class TestModel extends React.Component {
   static propTypes = {
     search: PropTypes.object,
     testModel: PropTypes.object,
@@ -39,10 +41,10 @@ export default class TestModel extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
-    this.handleImageToggle = this.handleImageToggle.bind(this);
-    this.handleImageListToggle = this.handleImageListToggle.bind(this);
+    (this:any).handleImageToggle = this.handleImageToggle.bind(this);
+    (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
   }
 
   componentDidMount() {

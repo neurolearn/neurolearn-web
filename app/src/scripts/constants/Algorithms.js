@@ -1,3 +1,5 @@
+/* @flow */
+
 import AnalysisTypes from './AnalysisTypes';
 
 export const algorithmNameMap = {

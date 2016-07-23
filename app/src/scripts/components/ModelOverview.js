@@ -22,7 +22,7 @@ const ModelOverview = (
   { model, user, onAlgorithmClick }
 : { model: ModelType,
     user: UserType,
-    onAlgorithmClick: () => void }
+    onAlgorithmClick: (e: SyntheticEvent) => void }
 ) => {
   const userIsOwner = (user && model.user.id === user.id);
   const algorithmName = algorithmNameMap[model.algorithm];

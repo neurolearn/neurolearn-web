@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -5,11 +7,18 @@ import MLModels from './dashboard/MLModels';
 import { fetchJSON } from '../state/fetched';
 import Footer from '../components/Footer';
 
-const Stats = ({stats}) => (
+const Stats = (
+  { stats } : {
+    stats: {
+      models_count: number,
+      tests_count: number
+    }
+  }
+) => (
   <p className="lead">There are currently <Link to="/explore/models">{stats.models_count} models</Link> and <Link to="/explore/tests">{stats.tests_count} tests</Link> being shared.</p>
 );
 
-export default class HomePage extends React.Component {
+class HomePage extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
   };
