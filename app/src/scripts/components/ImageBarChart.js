@@ -1,3 +1,5 @@
+/* @flow */
+
 import { sum, filter, pluck, isEmpty, every } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
@@ -7,7 +9,14 @@ import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
 import { filterImagesByName } from '../utils';
 
+
 export default class ImageBarChart extends React.Component {
+  state: {
+    selected?: number,
+    groups: Array<any>,
+    filterText: string
+  };
+
   static propTypes = {
     images: PropTypes.array.isRequired,
     groups: PropTypes.array,
@@ -15,21 +24,27 @@ export default class ImageBarChart extends React.Component {
     onGroupsChange: PropTypes.func.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
-      selected: null,
+      selected: undefined,
       groups: this.props.groups || [],
       filterText: ''
     };
-    this.handleFilterChange = this.handleFilterChange.bind(this);
+    (this:any).handleFilterChange = this.handleFilterChange.bind(this);
+    (this:any).handleGroupAdd = this.handleGroupAdd.bind(this);
+    (this:any).handleGroupSelect = this.handleGroupSelect.bind(this);
+    (this:any).handleGroupSave = this.handleGroupSave.bind(this);
+    (this:any).handleGroupDelete = this.handleGroupDelete.bind(this);
+    (this:any).handleImageToggle = this.handleImageToggle.bind(this);
+    (this:any).isChecked = this.isChecked.bind(this);
   }
 
-  collectionNameById(id) {
+  collectionNameById(id: number) {
     return this.props.collections[id].name;
   }
 
-  setCollectionName(images) {
+  setCollectionName(images: Array<{collection_id: number}>) {
     return images.map(item => {
       return update(item, {
         collectionName: {
@@ -39,7 +54,7 @@ export default class ImageBarChart extends React.Component {
     });
   }
 
-  mean(images) {
+  mean(images: Array<{id: number}>) {
     const rValues = pluck(filter(this.props.images, item => images[item.id]),
                           'r');
     if (rValues.length) {
@@ -49,7 +64,7 @@ export default class ImageBarChart extends React.Component {
     }
   }
 
-  setCorrelation(groups) {
+  setCorrelation(groups: Array<{images: Array<{id: number}>}>) {
     return groups.map(item => {
       return update(item, {
         r: {
@@ -59,16 +74,20 @@ export default class ImageBarChart extends React.Component {
     });
   }
 
-  setGroupsState(state) {
+  setGroupsState(state: Object) {
     this.setState(state, () => this.props.onGroupsChange(this.state.groups));
   }
 
   showCheckbox() {
-    return this.state.selected !== null;
+    return this.state.selected !== undefined;
   }
 
-  toggleAll(images, checked) {
+  toggleAll(images: Array<{id: number}>, checked: boolean) {
     const { selected } = this.state;
+
+    if (selected === undefined) {
+      return;
+    }
 
     const imageMap = images.reduce((accum, image) => {
       accum[image.id] = checked;
@@ -84,10 +103,10 @@ export default class ImageBarChart extends React.Component {
     this.setGroupsState({groups: groups});
   }
 
-  handleImageToggle(imageId, checked) {
+  handleImageToggle(imageId: number, checked: boolean) {
     const { selected } = this.state;
     let groups;
-    if (selected !== null) {
+    if (selected !== undefined) {
       groups = update(this.state.groups, {
         [selected]: {
           images: {
@@ -99,27 +118,27 @@ export default class ImageBarChart extends React.Component {
     }
   }
 
-  isChecked(imageId) {
+  isChecked(imageId: number) {
     const { selected, groups } = this.state;
-    if (selected !== null) {
+    if (selected !== undefined) {
       return groups[selected].images[imageId];
     }
 
     return false;
   }
 
-  isAllChecked(images) {
+  isAllChecked(images: Array<{id: number}>) {
     return every(images, image => this.isChecked(image.id));
   }
 
-  handleGroupSelect(index) {
+  handleGroupSelect(index: number) {
     this.setState({
       selected: index,
       filterText: ''
     });
   }
 
-  handleGroupSave(index, newGroupName) {
+  handleGroupSave(index: number, newGroupName: string) {
     const groups = update(this.state.groups, {
       [index]: {
         name: {
@@ -130,16 +149,16 @@ export default class ImageBarChart extends React.Component {
     this.setGroupsState({groups: groups});
   }
 
-  handleGroupDelete(index) {
+  handleGroupDelete(index: number) {
     const { groups } = this.state;
 
     this.setGroupsState({
       groups: groups.slice(0, index).concat(groups.slice(index + 1)),
-      selected: null
+      selected: undefined
     });
   }
 
-  handleGroupAdd(e) {
+  handleGroupAdd(e: SyntheticMouseEvent) {
     e.preventDefault();
     const newGroup = {'name': 'New Group', r: 0, images: {}};
     const groups = update(this.state.groups, {$push: [newGroup]});
@@ -171,7 +190,7 @@ export default class ImageBarChart extends React.Component {
                  placeholder="Filter Images"
                  value={this.state.filterText}
                  ref="filterText"
-                 onChange={this.handleFilterChange.bind(this)} />
+                 onChange={this.handleFilterChange} />
 
           {!isEmpty(images) && this.showCheckbox()
             ? <Input type="checkbox"
@@ -188,8 +207,8 @@ export default class ImageBarChart extends React.Component {
                 label={ImageLabel}
                 labelProps={{
                   showCheckbox: this.showCheckbox(),
-                  onChange: this.handleImageToggle.bind(this),
-                  isChecked: this.isChecked.bind(this)
+                  onChange: this.handleImageToggle,
+                  isChecked: this.isChecked
                 }} />
            }
         </div>
@@ -203,12 +222,12 @@ export default class ImageBarChart extends React.Component {
               label={GroupLabel}
               labelProps={{
                 selected: this.state.selected,
-                onSelect: this.handleGroupSelect.bind(this),
-                onSave: this.handleGroupSave.bind(this),
-                onDelete: this.handleGroupDelete.bind(this)
+                onSelect: this.handleGroupSelect,
+                onSave: this.handleGroupSave,
+                onDelete: this.handleGroupDelete
               }} />
           }
-          <Button style={{marginTop: 12}} onClick={this.handleGroupAdd.bind(this)} bsStyle="primary"><i className="fa fa-plus"></i> New Group</Button>
+          <Button style={{marginTop: 12}} onClick={this.handleGroupAdd} bsStyle="primary"><i className="fa fa-plus"></i> New Group</Button>
         </div>
       </div>
     );
