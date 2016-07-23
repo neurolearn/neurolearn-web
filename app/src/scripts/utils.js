@@ -59,6 +59,15 @@ function columnValues(data, index) {
   return data.slice(1).map((row, i) => row[index]);
 }
 
+export function pickColumn(data: Array<Array<string | number>>, index: number) {
+  return data.map(row => row[index]);
+}
+
+export function pickColumns(data: Array<Array<string | number>>, columnNames: Array<string>) {
+  const indexes = columnNames.map(name => findColumnIndex(data, name));
+  return data.map(row => indexes.map(index => row[index]));
+}
+
 // Thanks, jQuery
 function isNumeric(obj) {
   const type = typeof(obj);
@@ -97,7 +106,7 @@ export function getColumnsFromArray(data: Array<Array<string | number>>): Array<
 }
 
 export function findColumnIndex(
-  tableData: Array<mixed>, colName: string
+  tableData: Array<Array<string | number>>, colName: string
 ): number {
   return findIndex(tableData[0], col => col === colName);
 }
@@ -105,3 +114,31 @@ export function findColumnIndex(
 export function analysisTypeOfAlgorithm(algorithm: string) {
   return findKey(algorithmGroups, x => x.indexOf(algorithm) > -1);
 }
+
+export function getFieldData(data: Array<Array<string | number>>, fieldName: string) {
+  const idIndex = findColumnIndex(data, 'id');
+  const collectionIdIndex = findColumnIndex(data, 'collection_id');
+  const nameIndex = findColumnIndex(data, 'name');
+  const fieldIndex = findColumnIndex(data, fieldName);
+
+  const fieldData = data
+    .slice(1)
+    .filter(row => row[idIndex] && row[collectionIdIndex])
+    .map(row => {
+      return {
+        'id': row[idIndex],
+        'target': row[fieldIndex],
+        'collection_id': row[collectionIdIndex],
+        'name': row[nameIndex]
+      };
+  });
+
+  return {
+    field: {
+      index: fieldIndex,
+      name: fieldName
+    },
+    data: fieldData
+  };
+}
+

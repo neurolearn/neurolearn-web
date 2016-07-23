@@ -4,10 +4,7 @@ import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import EditableGrid from './EditableGrid';
-
-function pickColumn(data, index) {
-  return data.map(row => row[index]);
-}
+import { pickColumn } from '../utils';
 
 const VALUE_COLUMN_INDEX = 3;
 
@@ -18,7 +15,7 @@ export default class EditColumnModal extends React.Component {
 
   props: {
     name: string,
-    data: Array<string | number>,
+    data: Array<Array<string | number>>,
     onHide: () => void,
     onSave: () => void
   }

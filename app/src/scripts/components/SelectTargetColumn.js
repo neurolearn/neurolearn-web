@@ -1,3 +1,5 @@
+/* @flow */
+
 import includes from 'lodash/collection/includes';
 import some from 'lodash/collection/some';
 import take from 'lodash/array/take';
@@ -6,51 +8,25 @@ import React, { PropTypes } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import EditColumnModal from './EditColumnModal';
-
-import { getColumnsFromArray, guessType, findColumnIndex } from '../utils';
+import Events from '../utils/events';
+import { getColumnsFromArray, guessType, pickColumns, getFieldData } from '../utils';
 
 import styles from './SelectTargetColumn.scss';
 
 const excludeColumns = ['id', 'collection_id', 'name', 'file',
                         'url', 'file_size'];
 
-function getFieldData(data, fieldName) {
-  const idIndex = findColumnIndex(data, 'id');
-  const collectionIdIndex = findColumnIndex(data, 'collection_id');
-  const nameIndex = findColumnIndex(data, 'name');
-  const fieldIndex = findColumnIndex(data, fieldName);
-
-  const fieldData = data
-    .slice(1)
-    .filter(row => row[idIndex] && row[collectionIdIndex])
-    .map(row => {
-      return {
-        'id': row[idIndex],
-        'target': row[fieldIndex],
-        'collection_id': row[collectionIdIndex],
-        'name': row[nameIndex]
-      };
-  });
-
-  return {
-    field: {
-      index: fieldIndex,
-      name: fieldName
-    },
-    data: fieldData
-  };
-}
-
-function pickColumns(data, columnNames) {
-  const indexes = columnNames.map(name => findColumnIndex(data, name));
-  return data.map(row => indexes.map(index => row[index]));
-}
-
 const tooltip = (
   <Tooltip>This field contains null values. Corresponding images will be excluded from the analysis.</Tooltip>
 );
 
 export default class SelectTargetColumn extends React.Component {
+  state: {
+    showEditColumnModal: boolean,
+    editColumnName: string,
+    editColumnData?: Array<Array<string | number>>
+  };
+
   static propTypes = {
     data: PropTypes.array,
     targetData: PropTypes.object,
@@ -59,25 +35,25 @@ export default class SelectTargetColumn extends React.Component {
     onColumnDelete: PropTypes.func.isRequired
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       showEditColumnModal: false,
-      editColumnName: null,
+      editColumnName: '',
       editColumnData: undefined
     };
-    this.handleColumnSelect = this.handleColumnSelect.bind(this);
-    this.handleNewColumnAdd = this.handleNewColumnAdd.bind(this);
-    this.handleEditColumnModalHide = this.handleEditColumnModalHide.bind(this);
+    (this:any).handleColumnSelect = this.handleColumnSelect.bind(this);
+    (this:any).handleNewColumnAdd = this.handleNewColumnAdd.bind(this);
+    (this:any).handleEditColumnModalHide = this.handleEditColumnModalHide.bind(this);
   }
 
-  handleColumnSelect(e) {
-    const columnName = e.target.value;
+  handleColumnSelect(e: SyntheticEvent) {
+    const columnName = Events.target(e, HTMLInputElement).value;
     const { onSelectTarget, data } = this.props;
     onSelectTarget(getFieldData(data, columnName));
   }
 
-  handleNewColumnAdd(e) {
+  handleNewColumnAdd(e: SyntheticEvent) {
     e.preventDefault();
 
     const newColumnData = pickColumns(
@@ -92,7 +68,7 @@ export default class SelectTargetColumn extends React.Component {
     });
   }
 
-  handleColumnEdit(e, columnName) {
+  handleColumnEdit(e: SyntheticEvent, columnName: string) {
     this.setState({
       showEditColumnModal: true,
       editColumnName: columnName,
@@ -103,7 +79,7 @@ export default class SelectTargetColumn extends React.Component {
     });
   }
 
-  handleColumnDelete(e, columnName) {
+  handleColumnDelete(e: SyntheticEvent, columnName: string) {
     confirm(`Delete "${columnName}"?`) && this.props.onColumnDelete(columnName);
   }
 
