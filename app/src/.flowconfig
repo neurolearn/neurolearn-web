@@ -11,4 +11,4 @@
 
 [options]
 esproposal.class_static_fields=enable
-module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/scripts/CSSModuleStub.js'
+module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/scripts/FlowModuleStub.js'
