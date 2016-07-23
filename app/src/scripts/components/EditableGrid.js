@@ -1,7 +1,9 @@
+/* @flow */
+
 import isString from 'lodash/lang/isString';
 import React, { PropTypes } from 'react';
 
-require('handsontable');
+require('handsontable.full.js');
 
 export default class EditableGrid extends React.Component {
   static propTypes = {
@@ -9,7 +11,9 @@ export default class EditableGrid extends React.Component {
     headers: PropTypes.array
   }
 
-  initHandsontableInstance(data, headers) {
+  hot: Object;
+
+  initHandsontableInstance(data: number, headers: number) {
     var container = this.refs.hot,
         _this = this;
 

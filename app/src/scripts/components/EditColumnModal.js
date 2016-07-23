@@ -1,3 +1,5 @@
+/* @flow */
+
 import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
@@ -10,6 +12,17 @@ function pickColumn(data, index) {
 const VALUE_COLUMN_INDEX = 3;
 
 export default class EditColumnModal extends React.Component {
+  state: {
+    name: string
+  };
+
+  props: {
+    name: string,
+    data: Array<string | number>,
+    onHide: () => void,
+    onSave: () => void
+  }
+
   static propTypes = {
     name: PropTypes.string,
     data: PropTypes.array,
@@ -17,16 +30,19 @@ export default class EditColumnModal extends React.Component {
     onSave: PropTypes.func.isRequired
   }
 
-  constructor(props) {
+  _editableGrid: Object;
+
+  constructor(props: Object) {
     super(props);
     this.state = {
       name: props.name
     };
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
+
+    (this:any).handleNameChange = this.handleNameChange.bind(this);
+    (this:any).handleSave = this.handleSave.bind(this);
   }
 
-  handleNameChange(e) {
+  handleNameChange(e: Object) {
     this.setState({name: this.refs.name.value});
   }
 
@@ -37,7 +53,7 @@ export default class EditColumnModal extends React.Component {
     this.props.onHide();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Object) {
     this.setState({
       name: nextProps.name
     });
