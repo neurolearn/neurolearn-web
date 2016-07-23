@@ -1,3 +1,5 @@
+/* @flow */
+
 import update from 'react/lib/update';
 import pick from 'lodash/object/pick';
 import without from 'lodash/array/without';

@@ -1,5 +1,8 @@
+/* @flow */
+
 import { createAction } from 'redux-actions';
 import filter from 'lodash/collection/filter';
+import type { Action } from '.';
 
 export const API_ERROR = 'API_ERROR';
 const DISMISS_ALERT = 'DISMISS_ALERT';
@@ -18,7 +21,12 @@ function createMessage(payload) {
   return payload.message;
 }
 
-export default function reducer(state = [], action) {
+type AlertMessage = {
+  level: string,
+  message: string
+};
+
+export default function reducer(state: Array<AlertMessage> = [], action: Action) {
   const { type, payload, error } = action;
 
   if (type === DISMISS_ALERT) {

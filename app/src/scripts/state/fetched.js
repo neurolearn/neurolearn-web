@@ -1,4 +1,7 @@
+/* @flow */
+
 import { createAction } from 'redux-actions';
+import type { Action } from '.';
 
 import api from '../api';
 import { apiError, API_ERROR } from './alertMessages';
@@ -18,8 +21,8 @@ function receiveData(payload, key) {
   };
 }
 
-export function fetchJSON(path, key) {
-  return (dispatch) => {
+export function fetchJSON(path: string, key: string) {
+  return (dispatch: Function) => {
     dispatch(requestData({ path, key }));
     return api.get(path)
       .then(
@@ -29,23 +32,23 @@ export function fetchJSON(path, key) {
   };
 }
 
-export function deleteItem(path, success) {
-  return (dispatch) => {
+export function deleteItem(path: string, success?: Function) {
+  return (dispatch: Function) => {
     return api.delete(path)
       .then(success, error => dispatch(apiError(error)));
   };
 }
 
-export function deleteItemList(path, key, itemKeys, success) {
-  return (dispatch) => {
+export function deleteItemList(path: string, key: string, itemKeys: Array<string>, success?: Function) {
+  return (dispatch: Function) => {
     dispatch(deleteLocalItems({key, itemKeys}));
     return api.post(path, itemKeys)
       .then(success, error => dispatch(apiError(error)));
   };
 }
 
-export function patchItem(path, key, payload, success) {
-  return dispatch => {
+export function patchItem(path: string, key: string, payload: Object, success?: Function) {
+  return (dispatch: Function) => {
     return api.patch(path, payload)
       .then(
         result => dispatch(receiveData(result, key)),
@@ -58,17 +61,24 @@ const initialState = {
   isFetching: false
 };
 
-export default function reducer(state = initialState, action) {
+type FetchedState = {
+  isFetching: boolean,
+  [key: string]: Object
+};
+
+export default function reducer(state: FetchedState = initialState, action: Action) {
   switch (action.type) {
     case REQUEST_DATA:
       return Object.assign({}, state, {
         isFetching: true
       });
     case RECEIVE_DATA:
-      return Object.assign({}, state, {
-        isFetching: false,
-        [action.meta.key]: action.payload.data
-      });
+      return action.meta !== undefined
+        ? Object.assign({}, state, {
+          isFetching: false,
+          [action.meta.key]: action.payload.data
+        })
+        : state;
     case DELETE_LOCAL_ITEMS:
       const { key, itemKeys } = action.payload;
       const mappedKeys = itemKeys.reduce((accum, x) => {accum[x] = true; return accum}, {})

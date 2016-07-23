@@ -8,6 +8,8 @@ function locationOrigin(loc) {
   return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;;
 }
 
+type PayloadType = Object | Array<any>;
+
 const HOST = locationOrigin(window.location);
 const DEFAULT_HEADERS = {'Accept': 'application/json',
                          'Content-Type': 'application/json'};
@@ -41,7 +43,7 @@ function callAPI(path, params, options) {
   });
 }
 
-function fetchJSON(path: string, params: Object, options: Object = {}) {
+function fetchJSON(path: string, params?: PayloadType, options?: Object = {}) {
   return callAPI(path, params, options).then(response => {
     if (response.status === 200) {
       return response.json();
@@ -57,11 +59,11 @@ const api = {
     return callAPI(path, undefined, {method: 'DELETE'});
   },
 
-  post: (path: string, payload: Object) => {
+  post: (path: string, payload: PayloadType) => {
     return fetchJSON(path, payload, {method: 'POST'});
   },
 
-  patch: (path: string, payload: Object) => {
+  patch: (path: string, payload: PayloadType) => {
     return fetchJSON(path, payload, {method: 'PATCH'});
   }
 };

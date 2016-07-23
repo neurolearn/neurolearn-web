@@ -1,28 +1,41 @@
+/* @flow */
+
 import jwtDecode from 'jwt-decode';
 import { createAction } from 'redux-actions';
 import api from '../api';
 import { removeAuthToken } from '../utils';
+import type { Action } from '.';
 
 const REQUEST_AUTHENTICATED_USER = 'REQUEST_AUTHENTICATED_USER';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAILED = 'LOGIN_FAILED';
 const LOGOUT = 'LOGOUT';
 
+type User = {
+  id: number,
+  name: string
+};
+
+type AuthState = {
+  isFetching: boolean,
+  user?: User
+};
+
 export const requestAuthenticatedUser = createAction(REQUEST_AUTHENTICATED_USER);
 export const loginSuccess = createAction(LOGIN_SUCCESS);
 const loginFailed = createAction(LOGIN_FAILED);
 export const logout = createAction(LOGOUT);
 
-function heapId(user) {
+function heapId(user: User) {
   return `${user.id}/${user.name}`;
 }
 
-export function fetchAuthenticatedUser(callback) {
-  return dispatch => {
+export function fetchAuthenticatedUser(callback: () => void) {
+  return (dispatch: Function) => {
     dispatch(requestAuthenticatedUser());
     return api.get('/api/user')
       .then(
-        result => {
+        (result: any) => {
           dispatch(loginSuccess(result.data));
           if (window.heap) {
             window.heap.identify(heapId(result.data));
@@ -50,10 +63,10 @@ export function fetchAuthenticatedUser(callback) {
 
 const initialState = {
   isFetching: false,
-  user: null
+  user: undefined
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state: AuthState = initialState, action: Action) {
   switch (action.type) {
     case REQUEST_AUTHENTICATED_USER:
       return {
@@ -69,7 +82,7 @@ export default function reducer(state = initialState, action) {
     case LOGIN_FAILED:
       return {
         ...state,
-        user: null,
+        user: undefined,
         isFetching: false
       };
     case LOGOUT:
