@@ -1,7 +1,12 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-const VisibilityLabel = ({ isPrivate, onClick }) => {
+const VisibilityLabel = (
+  { isPrivate, onClick }
+: { isPrivate: boolean, onClick: () => void }
+) => {
     const visibility = isPrivate
     ? { iconClass: 'fa fa-lock', title: 'private', spanClass: 'visibility-private' }
     : { title: 'public', spanClass: 'visibility-public' }

@@ -1,6 +1,8 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 
-const TaskStateLabel = ({state}) => {
+const TaskStateLabel = ({ state } : { state: string }) => {
   switch (state) {
     case 'queued':
       return <span className="badge" style={{'backgroundColor': 'gray'}}>Queued</span>;
