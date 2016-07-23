@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -8,6 +10,11 @@ import InputWithSelectedText from './InputWithSelectedText';
 
 
 export default class EditableText extends React.Component {
+  state: {
+    showModal: boolean,
+    value: string
+  };
+
   static propTypes = {
     value: PropTypes.string,
     modalTitle: PropTypes.string,
@@ -16,20 +23,20 @@ export default class EditableText extends React.Component {
     children: PropTypes.node
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       showModal: false,
       value: ''
     };
 
-    this.handleTextClick = this.handleTextClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleHide = this.handleHide.bind(this);
+    (this:any).handleTextClick = this.handleTextClick.bind(this);
+    (this:any).handleChange = this.handleChange.bind(this);
+    (this:any).handleSave = this.handleSave.bind(this);
+    (this:any).handleHide = this.handleHide.bind(this);
   }
 
-  handleTextClick(e) {
+  handleTextClick(e: Object) {
     e.preventDefault();
 
     this.setState({
@@ -42,7 +49,7 @@ export default class EditableText extends React.Component {
     this.setState({ showModal: false });
   }
 
-  handleSave(e) {
+  handleSave(e: Object) {
     e.preventDefault();
 
     const value = this.state.value.trim();
@@ -53,7 +60,7 @@ export default class EditableText extends React.Component {
     }
   }
 
-  handleChange(e) {
+  handleChange(e: Object) {
     this.setState({ value: e.target.value });
   }
 

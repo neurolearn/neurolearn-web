@@ -1,9 +1,17 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
+import Events from '../utils/events';
 
 import styles from './GroupLabel.scss';
 
 export default class GroupLabel extends React.Component {
+  state: {
+    editing: boolean,
+    editText: string
+  };
+
   static propTypes = {
     item: PropTypes.object.isRequired,
     onSelect: PropTypes.func.isRequired,
@@ -13,7 +21,7 @@ export default class GroupLabel extends React.Component {
     selected: PropTypes.number
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       editing: false,
@@ -21,12 +29,12 @@ export default class GroupLabel extends React.Component {
     };
   }
 
-  handleClick(e) {
+  handleClick(e: SyntheticMouseEvent) {
     e.preventDefault();
     this.props.onSelect(this.props.index);
   }
 
-  handleEdit(e) {
+  handleEdit(e: SyntheticMouseEvent) {
     e.preventDefault();
     this.setState({ editing: true });
   }
@@ -38,13 +46,13 @@ export default class GroupLabel extends React.Component {
     });
   }
 
-  handleDelete(e) {
+  handleDelete(e: SyntheticMouseEvent) {
     e.preventDefault();
     this.props.onDelete(this.props.index);
   }
 
-  handleInputChange(e) {
-    this.setState({editText: e.target.value});
+  handleInputChange(e: SyntheticInputEvent) {
+    this.setState({editText: Events.target(e, HTMLInputElement).value});
   }
 
   handleSave() {
@@ -52,7 +60,7 @@ export default class GroupLabel extends React.Component {
     this.setState({editing: false});
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Object, prevState: Object) {
     if (!prevState.editing && this.state.editing) {
       const node = this.refs.editInput;
       node.focus();

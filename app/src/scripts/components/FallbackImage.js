@@ -1,7 +1,13 @@
+/* @flow */
+
 import React from 'react';
 
 export default class FallbackImage extends React.Component {
-  constructor(props) {
+  state: {
+    errored: boolean
+  };
+
+  constructor(props: Object) {
     super(props);
     this.state = {
       errored: false
