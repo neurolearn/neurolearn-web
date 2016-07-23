@@ -1,3 +1,5 @@
+/* @flow */
+
 import { keys, every, reduce } from 'lodash';
 
 import React, { PropTypes } from 'react';
@@ -14,12 +16,12 @@ export default class Table extends React.Component {
     className: PropTypes.string
   };
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
-    this.renderSelectCheckbox = this.renderSelectCheckbox.bind(this);
+    (this:any).renderSelectCheckbox = this.renderSelectCheckbox.bind(this);
   }
 
-  isSelected(key) {
+  isSelected(key: number) {
     return this.props.selectedRows[key];
   }
 
@@ -44,7 +46,7 @@ export default class Table extends React.Component {
 
   }
 
-  renderSelectCheckbox(item) {
+  renderSelectCheckbox(item: {id: number}) {
     return (
       <input type="checkbox"
              checked={this.isSelected(item.id)}
@@ -67,7 +69,7 @@ export default class Table extends React.Component {
       ? this.renderSelectAllCheckbox()
       : null;
 
-    const headers = (
+    const headers: Array<any> = (
       isSelectable ? [selectAllHeader] : []
     ).concat(
       React.Children.map(children, child => child.props.header)
@@ -84,11 +86,13 @@ export default class Table extends React.Component {
         <thead>
           <tr>
           {headers.map((header, key) =>
-            <th key={key}
+            header
+            ? <th key={key}
                 className={header.tdClassName}
                 style={header.tdStyle}>
-              {header.name || header.component || header}
-            </th>
+                {header.name || header.component || header}
+              </th>
+            : null
           )}
           </tr>
         </thead>
