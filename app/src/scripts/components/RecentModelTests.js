@@ -1,9 +1,18 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { pluralize } from '../utils.js';
 
-const RecentModelTests = ({ tests }) => (
+type ModelTest = {
+  id: number,
+  name: string,
+  images_count: number,
+  mean_correlation: number
+};
+
+const RecentModelTests = ({ tests } : { tests: Array<ModelTest> }) => (
   <div>
     {tests.map(test => <div key={test.id}>
         <Link to={`/tests/${test.id}`}>{test.name}</Link>

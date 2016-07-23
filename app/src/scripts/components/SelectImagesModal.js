@@ -1,3 +1,5 @@
+/* @flow */
+
 import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
@@ -6,10 +8,15 @@ import every from 'lodash/collection/every';
 
 import { filterImagesByName } from '../utils';
 import ImageItem from './ImageItem';
+import Events from '../utils/events';
 
 import styles from './SelectImagesModal.scss';
 
 export default class SelectImagesModal extends React.Component {
+  state: {
+    filterText: string
+  };
+
   static propTypes = {
     collection: PropTypes.object.isRequired,
     selectedImages: PropTypes.object,
@@ -19,12 +26,12 @@ export default class SelectImagesModal extends React.Component {
     children: React.PropTypes.element
   }
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
     this.state = {
       filterText: ''
     };
-    this.handleFilterChange = this.handleFilterChange.bind(this);
+    (this:any).handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   handleFilterChange() {
@@ -33,7 +40,7 @@ export default class SelectImagesModal extends React.Component {
     });
   }
 
-  isImageSelected(key) {
+  isImageSelected(key: string) {
     const { selectedImages } = this.props;
     if (selectedImages) {
       return selectedImages[key];
@@ -41,11 +48,15 @@ export default class SelectImagesModal extends React.Component {
     return false;
   }
 
-  toggleList(e, filteredImages) {
-    this.props.onToggleList(this.props.collection, filteredImages, e.target.checked);
+  toggleList(e: SyntheticEvent, filteredImages: Array<{}>) {
+    this.props.onToggleList(
+      this.props.collection,
+      filteredImages,
+      Events.target(e, HTMLInputElement).checked
+    );
   }
 
-  renderImages(images) {
+  renderImages(images: Array<{url: string}>) {
     const { collection } = this.props;
     return (
       <tbody>

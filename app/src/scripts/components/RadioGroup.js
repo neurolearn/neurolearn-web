@@ -1,6 +1,18 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 
-const RadioGroup = ({ items, selected, onChange }) => (
+type Item = {
+  value: string,
+  name: string
+};
+
+const RadioGroup = (
+  { items, selected, onChange }
+: { items: Array<Item>,
+    selected: string,
+    onChange: () => void }
+) => (
   <div>
     {items.map(item =>
         <div className="radio" key={item.value}>
@@ -14,7 +26,7 @@ const RadioGroup = ({ items, selected, onChange }) => (
         </div>)
     }
   </div>
-)
+);
 
 RadioGroup.propTypes = {
   items: PropTypes.array.isRequired,

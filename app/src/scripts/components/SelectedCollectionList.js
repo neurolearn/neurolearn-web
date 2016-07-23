@@ -1,4 +1,13 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
+
+type Collection = {
+  _id: number,
+  _source: {
+    name: string
+  }
+};
 
 export default class SelectedCollectionList extends React.Component {
   static propTypes = {
@@ -6,21 +15,21 @@ export default class SelectedCollectionList extends React.Component {
     onItemClick: PropTypes.func
   }
 
-  handleItemClick(e, collectionId) {
+  handleItemClick(e: SyntheticEvent, collectionId: number) {
     e.preventDefault();
     this.props.onItemClick(collectionId);
   }
 
-  countSelectedImages(selectedImages) {
+  countSelectedImages(selectedImages: {[key: string]: boolean}) {
     return Object.keys(selectedImages).reduce((accum, key) =>
       selectedImages[key] ? accum + 1 : accum,
     0);
   }
 
-  renderCollection(collection, count) {
+  renderCollection(collection: Collection, count: number) {
     return (
       <p>
-        <a href="#" onClick={(e) =>this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
+        <a href="#" onClick={(e) => this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
         &nbsp;({count})
       </p>
     );
