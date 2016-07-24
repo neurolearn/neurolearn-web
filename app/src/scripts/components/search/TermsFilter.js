@@ -1,8 +1,12 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { some, omit, sortBy } from 'lodash';
 
 import { Input } from 'react-bootstrap';
+
+import Events from '../../utils/events';
 
 import styles from './TermsFilter.scss';
 
@@ -22,12 +26,12 @@ export default class TermsFilter extends React.Component {
     disabled: PropTypes.bool
   }
 
-  handleChange(key, e) {
+  handleChange(key: string, e: SyntheticEvent) {
     const { terms } = this.props;
 
     const newTerms = terms.map(term =>
       term.key === key
-      ? Object.assign({}, term, {selected: e.target.checked})
+      ? Object.assign({}, term, {selected: Events.target(e, HTMLInputElement).checked})
       : term
     );
 
@@ -38,7 +42,7 @@ export default class TermsFilter extends React.Component {
     this.props.onChange(clearSelected(this.props.terms));
   }
 
-  renderCheckboxes(terms, disabled) {
+  renderCheckboxes(terms: Array<{}>, disabled: boolean) {
     return sortBy(terms, 'key').map(term =>
       <Input
         type='checkbox'
