@@ -95,8 +95,8 @@ class TestModel extends React.Component {
     this.props.dispatch(showSelectImagesModal(id));
   }
 
-  handleImageToggle(collection, imageId) {
-    this.props.dispatch(toggleImage({collection, imageId}));
+  handleImageToggle(collectionId, imageId) {
+    this.props.dispatch(toggleImage({collectionId, imageId}));
   }
 
   handleImageListToggle(collection, images, checked) {
