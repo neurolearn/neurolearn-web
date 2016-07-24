@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 
 import update from 'react/lib/update';
@@ -5,16 +7,17 @@ import { isEmpty, omit } from 'lodash';
 import { Input } from 'react-bootstrap';
 import RangeFilter from './RangeFilter';
 import TermsFilter from './TermsFilter';
+import Events from '../../utils/events';
 
-function unsetFilter(fieldName, filter) {
+function unsetFilter(fieldName: string, filter: Object) {
   return omit(filter, fieldName);
 }
 
-function setFilter(fieldName, filter, clause) {
+function setFilter(fieldName: string, filter: Object, clause: Object) {
   return update(filter, {[fieldName]: {$set: clause}});
 }
 
-function markSelected(filter, fieldName, terms) {
+function markSelected(filter, fieldName: string, terms) {
   const selected = filter[fieldName] && filter[fieldName].terms[fieldName];
 
   if (isEmpty(selected)) {
@@ -31,7 +34,7 @@ function markSelected(filter, fieldName, terms) {
   );
 }
 
-function getBuckets(results, aggregation) {
+function getBuckets(results, aggregation: string) {
   return results ? results.aggregations[aggregation].buckets : [];
 }
 
@@ -42,7 +45,13 @@ export default class RefineSearchResults extends React.Component {
     onChange: PropTypes.func
   }
 
-  handleRangeFilterChange(value) {
+  constructor(props: Object) {
+    super(props);
+    (this:any).handleRangeFilterChange = this.handleRangeFilterChange.bind(this);
+    (this:any).handleHasDOIChange = this.handleHasDOIChange.bind(this);
+  }
+
+  handleRangeFilterChange(value: [number, number]) {
     const { filter } = this.props;
     const clause = value && {
       'range': {
@@ -59,7 +68,7 @@ export default class RefineSearchResults extends React.Component {
     this.props.onChange(newFilter);
   }
 
-  handleTermsFilterChange(fieldName, terms) {
+  handleTermsFilterChange(fieldName: string, terms: Array<{selected: boolean, key: string}>) {
     const selectedTerms = terms
       .filter(term => term.selected)
       .map(term => term.key);
@@ -77,9 +86,9 @@ export default class RefineSearchResults extends React.Component {
     this.props.onChange(newFilter);
   }
 
-  handleHasDOIChange(e) {
-    const { checked } = e.target;
+  handleHasDOIChange(e: SyntheticEvent) {
     const { filter } = this.props;
+    const { checked } = Events.target(e, HTMLInputElement);
 
     const clause = {
       'exists': {'field': 'DOI'}
@@ -132,14 +141,14 @@ export default class RefineSearchResults extends React.Component {
           <RangeFilter
             label="Number of images"
             value={[imagesStats.min, imagesStats.max]}
-            onChange={this.handleRangeFilterChange.bind(this)}
+            onChange={this.handleRangeFilterChange}
           />
 
           { hasDOI && hasDOI.doc_count > 0 &&
             <Input
               type='checkbox'
               label={`Has DOI (${hasDOI.doc_count})`}
-              onChange={(e) => this.handleHasDOIChange(e)}
+              onChange={this.handleHasDOIChange}
             />
           }
 
@@ -160,4 +169,3 @@ export default class RefineSearchResults extends React.Component {
     );
   }
 }
-
