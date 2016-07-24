@@ -1,5 +1,3 @@
-/* @flow */
-
 import update from 'react/lib/update';
 import pick from 'lodash/object/pick';
 import without from 'lodash/array/without';
@@ -15,6 +13,7 @@ import { createAction } from 'redux-actions';
 import { findColumnIndex } from '../utils';
 import api from '../api';
 import { apiError } from './alertMessages';
+import type { Action } from '.';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
 export const REQUEST_IMAGES_METADATA = 'REQUEST_IMAGES_METADATA';
@@ -29,26 +28,10 @@ const excludeProps = ['collection', 'cognitive_paradigm_cogatlas_id', 'descripti
 
 const mandatoryProps = ['id', 'collection_id', 'file', 'name'];
 
+export const resetImagesMetadata = createAction(RESET_IMAGES_METADATA);
+export const requestImagesMetadata = createAction(REQUEST_IMAGES_METADATA);
 
-export function resetImagesMetadata() {
-  return {
-    type: RESET_IMAGES_METADATA
-  };
-}
-
-function requestImagesMetadata() {
-  return {
-    type: REQUEST_IMAGES_METADATA
-  };
-}
-
-function receiveImagesMetadata(items) {
-  return {
-    type: RECEIVE_IMAGES_METADATA,
-    items
-  };
-}
-
+export const receiveImagesMetadata = createAction(RECEIVE_IMAGES_METADATA);
 export const saveImagesMetadataColumn = createAction(SAVE_IMAGES_METADATA_COLUMN);
 export const deleteImagesMetadataColumn = createAction(DELETE_IMAGES_METADATA_COLUMN);
 
@@ -76,14 +59,21 @@ function convertToArrayOfArrays(items) {
     return [keys].concat(items.map(item => keys.map(key => item[key])));
 }
 
-export function loadImagesMetadata(imageMap) {
-  return dispatch => {
+type ImageMapType = {
+  [collectionId: string]: {[imageUrl: string]: boolean}
+};
+
+export function loadImagesMetadata(imageMap: ImageMapType) {
+  console.log('imageMap', imageMap);
+  debugger;
+
+  return (dispatch: Function) => {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
       return new Promise((resolve, reject) => {
         api.get(`/nvproxy/api/collections/${collectionId}/images/`)
           .then(
-            result => resolve([collectionId, result]),
+            (result) => resolve([collectionId, result]),
             error => reject([collectionId, error])
         );
       });
@@ -91,6 +81,7 @@ export function loadImagesMetadata(imageMap) {
     return Promise.all(imageMetadataPromises).then(results => {
       const items = results.reduce((accum, r) => {
         const [collectionId, response] = r;
+
         return accum.concat(setExtraProps(collectionId,
           filterImages(imageMap[collectionId],
                        response.results)));
@@ -114,10 +105,14 @@ function isInvariant(items) {
   return true;
 }
 
-export default function reducer(state = {
+export default function reducer(state
+: {
+  isFetching: boolean,
+  data: Array<Array<string | number>>
+} = {
   isFetching: false,
   data: []
-}, action) {
+}, action: Action) {
   switch (action.type) {
     case RESET_IMAGES_METADATA:
     case REQUEST_IMAGES_METADATA:
@@ -125,21 +120,22 @@ export default function reducer(state = {
         isFetching: true,
         data: []
       };
-    case RECEIVE_IMAGES_METADATA:
-      const { items } = action;
+    case RECEIVE_IMAGES_METADATA: {
+      const { payload } = action;
 
-      const allowProps = difference(items.length ? keys(items[0]) : [],
+      const allowProps = difference(payload.length ? keys(payload[0]) : [],
                                     union(mandatoryProps, excludeProps));
-      const invariantProps = allowProps.filter(prop => isInvariant(pluck(items, prop)));
+      const invariantProps = allowProps.filter(prop => isInvariant(pluck(payload, prop)));
       const pickedProps = union(mandatoryProps, difference(allowProps, invariantProps));
 
       return {
         isFetching: false,
         data: convertToArrayOfArrays(
-          action.items.map((item) => pick(item, pickedProps)))
+          action.payload.map((item) => pick(item, pickedProps)))
       };
+    }
 
-    case SAVE_IMAGES_METADATA_COLUMN:
+    case SAVE_IMAGES_METADATA_COLUMN: {
       const { data } = state;
       const { name, values } = action.payload;
       const columnIndex = findColumnIndex(data, name);
@@ -153,8 +149,9 @@ export default function reducer(state = {
         : {...state,
             data: zip(data, [name].concat(values))
                   .map(x => x[0].concat(x[1]))};
+    }
 
-    case DELETE_IMAGES_METADATA_COLUMN:
+    case DELETE_IMAGES_METADATA_COLUMN: {
       const { data } = state;
 
       const columnIndex = findColumnIndex(data, action.payload);
@@ -163,6 +160,7 @@ export default function reducer(state = {
         ...state,
         data: data.map(x => update(x, {$splice: [[columnIndex, 1]]}))
       };
+    }
 
     default:
       return state;

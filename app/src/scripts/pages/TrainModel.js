@@ -3,7 +3,7 @@
 import React from 'react';
 import NavItem from '../components/NavItem';
 
-const TrainModel = ({children}) => (
+const TrainModel = ({children} : {children? : any}) => (
   <div>
     <ul className="nav nav-wizard">
       <NavItem to="/models/new/input-data">1. Input Data</NavItem>

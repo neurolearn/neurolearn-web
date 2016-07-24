@@ -3,12 +3,11 @@
 import 'whatwg-fetch';
 
 import { getAuthToken } from './utils';
+import type { PayloadType } from './state';
 
 function locationOrigin(loc) {
   return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;;
 }
-
-type PayloadType = Object | Array<any>;
 
 const HOST = locationOrigin(window.location);
 const DEFAULT_HEADERS = {'Accept': 'application/json',
@@ -47,8 +46,9 @@ function fetchJSON(path: string, params?: PayloadType, options?: Object = {}) {
   return callAPI(path, params, options).then(response => {
     if (response.status === 200) {
       return response.json();
+    } else {
+      return response.text();
     }
-    return response.text();
   });
 }
 
