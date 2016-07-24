@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -31,7 +33,12 @@ class InputData extends React.Component {
     selectImagesModal: PropTypes.object,
     selectedImages: PropTypes.object,
     dispatch: PropTypes.func.isRequired
-  };
+  }
+
+  constructor(props) {
+    super(props);
+    (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
+  }
 
   componentDidMount() {
     if (!this.props.search.results) {
@@ -102,9 +109,11 @@ class InputData extends React.Component {
 
         <div className="row">
           <div className="col-md-9">
-                <SearchContainer {...this.props.search}
-                                 dispatch={this.props.dispatch}
-                                 onSearchResultClick={this.handleCollectionClick.bind(this)} />
+            <SearchContainer
+              {...this.props.search}
+              dispatch={this.props.dispatch}
+              onSearchResultClick={this.handleCollectionClick}
+            />
           </div>
 
           <div className="col-md-3">
@@ -115,10 +124,15 @@ class InputData extends React.Component {
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
                 { anySelected
                   ? <p>Training dataset is empty.</p>
-                  : <SelectedCollectionList selectedImages={selectedImages}
-                               onItemClick={(id) => this.handleCollectionClick(id)} />
+                  : <SelectedCollectionList
+                      selectedImages={selectedImages}
+                      onItemClick={this.handleCollectionClick}
+                    />
                 }
-                <Link disabled={anySelected} className="btn btn-primary btn-block continue-button" to="/models/new/training-label">Continue to Training Label</Link>
+                <Link
+                  disabled={anySelected}
+                  className="btn btn-primary btn-block continue-button"
+                  to="/models/new/training-label">Continue to Training Label</Link>
               </div>
             </div>
           </div>
@@ -135,7 +149,8 @@ class InputData extends React.Component {
                                            selectedImages.collectionsById)}
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
                                                                selectImagesModal.collectionId)}
-            onHide={() => dispatch(hideSelectImagesModal())}>
+            onHide={() => dispatch(hideSelectImagesModal())}
+          >
             <Link disabled={anySelected} className="btn btn-primary continue-button" to="/models/new/training-label">Continue to Training Label</Link>
           </SelectImagesModal>
         }

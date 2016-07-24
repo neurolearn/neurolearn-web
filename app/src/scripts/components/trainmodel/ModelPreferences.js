@@ -1,3 +1,5 @@
+/* @flow */
+
 import { isEmpty, some, mapValues, pick, zipWith } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
@@ -62,7 +64,11 @@ function validate(cv, subjectIdData, modelPreferences) {
   return errors;
 }
 
-export default class ModelPreferences extends React.Component {
+class ModelPreferences extends React.Component {
+  state: {
+    errors: Object
+  };
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     targetData: PropTypes.object.isRequired,
@@ -76,21 +82,21 @@ export default class ModelPreferences extends React.Component {
     router: PropTypes.object.isRequired
   };
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
 
     this.state = {
       errors: {}
     };
 
-    this.handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
-    this.handleCVTypeChange = this.handleCVTypeChange.bind(this);
-    this.handleAccessLevelChange = this.handleAccessLevelChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleColumnSave = this.handleColumnSave.bind(this);
-    this.handleColumnDelete = this.handleColumnDelete.bind(this);
-    this.handleSubjectIdSelection = this.handleSubjectIdSelection.bind(this);
-    this.handleKfoldUseSubjectIdsClick = this.handleKfoldUseSubjectIdsClick.bind(this);
+    (this:any).handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
+    (this:any).handleCVTypeChange = this.handleCVTypeChange.bind(this);
+    (this:any).handleAccessLevelChange = this.handleAccessLevelChange.bind(this);
+    (this:any).handleSubmit = this.handleSubmit.bind(this);
+    (this:any).handleColumnSave = this.handleColumnSave.bind(this);
+    (this:any).handleColumnDelete = this.handleColumnDelete.bind(this);
+    (this:any).handleSubjectIdSelection = this.handleSubjectIdSelection.bind(this);
+    (this:any).handleKfoldUseSubjectIdsClick = this.handleKfoldUseSubjectIdsClick.bind(this);
   }
 
   handleSubmit(e) {
@@ -156,22 +162,23 @@ export default class ModelPreferences extends React.Component {
     this.props.dispatch(setKfoldUseSubjectIds(e.target.checked));
   }
 
-  handleColumnSave(name, values) {
+  handleColumnSave(name: string, values) {
     this.props.dispatch(saveImagesMetadataColumn({name, values}));
   }
 
-  handleColumnDelete(name) {
+  handleColumnDelete(name: string) {
     this.props.dispatch(deleteImagesMetadataColumn(name));
   }
 
   renderSelectTargetColumn(imagesData, subjectIdData) {
     return (
       <SelectTargetColumn
-                      data={imagesData}
-                      targetData={subjectIdData}
-                      onSelectTarget={this.handleSubjectIdSelection}
-                      onColumnSave={this.handleColumnSave}
-                      onColumnDelete={this.handleColumnDelete} />
+        data={imagesData}
+        targetData={subjectIdData}
+        onSelectTarget={this.handleSubjectIdSelection}
+        onColumnSave={this.handleColumnSave}
+        onColumnDelete={this.handleColumnDelete}
+      />
     );
   }
 
