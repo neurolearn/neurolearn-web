@@ -1,3 +1,5 @@
+/* @flow */
+
 import { createAction, handleActions } from 'redux-actions';
 
 export const SET_SUBJECT_ID_DATA = 'SET_SUBJECT_ID_DATA';
