@@ -46,13 +46,13 @@ class InputData extends React.Component {
     }
   }
 
-  handleImageToggle(collection, imageId) {
-    this.props.dispatch(toggleImage(collection, imageId));
+  handleImageToggle(collectionId, imageId) {
+    this.props.dispatch(toggleImage({collectionId, imageId}));
     this.props.dispatch(resetImagesMetadata());
   }
 
   handleImageListToggle(collection, images, checked) {
-    this.props.dispatch(toggleImageList(collection, images, checked));
+    this.props.dispatch(toggleImageList({collection, images, checked}));
     this.props.dispatch(resetImagesMetadata());
   }
 

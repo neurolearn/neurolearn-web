@@ -96,11 +96,11 @@ class TestModel extends React.Component {
   }
 
   handleImageToggle(collection, imageId) {
-    this.props.dispatch(toggleImage(collection, imageId));
+    this.props.dispatch(toggleImage({collection, imageId}));
   }
 
   handleImageListToggle(collection, images, checked) {
-    this.props.dispatch(toggleImageList(collection, images, checked));
+    this.props.dispatch(toggleImageList({collection, images, checked}));
   }
 
   handleTestModelClick(e) {

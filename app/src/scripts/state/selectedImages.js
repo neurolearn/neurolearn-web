@@ -1,26 +1,19 @@
+/* @flow */
+
 import cloneDeep from 'lodash/lang/cloneDeep';
 import update from 'react/lib/update';
+
+import { createAction } from 'redux-actions';
+import type { Action } from '.';
 
 export const TOGGLE_IMAGE = 'TOGGLE_IMAGE';
 export const TOGGLE_IMAGE_LIST = 'TOGGLE_IMAGE_LIST';
 export const RESET_SELECTED_IMAGES = 'RESET_SELECTED_IMAGES';
 
-export function toggleImage(collectionId, imageId) {
-  return {
-    type: TOGGLE_IMAGE,
-    collectionId,
-    imageId
-  };
-}
+export const toggleImage = createAction(TOGGLE_IMAGE);
+export const toggleImageList = createAction(TOGGLE_IMAGE_LIST);
 
-export function toggleImageList(collection, images, checked) {
-  return {
-    type: TOGGLE_IMAGE_LIST,
-    collection,
-    images,
-    checked
-  };
-}
+export const resetSelectedImages = createAction(RESET_SELECTED_IMAGES);
 
 function imageListToggle(state, collection, images, checked) {
   const imagesUpdate = images.reduce((accum, image) => {
@@ -54,25 +47,25 @@ function imageToggle(state, collection, imageId) {
   });
 }
 
-export function resetSelectedImages() {
-  return {
-    type: RESET_SELECTED_IMAGES
-  };
-}
+type SelectedImagesType = {
+  images: Object,
+  collectionsById: Object
+};
 
-const initialState = {
+const initialState: SelectedImagesType = {
   images: {},
   collectionsById: {}
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state: SelectedImagesType = initialState, action: Action) {
   switch (action.type) {
     case TOGGLE_IMAGE:
-      return imageToggle(state, action.collectionId, action.imageId);
+      const { collectionId, imageId } = action.payload;
+      return imageToggle(state, collectionId, imageId);
 
     case TOGGLE_IMAGE_LIST:
-      return imageListToggle(state, action.collection, action.images,
-                             action.checked);
+      const { collection, images, checked } = action.payload;
+      return imageListToggle(state, collection, images, checked);
 
     case RESET_SELECTED_IMAGES:
       return initialState;
