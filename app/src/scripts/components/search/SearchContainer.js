@@ -1,3 +1,5 @@
+/* @flow */
+
 import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import SearchInput from './SearchInput';
@@ -38,15 +40,24 @@ export default class SearchContainer extends React.Component {
     dispatch: PropTypes.func.isRequired
   }
 
-  handleSearchInputChange(query) {
+  constructor(props: Object) {
+    super(props);
+
+    (this:any).handleFilterChange = this.handleFilterChange.bind(this);
+    (this:any).handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    (this:any).handleSortSelect = this.handleSortSelect.bind(this);
+    (this:any).handlePageSelect = this.handlePageSelect.bind(this);
+  }
+
+  handleSearchInputChange(query: string) {
     this.props.dispatch(loadSearchResults(inputSearchQuery(query)));
   }
 
-  handleSortSelect(sortType) {
+  handleSortSelect(sortType: string) {
     this.props.dispatch(loadSearchResults(selectSortType(sortType)));
   }
 
-  handlePageSelect(page) {
+  handlePageSelect(page: number) {
     if (page < 1) {
       return;
     }
@@ -55,11 +66,11 @@ export default class SearchContainer extends React.Component {
       (page - 1) * RESULTS_PER_PAGE)));
   }
 
-  handleFilterChange(filter) {
+  handleFilterChange(filter: Object) {
     this.props.dispatch(loadSearchResults(changeFilter(filter)));
   }
 
-  totalHits(searchResults) {
+  totalHits(searchResults: Object) {
     return searchResults ? searchResults.hits.total : 0;
   }
 
@@ -73,7 +84,7 @@ export default class SearchContainer extends React.Component {
             <RefineSearchResults
               results={results}
               filter={filter}
-              onChange={this.handleFilterChange.bind(this)}
+              onChange={this.handleFilterChange}
             />
           </div>
 
@@ -83,14 +94,14 @@ export default class SearchContainer extends React.Component {
                 <SearchInput
                   value={query}
                   placeholder="Search NeuroVault Collections"
-                  onChange={this.handleSearchInputChange.bind(this)}
+                  onChange={this.handleSearchInputChange}
                 />
                 <div className="search-meta clearfix">
                   <div className="pull-left HitsCount">Found {this.totalHits(results)} collections</div>
                   <div className="pull-right">
                     <SortSearchResults
                       sortType={sort}
-                      onSelect={this.handleSortSelect.bind(this)}
+                      onSelect={this.handleSortSelect}
                     />
                   </div>
                 </div>
@@ -106,7 +117,7 @@ export default class SearchContainer extends React.Component {
                   ? <SearchPagination
                       totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
                       activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                      onSelect={this.handlePageSelect.bind(this)} />
+                      onSelect={this.handlePageSelect} />
                   : false }
               </div>
             </div>
