@@ -41,7 +41,7 @@ function getBuckets(results, aggregation: string) {
 export default class RefineSearchResults extends React.Component {
   static propTypes = {
     filter: PropTypes.object,
-    results: PropTypes.object.isRequired,
+    results: PropTypes.object,
     onChange: PropTypes.func
   }
 
