@@ -31,6 +31,7 @@ export default class SortSearchResults extends React.Component {
     return (
       <div className={styles.root}>
         <DropdownButton
+          id="sortType"
           bsStyle="link"
           title={`Sort: ${sortTitle(this.props.sortType)}`}
           onSelect={(event, eventKey) => this.props.onSelect(eventKey)}>
