@@ -17,3 +17,5 @@ const TrainModel = ({children}) => (
 TrainModel.propTypes = {
   children: React.PropTypes.node
 };
+
+export default TrainModel;
