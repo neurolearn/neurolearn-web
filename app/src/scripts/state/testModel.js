@@ -1,5 +1,8 @@
+/* @flow */
+
 import { map, pick, keys, mapValues } from 'lodash';
 import { createAction } from 'redux-actions';
+import type { Action } from '.';
 
 import api from '../api';
 
@@ -19,7 +22,13 @@ function extractId(url) {
   return parseInt(url.match(/images\/(\d+)/)[1]);
 }
 
-function listImageIds(selectedImages) {
+function listImageIds(
+  selectedImages: {
+    [collectionId: string]: {
+      [url: string]: boolean
+    }
+  }
+) {
   return mapValues(selectedImages, function(urlsMap) {
     return map(keys(pick(urlsMap, Boolean)), extractId);
   });
@@ -32,8 +41,13 @@ function resetModelTestData(dispatch) {
    hideSelectImagesModal].map(action => dispatch(action()));
 }
 
-export function testModel(name, modelId, selectedImages, router) {
-  return (dispatch, getState) => {
+export function testModel(
+  name: string,
+  modelId: number,
+  selectedImages: Object,
+  router: Object
+) {
+  return (dispatch: Function, getState: Function) => {
     dispatch(requestTestModel());
 
     const payload = {
@@ -52,12 +66,17 @@ export function testModel(name, modelId, selectedImages, router) {
   };
 }
 
-const initialState = {
-  isFetching: false,
-  model: null
+type TestModelStateType = {
+  isFetching: boolean,
+  model?: number
 };
 
-export default function reducer(state = initialState, action) {
+const initialState: TestModelStateType = {
+  isFetching: false,
+  model: undefined
+};
+
+export default function reducer(state: TestModelStateType = initialState, action: Action) {
   switch (action.type) {
     case SET_TEST_MODEL:
       return Object.assign({}, state, {
