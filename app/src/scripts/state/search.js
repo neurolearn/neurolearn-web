@@ -1,4 +1,9 @@
+/* @flow */
+
 import { debounce, values, isEmpty } from 'lodash';
+import { createAction } from 'redux-actions';
+import type { Action } from '.';
+
 import api from '../api';
 
 import { RESULTS_PER_PAGE, DEFAULT_SEARCH_SORT } from '../constants/Search';
@@ -12,6 +17,15 @@ export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SELECT_SEARCH_OFFSET = 'SELECT_SEARCH_OFFSET';
 export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
+
+const requestSearchResults = createAction(REQUEST_SEARCH_RESULTS);
+const receiveSearchResults = createAction(RECEIVE_SEARCH_RESULTS);
+
+export const inputSearchQuery = createAction(INPUT_SEARCH_QUERY);
+export const selectSearchOffset = createAction(SELECT_SEARCH_OFFSET);
+export const selectSortType = createAction(SELECT_SORT_TYPE);
+export const changeFilter = createAction(CHANGE_FILTER);
+export const resetSearch = createAction(RESET_SEARCH);
 
 
 function sortOption(sortType) {
@@ -87,20 +101,6 @@ function prepareSearchParams(state) {
   };
 }
 
-function requestSearchResults(results) {
-  return {
-    type: REQUEST_SEARCH_RESULTS,
-    results
-  };
-}
-
-function receiveSearchResults(results) {
-  return {
-    type: RECEIVE_SEARCH_RESULTS,
-    results
-  };
-}
-
 function fetchSearchResults(dispatch, state) {
   const searchParams = prepareSearchParams(state);
   return api.post('/search', searchParams).then(
@@ -110,49 +110,23 @@ function fetchSearchResults(dispatch, state) {
 
 const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
 
-export function loadSearchResults(action) {
-  return (dispatch, getState) => {
+export function loadSearchResults(action: Action) {
+  return (dispatch: Function, getState: Function) => {
     dispatch(requestSearchResults());
     dispatch(action);
     return debouncedFetchSearchResults(dispatch, getState().search);
   };
 }
 
-export function inputSearchQuery(query) {
-  return {
-    type: INPUT_SEARCH_QUERY,
-    query
-  };
-}
+type SearchStateType = {
+  isFetching: boolean,
+  query: string,
+  filter: Object,
+  from: number,
+  sort: string
+};
 
-export function selectSearchOffset(offset) {
-  return {
-    type: SELECT_SEARCH_OFFSET,
-    offset
-  };
-}
-
-export function selectSortType(sortType) {
-  return {
-    type: SELECT_SORT_TYPE,
-    sortType
-  };
-}
-
-export function changeFilter(filter) {
-  return {
-    type: CHANGE_FILTER,
-    filter
-  };
-}
-
-export function resetSearch() {
-  return {
-    type: RESET_SEARCH
-  };
-}
-
-const initialState = {
+const initialState: SearchStateType = {
   isFetching: false,
   query: '',
   filter: {},
@@ -160,7 +134,7 @@ const initialState = {
   sort: DEFAULT_SEARCH_SORT
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state: SearchStateType = initialState, action: Action) {
   switch (action.type) {
     case REQUEST_SEARCH_RESULTS:
       return Object.assign({}, state, {
@@ -169,25 +143,25 @@ export default function reducer(state = initialState, action) {
     case RECEIVE_SEARCH_RESULTS:
       return Object.assign({}, state, {
         isFetching: false,
-        results: action.results
+        results: action.payload
       });
     case INPUT_SEARCH_QUERY:
       return Object.assign({}, state, {
-        query: action.query,
+        query: action.payload,
         from: 0
       });
     case CHANGE_FILTER:
       return Object.assign({}, state, {
-        filter: action.filter,
+        filter: action.payload,
         from: 0
       });
     case SELECT_SEARCH_OFFSET:
       return Object.assign({}, state, {
-        from: action.offset
+        from: action.payload
       });
     case SELECT_SORT_TYPE:
       return Object.assign({}, state, {
-        sort: action.sortType,
+        sort: action.payload,
         from: 0
       });
     case RESET_SEARCH:
