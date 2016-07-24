@@ -1,25 +1,25 @@
+/* @flow */
+
+import { createAction } from 'redux-actions';
+import type { Action } from '.';
+
 export const SHOW_SELECT_IMAGES_MODAL = 'SHOW_SELECT_IMAGES_MODAL';
 export const HIDE_SELECT_IMAGES_MODAL = 'HIDE_SELECT_IMAGES_MODAL';
 
-export function showSelectImagesModal(collectionId) {
-  return {
-    type: SHOW_SELECT_IMAGES_MODAL,
-    collectionId
-  };
-}
+export const showSelectImagesModal = createAction(SHOW_SELECT_IMAGES_MODAL);
+export const hideSelectImagesModal = createAction(HIDE_SELECT_IMAGES_MODAL);
 
-export function hideSelectImagesModal() {
-  return {
-    type: HIDE_SELECT_IMAGES_MODAL
-  };
-}
+type SelectImagesModalType = {
+  display: boolean,
+  collectionId: string
+};
 
-const initialState = { display: false, collectionId: null };
+const initialState: SelectImagesModalType = { display: false, collectionId: '' };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state: SelectImagesModalType = initialState, action: Action) {
   switch (action.type) {
     case SHOW_SELECT_IMAGES_MODAL:
-      return { display: true, collectionId: action.collectionId };
+      return { display: true, collectionId: action.payload };
 
     case HIDE_SELECT_IMAGES_MODAL:
       return initialState;
