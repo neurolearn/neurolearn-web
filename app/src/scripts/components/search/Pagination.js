@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import { Pagination } from 'react-bootstrap';
 
@@ -8,11 +10,16 @@ export default class SearchPagination extends React.Component {
     onSelect: PropTypes.func.isRequired
   }
 
-  handleSelect(event, selectedEvent) {
+  constructor(props: Object) {
+    super(props);
+    (this:any).handleSelect = this.handleSelect.bind(this);
+  }
+
+  handleSelect(event: SyntheticEvent, selectedEvent: {eventKey: number}) {
     this.props.onSelect(selectedEvent.eventKey);
   }
 
-  maxButtons(totalPages) {
+  maxButtons(totalPages: number) {
     return totalPages > 5 ? 5 : totalPages;
   }
 
@@ -27,7 +34,7 @@ export default class SearchPagination extends React.Component {
         items={this.props.totalPages}
         maxButtons={this.maxButtons(this.props.totalPages)}
         activePage={this.props.activePage}
-        onSelect={this.handleSelect.bind(this)} />
+        onSelect={this.handleSelect} />
     );
   }
 }
