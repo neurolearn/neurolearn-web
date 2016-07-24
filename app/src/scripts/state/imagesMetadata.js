@@ -64,9 +64,6 @@ type ImageMapType = {
 };
 
 export function loadImagesMetadata(imageMap: ImageMapType) {
-  console.log('imageMap', imageMap);
-  debugger;
-
   return (dispatch: Function) => {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
