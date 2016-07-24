@@ -1,3 +1,5 @@
+/* @flow */
+
 import { isEmpty, pick, pluck } from 'lodash';
 import classNames from 'classnames';
 
@@ -17,10 +19,11 @@ import {
   saveImagesMetadataColumn,
   deleteImagesMetadataColumn
 } from '../../state/imagesMetadata';
+
 import { setTargetData } from '../../state/targetData';
 
 
-function validate(targetData, analysisType) {
+function validate(targetData: Object, analysisType: string): string {
   if (targetData.field.index === null) {
     return 'A data field selection is required.';
   }
@@ -29,9 +32,15 @@ function validate(targetData, analysisType) {
       !isBinaryCollection(pluck(targetData.data, 'target'))) {
     return `“${targetData.field.name}” field contains more than two classes. Classification requires binary data. You might consider editing this field, selecting a different categorical field, or adding a new field.`;
   }
+
+  return '';
 }
 
-export default class TrainingLabel extends React.Component {
+class TrainingLabel extends React.Component {
+  state: {
+    errors: string
+  }
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     selectedImages: PropTypes.object,
@@ -40,18 +49,18 @@ export default class TrainingLabel extends React.Component {
     modelPreferences: PropTypes.object
   };
 
-  constructor(props) {
+  constructor(props: Object) {
     super(props);
 
     this.state = {
-      errors: null
+      errors: ''
     };
 
-    this.handleTargetSelection = this.handleTargetSelection.bind(this);
-    this.handleColumnSave = this.handleColumnSave.bind(this);
-    this.handleColumnDelete = this.handleColumnDelete.bind(this);
-    this.handleAnalysisTypeChange = this.handleAnalysisTypeChange.bind(this);
-    this.handleContinueClick = this.handleContinueClick.bind(this);
+    (this:any).handleTargetSelection = this.handleTargetSelection.bind(this);
+    (this:any).handleColumnSave = this.handleColumnSave.bind(this);
+    (this:any).handleColumnDelete = this.handleColumnDelete.bind(this);
+    (this:any).handleAnalysisTypeChange = this.handleAnalysisTypeChange.bind(this);
+    (this:any).handleContinueClick = this.handleContinueClick.bind(this);
   }
 
   componentDidMount() {
