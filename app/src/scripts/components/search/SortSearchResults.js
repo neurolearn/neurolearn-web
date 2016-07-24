@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import SearchSortTypes from '../../constants/SearchSortTypes';
@@ -6,7 +8,7 @@ import styles from './SortSearchResults.scss';
 
 const SORT_TYPES = ['MOST_IMAGES', 'FEWEST_IMAGES', 'RECENTLY_UPDATED'];
 
-function sortTitle(sortType) {
+function sortTitle(sortType: string): string {
   return SearchSortTypes[sortType].title;
 }
 
@@ -16,7 +18,7 @@ export default class SortSearchResults extends React.Component {
     onSelect: React.PropTypes.func
   }
 
-  renderMenuItems(sortTypes) {
+  renderMenuItems(sortTypes: Array<string>) {
     return sortTypes.map(sortType =>
       <MenuItem
         key={sortType}
@@ -29,7 +31,7 @@ export default class SortSearchResults extends React.Component {
     return (
       <div className={styles.root}>
         <DropdownButton
-          bsStyle='link'
+          bsStyle="link"
           title={`Sort: ${sortTitle(this.props.sortType)}`}
           onSelect={(event, eventKey) => this.props.onSelect(eventKey)}>
           {this.renderMenuItems(SORT_TYPES)}
