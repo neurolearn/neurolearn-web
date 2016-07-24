@@ -119,16 +119,20 @@ class TrainingLabel extends React.Component {
           <label>Analysis type</label>
           <div className="radio">
             <label className="checkbox-inline">
-              <input type="radio"
-                     value="regression"
-                     onChange={this.handleAnalysisTypeChange}
-                     checked={modelPreferences.analysisType === AnalysisTypes.regression}/>Regression
+              <input
+                type="radio"
+                value="regression"
+                onChange={this.handleAnalysisTypeChange}
+                checked={modelPreferences.analysisType === AnalysisTypes.regression}
+              />Regression
             </label>
             <label className="checkbox-inline">
-              <input type="radio"
-                     value="classification"
-                     onChange={this.handleAnalysisTypeChange}
-                     checked={modelPreferences.analysisType === AnalysisTypes.classification}/>Classification
+              <input
+                type="radio"
+                value="classification"
+                onChange={this.handleAnalysisTypeChange}
+                checked={modelPreferences.analysisType === AnalysisTypes.classification}
+              />Classification
             </label>
           </div>
         </div>
