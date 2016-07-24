@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
@@ -8,6 +10,12 @@ export default class SearchInput extends React.Component {
     value: PropTypes.string,
     placeholder: PropTypes.string,
     onChange: PropTypes.func.isRequired
+  }
+
+  constructor(props: Object) {
+    super(props);
+    (this:any).handleChange = this.handleChange.bind(this);
+    (this:any).handleClearSearchClick = this.handleClearSearchClick.bind(this);
   }
 
   handleChange() {
@@ -33,11 +41,11 @@ export default class SearchInput extends React.Component {
           autoCorrect="off"
           value={this.props.value}
           placeholder={this.props.placeholder}
-          onChange={this.handleChange.bind(this)}
+          onChange={this.handleChange}
         />
         <span
           className={classNames('clear-search fa fa-times-circle', value === '' && 'hide')}
-          onClick={this.handleClearSearchClick.bind(this)}
+          onClick={this.handleClearSearchClick}
         ></span>
       </div>
     );
