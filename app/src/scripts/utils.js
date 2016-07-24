@@ -55,6 +55,10 @@ export function neuroVaultImageURL(imageId: number) {
   return `http://neurovault.org/images/${imageId}/`;
 }
 
+export function neuroVaultCollectionURL(collectionId: number) {
+  return `http://neurovault.org/collections/${collectionId}/`;
+}
+
 function columnValues(data, index) {
   return data.slice(1).map((row, i) => row[index]);
 }
