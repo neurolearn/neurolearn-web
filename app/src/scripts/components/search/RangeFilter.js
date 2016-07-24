@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, { PropTypes } from 'react';
 import ReactSlider from 'react-slider';
 
@@ -7,12 +9,9 @@ const RANGE_MIN = 0;
 const RANGE_MAX = 100;
 
 export default class RangeFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null
-    };
-  }
+  state: {
+    value?: [number, number]
+  };
 
   static propTypes = {
     label: React.PropTypes.string,
@@ -20,11 +19,23 @@ export default class RangeFilter extends React.Component {
     onChange: PropTypes.func
   }
 
+  constructor(props: Object) {
+    super(props);
+    this.state = {
+      value: undefined
+    };
+
+    (this:any).handleClearFilterClick = this.handleClearFilterClick.bind(this);
+    (this:any).handleInputChange = this.handleInputChange.bind(this);
+    (this:any).handleSliderChange = this.handleSliderChange.bind(this);
+    (this:any).handleSliderOnAfterChange = this.handleSliderOnAfterChange.bind(this);
+  }
+
   triggerOnChange() {
     this.props.onChange(this.state.value);
   }
 
-  inputOnChange() {
+  handleInputChange() {
     this.setState({
       value: [
         this.refs.inputFrom.value,
@@ -33,16 +44,16 @@ export default class RangeFilter extends React.Component {
     }, this.triggerOnChange);
   }
 
-  sliderOnChange(e) {
-    this.setState({value: e});
+  handleSliderChange(value: [number, number]) {
+    this.setState({ value });
   }
 
-  sliderOnAfterChange() {
+  handleSliderOnAfterChange() {
     this.triggerOnChange();
   }
 
   handleClearFilterClick() {
-    this.setState({value: null}, this.triggerOnChange);
+    this.setState({value: undefined}, this.triggerOnChange);
   }
 
   render() {
@@ -55,7 +66,7 @@ export default class RangeFilter extends React.Component {
         }&nbsp;<i
                   title="Clear Filter"
                   className="clear-filter fa fa-times-circle"
-                  onClick={this.handleClearFilterClick.bind(this)}
+                  onClick={this.handleClearFilterClick}
                ></i></label>
 
         <div className="clearfix">
@@ -65,7 +76,7 @@ export default class RangeFilter extends React.Component {
                   className='form-control'
                   value={value ? value[0] : ''}
                   ref='inputFrom'
-                  onChange={this.inputOnChange.bind(this)} />
+                  onChange={this.handleInputChange} />
             </div>
             <span className={styles.sep}>—</span>
             <div className={styles.to}>
@@ -74,7 +85,7 @@ export default class RangeFilter extends React.Component {
                   className='form-control'
                   ref='inputTo'
                   value={value ? value[1] : ''}
-                  onChange={this.inputOnChange.bind(this)} />
+                  onChange={this.handleInputChange} />
             </div>
         </div>
         <div className={ styles.stats }>
@@ -87,11 +98,10 @@ export default class RangeFilter extends React.Component {
           value={value ? value : [RANGE_MIN, RANGE_MAX]}
           orientation="horizontal"
           withBars
-          onChange={this.sliderOnChange.bind(this)}
-          onAfterChange={this.sliderOnAfterChange.bind(this)}
+          onChange={this.handleSliderChange}
+          onAfterChange={this.handleSliderOnAfterChange.bind(this)}
           />
       </div>
     );
   }
 }
-
