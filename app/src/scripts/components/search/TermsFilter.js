@@ -26,6 +26,11 @@ export default class TermsFilter extends React.Component {
     disabled: PropTypes.bool
   }
 
+  constructor(props: Object) {
+    super(props);
+    (this:any).handleClearFilterClick = this.handleClearFilterClick.bind(this);
+  }
+
   handleChange(key: string, e: SyntheticEvent) {
     const { terms } = this.props;
 
@@ -64,7 +69,7 @@ export default class TermsFilter extends React.Component {
                                 !anySelected(terms) && 'empty-filter')}
         >{label}&nbsp;<i title="Clear Filter"
                          className="clear-filter fa fa-times-circle"
-                         onClick={this.handleClearFilterClick.bind(this)}
+                         onClick={this.handleClearFilterClick}
                       ></i>
         </label>
         { this.renderCheckboxes(terms, disabled) }
