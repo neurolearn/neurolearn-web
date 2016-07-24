@@ -28,7 +28,7 @@ export default class SelectedCollectionList extends React.Component {
 
   renderCollection(collection: Collection, count: number) {
     return (
-      <p>
+      <p key={collection._id}>
         <a href="#" onClick={(e) => this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
         &nbsp;({count})
       </p>
