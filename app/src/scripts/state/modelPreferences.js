@@ -1,4 +1,7 @@
+/* @flow */
+
 import { createAction } from 'redux-actions';
+import type { Action } from '.';
 
 import AnalysisTypes from '../constants/AnalysisTypes';
 
@@ -35,25 +38,25 @@ export const setKfoldUseSubjectIds = createAction(SET_KFOLD_USE_SUBJECT_IDS);
 const requestModelTraining = createAction(REQUEST_MODEL_TRAINING);
 const resetModelPreferences = createAction(RESET_MODEL_PREFERENCES);
 
-export function resetModelTrainData(dispatch) {
+export function resetModelTrainData(dispatch: Function) {
   [resetSearch,
    resetImagesMetadata,
    resetSelectedImages,
    hideSelectImagesModal,
    resetTargetData,
    resetSubjectIdData,
-   resetModelPreferences].map(action => dispatch(action()));
+   resetModelPreferences].map((action: Function) => dispatch(action()));
 }
 
-export function trainModel(name,
-                           description,
-                           isPrivate,
-                           algorithm,
-                           targetData,
-                           collections,
-                           crossValidation,
-                           router) {
-  return dispatch => {
+export function trainModel(name: string,
+                           description: string,
+                           isPrivate: boolean,
+                           algorithm: string,
+                           targetData: Object,
+                           collections: Object,
+                           crossValidation: Object,
+                           router: Object) {
+  return (dispatch: Function) => {
     dispatch(requestModelTraining());
 
     const payload = {
@@ -77,8 +80,8 @@ export function trainModel(name,
   };
 }
 
-export function retrainModelWith(modelId, params, success) {
-  return dispatch => {
+export function retrainModelWith(modelId: string, params: Object, success: Function) {
+  return (dispatch: Function) => {
     dispatch(requestModelTraining());
 
     return api.post(`/api/models/${modelId}/retrain`, params)
@@ -86,7 +89,20 @@ export function retrainModelWith(modelId, params, success) {
   }
 }
 
-const initialState = {
+type ModelPreferencesType = {
+  isFetching: boolean,
+  modelName: string,
+  description: string,
+  algorithm: string,
+  cvType: string,
+  kfoldsParam: string,
+  losoParam: string,
+  private: boolean,
+  kfoldUseSubjectIDs: boolean,
+  analysisType: string
+};
+
+const initialState : ModelPreferencesType = {
   isFetching: false,
   modelName: '',
   description: '',
@@ -99,7 +115,7 @@ const initialState = {
   analysisType: AnalysisTypes.regression
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state: ModelPreferencesType = initialState, action: Action) {
   switch (action.type) {
     case INPUT_MODEL_NAME:
       return Object.assign({}, state, {
