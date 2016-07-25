@@ -77,12 +77,12 @@ const FAQ = () => (
 
         <a name="q7"></a>
         <h2>How do I upload my own data?</h2>
-        <p>Data must be uploaded directly to neurovault.  There are two ways to upload your data.
-          <ul>
-            <li>The primary upload method is to use the neurovault graphic interface and follow all of the instructions.</li>
-            <li>Alternatively, there is a programmatic method to upload data using the neurovault upload API.  Make sure that you upload any meta-data associated with the images using the ‘edit image metadata’ button.  This will allow you to manually upload a csv file or create columns using an interactive table interface.</li>
-          </ul>
-        </p>
+        <p>Data must be uploaded directly to neurovault.  There are two ways to upload your data.</p>
+        <ul>
+          <li>The primary upload method is to use the neurovault graphic interface and follow all of the instructions.</li>
+          <li>Alternatively, there is a programmatic method to upload data using the neurovault upload API.  Make sure that you upload any meta-data associated with the images using the ‘edit image metadata’ button.  This will allow you to manually upload a csv file or create columns using an interactive table interface.</li>
+        </ul>
+
         <a name="q8"></a>
         <h2>What do I do if I discover a bug?</h2>
         <p>Please send an email to <a href="mailto:neurolearnweb@gmail.com">neurolearnweb@gmail.com</a> with details about the circumstances under which the bug occurred  or start a new issue on our github sites.</p>
