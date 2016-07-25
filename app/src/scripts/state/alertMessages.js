@@ -2,7 +2,7 @@
 
 import { createAction } from 'redux-actions';
 import filter from 'lodash/collection/filter';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 export const API_ERROR = 'API_ERROR';
 const DISMISS_ALERT = 'DISMISS_ALERT';

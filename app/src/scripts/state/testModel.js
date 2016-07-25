@@ -2,7 +2,7 @@
 
 import { map, pick, keys, mapValues } from 'lodash';
 import { createAction } from 'redux-actions';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 import api from '../api';
 
@@ -66,17 +66,17 @@ export function testModel(
   };
 }
 
-type TestModelStateType = {
+type TestModelState = {
   isFetching: boolean,
   model?: number
 };
 
-const initialState: TestModelStateType = {
+const initialState: TestModelState = {
   isFetching: false,
   model: undefined
 };
 
-export default function reducer(state: TestModelStateType = initialState, action: Action) {
+export default function reducer(state: TestModelState = initialState, action: Action) {
   switch (action.type) {
     case SET_TEST_MODEL:
       return Object.assign({}, state, {

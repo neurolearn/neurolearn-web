@@ -4,17 +4,13 @@ import jwtDecode from 'jwt-decode';
 import { createAction } from 'redux-actions';
 import api from '../api';
 import { removeAuthToken } from '../utils';
-import type { Action } from '.';
+
+import type { User, Action } from '../types';
 
 const REQUEST_AUTHENTICATED_USER = 'REQUEST_AUTHENTICATED_USER';
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGIN_FAILED = 'LOGIN_FAILED';
 const LOGOUT = 'LOGOUT';
-
-type User = {
-  id: number,
-  name: string
-};
 
 type AuthState = {
   isFetching: boolean,

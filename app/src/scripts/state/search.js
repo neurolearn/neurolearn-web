@@ -2,7 +2,7 @@
 
 import { debounce, values, isEmpty } from 'lodash';
 import { createAction } from 'redux-actions';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 import api from '../api';
 
@@ -118,7 +118,7 @@ export function loadSearchResults(action: Action) {
   };
 }
 
-type SearchStateType = {
+type SearchState = {
   isFetching: boolean,
   query: string,
   filter: Object,
@@ -126,7 +126,7 @@ type SearchStateType = {
   sort: string
 };
 
-const initialState: SearchStateType = {
+const initialState: SearchState = {
   isFetching: false,
   query: '',
   filter: {},
@@ -134,7 +134,7 @@ const initialState: SearchStateType = {
   sort: DEFAULT_SEARCH_SORT
 };
 
-export default function reducer(state: SearchStateType = initialState, action: Action) {
+export default function reducer(state: SearchState = initialState, action: Action) {
   switch (action.type) {
     case REQUEST_SEARCH_RESULTS:
       return Object.assign({}, state, {

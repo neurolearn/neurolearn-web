@@ -5,12 +5,7 @@ import { Link } from 'react-router';
 
 import { pluralize } from '../utils.js';
 
-type ModelTest = {
-  id: number,
-  name: string,
-  images_count: number,
-  mean_correlation: number
-};
+import type { ModelTest } from '../types';
 
 const RecentModelTests = ({ tests } : { tests: Array<ModelTest> }) => (
   <div>

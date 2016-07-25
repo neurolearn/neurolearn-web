@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/lang/cloneDeep';
 import update from 'react/lib/update';
 
 import { createAction } from 'redux-actions';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 export const TOGGLE_IMAGE = 'TOGGLE_IMAGE';
 export const TOGGLE_IMAGE_LIST = 'TOGGLE_IMAGE_LIST';
@@ -47,17 +47,17 @@ function imageToggle(state, collection, imageId) {
   });
 }
 
-type SelectedImagesType = {
+type SelectedImagesState = {
   images: Object,
   collectionsById: Object
 };
 
-const initialState: SelectedImagesType = {
+const initialState: SelectedImagesState = {
   images: {},
   collectionsById: {}
 };
 
-export default function reducer(state: SelectedImagesType = initialState, action: Action) {
+export default function reducer(state: SelectedImagesState = initialState, action: Action) {
   switch (action.type) {
     case TOGGLE_IMAGE:
       const { collectionId, imageId } = action.payload;

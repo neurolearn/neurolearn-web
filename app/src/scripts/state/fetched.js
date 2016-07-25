@@ -1,7 +1,7 @@
 /* @flow */
 
 import { createAction } from 'redux-actions';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 import api from '../api';
 import { apiError, API_ERROR } from './alertMessages';

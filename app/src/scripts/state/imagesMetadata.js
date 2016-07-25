@@ -59,11 +59,11 @@ function convertToArrayOfArrays(items) {
     return [keys].concat(items.map(item => keys.map(key => item[key])));
 }
 
-type ImageMapType = {
+type ImageMap = {
   [collectionId: string]: {[imageUrl: string]: boolean}
 };
 
-export function loadImagesMetadata(imageMap: ImageMapType) {
+export function loadImagesMetadata(imageMap: ImageMap) {
   return (dispatch: Function) => {
     dispatch(requestImagesMetadata());
     const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {

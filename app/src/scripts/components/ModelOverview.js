@@ -5,23 +5,14 @@ import React, { PropTypes } from 'react';
 import { algorithmNameMap } from '../constants/Algorithms';
 import { pluralize } from '../utils.js';
 
+import type { User, Model } from '../types';
+
 import styles from './ModelOverview.scss';
-
-type UserType = {
-  id: number
-};
-
-type ModelType = {
-  user: UserType,
-  images_count: number,
-  label_name: string,
-  algorithm: string
-};
 
 const ModelOverview = (
   { model, user, onAlgorithmClick }
-: { model: ModelType,
-    user: UserType,
+: { model: Model,
+    user: User,
     onAlgorithmClick: (e: SyntheticEvent) => void }
 ) => {
   const userIsOwner = (user && model.user.id === user.id);

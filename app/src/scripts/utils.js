@@ -10,7 +10,7 @@ import keys from 'lodash/object/keys';
 import take from 'lodash/array/take';
 import findIndex from 'lodash/array/findIndex';
 
-type WindowLocation = { protocol: string, host: string};
+import type { WindowLocation } from './types';
 
 export function pluralize(
   n: number,

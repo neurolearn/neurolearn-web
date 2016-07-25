@@ -1,7 +1,7 @@
 /* @flow */
 
 import { createAction } from 'redux-actions';
-import type { Action } from '.';
+import type { Action } from '../types';
 
 import AnalysisTypes from '../constants/AnalysisTypes';
 
@@ -89,7 +89,7 @@ export function retrainModelWith(modelId: string, params: Object, success: Funct
   }
 }
 
-type ModelPreferencesType = {
+type ModelPreferencesState = {
   isFetching: boolean,
   modelName: string,
   description: string,
@@ -102,7 +102,7 @@ type ModelPreferencesType = {
   analysisType: string
 };
 
-const initialState : ModelPreferencesType = {
+const initialState : ModelPreferencesState = {
   isFetching: false,
   modelName: '',
   description: '',
@@ -115,7 +115,7 @@ const initialState : ModelPreferencesType = {
   analysisType: AnalysisTypes.regression
 };
 
-export default function reducer(state: ModelPreferencesType = initialState, action: Action) {
+export default function reducer(state: ModelPreferencesState = initialState, action: Action) {
   switch (action.type) {
     case INPUT_MODEL_NAME:
       return Object.assign({}, state, {
