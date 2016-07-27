@@ -2,25 +2,25 @@
 
 import React from 'react';
 
-import { Router, Route, Redirect } from 'react-router';
+import { Route, Redirect } from 'react-router';
 
-import App from './App';
-import HomePage from './pages/HomePage';
-import Explore from './pages/Explore';
-import MLModels from './pages/dashboard/MLModels';
-import ModelTests from './pages/dashboard/ModelTests';
-import TrainModel from './pages/TrainModel';
-import ViewModel from './pages/ViewModel';
-import TestModel from './pages/TestModel';
-import ViewTest from './pages/ViewTest';
-import InputData from './components/trainmodel/InputData';
-import TrainingLabel from './components/trainmodel/TrainingLabel';
-import ModelPreferences from './components/trainmodel/ModelPreferences';
-import FAQ from './pages/FAQ';
-import NotFound from './pages/NotFound';
+import App from '../App';
+import HomePage from '../pages/HomePage';
+import Explore from '../pages/Explore';
+import MLModels from '../pages/dashboard/MLModels';
+import ModelTests from '../pages/dashboard/ModelTests';
+import TrainModel from '../pages/TrainModel';
+import ViewModel from '../pages/ViewModel';
+import TestModel from '../pages/TestModel';
+import ViewTest from '../pages/ViewTest';
+import InputData from '../components/trainmodel/InputData';
+import TrainingLabel from '../components/trainmodel/TrainingLabel';
+import ModelPreferences from '../components/trainmodel/ModelPreferences';
+import FAQ from '../pages/FAQ';
+import NotFound from '../pages/NotFound';
 
-import { fetchAuthenticatedUser } from './state/auth';
-import { getAuthToken } from './utils';
+import { fetchAuthenticatedUser } from '../state/auth';
+import { getAuthToken } from '../utils';
 
 export default function renderRoutes(store: Object) {
   const requireAuth = (nextState, replace) => {
@@ -28,7 +28,7 @@ export default function renderRoutes(store: Object) {
     if (!auth.user) {
       replace({}, '/');
     }
-  }
+  };
 
   const checkAuth = (nextState, replace, callback) => {
     const { auth } = store.getState();
@@ -42,7 +42,7 @@ export default function renderRoutes(store: Object) {
         callback();
       }
     }
-  }
+  };
 
   return (
     <Route component={App} onEnter={checkAuth}>
