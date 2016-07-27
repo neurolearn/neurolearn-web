@@ -262,6 +262,24 @@ webpackConfig.module.loaders.push(
 /* eslint-enable */
 
 // ------------------------------------
+// Verbatim Modules
+// ------------------------------------
+
+function vendorRegExpPath(filename) {
+  return new RegExp('/vendor_modules/' + filename.replace(/\./g, '\\.') + '$');
+}
+
+webpackConfig.module.noParse = [
+  'handsontable.full.js',
+
+  // nsviewer is from examples folder of neurosynth viewer repo:
+  // cat panzoom.js jquery.min.js xtk.js jquery-ui.min.js \
+  // bootstrap.min.js rainbow.js sylvester.js amplify.min.js \
+  // viewer.js > nsviewer.js
+  'nsviewer.js'
+].map(vendorRegExpPath);
+
+// ------------------------------------
 // Finalize Configuration
 // ------------------------------------
 // when we don't know the public path (we know it only when HMR is enabled [in development]) we
