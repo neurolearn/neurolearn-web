@@ -2,12 +2,12 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Link } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
 import { bindActionCreators } from 'redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AlertMessages from './components/AlertMessages';
-import { logout, loginSuccess } from './state/auth';
+import { logout } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME } from './constants/auth';
 import { authLink } from './utils';
@@ -19,7 +19,6 @@ const logoBetaStyle = {
   fontFamily: 'Georgia, serif'
 };
 
-
 class App extends React.Component {
   static propTypes = {
     children: PropTypes.object,
@@ -30,6 +29,11 @@ class App extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
+  };
+
+  constructor() {
+    super();
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleLogout(e) {
@@ -47,8 +51,8 @@ class App extends React.Component {
     return (
       <NavDropdown id="user-account-dropdown" eventKey={1} title={user.name}>
         <MenuItem
-          eventKey='1'
-          onSelect={this.handleLogout.bind(this)}
+          eventKey="1"
+          onSelect={this.handleLogout}
         >Logout</MenuItem>
       </NavDropdown>
     );
@@ -65,7 +69,7 @@ class App extends React.Component {
     );
   }
 
-  renderApp () {
+  renderApp() {
     const { auth, alertMessages, dispatch } = this.props;
     const { router } = this.context;
 
@@ -73,7 +77,7 @@ class App extends React.Component {
       <div>
         <Navbar staticTop>
           <NavBrand><Link to="/">Neurolearn<sup style={logoBetaStyle}>beta</sup></Link></NavBrand>
-          { auth.user && this.renderAuthenticatedNav() }
+          {auth.user && this.renderAuthenticatedNav()}
           <Nav>
             <LinkContainer to="/explore">
               <NavItem eventKey={1} active={router.isActive('/explore')}>Explore</NavItem>
@@ -83,19 +87,23 @@ class App extends React.Component {
             </LinkContainer>
           </Nav>
           <Nav right>
-            { auth.user
+            {auth.user
               ? this.renderUserDropdown(auth.user)
-              : this.renderLoginLink() }
+              : this.renderLoginLink()}
           </Nav>
         </Navbar>
 
         <div className="container" style={{marginBottom: 50}}>
           <AlertMessages messages={alertMessages}
-                         {...bindActionCreators({dismissAlert}, dispatch)} />
+            {...bindActionCreators({dismissAlert}, dispatch)} />
           {this.props.children}
         </div>
-        <div style={{position: 'fixed', bottom: 20, right: 20 , zIndex: 1000 }}>
-          <a style={{borderRadius: '999rem'}} className="btn btn-success" target="_blank" href="https://github.com/neurolearn/neurolearn-web/issues"><i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback</a>
+        <div style={{position: 'fixed', bottom: 20, right: 20, zIndex: 1000}}>
+          <a
+            style={{borderRadius: '999rem'}}
+            className="btn btn-success"
+            target="_blank"
+            href="https://github.com/neurolearn/neurolearn-web/issues"><i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback</a>
         </div>
       </div>
     );
