@@ -1,6 +1,7 @@
 /* @flow */
 
 import { combineReducers } from 'redux';
+import { routerReducer as router } from 'react-router-redux';
 
 import selectImagesModal from '../state/selectImagesModal';
 import search from '../state/search';
@@ -14,18 +15,22 @@ import testModel from '../state/testModel';
 import alertMessages from '../state/alertMessages';
 import fetched from '../state/fetched';
 
-const rootReducer = combineReducers({
-  auth,
-  imagesMetadata,
-  search,
-  selectedImages,
-  selectImagesModal,
-  targetData,
-  subjectIdData,
-  modelPreferences,
-  testModel,
-  fetched,
-  alertMessages
-});
+export const makeRootReducer = (asyncReducers) => {
+  return combineReducers({
+    auth,
+    imagesMetadata,
+    search,
+    selectedImages,
+    selectImagesModal,
+    targetData,
+    subjectIdData,
+    modelPreferences,
+    testModel,
+    fetched,
+    alertMessages,
+    router,
+    ...asyncReducers
+  });
+};
 
-export default rootReducer;
+export default makeRootReducer;
