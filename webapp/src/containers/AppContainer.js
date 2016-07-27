@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-// import { Router } from 'react-router'
+import { Router } from 'react-router'
 import { Provider } from 'react-redux'
 
 class AppContainer extends Component {
@@ -15,7 +15,8 @@ class AppContainer extends Component {
     return (
       <Provider store={store}>
         {/* react-kit <Router history={history} children={routes} /> */}
-        {() => renderRoutes(store, browserHistory)}
+        <Router history={history} children={routes} />
+        {/* () => renderRoutes(store, browserHistory) */}
 
       </Provider>
     )

@@ -22,7 +22,7 @@ import NotFound from './pages/NotFound';
 import { fetchAuthenticatedUser } from './state/auth';
 import { getAuthToken } from './utils';
 
-export default function renderRoutes(store: Object, history: Object) {
+export default function renderRoutes(store: Object) {
   const requireAuth = (nextState, replace) => {
     const { auth } = store.getState();
     if (!auth.user) {
@@ -45,30 +45,28 @@ export default function renderRoutes(store: Object, history: Object) {
   }
 
   return (
-    <Router history={history}>
-      <Route component={App} onEnter={checkAuth}>
-        <Route path="/" component={HomePage} />
-        <Route path="/faq" component={FAQ} />
-        <Redirect from="/dashboard" to="/dashboard/models" />
-        <Route path="/dashboard" onEnter={requireAuth}>
-          <Route path="models" component={MLModels} />
-          <Route path="tests" component={ModelTests} />
-        </Route>
-        <Redirect from="/explore" to="/explore/models" />
-        <Route path="/explore">
-          <Route path="(:itemType)" component={Explore} />
-        </Route>
-        <Redirect from="/models/new" to="/models/new/input-data" />
-        <Route path="/models/new" component={TrainModel} onEnter={requireAuth}>
-          <Route path="input-data" component={InputData} />
-          <Route path="training-label" component={TrainingLabel} />
-          <Route path="model-preferences" component={ModelPreferences} />
-        </Route>
-        <Route path="/models/:id" component={ViewModel} />
-        <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
-        <Route path="/tests/:id" component={ViewTest} />
-        <Route path="*" component={NotFound} />
+    <Route component={App} onEnter={checkAuth}>
+      <Route path="/" component={HomePage} />
+      <Route path="/faq" component={FAQ} />
+      <Redirect from="/dashboard" to="/dashboard/models" />
+      <Route path="/dashboard" onEnter={requireAuth}>
+        <Route path="models" component={MLModels} />
+        <Route path="tests" component={ModelTests} />
       </Route>
-    </Router>
+      <Redirect from="/explore" to="/explore/models" />
+      <Route path="/explore">
+        <Route path="(:itemType)" component={Explore} />
+      </Route>
+      <Redirect from="/models/new" to="/models/new/input-data" />
+      <Route path="/models/new" component={TrainModel} onEnter={requireAuth}>
+        <Route path="input-data" component={InputData} />
+        <Route path="training-label" component={TrainingLabel} />
+        <Route path="model-preferences" component={ModelPreferences} />
+      </Route>
+      <Route path="/models/:id" component={ViewModel} />
+      <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
+      <Route path="/tests/:id" component={ViewTest} />
+      <Route path="*" component={NotFound} />
+    </Route>
   );
 }
