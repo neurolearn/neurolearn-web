@@ -20,7 +20,8 @@ const webpackConfig = {
     modulesDirectories: [
       'node_modules',
       'vendor_modules',
-      'src'
+      'src',
+      'src/styles'
     ]
   },
   module: {}
