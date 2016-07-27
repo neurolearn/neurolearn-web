@@ -109,9 +109,8 @@ class App extends React.Component {
     );
   }
 
-  render () {
-    const { auth, alertMessages, dispatch } = this.props;
-    const { router } = this.context;
+  render() {
+    const { auth } = this.props;
 
     return auth.isFetching
       ? null
