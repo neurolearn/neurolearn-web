@@ -12,6 +12,8 @@ import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME } from './constants/auth';
 import { authLink } from './utils';
 
+import './styles/core.scss';
+
 const logoBetaStyle = {
   fontStyle: 'italic',
   color: '#A2A2A2',

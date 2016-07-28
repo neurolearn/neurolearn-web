@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { fetchJSON } from '../../../state/fetched';
 import Footer from '../../../components/Footer';
 
+import classes from './Home.scss';
+
 const Stats = (
   { stats } : {
     stats: {
@@ -37,8 +39,8 @@ class HomePage extends React.Component {
     const { fetched: { stats } } = this.props;
     return (
       <div>
-        <div className="hero">
-          <h1 className="hero-header">Neurolearn</h1>
+        <div className={classes.hero}>
+          <h1>Neurolearn</h1>
           <p className="lead">A web platform for analyzing neuroimaging data stored in <a href="http://neurovault.org">NeuroVault</a> using machine-learning tools.</p>
         </div>
         <div className="row">
