@@ -12,6 +12,11 @@ import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME } from './constants/auth';
 import { authLink } from './utils';
 
+import 'bootstrap-nav-wizard.css';
+import 'font-awesome.css';
+import 'jquery-ui.css';
+import 'NSViewer.css';
+
 import './styles/core.scss';
 
 const logoBetaStyle = {
