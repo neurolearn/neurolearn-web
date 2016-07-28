@@ -181,7 +181,8 @@ if (isUsingCSSModules) {
 
   webpackConfig.module.loaders.push({
     test: /\.scss$/,
-    include: cssModulesRegex,
+    // include: cssModulesRegex,
+    // exclude: /vendor_modules/,
     loaders: [
       'style',
       cssModulesLoader,
@@ -190,38 +191,41 @@ if (isUsingCSSModules) {
     ]
   });
 
+  // Load .css unmodified
   webpackConfig.module.loaders.push({
     test: /\.css$/,
-    include: cssModulesRegex,
+    // include: cssModulesRegex,
+    // exclude: /vendor_modules/,
     loaders: [
       'style',
-      cssModulesLoader,
-      'postcss'
+      'css'
     ]
   });
 }
 
 // Loaders for files that should not be treated as CSS modules.
-const excludeCSSModules = isUsingCSSModules ? cssModulesRegex : false;
-webpackConfig.module.loaders.push({
-  test: /\.scss$/,
-  exclude: excludeCSSModules,
-  loaders: [
-    'style',
-    BASE_CSS_LOADER,
-    'postcss',
-    'sass?sourceMap'
-  ]
-});
-webpackConfig.module.loaders.push({
-  test: /\.css$/,
-  exclude: excludeCSSModules,
-  loaders: [
-    'style',
-    BASE_CSS_LOADER,
-    'postcss'
-  ]
-});
+// const excludeCSSModules = isUsingCSSModules ? cssModulesRegex : false;
+
+// webpackConfig.module.loaders.push({
+//   test: /\.scss$/,
+//   exclude: excludeCSSModules,
+//   loaders: [
+//     'style',
+//     BASE_CSS_LOADER,
+//     'postcss',
+//     'sass?sourceMap'
+//   ]
+// });
+// webpackConfig.module.loaders.push({
+//   test: /\.css$/,
+//   exclude: /vendor_modules/,
+//   // exclude: excludeCSSModules,
+//   loaders: [
+//     'style',
+//     BASE_CSS_LOADER,
+//     'postcss'
+//   ]
+// });
 
 // ------------------------------------
 // Style Configuration
