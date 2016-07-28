@@ -3,7 +3,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import MLModels from './dashboard/MLModels';
 import { fetchJSON } from '../state/fetched';
 import Footer from '../components/Footer';
 
