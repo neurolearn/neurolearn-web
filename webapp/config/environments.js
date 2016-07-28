@@ -14,7 +14,7 @@ export default {
       enabled: true,
       options: {
         host: 'http://localhost:3001',
-        match: /^\/(?:api|signin|media)\/.*/
+        match: /^\/(?:api|signin|media|static)\/.*/
       }
     }
   }),
