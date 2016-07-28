@@ -3,8 +3,8 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { fetchJSON } from '../state/fetched';
-import Footer from '../components/Footer';
+import { fetchJSON } from '../../../state/fetched';
+import Footer from '../../../components/Footer';
 
 const Stats = (
   { stats } : {
