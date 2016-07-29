@@ -1,3 +1,4 @@
+import path from 'path';
 import webpack from 'webpack';
 import cssnano from 'cssnano';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -44,9 +45,12 @@ webpackConfig.entry = {
 // ------------------------------------
 // Bundle Output
 // ------------------------------------
+
 webpackConfig.output = {
   filename: `[name].[${config.compiler_hash_type}].js`,
-  path: paths.dist(),
+  path: __DEV__
+    ? paths.dist()
+    : path.join(paths.dist(), '/static/app/'),
   publicPath: config.compiler_public_path
 };
 
@@ -59,7 +63,7 @@ webpackConfig.plugins = [
     template: paths.client('index.html'),
     hash: false,
     favicon: paths.client('static/favicon.ico'),
-    filename: 'index.html',
+    filename: path.join(paths.dist(), 'index.html'),
     inject: 'body',
     minify: {
       collapseWhitespace: true
