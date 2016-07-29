@@ -64,7 +64,8 @@ webpackConfig.plugins = [
     minify: {
       collapseWhitespace: true
     }
-  })
+  }),
+  new webpack.ProgressPlugin(function handler(percentage, msg) { debug(msg) })
 ];
 
 if (__DEV__) {
@@ -136,9 +137,10 @@ webpackConfig.module.loaders = [{
     plugins: ['transform-runtime'],
     presets: ['es2015', 'react', 'stage-0'],
     env: {
-      production: {
-        presets: ['react-optimize']
-      }
+      // Disable react-optimize, https://github.com/thejameskyle/babel-react-optimize/issues/19
+      // production: {
+      //   presets: ['react-optimize']
+      // }
     }
   }
 },
@@ -216,16 +218,16 @@ webpackConfig.module.loaders.push({
     'sass?sourceMap'
   ]
 });
-webpackConfig.module.loaders.push({
-  test: /\.css$/,
-  exclude: /vendor_modules/,
-  // exclude: excludeCSSModules,
-  loaders: [
-    'style',
-    BASE_CSS_LOADER,
-    'postcss'
-  ]
-});
+// webpackConfig.module.loaders.push({
+//   test: /\.css$/,
+//   exclude: /vendor_modules/,
+//   // exclude: excludeCSSModules,
+//   loaders: [
+//     'style',
+//     BASE_CSS_LOADER,
+//     'postcss'
+//   ]
+// });
 
 // ------------------------------------
 // Style Configuration
