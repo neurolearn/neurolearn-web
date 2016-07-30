@@ -7,13 +7,12 @@ import ScatterPlot from './ScatterPlot';
 
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 
-
 function scatterplotData(stats: Object) {
   const {Y, yfit_xval, yfit_all} = stats;
   const yfit = yfit_xval || yfit_all;
 
   return zipWith(Y, yfit_xval, (acc, value) => {
-        return { x: acc, y: value };
+    return { x: acc, y: value };
   });
 }
 

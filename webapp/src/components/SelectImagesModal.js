@@ -61,10 +61,12 @@ export default class SelectImagesModal extends React.Component {
     return (
       <tbody>
         {sortBy(images, 'name').map((image) =>
-          <ImageItem {...image}
-                     key={image.url}
-                     checked={this.isImageSelected(image.url)}
-                     onChange={() => this.props.onToggle(collection, image.url)} />
+          <ImageItem
+            {...image}
+            key={image.url}
+            checked={this.isImageSelected(image.url)}
+            onChange={() => this.props.onToggle(collection, image.url)}
+          />
         )}
       </tbody>
     );
@@ -84,28 +86,32 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id='contained-modal-title-lg'>Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Input type="text"
-          placeholder="Filter Images"
-          value={this.state.filterText}
-          ref="filterText"
-          onChange={this.handleFilterChange} />
-
-        <div className={styles.root}>
-
-          <table className="table">
-            <thead>
-              <tr>
-                <th>
-                  <input type="checkbox" checked={allFilteredAreSelected} onChange={e => this.toggleList(e, filteredImages)} />
-                </th>
-                <th className="col-md-4">Name</th>
-                <th className="col-md-2">Image Type</th>
-                <th>Map Type</th>
-                <th className="col-md-4"></th>
-              </tr>
-            </thead>
-            {filteredImages && this.renderImages(filteredImages)}
-          </table>
+          <Input
+            type="text"
+            placeholder="Filter Images"
+            value={this.state.filterText}
+            ref="filterText"
+            onChange={this.handleFilterChange}
+          />
+          <div className={styles.root}>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={allFilteredAreSelected}
+                      onChange={e => this.toggleList(e, filteredImages)}
+                    />
+                  </th>
+                  <th className="col-md-4">Name</th>
+                  <th className="col-md-2">Image Type</th>
+                  <th>Map Type</th>
+                  <th className="col-md-4"></th>
+                </tr>
+              </thead>
+              {filteredImages && this.renderImages(filteredImages)}
+            </table>
           </div>
         </Modal.Body>
         <Modal.Footer>

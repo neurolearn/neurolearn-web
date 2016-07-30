@@ -1,6 +1,6 @@
 /* @flow */
 
-import { keys, every, reduce } from 'lodash';
+import { reduce } from 'lodash';
 
 import React, { PropTypes } from 'react';
 
@@ -40,17 +40,19 @@ export default class Table extends React.Component {
     return {
       component: <IndeterminableCheckbox
                     checked={this.isAllSelected()}
-                    onChange={e => this.props.onSelectAll(e.target.checked)} />,
+                    onChange={e => this.props.onSelectAll(e.target.checked)}
+                  />,
       tdStyle: { width: 30, maxWidth: 30 }
     };
-
   }
 
   renderSelectCheckbox(item: {id: number}) {
     return (
-      <input type="checkbox"
-             checked={this.isSelected(item.id)}
-             onChange={e => this.props.onSelect(item.id, e.target.checked)} />
+      <input
+        type="checkbox"
+        checked={this.isSelected(item.id)}
+        onChange={e => this.props.onSelect(item.id, e.target.checked)}
+      />
     );
   }
 
@@ -79,7 +81,7 @@ export default class Table extends React.Component {
       isSelectable ? [this.renderSelectCheckbox] : []
     ).concat(
       React.Children.map(children, child => child.props.cell)
-    )
+    );
 
     return (
       <table className={className}>

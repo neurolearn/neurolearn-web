@@ -8,7 +8,7 @@ import SelectImagesModal from '../SelectImagesModal';
 import SelectedCollectionList from '../SelectedCollectionList';
 import { Link } from 'react-router';
 
-import {resetImagesMetadata } from '../../state/imagesMetadata';
+import { resetImagesMetadata } from '../../state/imagesMetadata';
 
 import {
   showSelectImagesModal,
@@ -22,7 +22,7 @@ import {
 
 import {
   loadSearchResults,
-  inputSearchQuery,
+  inputSearchQuery
 } from '../../state/search';
 
 import styles from './InputData.scss';

@@ -1,9 +1,7 @@
 /* @flow */
 
-import isString from 'lodash/lang/isString';
 import React, { PropTypes } from 'react';
-
-require('handsontable.full.js');
+import 'handsontable.full.js';
 
 export default class EditableGrid extends React.Component {
   static propTypes = {
@@ -14,10 +12,9 @@ export default class EditableGrid extends React.Component {
   hot: Object;
 
   initHandsontableInstance(data: number, headers: number) {
-    var container = this.refs.hot,
-        _this = this;
+    const container = this.refs.hot;
 
-    var hot = new window.Handsontable(container, {
+    const hot = new window.Handsontable(container, {
       data: data,
       colHeaders: headers,
       rowHeaders: true,
@@ -61,7 +58,7 @@ export default class EditableGrid extends React.Component {
   render() {
     return (
       <div className="DataGrid" style={{height: 320, overflow: 'hidden'}}>
-        <div ref="hot"/>
+        <div ref="hot" />
       </div>
     );
   }

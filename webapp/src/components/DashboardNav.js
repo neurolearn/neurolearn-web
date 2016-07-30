@@ -15,6 +15,6 @@ const DashboardNav = ({children} : {children? : any}) => (
 
 DashboardNav.propTypes = {
   children: PropTypes.node
-}
+};
 
 export default DashboardNav;

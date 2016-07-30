@@ -26,8 +26,8 @@ const AlertMessages = (
 );
 
 AlertMessages.propTypes = {
-    messages: PropTypes.array.isRequired,
-    dismissAlert: PropTypes.func.isRequired
-}
+  messages: PropTypes.array.isRequired,
+  dismissAlert: PropTypes.func.isRequired
+};
 
 export default AlertMessages;

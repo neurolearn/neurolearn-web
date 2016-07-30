@@ -5,9 +5,7 @@ import { algorithmGroups } from './constants/Algorithms';
 import isEmpty from 'lodash/lang/isEmpty';
 import findKey from 'lodash/object/findKey';
 import every from 'lodash/collection/every';
-import pick from 'lodash/object/pick';
 import keys from 'lodash/object/keys';
-import take from 'lodash/array/take';
 import findIndex from 'lodash/array/findIndex';
 
 import type { WindowLocation } from './types';
@@ -16,8 +14,7 @@ export function pluralize(
   n: number,
   singular: string,
   plural: string
-) : string
-{
+) : string {
   return (n !== 1) ? plural : singular;
 }
 
@@ -30,14 +27,14 @@ export function removeAuthToken(): void {
 }
 
 function nvAuthLink(loc: WindowLocation): string {
-    const { protocol, host } = loc;
-    const redirectUri = `${protocol}//${host}/signin/authorized`;
-    return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  const { protocol, host } = loc;
+  const redirectUri = `${protocol}//${host}/signin/authorized`;
+  return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 }
 
 export function authLink(loc: WindowLocation): string {
-    const { host }= loc;
-    return /^localhost\b/.test(host)
+  const { host } = loc;
+  return /^localhost\b/.test(host)
       ? nvAuthLink(loc)
       : '/signin';
 }
@@ -74,7 +71,7 @@ export function pickColumns(data: Array<Array<string | number>>, columnNames: Ar
 
 // Thanks, jQuery
 function isNumeric(obj) {
-  const type = typeof(obj);
+  const type = typeof obj;
   return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
 }
 
@@ -105,7 +102,7 @@ export function getColumnsFromArray(data: Array<Array<string | number>>): Array<
     return {
       'name': column,
       'values': values
-    }
+    };
   });
 }
 
@@ -135,7 +132,7 @@ export function getFieldData(data: Array<Array<string | number>>, fieldName: str
         'collection_id': row[collectionIdIndex],
         'name': row[nameIndex]
       };
-  });
+    });
 
   return {
     field: {

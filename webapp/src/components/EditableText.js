@@ -70,7 +70,7 @@ export default class EditableText extends React.Component {
     }
 
     const value = this.state.value.trim();
-    return value && (value != this.props.value)
+    return value && (value !== this.props.value);
   }
 
   renderModalBody() {
@@ -96,9 +96,11 @@ export default class EditableText extends React.Component {
           <ModalDialog
             title={modalTitle}
             body={this.renderModalBody()}
-            actionButton={<Button bsStyle="primary"
-                                  disabled={!this.isValid()}
-                                  onClick={this.handleSave}>Save</Button>}
+            actionButton={
+              <Button bsStyle="primary"
+                disabled={!this.isValid()}
+                onClick={this.handleSave}>Save</Button>
+            }
             onHide={this.handleHide} />
         }
       </span>

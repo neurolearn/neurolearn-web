@@ -15,6 +15,6 @@ export default React.createClass({
   render() {
     var isActive = this.context.router.isActive(this.props.to, this.props.query);
     var className = isActive ? 'active' : '';
-    return <li className={className}><Link {...this.props}/></li>;
+    return <li className={className}><Link {...this.props} /></li>;
   }
 });

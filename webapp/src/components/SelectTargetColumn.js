@@ -17,7 +17,9 @@ const excludeColumns = ['id', 'collection_id', 'name', 'file',
                         'url', 'file_size'];
 
 const tooltip = (
-  <Tooltip id="nullValues">This field contains null values. Corresponding images will be excluded from the analysis.</Tooltip>
+  <Tooltip id="nullValues">
+    This field contains null values. Corresponding images will be excluded from the analysis.
+  </Tooltip>
 );
 
 export default class SelectTargetColumn extends React.Component {

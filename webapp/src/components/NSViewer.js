@@ -1,8 +1,7 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
-
-require('nsviewer.js');
+import 'nsviewer.js';
 
 export default class NSViewer extends React.Component {
   static propTypes = {

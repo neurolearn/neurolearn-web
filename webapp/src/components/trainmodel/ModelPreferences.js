@@ -1,6 +1,6 @@
 /* @flow */
 
-import { isEmpty, some, mapValues, pick, zipWith } from 'lodash';
+import { isEmpty, mapValues, pick, zipWith } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 

@@ -9,7 +9,6 @@ import { Link } from 'react-router';
 import { algorithmNameMap } from '../constants/Algorithms';
 import { pluralize } from '../utils.js';
 
-
 const BASE_URL = {
   'MLModel': 'models',
   'ModelTest': 'tests'

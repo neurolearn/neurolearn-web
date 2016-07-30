@@ -21,9 +21,7 @@ const ScatterPlot = (props: {width: number, data: Array<{values: Object}>}) => {
   const xPadding = getPadding(xExtent);
   const xScale = createScale(xExtent, xPadding, [0, width - 40]);
 
-  const tooltipScatter = function(x, y) {
-      return 'Predicted: ' + round(y, 2);
-  };
+  const tooltipScatter = (x, y) => ('Predicted: ' + round(y, 2));
 
   return (
     <div className={styles.root}>
@@ -37,9 +35,9 @@ const ScatterPlot = (props: {width: number, data: Array<{values: Object}>}) => {
 };
 
 ScatterPlot.propTypes = {
-    data: React.PropTypes.array.isRequired,
-    height: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired
+  data: React.PropTypes.array.isRequired,
+  height: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired
 };
 
 export default ScatterPlot;

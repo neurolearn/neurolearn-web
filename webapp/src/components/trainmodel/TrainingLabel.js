@@ -149,7 +149,7 @@ class TrainingLabel extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12" >
-          <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
+          <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
           <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Loading image metadata…</div>
         </div>
       </div>
@@ -161,13 +161,15 @@ class TrainingLabel extends React.Component {
     return (
       <div>
         <h1 className="page-header">Training Label</h1>
-        { imagesMetadata.isFetching && this.renderLoading() }
-        { !isEmpty(imagesMetadata.data) &&
-          this.renderDataGrid(imagesMetadata.data, targetData, modelPreferences) }
+        {imagesMetadata.isFetching && this.renderLoading()}
+        {!isEmpty(imagesMetadata.data) &&
+          this.renderDataGrid(imagesMetadata.data, targetData, modelPreferences)}
 
-        <hr/>
-        <Link onClick={this.handleContinueClick} className="btn btn-primary continue-button"
-              to="/models/new/model-preferences">Continue to Model Preferences</Link>
+        <hr />
+        <Link
+          onClick={this.handleContinueClick}
+          className="btn btn-primary continue-button"
+          to="/models/new/model-preferences">Continue to Model Preferences</Link>
       </div>
     );
   }

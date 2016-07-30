@@ -36,17 +36,19 @@ const ImageViewerModal = (
   ];
 
   return (
-    <Modal bsSize='large' show={true} onHide={onHide} aria-labelledby='contained-modal-title-lg'>
+    <Modal bsSize="large" show onHide={onHide} aria-labelledby="contained-modal-title-lg">
       <Modal.Header closeButton>
-        <Modal.Title id='contained-modal-title-lg'>Weightmap Viewer</Modal.Title>
+        <Modal.Title id="contained-modal-title-lg">Weightmap Viewer</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <NSViewer images={images} onImagesLoaded={onImagesLoaded}/>
-        <ReactCSSTransitionGroup transitionName="overlay"
-                                 transitionEnterTimeout={100}
-                                 transitionLeaveTimeout={100}>
-          {loadingImages && [<div className="overlay">&nbsp;</div>,
-                             <Spinner opts={{position: 'absolute'}} />]}
+        <NSViewer images={images} onImagesLoaded={onImagesLoaded} />
+        <ReactCSSTransitionGroup
+          transitionName="overlay"
+          transitionEnterTimeout={100}
+          transitionLeaveTimeout={100}
+        >{loadingImages && [
+          <div className="overlay">&nbsp;</div>,
+          <Spinner opts={{position: 'absolute'}} />]}
         </ReactCSSTransitionGroup>
         <div className="clearfix"></div>
       </Modal.Body>
@@ -62,6 +64,6 @@ ImageViewerModal.propTypes = {
   weightmapUrl: PropTypes.string.isRequired,
   onHide: PropTypes.func.isRequired,
   onImagesLoaded: PropTypes.func.isRequired
-}
+};
 
 export default ImageViewerModal;

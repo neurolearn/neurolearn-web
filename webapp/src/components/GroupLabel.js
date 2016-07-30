@@ -27,6 +27,13 @@ export default class GroupLabel extends React.Component {
       editing: false,
       editText: this.props.item.name
     };
+
+    (this:any).handleClick = this.handleClick.bind(this);
+    (this:any).handleInputChange = this.handleInputChange.bind(this);
+    (this:any).handleEdit = this.handleEdit.bind(this);
+    (this:any).handleDelete = this.handleDelete.bind(this);
+    (this:any).handleCancel = this.handleCancel.bind(this);
+    (this:any).handleSave = this.handleSave.bind(this);
   }
 
   handleClick(e: SyntheticMouseEvent) {
@@ -72,23 +79,27 @@ export default class GroupLabel extends React.Component {
     const { item, index, selected } = this.props;
     const { editing } = this.state;
     return (
-      <div className={editing ? styles.editing : styles.viewing}
-           style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}>
-        <span className="view group-title"
-          onClick={this.handleClick.bind(this)}>{item.name}</span>
-        <input className="edit"
-               ref="editInput"
-               value={this.state.editText}
-               onChange={this.handleInputChange.bind(this)} />
+      <div
+        className={editing ? styles.editing : styles.viewing}
+        style={{backgroundColor: index === selected ? '#eee' : 'white', height: 70}}
+      >
+        <span
+          className="view group-title"
+          onClick={this.handleClick}
+        >{item.name}</span>
+        <input
+          className="edit"
+          ref="editInput"
+          value={this.state.editText}
+          onChange={this.handleInputChange}
+        />
         <div className="view pull-right">
-          <span className="action pull-left" onClick={this.handleEdit.bind(this)}><i className="fa fa-pencil"></i> Edit</span>
-          <span className="action pull-left" onClick={this.handleDelete.bind(this)}><i className="fa fa-trash"></i> Delete</span>
+          <span className="action pull-left" onClick={this.handleEdit}><i className="fa fa-pencil"></i> Edit</span>
+          <span className="action pull-left" onClick={this.handleDelete}><i className="fa fa-trash"></i> Delete</span>
         </div>
         <div className="edit pull-right">
-          <Button bsStyle='default' className="edit-action"
-                  onClick={this.handleCancel.bind(this)}>Cancel</Button>
-          <Button bsStyle='primary' className="edit-action"
-                  onClick={this.handleSave.bind(this)}>Save</Button>
+          <Button bsStyle="default" className="edit-action" onClick={this.handleCancel}>Cancel</Button>
+          <Button bsStyle="primary" className="edit-action" onClick={this.handleSave}>Save</Button>
         </div>
       </div>
     );

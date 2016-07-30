@@ -11,7 +11,7 @@ const ModalDialog = (
     onHide: () => void,
     bsSize?: string }
 ) => (
-  <Modal bsSize={bsSize} show={true} onHide={onHide}>
+  <Modal bsSize={bsSize} show onHide={onHide}>
     <Modal.Header closeButton>
       <Modal.Title>{title}</Modal.Title>
     </Modal.Header>
@@ -21,7 +21,7 @@ const ModalDialog = (
       <Button onClick={onHide}>Close</Button>
     </Modal.Footer>
   </Modal>
-)
+);
 
 ModalDialog.propTypes = {
   title: PropTypes.string,
@@ -29,6 +29,6 @@ ModalDialog.propTypes = {
   actionButton: PropTypes.node,
   onHide: PropTypes.func,
   bsSize: PropTypes.string
-}
+};
 
 export default ModalDialog;

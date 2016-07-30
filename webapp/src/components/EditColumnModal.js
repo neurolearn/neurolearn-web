@@ -1,8 +1,7 @@
 /* @flow */
 
-import classNames from 'classnames';
 import React, { PropTypes } from 'react';
-import { Modal, Button, Input } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import EditableGrid from './EditableGrid';
 import { pickColumn } from '../utils';
 
@@ -60,29 +59,31 @@ export default class EditColumnModal extends React.Component {
     const { data } = this.props;
 
     return (
-      <Modal {...this.props} aria-labelledby='contained-modal-title-lg'>
+      <Modal {...this.props} aria-labelledby="contained-modal-title-lg">
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-lg'>Edit Field</Modal.Title>
+          <Modal.Title id="contained-modal-title-lg">Edit Field</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <div className="form-group">
-          <label>Name</label>
-          <input type='text'
-                 value={this.state.name}
-                 onChange={this.handleNameChange}
-                 ref="name"
-                 className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Data</label>
-          <EditableGrid
-            headers={data[0]}
-            data={data.slice(1)}
-            ref={c => this._editableGrid = c}
-          />
-        </div>
-        {/* A div below fixes Handsontable issue with Copy & Paste in a Boostrap modal dialog */}
-        <div id="CopyPasteDiv" style={{position: 'fixed', top: -10000, left: -10000}}><textarea className="copyPaste" style={{width: 10000, height: 10000, overflow: 'hidden', opacity: 0}}></textarea></div>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              value={this.state.name}
+              onChange={this.handleNameChange}
+              ref="name"
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Data</label>
+            <EditableGrid
+              headers={data[0]}
+              data={data.slice(1)}
+              ref={c => this._editableGrid = c}
+            />
+          </div>
+          {/* A div below fixes Handsontable issue with Copy & Paste in a Boostrap modal dialog */}
+          <div id="CopyPasteDiv" style={{position: 'fixed', top: -10000, left: -10000}}><textarea className="copyPaste" style={{width: 10000, height: 10000, overflow: 'hidden', opacity: 0}}></textarea></div>
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={this.handleSave}>Save</Button>

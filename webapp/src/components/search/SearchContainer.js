@@ -1,6 +1,5 @@
 /* @flow */
 
-import isEmpty from 'lodash/lang/isEmpty';
 import React, { PropTypes } from 'react';
 import SearchInput from './SearchInput';
 import SortSearchResults from './SortSearchResults';
@@ -14,9 +13,8 @@ import {
   inputSearchQuery,
   selectSearchOffset,
   selectSortType,
-  changeFilter,
+  changeFilter
 } from '../../state/search';
-
 
 import styles from './SearchContainer.scss';
 
@@ -113,12 +111,13 @@ export default class SearchContainer extends React.Component {
                   />}
                   {isFetching && <div className="overlay"></div>}
                 </div>
-                { this.totalHits(results) > RESULTS_PER_PAGE
+                {this.totalHits(results) > RESULTS_PER_PAGE
                   ? <SearchPagination
                       totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
                       activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                      onSelect={this.handlePageSelect} />
-                  : false }
+                      onSelect={this.handlePageSelect}
+                    />
+                  : false}
               </div>
             </div>
           </div>

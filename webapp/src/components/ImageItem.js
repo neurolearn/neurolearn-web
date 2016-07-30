@@ -1,7 +1,6 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
-import { Input } from 'react-bootstrap';
 import FallbackImage from './FallbackImage';
 
 const ImageItem = (

@@ -9,7 +9,6 @@ import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
 import { filterImagesByName } from '../utils';
 
-
 export default class ImageBarChart extends React.Component {
   state: {
     selected?: number,

@@ -18,9 +18,11 @@ const ImageLabel = (
 ) => (
   <div className={styles.root}>
     {showCheckbox &&
-      <Input type='checkbox'
-             checked={isChecked(item.id)}
-             onChange={e => onChange(item.id, e.target.checked)}/>
+      <Input
+        type="checkbox"
+        checked={isChecked(item.id)}
+        onChange={e => onChange(item.id, e.target.checked)}
+      />
     }
     <div className="image-name"><a href={neuroVaultImageURL(item.id)}>{item.name}</a></div>
     <p className="collection-name">{item.collectionName}</p>
