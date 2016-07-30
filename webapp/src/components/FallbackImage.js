@@ -12,6 +12,7 @@ export default class FallbackImage extends React.Component {
     this.state = {
       errored: false
     };
+    (this:any).handleError = this.handleError.bind(this);
   }
 
   handleError() {
@@ -21,6 +22,6 @@ export default class FallbackImage extends React.Component {
   render() {
     return this.state.errored
       ? null
-      : <img onError={this.handleError.bind(this)} {...this.props} />;
+      : <img onError={this.handleError} {...this.props} />;
   }
 }
