@@ -6,7 +6,7 @@ import { getAuthToken } from './utils';
 import type { PayloadType } from './types';
 
 function locationOrigin(loc) {
-  return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;;
+  return loc.origin || `${loc.protocol}//${loc.hostname}${loc.port ? `:${loc.port}` : ''}`;
 }
 
 const HOST = locationOrigin(window.location);
