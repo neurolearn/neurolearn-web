@@ -64,43 +64,43 @@ export default class RangeFilter extends React.Component {
         <label className={!value && 'empty-filter'}>{
           this.props.label
         }&nbsp;<i
-                  title="Clear Filter"
-                  className="clear-filter fa fa-times-circle"
-                  onClick={this.handleClearFilterClick}
+          title="Clear Filter"
+          className="clear-filter fa fa-times-circle"
+          onClick={this.handleClearFilterClick}
                ></i></label>
 
         <div className="clearfix">
-            <div className={styles.from}>
-              <input
-                  type='text'
-                  className='form-control'
-                  value={value ? value[0] : ''}
-                  ref='inputFrom'
-                  onChange={this.handleInputChange} />
-            </div>
-            <span className={styles.sep}>—</span>
-            <div className={styles.to}>
-              <input
-                  type='text'
-                  className='form-control'
-                  ref='inputTo'
-                  value={value ? value[1] : ''}
-                  onChange={this.handleInputChange} />
-            </div>
+          <div className={styles.from}>
+            <input
+              type="text"
+              className="form-control"
+              value={value ? value[0] : ''}
+              ref="inputFrom"
+              onChange={this.handleInputChange} />
+          </div>
+          <span className={styles.sep}>—</span>
+          <div className={styles.to}>
+            <input
+              type="text"
+              className="form-control"
+              ref="inputTo"
+              value={value ? value[1] : ''}
+              onChange={this.handleInputChange} />
+          </div>
         </div>
-        <div className={ styles.stats }>
-          <span className="min">{ RANGE_MIN }</span>
-          <span className="max pull-right">{ RANGE_MAX }</span>
+        <div className={styles.stats}>
+          <span className="min">{RANGE_MIN}</span>
+          <span className="max pull-right">{RANGE_MAX}</span>
         </div>
         <ReactSlider
           min={RANGE_MIN}
           max={RANGE_MAX}
-          value={value ? value : [RANGE_MIN, RANGE_MAX]}
+          value={value || [RANGE_MIN, RANGE_MAX]}
           orientation="horizontal"
           withBars
           onChange={this.handleSliderChange}
-          onAfterChange={this.handleSliderOnAfterChange.bind(this)}
-          />
+          onAfterChange={this.handleSliderOnAfterChange}
+        />
       </div>
     );
   }
