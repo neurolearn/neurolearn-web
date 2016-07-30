@@ -7,6 +7,7 @@ celeryresults.sqlite
 media
 nv_tmp
 activate-venv.sh
+fabfile.py
 cache/
 
 nlweb/static/app
