@@ -14,6 +14,8 @@ const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new Koa();
 
+app.use(multiHostProxyMiddleware());
+
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement isomorphic
 // rendering, you'll want to remove this middleware.
@@ -32,7 +34,6 @@ if (config.env === 'development') {
 
   app.use(webpackDevMiddleware(compiler, publicPath));
   app.use(webpackHMRMiddleware(compiler));
-  app.use(multiHostProxyMiddleware());
 
   // Serve static assets from ~/src/static since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
