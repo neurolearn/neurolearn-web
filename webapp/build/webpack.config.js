@@ -154,6 +154,15 @@ webpackConfig.module.loaders = [{
 }];
 
 // ------------------------------------
+// Legacy JavaScript
+// ------------------------------------
+
+webpackConfig.module.loaders.push({
+  test: /vendor_modules\/handsontable.full.js$/,
+  loader: 'imports?this=>window'
+});
+
+// ------------------------------------
 // Style Loaders
 // ------------------------------------
 // We use cssnano with the postcss loader, so we tell
