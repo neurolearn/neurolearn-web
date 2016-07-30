@@ -3,6 +3,7 @@
 .*/regenerator/node_modules/.*
 .*/node_modules/npmconf/.*
 .*/node_modules/yargs/node_modules/.*
+.*/node_modules/editions/.*
 
 [include]
 ../node_modules/
@@ -11,6 +12,6 @@
 
 [options]
 esproposal.class_static_fields=enable
-module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/scripts/flow/ModuleStub.js'
-module.name_mapper='^handsontable.full.js$' -> '<PROJECT_ROOT>/scripts/flow/ModuleStub.js'
-module.name_mapper='^nsviewer.js$' -> '<PROJECT_ROOT>/scripts/flow/ModuleStub.js'
+module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/ModuleStub.js'
+module.name_mapper='^handsontable.full.js$' -> '<PROJECT_ROOT>/flow/ModuleStub.js'
+module.name_mapper='^nsviewer.js$' -> '<PROJECT_ROOT>/flow/ModuleStub.js'

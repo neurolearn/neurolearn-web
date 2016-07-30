@@ -15,7 +15,7 @@ import testModel from '../state/testModel';
 import alertMessages from '../state/alertMessages';
 import fetched from '../state/fetched';
 
-export const makeRootReducer = (asyncReducers) => {
+export const makeRootReducer = (asyncReducers: Object) => {
   return combineReducers({
     auth,
     imagesMetadata,

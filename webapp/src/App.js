@@ -33,7 +33,7 @@ class App extends React.Component {
 
   constructor() {
     super();
-    this.handleLogout = this.handleLogout.bind(this);
+    (this:any).handleLogout = this.handleLogout.bind(this);
   }
 
   handleLogout(e) {
