@@ -60,14 +60,15 @@ webpackConfig.output = {
 webpackConfig.plugins = [
   new webpack.DefinePlugin(config.globals),
   new HtmlWebpackPlugin({
-    template: paths.client('index.html'),
+    template: paths.client('index.html.ejs'),
     hash: false,
     favicon: paths.client('static/favicon.ico'),
     filename: path.join(paths.dist(), 'index.html'),
     inject: 'body',
     minify: {
       collapseWhitespace: true
-    }
+    },
+    environment: config.env
   }),
   new webpack.ProgressPlugin(function handler(percentage, msg) { debug(msg) })
 ];
