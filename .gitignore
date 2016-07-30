@@ -30,7 +30,6 @@ dist
 sdist
 develop-eggs
 .installed.cfg
-lib
 lib64
 
 # Installer logs
