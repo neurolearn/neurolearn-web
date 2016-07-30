@@ -22,7 +22,6 @@ import {
 
 import { setTargetData } from '../../state/targetData';
 
-
 function validate(targetData: Object, analysisType: string): string {
   if (targetData.field.index === null) {
     return 'A data field selection is required.';
@@ -30,7 +29,9 @@ function validate(targetData: Object, analysisType: string): string {
 
   if (analysisType === AnalysisTypes.classification &&
       !isBinaryCollection(pluck(targetData.data, 'target'))) {
-    return `“${targetData.field.name}” field contains more than two classes. Classification requires binary data. You might consider editing this field, selecting a different categorical field, or adding a new field.`;
+    return `“${targetData.field.name}” field contains more than two classes. ` +
+           'Classification requires binary data. You might consider editing this field, ' +
+           'selecting a different categorical field, or adding a new field.';
   }
 
   return '';
@@ -102,12 +103,6 @@ class TrainingLabel extends React.Component {
       e.preventDefault();
       this.setState({ errors: errors });
     }
-  }
-
-  prependRowWithColumnNames(data) {
-    let firstRow = {};
-    Object.keys(data[0]).map(key => firstRow[key] = key);
-    return [firstRow].concat(data);
   }
 
   renderDataGrid(data, targetData, modelPreferences) {
