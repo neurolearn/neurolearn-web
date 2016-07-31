@@ -29,9 +29,10 @@ function listImageIds(
     }
   }
 ) {
-  return mapValues(selectedImages, function(urlsMap) {
-    return map(keys(pick(urlsMap, Boolean)), extractId);
-  });
+  return mapValues(
+    selectedImages,
+    urlsMap => map(keys(pick(urlsMap, Boolean)), extractId)
+  );
 }
 
 function resetModelTestData(dispatch) {

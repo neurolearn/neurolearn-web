@@ -55,8 +55,8 @@ function withFirst(frontItems, items) {
 }
 
 function convertToArrayOfArrays(items) {
-    const keys = withFirst(mandatoryProps, Object.keys(items[0]));
-    return [keys].concat(items.map(item => keys.map(key => item[key])));
+  const keys = withFirst(mandatoryProps, Object.keys(items[0]));
+  return [keys].concat(items.map(item => keys.map(key => item[key])));
 }
 
 type ImageMap = {
@@ -94,8 +94,8 @@ function isInvariant(items) {
     return true;
   };
   const first = items[0];
-  for(let i = 1; i < items.length; i += 1) {
-    if (items[i] != first) {
+  for (let i = 1; i < items.length; i += 1) {
+    if (items[i] !== first) {
       return false;
     }
   }

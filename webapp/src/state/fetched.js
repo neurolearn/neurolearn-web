@@ -54,7 +54,7 @@ export function patchItem(path: string, key: string, payload: Object, success?: 
         result => dispatch(receiveData(result, key)),
         error => dispatch(apiError(error))
       );
-  }
+  };
 }
 
 const initialState = {
@@ -81,7 +81,7 @@ export default function reducer(state: FetchedState = initialState, action: Acti
         : state;
     case DELETE_LOCAL_ITEMS:
       const { key, itemKeys } = action.payload;
-      const mappedKeys = itemKeys.reduce((accum, x) => {accum[x] = true; return accum}, {})
+      const mappedKeys = itemKeys.reduce((accum, x) => { accum[x] = true; return accum }, {});
 
       return Object.assign({}, state, {
         [key]: state[key].filter(x => !mappedKeys[x.id])

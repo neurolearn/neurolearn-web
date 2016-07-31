@@ -53,7 +53,7 @@ export function fetchAuthenticatedUser(callback: () => void) {
           }
         }
       );
-  }
+  };
 }
 
 const initialState = {

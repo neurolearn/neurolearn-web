@@ -29,7 +29,8 @@ export function removeAuthToken(): void {
 function nvAuthLink(loc: WindowLocation): string {
   const { protocol, host } = loc;
   const redirectUri = `${protocol}//${host}/signin/authorized`;
-  return `http://neurovault.org/o/authorize/?response_type=code&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  return 'http://neurovault.org/o/authorize/?response_type=code' +
+         `&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 }
 
 export function authLink(loc: WindowLocation): string {

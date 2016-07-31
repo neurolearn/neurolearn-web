@@ -28,7 +28,7 @@ function imageListToggle(state, collection, images, checked) {
 }
 
 function imageToggle(state, collection, imageId) {
-  const toggle = function(x) {
+  const toggle = (x: Object) => {
     if (x) {
       if (x[imageId]) {
         x[imageId] = false;

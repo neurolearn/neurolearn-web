@@ -27,7 +27,7 @@ export const RESET_MODEL_PREFERENCES = 'RESET_MODEL_PREFERENCES';
 export const SET_KFOLD_USE_SUBJECT_IDS = 'SET_KFOLD_USE_SUBJECT_IDS';
 
 export const inputModelName = createAction(INPUT_MODEL_NAME);
-export const inputDescription  = createAction(INPUT_DESCRIPTION);
+export const inputDescription = createAction(INPUT_DESCRIPTION);
 export const inputKfoldParam = createAction(INPUT_KFOLD_PARAM);
 export const selectCVType = createAction(SELECT_CV_TYPE);
 export const setPrivate = createAction(SET_PRIVATE);
@@ -86,7 +86,7 @@ export function retrainModelWith(modelId: string, params: Object, success: Funct
 
     return api.post(`/api/models/${modelId}/retrain`, params)
       .then(success, error => dispatch(apiError(error)));
-  }
+  };
 }
 
 type ModelPreferencesState = {

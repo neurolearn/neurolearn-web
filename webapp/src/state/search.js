@@ -27,7 +27,6 @@ export const selectSortType = createAction(SELECT_SORT_TYPE);
 export const changeFilter = createAction(CHANGE_FILTER);
 export const resetSearch = createAction(RESET_SEARCH);
 
-
 function sortOption(sortType) {
   return SearchSortTypes[sortType].option;
 }
@@ -82,7 +81,7 @@ function prepareSearchParams(state) {
     },
     'has_DOI': {
       'filter': {
-        'exists': { 'field': 'DOI'}
+        'exists': {'field': 'DOI'}
       }
     }
   };
