@@ -16,7 +16,6 @@ import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
 import Table from '../../components/Table';
 import Column from '../../components/Column';
-import styles from './MLModels.scss';
 
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardModels';
@@ -140,7 +139,7 @@ class MLModels extends React.Component {
     const someSelected = !some(values(selectedRows));
 
     return (
-      <div className={styles.root}>
+      <div>
         <DashboardNav>
           <ButtonToolbar className="pull-right">
             <Button
