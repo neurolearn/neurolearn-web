@@ -13,7 +13,7 @@ export const algorithmNameMap = {
   'lasso': 'Lasso',
   'lassoCV': 'Lasso CV',
   'ridge': 'Ridge',
-  'ridgeCV': 'Ridge CV',
+  'ridgeCV': 'Ridge CV'
 };
 
 export const algorithmGroups = {

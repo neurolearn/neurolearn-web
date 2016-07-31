@@ -34,7 +34,6 @@ import {
   setSubjectIdData
 } from '../../state/subjectIdData';
 
-
 function validate(cv, subjectIdData, modelPreferences) {
   const errors = {};
   const { modelName, algorithm, kfoldsParam } = modelPreferences;
@@ -55,7 +54,7 @@ function validate(cv, subjectIdData, modelPreferences) {
     errors.loso = 'Subject ID is required for this type of cross validation.';
   }
 
-  if (cv.type == CVTypes.kfolds &&
+  if (cv.type === CVTypes.kfolds &&
       modelPreferences.kfoldUseSubjectIDs &&
       subjectIdData.field.index === null) {
     errors.kfoldSubjectId = 'Subject ID is required.';
@@ -122,7 +121,7 @@ class ModelPreferences extends React.Component {
       field: targetData.field,
       data: zipWith(targetData.data, subjectIdData.data,
         (accumulator, value) => Object.assign({}, accumulator, {subject_id: value.target}))
-    }
+    };
 
     this.props.dispatch(trainModel(prefs.modelName,
                                    prefs.description,
@@ -147,7 +146,7 @@ class ModelPreferences extends React.Component {
   }
 
   handleAccessLevelChange(e) {
-    this.props.dispatch(setPrivate(e.target.value === 'private'))
+    this.props.dispatch(setPrivate(e.target.value === 'private'));
   }
 
   handleAlgorithmChange(e) {
@@ -183,15 +182,11 @@ class ModelPreferences extends React.Component {
   }
 
   renderError(error) {
-    return error && <div className="help-block">{error}</div>
+    return error && <div className="help-block">{error}</div>;
   }
 
   render() {
-    const {
-      modelPreferences, targetData,
-      subjectIdData, imagesData
-    } = this.props;
-
+    const { modelPreferences, subjectIdData, imagesData } = this.props;
     const { errors } = this.state;
 
     return (
@@ -204,43 +199,50 @@ class ModelPreferences extends React.Component {
                                        errors.modelName && 'has-error')}>
               <label className="control-label">Model Name</label>
               <input type="text"
-                     value={modelPreferences.modelName}
-                     onChange={this.genHandler('modelName', inputModelName)}
-                     ref="modelName"
-                     label=""
-                     className="form-control" />
+                value={modelPreferences.modelName}
+                onChange={this.genHandler('modelName', inputModelName)}
+                ref="modelName"
+                label=""
+                className="form-control"
+              />
               {this.renderError(errors.modelName)}
             </div>
           </div>
           <div className="row">
             <div className="form-group col-md-6">
               <label>Description <span style={{color: 'gray'}}>(optional)</span></label>
-              <textarea type='textarea'
-                     value={modelPreferences.description}
-                     onChange={this.genHandler('description', inputDescription)}
-                     ref='description'
-                    label=''
-                    className="form-control" />
-              </div>
+              <textarea
+                type="textarea"
+                value={modelPreferences.description}
+                onChange={this.genHandler('description', inputDescription)}
+                ref="description"
+                label=""
+                className="form-control"
+              />
+            </div>
           </div>
 
           <div className="form-group">
             <label>Access level</label>
             <div className="radio">
               <label>
-                <input type="radio"
-                       onChange={this.handleAccessLevelChange}
-                       value="public"
-                       checked={!modelPreferences.private} />
+                <input
+                  type="radio"
+                  onChange={this.handleAccessLevelChange}
+                  value="public"
+                  checked={!modelPreferences.private}
+                />
                 Public (anyone can see this model)
               </label>
             </div>
             <div className="radio">
               <label>
-                <input type="radio"
-                       onChange={this.handleAccessLevelChange}
-                       value="private"
-                       checked={modelPreferences.private} />
+                <input
+                  type="radio"
+                  onChange={this.handleAccessLevelChange}
+                  value="private"
+                  checked={modelPreferences.private}
+                />
                 Private
               </label>
             </div>
@@ -252,10 +254,12 @@ class ModelPreferences extends React.Component {
             {algorithmGroups[modelPreferences.analysisType].map(type =>
               <div className="radio" key={type}>
                 <label>
-                  <input type="radio"
-                         onChange={this.handleAlgorithmChange}
-                         value={type}
-                         checked={type === modelPreferences.algorithm} />
+                  <input
+                    type="radio"
+                    onChange={this.handleAlgorithmChange}
+                    value={type}
+                    checked={type === modelPreferences.algorithm}
+                  />
                   {algorithmNameMap[type]}
                 </label>
               </div>
@@ -266,24 +270,28 @@ class ModelPreferences extends React.Component {
             <label>Cross Validation</label>
             <div className="radio">
               <label>
-                <input type="radio"
-                       ref="cvType"
-                       onChange={this.handleCVTypeChange}
-                       name="cvType"
-                       value=""
-                       checked={modelPreferences.cvType === ''} />
+                <input
+                  type="radio"
+                  ref="cvType"
+                  onChange={this.handleCVTypeChange}
+                  name="cvType"
+                  value=""
+                  checked={modelPreferences.cvType === ''}
+                />
                 None
               </label>
             </div>
 
             <div className="radio">
               <label>
-                <input type="radio"
-                       ref="cvType"
-                       onChange={this.handleCVTypeChange}
-                       name="cvType"
-                       value={CVTypes.kfolds}
-                       checked={modelPreferences.cvType === CVTypes.kfolds} />
+                <input
+                  type="radio"
+                  ref="cvType"
+                  onChange={this.handleCVTypeChange}
+                  name="cvType"
+                  value={CVTypes.kfolds}
+                  checked={modelPreferences.cvType === CVTypes.kfolds}
+                />
                 k-fold
               </label>
             </div>
@@ -298,20 +306,24 @@ class ModelPreferences extends React.Component {
 
                     <label className="control-label">Number of Divisions (k)</label>
                     <div>
-                      <input type="text"
-                             ref="kfoldsParam"
-                             onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
-                             value={modelPreferences.kfoldsParam}
-                             className="form-control" />
+                      <input
+                        type="text"
+                        ref="kfoldsParam"
+                        onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
+                        value={modelPreferences.kfoldsParam}
+                        className="form-control"
+                      />
                     </div>
                     {this.renderError(errors.kfoldsParam)}
                   </div>
                 </div>
                 <div className="checkbox">
                   <label>
-                    <input type="checkbox"
-                           checked={modelPreferences.kfoldUseSubjectIDs}
-                           onChange={this.handleKfoldUseSubjectIdsClick}/> Use Subject IDs
+                    <input
+                      type="checkbox"
+                      checked={modelPreferences.kfoldUseSubjectIDs}
+                      onChange={this.handleKfoldUseSubjectIdsClick}
+                    /> Use Subject IDs
                   </label>
                 </div>
                 <div className={classNames('form-group',
@@ -325,12 +337,14 @@ class ModelPreferences extends React.Component {
             </div>
             <div className="radio">
               <label>
-                <input type="radio"
-                       ref="cvType"
-                       onChange={this.handleCVTypeChange}
-                       name="cvType"
-                       value={CVTypes.loso}
-                       checked={modelPreferences.cvType === CVTypes.loso} />
+                <input
+                  type="radio"
+                  ref="cvType"
+                  onChange={this.handleCVTypeChange}
+                  name="cvType"
+                  value={CVTypes.loso}
+                  checked={modelPreferences.cvType === CVTypes.loso}
+                />
                 Leave One Subject Out
               </label>
             </div>
@@ -345,12 +359,11 @@ class ModelPreferences extends React.Component {
             </div>
           </div>
 
-          <button type="submit"
-                  className="btn btn-primary"
-                  disabled={modelPreferences.isFetching}>{
-                    modelPreferences.isFetching
-                    ? 'Please wait…'
-                    : 'Train Model'}</button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={modelPreferences.isFetching}
+          >{modelPreferences.isFetching ? 'Please wait…' : 'Train Model'}</button>
         </form>
       </div>
     );
@@ -369,7 +382,7 @@ function select(state) {
     collectionsById: elasticEntitiesToObjects(
       state.selectedImages.collectionsById),
     imagesData: state.imagesMetadata.data
-  }
+  };
 }
 
 export default connect(select)(ModelPreferences);

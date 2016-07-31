@@ -67,8 +67,7 @@ class TrainingLabel extends React.Component {
   componentDidMount() {
     const images = pick(this.props.selectedImages.images,
                         this.countSelectedImages);
-    if (!isEmpty(Object.keys(images))
-        && isEmpty(this.props.imagesMetadata.data)) {
+    if (!isEmpty(Object.keys(images)) && isEmpty(this.props.imagesMetadata.data)) {
       this.props.dispatch(loadImagesMetadata(images));
     }
   }
@@ -132,7 +131,9 @@ class TrainingLabel extends React.Component {
           </div>
         </div>
         <div className={classNames('form-group', errors && 'has-error')}>
-          <label className="control-label">Select the row with the variable you would like to use for training labels</label>
+          <label className="control-label">
+            Select the row with the variable you would like to use for training labels
+          </label>
           <SelectTargetColumn
             data={data}
             targetData={targetData}
