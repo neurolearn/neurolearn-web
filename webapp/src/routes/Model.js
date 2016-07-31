@@ -32,7 +32,7 @@ import { analysisTypeOfAlgorithm } from '../utils';
 
 import styles from './Model.scss';
 
-class ViewModel extends React.Component {
+class Model extends React.Component {
   state: {
     loadingImages: boolean,
     showViewerModal: boolean,
@@ -387,4 +387,4 @@ function select(state) {
   };
 }
 
-export default connect(select)(ViewModel);
+export default connect(select)(Model);
