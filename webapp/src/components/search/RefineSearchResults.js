@@ -105,8 +105,7 @@ export default class RefineSearchResults extends React.Component {
     const { results, filter } = this.props;
 
     const imagesStats = results
-      ? results.aggregations.number_of_images_stats :
-      {max: 0, min: 0};
+      ? results.aggregations.number_of_images_stats : {max: 0, min: 0};
 
     const hasDOI = results
       ? results.aggregations.has_DOI
@@ -144,9 +143,9 @@ export default class RefineSearchResults extends React.Component {
             onChange={this.handleRangeFilterChange}
           />
 
-          { hasDOI && hasDOI.doc_count > 0 &&
+          {hasDOI && hasDOI.doc_count > 0 &&
             <Input
-              type='checkbox'
+              type="checkbox"
               label={`Has DOI (${hasDOI.doc_count})`}
               onChange={this.handleHasDOIChange}
             />
@@ -158,8 +157,7 @@ export default class RefineSearchResults extends React.Component {
                   key={i}
                   label={tf.label}
                   terms={markSelected(filter, tf.fieldName, tf.terms)}
-                  onChange={(terms) =>
-                    this.handleTermsFilterChange(tf.fieldName, terms)}
+                  onChange={terms => this.handleTermsFilterChange(tf.fieldName, terms)}
                 />
             )
           }

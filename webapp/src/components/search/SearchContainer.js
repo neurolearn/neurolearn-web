@@ -105,18 +105,19 @@ export default class SearchContainer extends React.Component {
                 </div>
                 <div className="search-results-wrapper">
                   {results &&
-                  <SearchResults
-                    results={results}
-                    onSearchResultClick={this.props.onSearchResultClick}
-                  />}
+                    <SearchResults
+                      results={results}
+                      onSearchResultClick={this.props.onSearchResultClick}
+                    />}
                   {isFetching && <div className="overlay"></div>}
                 </div>
                 {this.totalHits(results) > RESULTS_PER_PAGE
-                  ? <SearchPagination
-                      totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
-                      activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                      onSelect={this.handlePageSelect}
-                    />
+                  ? (
+                  <SearchPagination
+                    totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
+                    activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
+                    onSelect={this.handlePageSelect}
+                  />)
                   : false}
               </div>
             </div>

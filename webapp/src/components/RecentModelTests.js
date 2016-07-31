@@ -9,7 +9,8 @@ import type { ModelTest } from '../types';
 
 const RecentModelTests = ({ tests } : { tests: Array<ModelTest> }) => (
   <div>
-    {tests.map(test => <div key={test.id}>
+    {tests.map(test =>
+      <div key={test.id}>
         <Link to={`/tests/${test.id}`}>{test.name}</Link>
         <p>
           {test.images_count} {pluralize(test.images_count, 'image', 'images')} • {test.mean_correlation} mean r
@@ -20,6 +21,6 @@ const RecentModelTests = ({ tests } : { tests: Array<ModelTest> }) => (
 
 RecentModelTests.propTypes = {
   tests: PropTypes.array.isRequired
-}
+};
 
 export default RecentModelTests;

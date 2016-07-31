@@ -26,15 +26,16 @@ export default class SearchPagination extends React.Component {
   render() {
     return (
       <Pagination
-        prev={true}
-        next={true}
-        first={true}
-        last={true}
-        ellipsis={true}
+        prev
+        next
+        first
+        last
+        ellipsis
         items={this.props.totalPages}
         maxButtons={this.maxButtons(this.props.totalPages)}
         activePage={this.props.activePage}
-        onSelect={this.handleSelect} />
+        onSelect={this.handleSelect}
+      />
     );
   }
 }
