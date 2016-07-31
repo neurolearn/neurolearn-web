@@ -38,6 +38,9 @@ class InputData extends React.Component {
   constructor(props) {
     super(props);
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
+    (this:any).handleImageToggle = this.handleImageToggle.bind(this);
+    (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
+    (this:any).handleHide = this.handleHide.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +57,10 @@ class InputData extends React.Component {
   handleImageListToggle(collection, images, checked) {
     this.props.dispatch(toggleImageList({collection, images, checked}));
     this.props.dispatch(resetImagesMetadata());
+  }
+
+  handleHide() {
+    this.props.dispatch(hideSelectImagesModal());
   }
 
   getCollection(collectionId, collectionsById) {
@@ -99,7 +106,7 @@ class InputData extends React.Component {
   }
 
   render() {
-    const { selectImagesModal, selectedImages, dispatch } = this.props;
+    const { selectImagesModal, selectedImages } = this.props;
     const anySelected = this.countSelectedImages(selectedImages.images) === 0;
 
     return (
@@ -122,11 +129,11 @@ class InputData extends React.Component {
                 <h3 className="panel-title">Selected Images</h3>
               </div>
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
-                { anySelected
+                {anySelected
                   ? <p>Training dataset is empty.</p>
                   : <SelectedCollectionList
-                      selectedImages={selectedImages}
-                      onItemClick={this.handleCollectionClick}
+                    selectedImages={selectedImages}
+                    onItemClick={this.handleCollectionClick}
                     />
                 }
                 <Link
@@ -140,18 +147,20 @@ class InputData extends React.Component {
         {selectImagesModal.collectionId &&
           <SelectImagesModal
             show={selectImagesModal.display}
-            onToggle={(collection, imageId) =>
-                        this.handleImageToggle(collection, imageId)}
-            onToggleList={(collection, images, checked) =>
-                        this.handleImageListToggle(collection, images,
-                                                   checked)}
-            collection={this.getCollection(selectImagesModal.collectionId,
-                                           selectedImages.collectionsById)}
-            selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
-                                                               selectImagesModal.collectionId)}
-            onHide={() => dispatch(hideSelectImagesModal())}
+            onToggle={this.handleImageToggle}
+            onToggleList={this.handleImageListToggle}
+            collection={this.getCollection(
+              selectImagesModal.collectionId, selectedImages.collectionsById
+            )}
+            selectedImages={this.getSelectedImagesInCollection(
+              selectedImages.images, selectImagesModal.collectionId
+            )}
+            onHide={this.handleHide}
           >
-            <Link disabled={anySelected} className="btn btn-primary continue-button" to="/models/new/training-label">Continue to Training Label</Link>
+            <Link
+              disabled={anySelected}
+              className="btn btn-primary continue-button"
+              to="/models/new/training-label">Continue to Training Label</Link>
           </SelectImagesModal>
         }
       </div>
