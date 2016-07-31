@@ -20,7 +20,12 @@ const SearchResult = (props : { hit: Object, onClick: () => void }) => {
         <div className="title">
           <h3>{name}</h3>
           <p>{authors}</p>
-          <p><a href={neuroVaultCollectionURL(id)} target="_blank"><i style={{paddingRight: 2}} className="fa fa-external-link"></i>NeuroVault</a></p>
+          <p>
+            <a
+              href={neuroVaultCollectionURL(id)}
+              target="_blank"
+            ><i style={{paddingRight: 2}} className="fa fa-external-link"></i>NeuroVault</a>
+          </p>
         </div>
         <div className="images">
           <FallbackImage src={firstImageThumbnail(images)} className="img-responsive" />
@@ -32,7 +37,7 @@ const SearchResult = (props : { hit: Object, onClick: () => void }) => {
       </div>
     </div>
   );
-}
+};
 
 SearchResult.propTypes = {
   hit: PropTypes.object,

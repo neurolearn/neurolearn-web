@@ -1,6 +1,5 @@
 /* @flow */
 
-import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { Modal, Button, Input } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
@@ -81,9 +80,9 @@ export default class SelectImagesModal extends React.Component {
     });
 
     return (
-      <Modal {...this.props} bsSize='large' aria-labelledby='contained-modal-title-lg'>
+      <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
         <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-lg'>Select Images</Modal.Title>
+          <Modal.Title id="contained-modal-title-lg">Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Input

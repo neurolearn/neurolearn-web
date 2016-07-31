@@ -12,16 +12,18 @@ const SearchResults = (
   return results.hits.total ? (
     <div className={styles.root}>
       {results.hits.hits.map(hit =>
-        <SearchResult key={hit._id}
-                      hit={hit}
-                      onClick={() => onSearchResultClick(hit._id)} />)}
+        <SearchResult
+          key={hit._id}
+          hit={hit}
+          onClick={() => onSearchResultClick(hit._id)}
+        />)}
     </div>
   ) : (
     <div className={styles.root}>
       <h3>No collections found</h3>
     </div>
   );
-}
+};
 
 SearchResults.propTypes = {
   results: PropTypes.object,

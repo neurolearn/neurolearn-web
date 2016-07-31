@@ -50,7 +50,7 @@ export default class TermsFilter extends React.Component {
   renderCheckboxes(terms: Array<{}>, disabled: boolean) {
     return sortBy(terms, 'key').map(term =>
       <Input
-        type='checkbox'
+        type="checkbox"
         disabled={disabled}
         checked={term.selected}
         label={`${term.key} (${term.doc_count})`}
@@ -67,12 +67,13 @@ export default class TermsFilter extends React.Component {
         <label
           className={classNames('control-label',
                                 !anySelected(terms) && 'empty-filter')}
-        >{label}&nbsp;<i title="Clear Filter"
-                         className="clear-filter fa fa-times-circle"
-                         onClick={this.handleClearFilterClick}
-                      ></i>
+        >{label}&nbsp;<i
+          title="Clear Filter"
+          className="clear-filter fa fa-times-circle"
+          onClick={this.handleClearFilterClick}
+        ></i>
         </label>
-        { this.renderCheckboxes(terms, disabled) }
+        {this.renderCheckboxes(terms, disabled)}
       </div>
     );
   }

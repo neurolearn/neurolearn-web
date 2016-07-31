@@ -93,7 +93,8 @@ export default class SelectTargetColumn extends React.Component {
     return (
       <tr>
         <td colSpan="5" className="text-center" style={{padding: 30}}>
-          No valid variables are currently available for this dataset. Please create a new one by selecting “Add new field”.
+          No valid variables are currently available for this dataset.
+          Please create a new one by selecting “Add new field”.
         </td>
       </tr>
     );
@@ -133,15 +134,15 @@ export default class SelectTargetColumn extends React.Component {
             </tr>
           </thead>
           <tbody>
-            { isEmpty(columns) && this.renderEmptyState() }
+            {isEmpty(columns) && this.renderEmptyState()}
             {
               columns.map(column =>
                 <tr key={column.name}>
                   <td>
                     <input type="radio"
-                           value={column.name}
-                           onChange={this.handleColumnSelect}
-                           checked={column.name === field.name}/>
+                      value={column.name}
+                      onChange={this.handleColumnSelect}
+                      checked={column.name === field.name} />
                   </td>
                   <td>
                     {column.name}
@@ -153,13 +154,19 @@ export default class SelectTargetColumn extends React.Component {
                     {column.sampleValues.join(', ')}
                     {column.hasNullValues &&
                       <OverlayTrigger overlay={tooltip} placement="top" delayShow={300} delayHide={150}>
-                        <span style={{color: 'gray', marginLeft: 10}}><i className="fa fa-exclamation-triangle"></i> Null values</span>
+                        <span style={{color: 'gray', marginLeft: 10}}>
+                          <i className="fa fa-exclamation-triangle"></i> Null values
+                        </span>
                       </OverlayTrigger>
                     }
                   </td>
                   <td style={{textAlign: 'right'}}>
-                   <span className="action" onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
-                   <span className="action" onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
+                    <span
+                      className="action"
+                      onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
+                    <span
+                      className="action"
+                      onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
                   </td>
                 </tr>
               )

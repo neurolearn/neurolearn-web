@@ -19,6 +19,11 @@ export default class Table extends React.Component {
   constructor(props: Object) {
     super(props);
     (this:any).renderSelectCheckbox = this.renderSelectCheckbox.bind(this);
+    (this:any).handleSelectAll = this.handleSelectAll.bind(this);
+  }
+
+  handleSelectAll(e: SyntheticEvent) {
+    this.props.onSelectAll(e.target.checked);
   }
 
   isSelected(key: number) {
@@ -38,10 +43,12 @@ export default class Table extends React.Component {
 
   renderSelectAllCheckbox() {
     return {
-      component: <IndeterminableCheckbox
-                    checked={this.isAllSelected()}
-                    onChange={e => this.props.onSelectAll(e.target.checked)}
-                  />,
+      component: (
+        <IndeterminableCheckbox
+          checked={this.isAllSelected()}
+          onChange={this.handleSelectAll}
+        />
+      ),
       tdStyle: { width: 30, maxWidth: 30 }
     };
   }
@@ -89,11 +96,15 @@ export default class Table extends React.Component {
           <tr>
           {headers.map((header, key) =>
             header
-            ? <th key={key}
+            ? (
+              <th
+                key={key}
                 className={header.tdClassName}
-                style={header.tdStyle}>
+                style={header.tdStyle}
+              >
                 {header.name || header.component || header}
               </th>
+            )
             : null
           )}
           </tr>
