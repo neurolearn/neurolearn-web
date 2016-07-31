@@ -163,10 +163,16 @@ export default class SelectTargetColumn extends React.Component {
                   <td style={{textAlign: 'right'}}>
                     <span
                       className="action"
-                      onClick={(e) => this.handleColumnEdit(e, column.name)}><i className="fa fa-pencil"></i> Edit</span>
+                      onClick={(e) => this.handleColumnEdit(e, column.name)}
+                    >
+                      <i className="fa fa-pencil"></i> Edit
+                    </span>
                     <span
                       className="action"
-                      onClick={(e) => this.handleColumnDelete(e, column.name)}><i className="fa fa-trash"></i> Delete</span>
+                      onClick={(e) => this.handleColumnDelete(e, column.name)}
+                    >
+                      <i className="fa fa-trash"></i> Delete
+                    </span>
                   </td>
                 </tr>
               )

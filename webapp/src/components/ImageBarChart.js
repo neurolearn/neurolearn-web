@@ -186,29 +186,32 @@ export default class ImageBarChart extends React.Component {
         <div className="col-md-6">
           <h2>Images</h2>
           <Input type="text"
-                 placeholder="Filter Images"
-                 value={this.state.filterText}
-                 ref="filterText"
-                 onChange={this.handleFilterChange} />
+            placeholder="Filter Images"
+            value={this.state.filterText}
+            ref="filterText"
+            onChange={this.handleFilterChange}
+          />
 
           {!isEmpty(images) && this.showCheckbox()
             ? <Input type="checkbox"
-                   label={`Select ${images.length} images`}
-                   checked={this.isAllChecked(images)}
-                   onChange={e => this.toggleAll(images, e.target.checked)}/>
+              label={`Select ${images.length} images`}
+              checked={this.isAllChecked(images)}
+              onChange={e => this.toggleAll(images, e.target.checked)}
+              />
             : <div style={{marginTop: 10, marginBottom: 10}}>{`${images.length} images`}</div>
           }
 
           {isEmpty(images)
-            ? this.renderEmptyImageList()
-            : <BarChartRowContainer
-                items={images}
-                label={ImageLabel}
-                labelProps={{
-                  showCheckbox: this.showCheckbox(),
-                  onChange: this.handleImageToggle,
-                  isChecked: this.isChecked
-                }} />
+           ? this.renderEmptyImageList()
+           : <BarChartRowContainer
+               items={images}
+               label={ImageLabel}
+               labelProps={{
+                 showCheckbox: this.showCheckbox(),
+                 onChange: this.handleImageToggle,
+                 isChecked: this.isChecked
+               }}
+             />
            }
         </div>
 
@@ -226,7 +229,13 @@ export default class ImageBarChart extends React.Component {
                 onDelete: this.handleGroupDelete
               }} />
           }
-          <Button style={{marginTop: 12}} onClick={this.handleGroupAdd} bsStyle="primary"><i className="fa fa-plus"></i> New Group</Button>
+          <Button
+            style={{marginTop: 12}}
+            onClick={this.handleGroupAdd}
+            bsStyle="primary"
+          >
+            <i className="fa fa-plus"></i> New Group
+          </Button>
         </div>
       </div>
     );

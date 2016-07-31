@@ -14,7 +14,7 @@ const ImageItem = (
 ) => (
   <tr>
     <td>
-      <input type='checkbox' checked={checked} onChange={onChange}/>
+      <input type="checkbox" checked={checked} onChange={onChange} />
     </td>
     <td onClick={onChange} className="name">{name}</td>
     <td>{image_type}</td>
@@ -29,6 +29,6 @@ ImageItem.propTypes = {
   checked: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired
-}
+};
 
 export default ImageItem;
