@@ -20,7 +20,6 @@ import styles from './MLModels.scss';
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardTests';
 
-
 class ModelTests extends React.Component {
   state: {
     selectedRows: Object
@@ -69,9 +68,8 @@ class ModelTests extends React.Component {
   }
 
   handleToggleAll(checked) {
-    const { selectedRows } = this.state;
     const { items } = this.props;
-    this.setState({ selectedRows: zipObject(items.map(x => [x.id, checked])) })
+    this.setState({ selectedRows: zipObject(items.map(x => [x.id, checked])) });
   }
 
   handleDeleteSelected() {
@@ -87,22 +85,28 @@ class ModelTests extends React.Component {
 
   renderItems(items) {
     return (
-      <Table data={items}
-             selectedRows={this.state.selectedRows}
-             onSelect={this.handleToggleRow}
-             onSelectAll={this.handleToggleAll}
-             className="table table-hover"
-             >
-        <Column header={{name: 'Name', tdClassName: 'col-md-4'}}
-                cell={x => <Link to={`/tests/${x.id}`}>{x.name}</Link>} />
-        <Column header="Status"
-                cell={x => <TaskStateLabel state={x.state}/>} />
-        <Column header="Test Duration"
-                cell={x => x.test_duration
-                           && (Math.floor(x.test_duration)
-                           + ' sec')} />
+      <Table
+        data={items}
+        selectedRows={this.state.selectedRows}
+        onSelect={this.handleToggleRow}
+        onSelectAll={this.handleToggleAll}
+        className="table table-hover"
+      >
+        <Column
+          header={{name: 'Name', tdClassName: 'col-md-4'}}
+          cell={x => <Link to={`/tests/${x.id}`}>{x.name}</Link>}
+        />
+        <Column
+          header="Status"
+          cell={x => <TaskStateLabel state={x.state} />}
+        />
+        <Column
+          header="Test Duration"
+          cell={x => x.test_duration && (Math.floor(x.test_duration) + ' sec')}
+        />
         <Column header="Created"
-                cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>} />
+          cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>}
+        />
       </Table>
     );
   }
@@ -123,15 +127,15 @@ class ModelTests extends React.Component {
     return (
       <div className={styles.root}>
         <DashboardNav>
-          <Button disabled={someSelected}
-                  onClick={this.handleDeleteSelected}><i className="fa fa-trash"></i> Delete</Button>
+          <Button
+            disabled={someSelected}
+            onClick={this.handleDeleteSelected}
+          ><i className="fa fa-trash"></i> Delete</Button>
         </DashboardNav>
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(items)
-              ? this.renderEmptyState()
-              : this.renderItems(items) }
+            {isEmpty(items) ? this.renderEmptyState() : this.renderItems(items)}
           </div>
         </div>
       </div>
@@ -143,7 +147,7 @@ function select(state) {
   return {
     items: state.fetched[FETCHED_KEY],
     auth: state.auth
-  }
+  };
 }
 
 export default connect(select)(ModelTests);
