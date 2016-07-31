@@ -1,6 +1,5 @@
 /* @flow */
 
-import jwtDecode from 'jwt-decode';
 import { createAction } from 'redux-actions';
 import api from '../api';
 import { removeAuthToken } from '../utils';
