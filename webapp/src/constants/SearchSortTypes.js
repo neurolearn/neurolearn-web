@@ -3,7 +3,11 @@
 export default {
   MOST_IMAGES: {
     title: 'Most images',
-    option: { 'number_of_images': { 'order': 'desc'}}
+    option: {
+      'number_of_images': {
+        'order': 'desc'
+      }
+    }
   },
 
   FEWEST_IMAGES: {
@@ -13,6 +17,10 @@ export default {
 
   RECENTLY_UPDATED: {
     title: 'Recently updated',
-    option: { 'modify_date': { 'order': 'desc'}}
+    option: {
+      'modify_date': {
+        'order': 'desc'
+      }
+    }
   }
 };
