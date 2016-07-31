@@ -20,12 +20,12 @@ import {
 
 import {
   toggleImage,
-  toggleImageList,
+  toggleImageList
 } from '../state/selectedImages';
 
 import {
   loadSearchResults,
-  inputSearchQuery,
+  inputSearchQuery
 } from '../state/search';
 
 class TestModel extends React.Component {
@@ -45,6 +45,8 @@ class TestModel extends React.Component {
     super(props);
     (this:any).handleImageToggle = this.handleImageToggle.bind(this);
     (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
+    (this:any).handleTestModelClick = this.handleTestModelClick.bind(this);
+    (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
   }
 
   componentDidMount() {
@@ -128,8 +130,9 @@ class TestModel extends React.Component {
             <div className="panel panel-default">
               <div className="panel-body">
                 <SearchContainer {...this.props.search}
-                                 dispatch={this.props.dispatch}
-                                 onSearchResultClick={this.handleCollectionClick.bind(this)} />
+                  dispatch={this.props.dispatch}
+                  onSearchResultClick={this.handleCollectionClick}
+                />
               </div>
             </div>
           </div>
@@ -139,8 +142,8 @@ class TestModel extends React.Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Model</h3>
               </div>
-              <div className='panel-body'>
-                { testModel.model
+              <div className="panel-body">
+                {testModel.model
                   ? <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
                   : <p>No test model has been selected.</p>
                 }
@@ -152,14 +155,18 @@ class TestModel extends React.Component {
                 <h3 className="panel-title">Selected Images</h3>
               </div>
               <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
-                { anySelected
+                {anySelected
                   ? <p>Training dataset is empty.</p>
-                  : <SelectedCollectionList selectedImages={selectedImages}
-                               onItemClick={(id) => this.handleCollectionClick(id)} />
+                  : <SelectedCollectionList
+                    selectedImages={selectedImages}
+                    onItemClick={this.handleCollectionClick}
+                    />
                 }
-                <Button disabled={anySelected || testModel.isFetching}
-                        bsStyle="primary"
-                        onClick={this.handleTestModelClick.bind(this)}>{testModel.isFetching ? 'Please wait…' : 'Test Model'}</Button>
+                <Button
+                  disabled={anySelected || testModel.isFetching}
+                  bsStyle="primary"
+                  onClick={this.handleTestModelClick}>{testModel.isFetching ? 'Please wait…' : 'Test Model'}
+                </Button>
               </div>
             </div>
           </div>
@@ -173,7 +180,8 @@ class TestModel extends React.Component {
                                            selectedImages.collectionsById)}
             selectedImages={this.getSelectedImagesInCollection(selectedImages.images,
                                                                selectImagesModal.collectionId)}
-            onHide={() => dispatch(hideSelectImagesModal())} />
+            onHide={() => dispatch(hideSelectImagesModal())}
+          />
         }
       </div>
     );

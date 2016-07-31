@@ -62,14 +62,14 @@ class ViewTest extends React.Component {
       case 'failure':
         return this.renderFailure(test);
       default:
-        throw 'Unknown test state.';
+        throw Error('Unknown test state.');
     }
   }
 
   renderProgress() {
     return (
       <div className="col-md-12" >
-        <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}}/></div>
+        <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
         <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Model testing is in progress…</div>
       </div>
     );
@@ -94,9 +94,10 @@ class ViewTest extends React.Component {
       <div className="col-md-12">
         <p>Model: <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
         <ImageBarChart images={correlation}
-                       groups={groups}
-                       collections={collections}
-                       onGroupsChange={newGroups => this.handleGroupsChange(test.id, newGroups)} />
+          groups={groups}
+          collections={collections}
+          onGroupsChange={newGroups => this.handleGroupsChange(test.id, newGroups)}
+        />
       </div>
     );
   }
@@ -116,13 +117,17 @@ class ViewTest extends React.Component {
           <ButtonToolbar className="pull-right">
             {userIsOwner &&
               <Button bsStyle="danger"
-                      onClick={() => this.handleDelete(test.id)}>Delete</Button>}
+                onClick={() => this.handleDelete(test.id)}
+              >Delete</Button>}
           </ButtonToolbar>
           <h1>{test && test.name}</h1>
-          <div>{test.user.name} <span style={{color: 'gray'}}>created</span> <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time></div>
+          <div>{test.user.name}
+            <span style={{color: 'gray'}}>created</span>
+            <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time>
+          </div>
         </div>
         <div className="row">
-        { test && this.renderState(test) }
+        {test && this.renderState(test)}
         </div>
       </div>
     );
