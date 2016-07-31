@@ -71,9 +71,8 @@ class MLModels extends React.Component {
   }
 
   handleToggleAll(checked) {
-    const { selectedRows } = this.state;
     const { items } = this.props;
-    this.setState({ selectedRows: zipObject(items.map(x => [x.id, checked])) })
+    this.setState({ selectedRows: zipObject(items.map(x => [x.id, checked])) });
   }
 
   handleTrainNewModel() {
@@ -96,25 +95,32 @@ class MLModels extends React.Component {
   renderItems(items) {
     return (
       <Table data={items}
-             selectedRows={this.state.selectedRows}
-             onSelect={this.handleToggleRow}
-             onSelectAll={this.handleToggleAll}
-             className="table table-hover">
-        <Column header={{name: 'Name', tdClassName: 'col-md-3'}}
-                cell={x => [<Link to={`/models/${x.id}`}>{x.name}</Link>,
-                            x.private && <i title="Private model" className="fa fa-lock" style={{marginLeft: 4, color: 'gray'}} aria-hidden="true"></i>]} />
-        <Column header="Status"
-                cell={x => <TaskStateLabel state={x.state}/>} />
-        <Column header="Algorithm"
-                cell={x => algorithmNameMap[x.algorithm]} />
-        <Column header="Cross-validation Type"
-                cell={x => x.cv ? x.cv.type : ''} />
-        <Column header="Training Duration"
-                cell={x => x.training_duration
-                           && (Math.floor(x.training_duration)
-                           + ' sec')} />
-        <Column header="Created"
-                cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>} />
+        selectedRows={this.state.selectedRows}
+        onSelect={this.handleToggleRow}
+        onSelectAll={this.handleToggleAll}
+        className="table table-hover">
+        <Column
+          header={{name: 'Name', tdClassName: 'col-md-3'}}
+          cell={x => [
+            <Link to={`/models/${x.id}`}>{x.name}</Link>,
+            (x.private &&
+              <i
+                title="Private model"
+                className="fa fa-lock"
+                style={{marginLeft: 4, color: 'gray'}}
+                aria-hidden="true"></i>)
+          ]} />
+        <Column header="Status" cell={x => <TaskStateLabel state={x.state} />} />
+        <Column header="Algorithm" cell={x => algorithmNameMap[x.algorithm]} />
+        <Column header="Cross-validation Type" cell={x => x.cv ? x.cv.type : ''} />
+        <Column
+          header="Training Duration"
+          cell={x => x.training_duration && (Math.floor(x.training_duration) + ' sec')}
+        />
+        <Column
+          header="Created"
+          cell={x => <span className="datetime">{moment(x.created).fromNow()}</span>}
+        />
       </Table>
     );
   }
@@ -137,19 +143,20 @@ class MLModels extends React.Component {
       <div className={styles.root}>
         <DashboardNav>
           <ButtonToolbar className="pull-right">
-
-          <Button bsStyle="primary"
-                  onClick={this.handleTrainNewModel}><i className="fa fa-plus"></i> New Model</Button>
-          <Button disabled={someSelected}
-                  onClick={this.handleDeleteSelected}><i className="fa fa-trash"></i> Delete</Button>
+            <Button
+              bsStyle="primary"
+              onClick={this.handleTrainNewModel}><i className="fa fa-plus"></i> New Model</Button>
+            <Button
+              disabled={someSelected}
+              onClick={this.handleDeleteSelected}><i className="fa fa-trash"></i> Delete</Button>
           </ButtonToolbar>
         </DashboardNav>
 
         <div className="row">
           <div className="col-md-12">
-            { isEmpty(items)
+            {isEmpty(items)
               ? this.renderEmptyState()
-              : this.renderItems(items) }
+              : this.renderItems(items)}
           </div>
         </div>
       </div>
@@ -161,7 +168,7 @@ function select(state) {
   return {
     items: state.fetched[FETCHED_KEY],
     auth: state.auth
-  }
+  };
 }
 
 export default connect(select)(MLModels);
