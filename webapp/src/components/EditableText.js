@@ -1,13 +1,11 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 
 import { Button } from 'react-bootstrap';
 
 import ModalDialog from './ModalDialog';
 import InputWithSelectedText from './InputWithSelectedText';
-
 
 export default class EditableText extends React.Component {
   state: {

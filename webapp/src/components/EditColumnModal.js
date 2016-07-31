@@ -83,7 +83,12 @@ export default class EditColumnModal extends React.Component {
             />
           </div>
           {/* A div below fixes Handsontable issue with Copy & Paste in a Boostrap modal dialog */}
-          <div id="CopyPasteDiv" style={{position: 'fixed', top: -10000, left: -10000}}><textarea className="copyPaste" style={{width: 10000, height: 10000, overflow: 'hidden', opacity: 0}}></textarea></div>
+          <div id="CopyPasteDiv" style={{position: 'fixed', top: -10000, left: -10000}}>
+            <textarea
+              className="copyPaste"
+              style={{width: 10000, height: 10000, overflow: 'hidden', opacity: 0}}
+            />
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={this.handleSave}>Save</Button>

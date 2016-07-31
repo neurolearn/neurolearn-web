@@ -103,7 +103,10 @@ class App extends React.Component {
             style={{borderRadius: '999rem'}}
             className="btn btn-success"
             target="_blank"
-            href="https://github.com/neurolearn/neurolearn-web/issues"><i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback</a>
+            href="https://github.com/neurolearn/neurolearn-web/issues"
+          >
+            <i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback
+          </a>
         </div>
       </div>
     );

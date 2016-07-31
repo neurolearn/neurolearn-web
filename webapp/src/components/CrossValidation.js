@@ -8,8 +8,7 @@ import ScatterPlot from './ScatterPlot';
 import { summaryPropsNameMap, propOrder } from '../constants/SummaryProps';
 
 function scatterplotData(stats: Object) {
-  const {Y, yfit_xval, yfit_all} = stats;
-  const yfit = yfit_xval || yfit_all;
+  const { Y, yfit_xval } = stats;
 
   return zipWith(Y, yfit_xval, (acc, value) => {
     return { x: acc, y: value };
@@ -45,19 +44,21 @@ const CvSummary = ({propOrder, summary} : {propOrder: string[], summary: Object}
 
 const Scatterplot = ({label, stats}: {label: Object, stats: Object}) => {
   const spData = [{
-      label: label.name,
-      values: scatterplotData(stats)
+    label: label.name,
+    values: scatterplotData(stats)
   }];
   return (
     <div>
       <h4>Actual vs. Predicted</h4>
 
-      <ScatterPlot data={spData}
-                        width={500}
-                        height={400}
-                        margin={{top: 10, bottom: 30, left: 30, right: 0}}
-                        xAxis={{label: label.name}}
-                        yAxis={{label: `Predicted ${label.name}`}} />
+      <ScatterPlot
+        data={spData}
+        width={500}
+        height={400}
+        margin={{top: 10, bottom: 30, left: 30, right: 0}}
+        xAxis={{label: label.name}}
+        yAxis={{label: `Predicted ${label.name}`}}
+      />
     </div>
   );
 };
@@ -68,7 +69,7 @@ const ROCPlot = ({modelId, plotFilename} : {modelId: number, plotFilename: strin
     <div className="row">
       <div className="col-md-8">
         <h4>ROC</h4>
-        <img style={{marginTop: 15}} src={plotUrl} className="img-responsive"/>
+        <img style={{marginTop: 15}} src={plotUrl} className="img-responsive" />
       </div>
     </div>
   );

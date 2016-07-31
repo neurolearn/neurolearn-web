@@ -35,14 +35,12 @@ export default class BarChartRowContainer extends React.Component {
 
     if (err <= 0.15) {
       step *= 10;
-    }
-    else if (err <= 0.35) {
+    } else if (err <= 0.35) {
       step *= 5;
-    }
-    else if (err <= 0.75) {
+    } else if (err <= 0.75) {
       step *= 2;
     }
-    return Math.floor(span / step) * step + step * .5;
+    return Math.floor(span / step) * step + step * 0.5;
   }
 
   scaleWidth(width: number, scaleMax: number, value: number) {
@@ -56,21 +54,27 @@ export default class BarChartRowContainer extends React.Component {
     return (
       <tr key={key}>
         <td className="image-label">
-          <this.props.label {...this.props.labelProps} index={key} item={item}/>
+          <this.props.label {...this.props.labelProps} index={key} item={item} />
         </td>
         <td className="chart-cell low-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
           {key === 0 && <div className="tick pull-left">{parseFloat(-maxTick)}</div>}
-          {r < 0 &&
-            [<div className="bar-chart bar-negative" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}></div>,
-             <div className="bar-label bar-label-negative">{r}</div>]
-          }
+          {r < 0 && [
+            <div
+              className="bar-chart bar-negative"
+              style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}
+            />,
+            <div className="bar-label bar-label-negative">{r}</div>
+          ]}
         </td>
         <td className="chart-cell high-chart" style={{minWidth: AXIS_PIXEL_WIDTH}}>
           {key === 0 && <div className="tick pull-right">{parseFloat(maxTick)}</div>}
-          {r >= 0 &&
-            [<div className="bar-chart bar-positive" style={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}></div>,
-             <div className="bar-label bar-label-positive">{r}</div>]
-          }
+          {r >= 0 && [
+            <div
+              className="bar-chart bar-positive" s
+              tyle={{width: this.scaleWidth(AXIS_PIXEL_WIDTH, maxTick, r)}}
+            />,
+            <div className="bar-label bar-label-positive">{r}</div>
+          ]}
         </td>
       </tr>
     );

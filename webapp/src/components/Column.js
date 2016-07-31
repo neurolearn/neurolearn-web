@@ -1,5 +1,5 @@
 /* @flow */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 export default class Column extends React.Component {}
