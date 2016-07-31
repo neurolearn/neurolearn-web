@@ -18,7 +18,7 @@ import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
 import VisibilityLabel from '../components/VisibilityLabel';
 import EditableText from '../components/EditableText';
-import NotFound from './NotFound';
+import NotFound from '../components/NotFound';
 import Events from '../utils/events';
 
 import { retrainModelWith } from '../state/modelPreferences';
@@ -30,7 +30,7 @@ import {
 
 import { analysisTypeOfAlgorithm } from '../utils';
 
-import styles from './ViewModel.scss';
+import styles from './Model.scss';
 
 class ViewModel extends React.Component {
   state: {

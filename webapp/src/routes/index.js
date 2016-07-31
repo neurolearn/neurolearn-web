@@ -10,14 +10,14 @@ import Explore from '../pages/Explore';
 import MLModels from '../pages/dashboard/MLModels';
 import ModelTests from '../pages/dashboard/ModelTests';
 import TrainModel from '../pages/TrainModel';
-import ViewModel from '../pages/ViewModel';
+import Model from './Model';
 import TestModel from '../pages/TestModel';
 import ViewTest from '../pages/ViewTest';
 import InputData from '../components/trainmodel/InputData';
 import TrainingLabel from '../components/trainmodel/TrainingLabel';
 import ModelPreferences from '../components/trainmodel/ModelPreferences';
 import FAQ from '../pages/FAQ';
-import NotFound from '../pages/NotFound';
+import NotFound from '../components/NotFound';
 
 import { fetchAuthenticatedUser } from '../state/auth';
 import { getAuthToken } from '../utils';
@@ -63,7 +63,7 @@ export default function renderRoutes(store: Object) {
         <Route path="training-label" component={TrainingLabel} />
         <Route path="model-preferences" component={ModelPreferences} />
       </Route>
-      <Route path="/models/:id" component={ViewModel} />
+      <Route path="/models/:id" component={Model} />
       <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
       <Route path="/tests/:id" component={ViewTest} />
       <Route path="*" component={NotFound} />
