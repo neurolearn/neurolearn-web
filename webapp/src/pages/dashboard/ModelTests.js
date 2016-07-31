@@ -15,8 +15,6 @@ import DashboardNav from '../../components/DashboardNav';
 import Table from '../../components/Table';
 import Column from '../../components/Column';
 
-import styles from './MLModels.scss';
-
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardTests';
 
@@ -125,7 +123,7 @@ class ModelTests extends React.Component {
     const someSelected = !some(values(selectedRows));
 
     return (
-      <div className={styles.root}>
+      <div>
         <DashboardNav>
           <Button
             disabled={someSelected}
