@@ -7,7 +7,8 @@
   "plugins": [
     "babel",
     "react",
-    "promise"
+    "promise", 
+    "flow-vars"
   ],
   "env"     : {
     "browser" : true
@@ -25,6 +26,8 @@
     "babel/generator-star-spacing": 1,
     "jsx-quotes": [2, "prefer-double"],
     "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
-    "space-before-function-paren": ["error", { "anonymous": "always", "named": "never" }]
+    "space-before-function-paren": ["error", { "anonymous": "always", "named": "never" }],
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1
   }
 }
