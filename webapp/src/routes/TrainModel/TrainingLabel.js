@@ -6,13 +6,13 @@ import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import SelectTargetColumn from '../SelectTargetColumn';
-import Spinner from '../Spinner';
+import SelectTargetColumn from 'components/SelectTargetColumn';
+import Spinner from 'components/Spinner';
 
-import AnalysisTypes from '../../constants/AnalysisTypes';
-import { selectAnalysisType } from '../../state/modelPreferences';
+import AnalysisTypes from 'constants/AnalysisTypes';
+import { selectAnalysisType } from 'state/modelPreferences';
 
-import { isBinaryCollection } from '../../utils';
+import { isBinaryCollection } from 'utils';
 
 import {
   loadImagesMetadata,

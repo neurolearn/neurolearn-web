@@ -9,13 +9,13 @@ import Home from './Home';
 import Explore from './Explore';
 import ModelList from './Dashboard/ModelList';
 import TestList from './Dashboard/TestList';
-import TrainModel from './TrainModel';
 import Model from './Model';
 import Test from './Test';
+import TrainModel from './TrainModel';
+import InputData from './TrainModel/InputData';
+import TrainingLabel from './TrainModel/TrainingLabel';
+import ModelPreferences from './TrainModel/ModelPreferences';
 import TestModel from './TestModel';
-import InputData from '../components/trainmodel/InputData';
-import TrainingLabel from '../components/trainmodel/TrainingLabel';
-import ModelPreferences from '../components/trainmodel/ModelPreferences';
 import FAQ from './FAQ';
 import NotFound from '../components/NotFound';
 

@@ -4,14 +4,14 @@ import { isEmpty, mapValues, pick, zipWith } from 'lodash';
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-import SelectTargetColumn from '../SelectTargetColumn';
+import SelectTargetColumn from 'components/SelectTargetColumn';
 
 import {
   algorithmGroups,
   algorithmNameMap
-} from '../../constants/Algorithms';
+} from 'constants/Algorithms';
 
-import CVTypes from '../../constants/CrossValidationTypes';
+import CVTypes from 'constants/CrossValidationTypes';
 
 import { connect } from 'react-redux';
 import {
@@ -23,16 +23,16 @@ import {
   selectAlgorithm,
   setKfoldUseSubjectIds,
   trainModel
-} from '../../state/modelPreferences';
+} from 'state/modelPreferences';
 
 import {
   saveImagesMetadataColumn,
   deleteImagesMetadataColumn
-} from '../../state/imagesMetadata';
+} from 'state/imagesMetadata';
 
 import {
   setSubjectIdData
-} from '../../state/subjectIdData';
+} from 'state/subjectIdData';
 
 function validate(cv, subjectIdData, modelPreferences) {
   const errors = {};

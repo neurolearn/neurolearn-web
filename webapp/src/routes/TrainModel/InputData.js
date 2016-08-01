@@ -3,27 +3,27 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import SearchContainer from '../search/SearchContainer';
-import SelectImagesModal from '../SelectImagesModal';
-import SelectedCollectionList from '../SelectedCollectionList';
+import SearchContainer from 'components/search/SearchContainer';
+import SelectImagesModal from 'components/SelectImagesModal';
+import SelectedCollectionList from 'components/SelectedCollectionList';
 import { Link } from 'react-router';
 
-import { resetImagesMetadata } from '../../state/imagesMetadata';
+import { resetImagesMetadata } from 'state/imagesMetadata';
 
 import {
   showSelectImagesModal,
   hideSelectImagesModal
-} from '../../state/selectImagesModal';
+} from 'state/selectImagesModal';
 
 import {
   toggleImage,
   toggleImageList
-} from '../../state/selectedImages';
+} from 'state/selectedImages';
 
 import {
   loadSearchResults,
   inputSearchQuery
-} from '../../state/search';
+} from 'state/search';
 
 import styles from './InputData.scss';
 
