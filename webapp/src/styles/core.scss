@@ -1,3 +1,20 @@
 :global {
-
+  .logo-beta {
+    font-style: italic;
+    color: #A2A2A2;
+    margin-left: 2px;
+    font-family: 'Georgia, serif';
+  }
+  .app-container {
+    margin-bottom: 50px;
+  }
+  .feedback-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    .btn {
+      border-radius: 999rem;
+    }
+  }
 }

@@ -12,12 +12,7 @@ import { dismissAlert } from './state/alertMessages';
 import { JWT_KEY_NAME } from './constants/auth';
 import { authLink } from './utils';
 
-const logoBetaStyle = {
-  fontStyle: 'italic',
-  color: '#A2A2A2',
-  marginLeft: 2,
-  fontFamily: 'Georgia, serif'
-};
+import 'core.scss';
 
 class App extends React.Component {
   static propTypes = {
@@ -76,7 +71,7 @@ class App extends React.Component {
     return (
       <div>
         <Navbar staticTop>
-          <NavBrand><Link to="/">Neurolearn<sup style={logoBetaStyle}>beta</sup></Link></NavBrand>
+          <NavBrand><Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link></NavBrand>
           {auth.user && this.renderAuthenticatedNav()}
           <Nav>
             <LinkContainer to="/explore">
@@ -93,14 +88,13 @@ class App extends React.Component {
           </Nav>
         </Navbar>
 
-        <div className="container" style={{marginBottom: 50}}>
+        <div className="container app-container">
           <AlertMessages messages={alertMessages}
             {...bindActionCreators({dismissAlert}, dispatch)} />
           {this.props.children}
         </div>
-        <div style={{position: 'fixed', bottom: 20, right: 20, zIndex: 1000}}>
+        <div className="feedback-button">
           <a
-            style={{borderRadius: '999rem'}}
             className="btn btn-success"
             target="_blank"
             href="https://github.com/neurolearn/neurolearn-web/issues"
