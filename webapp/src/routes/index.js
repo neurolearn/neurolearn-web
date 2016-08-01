@@ -7,12 +7,12 @@ import { Route, Redirect } from 'react-router';
 import App from '../App';
 import Home from './Home';
 import Explore from '../pages/Explore';
-import MLModels from '../pages/dashboard/MLModels';
-import ModelTests from '../pages/dashboard/ModelTests';
+import ModelList from './Dashboard/ModelList';
+import TestList from './Dashboard/TestList';
 import TrainModel from '../pages/TrainModel';
 import Model from './Model';
+import Test from './Test';
 import TestModel from '../pages/TestModel';
-import ViewTest from '../pages/ViewTest';
 import InputData from '../components/trainmodel/InputData';
 import TrainingLabel from '../components/trainmodel/TrainingLabel';
 import ModelPreferences from '../components/trainmodel/ModelPreferences';
@@ -50,8 +50,8 @@ export default function renderRoutes(store: Object) {
       <Route path="/faq" component={FAQ} />
       <Redirect from="/dashboard" to="/dashboard/models" />
       <Route path="/dashboard" onEnter={requireAuth}>
-        <Route path="models" component={MLModels} />
-        <Route path="tests" component={ModelTests} />
+        <Route path="models" component={ModelList} />
+        <Route path="tests" component={TestList} />
       </Route>
       <Redirect from="/explore" to="/explore/models" />
       <Route path="/explore">
@@ -65,7 +65,7 @@ export default function renderRoutes(store: Object) {
       </Route>
       <Route path="/models/:id" component={Model} />
       <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
-      <Route path="/tests/:id" component={ViewTest} />
+      <Route path="/tests/:id" component={Test} />
       <Route path="*" component={NotFound} />
     </Route>
   );
