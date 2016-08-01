@@ -14,10 +14,14 @@ export default (initialState = {}, history) => {
   // ======================================================
   const enhancers = [];
   if (__DEBUG__) {
-    const devToolsExtension = window.devToolsExtension;
-    if (typeof devToolsExtension === 'function') {
-      enhancers.push(devToolsExtension());
-    }
+    // Disbale devtools
+    // const devToolsExtension = window.devToolsExtension;
+    // if (typeof devToolsExtension === 'function') {
+    //   enhancers.push(devToolsExtension());
+    // }
+    const createLogger = require('redux-logger');
+    const logger = createLogger();
+    middleware.push(logger);
   }
 
   // ======================================================
