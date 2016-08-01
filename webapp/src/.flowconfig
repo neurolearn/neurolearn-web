@@ -1,4 +1,8 @@
 [ignore]
+.*/bin/.*
+.*/build/.*
+.*/config/.*
+.*/coverage/.*
 .*/fbjs/.*
 .*/regenerator/node_modules/.*
 .*/node_modules/npmconf/.*
@@ -15,3 +19,9 @@ esproposal.class_static_fields=enable
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/ModuleStub.js'
 module.name_mapper='^handsontable.full.js$' -> '<PROJECT_ROOT>/flow/ModuleStub.js'
 module.name_mapper='^nsviewer.js$' -> '<PROJECT_ROOT>/flow/ModuleStub.js'
+
+module.name_mapper='^components\/\(.*\)$' -> '<PROJECT_ROOT>/components/\1'
+module.name_mapper='^constants\/\(.*\)$' -> '<PROJECT_ROOT>/constants/\1'
+module.name_mapper='^utils\/\(.*\)$' -> '<PROJECT_ROOT>/utils/\1'
+module.name_mapper='^utils$' -> '<PROJECT_ROOT>/utils'
+module.name_mapper='^state\/\(.*\)$' -> '<PROJECT_ROOT>/state/\1'
