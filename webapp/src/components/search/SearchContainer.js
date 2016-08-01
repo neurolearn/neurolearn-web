@@ -3,8 +3,8 @@
 import React, { PropTypes } from 'react';
 import SearchInput from './SearchInput';
 import SortSearchResults from './SortSearchResults';
-import SearchResults from './SearchResults';
-import SearchPagination from './Pagination';
+import ResultList from './ResultList';
+import Pagination from './Pagination';
 import RefineSearchResults from './RefineSearchResults';
 import { RESULTS_PER_PAGE } from '../../constants/Search';
 
@@ -105,7 +105,7 @@ export default class SearchContainer extends React.Component {
                 </div>
                 <div className="search-results-wrapper">
                   {results &&
-                    <SearchResults
+                    <ResultList
                       results={results}
                       onSearchResultClick={this.props.onSearchResultClick}
                     />}
@@ -113,7 +113,7 @@ export default class SearchContainer extends React.Component {
                 </div>
                 {this.totalHits(results) > RESULTS_PER_PAGE
                   ? (
-                  <SearchPagination
+                  <Pagination
                     totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
                     activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
                     onSelect={this.handlePageSelect}
