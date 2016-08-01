@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 
 import { algorithmNameMap } from '../constants/Algorithms';
-import { pluralize } from '../utils.js';
+import { pluralize } from '../utils';
 
 import type { User, Model } from '../types';
 

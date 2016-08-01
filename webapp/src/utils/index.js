@@ -1,14 +1,15 @@
 /* @flow */
 
-import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from './constants/auth';
-import { algorithmGroups } from './constants/Algorithms';
 import isEmpty from 'lodash/lang/isEmpty';
 import findKey from 'lodash/object/findKey';
 import every from 'lodash/collection/every';
 import keys from 'lodash/object/keys';
 import findIndex from 'lodash/array/findIndex';
 
-import type { WindowLocation } from './types';
+import { JWT_KEY_NAME, NEUROVAULT_DEV_CLIENT_ID } from '../constants/auth';
+import { algorithmGroups } from '../constants/Algorithms';
+
+import type { WindowLocation } from '../types';
 
 export function pluralize(
   n: number,

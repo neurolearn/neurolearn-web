@@ -7,7 +7,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { algorithmNameMap } from '../constants/Algorithms';
-import { pluralize } from '../utils.js';
+import { pluralize } from '../utils';
 
 const BASE_URL = {
   'MLModel': 'models',

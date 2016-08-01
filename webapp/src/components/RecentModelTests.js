@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import { pluralize } from '../utils.js';
+import { pluralize } from '../utils';
 
 import type { ModelTest } from '../types';
 
