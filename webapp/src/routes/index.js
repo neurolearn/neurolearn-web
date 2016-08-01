@@ -6,17 +6,17 @@ import { Route, Redirect } from 'react-router';
 
 import App from '../App';
 import Home from './Home';
-import Explore from '../pages/Explore';
+import Explore from './Explore';
 import ModelList from './Dashboard/ModelList';
 import TestList from './Dashboard/TestList';
-import TrainModel from '../pages/TrainModel';
+import TrainModel from './TrainModel';
 import Model from './Model';
 import Test from './Test';
-import TestModel from '../pages/TestModel';
+import TestModel from './TestModel';
 import InputData from '../components/trainmodel/InputData';
 import TrainingLabel from '../components/trainmodel/TrainingLabel';
 import ModelPreferences from '../components/trainmodel/ModelPreferences';
-import FAQ from '../pages/FAQ';
+import FAQ from './FAQ';
 import NotFound from '../components/NotFound';
 
 import { fetchAuthenticatedUser } from '../state/auth';
