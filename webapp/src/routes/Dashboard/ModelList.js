@@ -20,7 +20,7 @@ import Column from '../../components/Column';
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardModels';
 
-class MLModels extends React.Component {
+class ModelList extends React.Component {
   state: {
     selectedRows: Object
   };
@@ -170,4 +170,4 @@ function select(state) {
   };
 }
 
-export default connect(select)(MLModels);
+export default connect(select)(ModelList);

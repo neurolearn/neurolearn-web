@@ -21,7 +21,7 @@ function saveCorrelationGroups(testId, groups) {
   };
 }
 
-class ViewTest extends React.Component {
+class Test extends React.Component {
   static propTypes = {
     params: PropTypes.object.isRequired,
     test: PropTypes.object,
@@ -142,5 +142,5 @@ function select(state) {
   };
 }
 
-export default connect(select)(ViewTest);
+export default connect(select)(Test);
 

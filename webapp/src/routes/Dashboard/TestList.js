@@ -18,7 +18,7 @@ import Column from '../../components/Column';
 const POLL_INTERVAL = 2500;
 const FETCHED_KEY = 'dashboardTests';
 
-class ModelTests extends React.Component {
+class TestList extends React.Component {
   state: {
     selectedRows: Object
   };
@@ -141,11 +141,11 @@ class ModelTests extends React.Component {
   }
 }
 
-function select(state) {
+function mapStateToProps(state) {
   return {
     items: state.fetched[FETCHED_KEY],
     auth: state.auth
   };
 }
 
-export default connect(select)(ModelTests);
+export default connect(mapStateToProps)(TestList);
