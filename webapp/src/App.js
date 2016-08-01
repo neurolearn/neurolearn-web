@@ -4,7 +4,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
-import { bindActionCreators } from 'redux';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AlertMessages from './components/AlertMessages';
 import { logout } from './state/auth';
@@ -19,7 +18,8 @@ class App extends React.Component {
     children: PropTypes.object,
     auth: PropTypes.object,
     alertMessages: PropTypes.array,
-    dispatch: PropTypes.func.isRequired
+    dismissAlert: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -34,7 +34,7 @@ class App extends React.Component {
   handleLogout(e) {
     e.preventDefault();
     localStorage.removeItem(JWT_KEY_NAME);
-    this.props.dispatch(logout());
+    this.props.logout();
     this.context.router.push('/');
   }
 
@@ -65,7 +65,7 @@ class App extends React.Component {
   }
 
   renderApp() {
-    const { auth, alertMessages, dispatch } = this.props;
+    const { auth, alertMessages, dismissAlert } = this.props;
     const { router } = this.context;
 
     return (
@@ -89,8 +89,7 @@ class App extends React.Component {
         </Navbar>
 
         <div className="container app-container">
-          <AlertMessages messages={alertMessages}
-            {...bindActionCreators({dismissAlert}, dispatch)} />
+          <AlertMessages messages={alertMessages} dismissAlert={dismissAlert} />
           {this.props.children}
         </div>
         <div className="feedback-button">
@@ -115,8 +114,4 @@ class App extends React.Component {
   }
 }
 
-function select(state) {
-  return state;
-}
-
-export default connect(select)(App);
+export default connect(state => state, { logout, dismissAlert })(App);
