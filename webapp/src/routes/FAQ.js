@@ -188,19 +188,17 @@ const FAQ = () => (
         <a name="q8"></a>
         <h2>What do I do if I discover a bug?</h2>
         <p>
-          Please send an email to <a href="mailto:neurolearnweb@gmail.com">neurolearnweb@gmail.com</a>
-          with details about the circumstances under which the bug occurred
-          or start a new issue on our
-          <a href="https://github.com/neurolearn/neurolearn-web/issues" target="_blank">GitHub page</a>.
+          Please send an email to <a href="mailto:neurolearnweb@gmail.com">neurolearnweb@gmail.com</a> with
+          details about the circumstances under which the bug occurred or start a new issue on
+          our <a href="https://github.com/neurolearn/neurolearn-web/issues" target="_blank">GitHub page</a>.
         </p>
 
         <a name="q9"></a>
         <h2>How can I contribute to the development of neuro-learn?</h2>
         <p>
-          Please send any feedback and suggestions to
-          <a href="mailto:neurolearnweb@gmail.com">neurolearnweb@gmail.com</a>,
-          or start an issue on our
-          <a href="https://github.com/neurolearn/neurolearn-web/issues" target="_blank">GitHub page</a>.
+          Please send any feedback and suggestions to <a href="mailto:neurolearnweb@gmail.com">
+          neurolearnweb@gmail.com</a>, or start an issue on
+          our <a href="https://github.com/neurolearn/neurolearn-web/issues" target="_blank">GitHub page</a>.
           We encourage interested developers to contribute pull requests to our GitHub repositories.
         </p>
       </div>
