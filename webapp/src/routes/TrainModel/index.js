@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import NavItem from '../components/NavItem';
+import NavItem from 'components/NavItem';
 
 const TrainModel = ({children} : {children? : any}) => (
   <div>
