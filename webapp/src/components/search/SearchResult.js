@@ -1,11 +1,11 @@
 /* @flow */
 
-import styles from './SearchResult.scss';
-
 import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import FallbackImage from '../FallbackImage';
 import { pluralize, neuroVaultCollectionURL } from '../../utils';
+
+import styles from './SearchResult.scss';
 
 function firstImageThumbnail(images: Array<{thumbnail: string}>): string {
   return images.length ? images[0].thumbnail : '';

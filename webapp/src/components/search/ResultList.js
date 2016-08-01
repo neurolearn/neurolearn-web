@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 import SearchResult from './SearchResult';
 
-import styles from './SearchResults.scss';
+import styles from './ResultList.scss';
 
 const SearchResults = (
   { results, onSearchResultClick }
