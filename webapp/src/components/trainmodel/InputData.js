@@ -168,8 +168,4 @@ class InputData extends React.Component {
   }
 }
 
-function select(state) {
-  return state;
-}
-
-export default connect(select)(InputData);
+export default connect(state => state)(InputData);

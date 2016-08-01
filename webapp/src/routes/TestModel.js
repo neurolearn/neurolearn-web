@@ -188,8 +188,4 @@ class TestModel extends React.Component {
   }
 }
 
-function select(state) {
-  return state;
-}
-
-export default connect(select)(TestModel);
+export default connect(state => state)(TestModel);
