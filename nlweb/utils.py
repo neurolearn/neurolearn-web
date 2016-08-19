@@ -1,4 +1,5 @@
 import datetime
+import numbers
 
 
 def friendly_time(dt, past_="ago",
@@ -49,3 +50,7 @@ def merge_two_dicts(a, b):
     c = a.copy()
     c.update(b)
     return c
+
+
+def is_number(value):
+    return isinstance(value, numbers.Number)

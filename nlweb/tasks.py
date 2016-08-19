@@ -11,7 +11,7 @@ from nlweb.image_utils import (download_images, fetch_collection,
                                fetch_collection_images)
 
 from nlweb.models import MLModel, ModelTest, db
-from nlweb.utils import pick
+from nlweb.utils import pick, is_number
 
 
 ALLOWED_COLLECTION_PROPS = ('id', 'name')
@@ -40,7 +40,7 @@ def train_model(self, mlmodel_id):
     client = HTTPClient(cache)
 
     target_data = [x for x in mlmodel.input_data['data']
-                   if x['target'].strip()]
+                   if is_number(x['target']) or x['target']]
 
     image_list = download_images(client, target_data, output_dir)
 
