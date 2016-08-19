@@ -287,7 +287,11 @@ class Model extends React.Component {
       <div>
         <h1>{this.renderModelNameWithLabel(model, userIsOwner)}</h1>
         <p>{this.renderModelDescription(model.description, userIsOwner)}</p>
-        <p>{model.user.name} <span style={{color: 'gray'}}>created</span>
+        <p>
+          {model.user.name}
+          {' '}
+          <span style={{color: 'gray'}}>created</span>
+          {' '}
           <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time>
         </p>
       </div>

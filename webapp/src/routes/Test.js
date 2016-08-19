@@ -121,8 +121,11 @@ class Test extends React.Component {
               >Delete</Button>}
           </ButtonToolbar>
           <h1>{test && test.name}</h1>
-          <div>{test.user.name}
+          <div>
+            {test.user.name}
+            {' '}
             <span style={{color: 'gray'}}>created</span>
+            {' '}
             <time style={{color: 'gray'}} className="datetime">{moment(test.created).fromNow()}</time>
           </div>
         </div>
