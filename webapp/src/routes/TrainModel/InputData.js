@@ -3,10 +3,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Link } from 'react-router';
+import { ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
 import SearchContainer from 'components/search/SearchContainer';
 import SelectImagesModal from 'components/SelectImagesModal';
 import SelectedCollectionList from 'components/SelectedCollectionList';
-import { Link } from 'react-router';
 
 import { resetImagesMetadata } from 'state/imagesMetadata';
 
@@ -108,6 +109,13 @@ class InputData extends React.Component {
     return (
       <div className={styles.root}>
         <h1 className="page-header">Input Data</h1>
+        <ButtonToolbar style={{marginBottom: 15}}>
+          <ButtonGroup bsSize="small" >
+            <Button active>All Collections</Button>
+            <Button>My Collections</Button>
+          </ButtonGroup>
+        </ButtonToolbar>
+
         <p className="lead">Search NeuroVault collections and select images to create a training dataset.</p>
 
         <div className="row">
