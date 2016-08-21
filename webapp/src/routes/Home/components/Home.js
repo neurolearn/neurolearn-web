@@ -17,7 +17,7 @@ const Stats = (
   }
 ) => (
   <p className="lead">
-    There are currently <Link to="/explore/models">{stats.models_count} models</Link>
+    There are currently <Link to="/explore/models">{stats.models_count} models</Link>{' '}
     and <Link to="/explore/tests">{stats.tests_count} tests</Link> being shared.
   </p>
 );
