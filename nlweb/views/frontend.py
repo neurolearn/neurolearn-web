@@ -19,6 +19,7 @@ def browser_supported(request):
 
 
 @blueprint.route('/')
+@blueprint.route('/faq')
 @blueprint.route('/dashboard/<path:path>')
 @blueprint.route('/explore/<path:path>')
 @blueprint.route('/models/<path:path>')
