@@ -40,7 +40,7 @@ export default class BarChartRowContainer extends React.Component {
     } else if (err <= 0.75) {
       step *= 2;
     }
-    return Math.floor(span / step) * step + step * 0.5;
+    return Math.floor(span / step) * step + step;
   }
 
   scaleWidth(width: number, scaleMax: number, value: number) {
