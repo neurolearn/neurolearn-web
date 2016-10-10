@@ -131,16 +131,7 @@ def delete_mlmodel(pk):
     return 'No Content', 204
 
 
-@blueprint.route('/models/<int:pk>', methods=['PUT', 'PATCH'])
-@jwt_required()
-def update_mlmodel(pk):
-    item = MLModel.get_existing_item(pk)
-    if not item:
-        return not_found()
-
-    if item.user != current_user:
-        return not_found()
-
+def update_item(item, request, serializer):
     args = request.json
 
     item.name = args.get('name', item.name)
@@ -148,8 +139,19 @@ def update_mlmodel(pk):
     item.private = args.get('private', item.private)
     db.session.commit()
 
-    result = mlmodel_schema.dump(item)
+    result = serializer.dump(item)
     return jsonify(data=result.data)
+
+
+@blueprint.route('/models/<int:pk>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_mlmodel(pk):
+    item = MLModel.get_existing_item(pk)
+
+    if not item or item.user != current_user:
+        return not_found()
+
+    return update_item(item, request, mlmodel_schema)
 
 
 @blueprint.route('/models/<int:pk>/retrain', methods=['POST'])
@@ -208,6 +210,17 @@ def create_test():
     tasks.test_model.delay(model_test.id)
 
     return 'Created', 201
+
+
+@blueprint.route('/tests/<int:pk>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_test(pk):
+    item = ModelTest.get_existing_item(pk)
+
+    if not item or item.user != current_user:
+        return not_found()
+
+    return update_item(item, request, test_schema)
 
 
 @blueprint.route('/user/tests', methods=['GET'])

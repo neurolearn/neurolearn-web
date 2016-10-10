@@ -6,12 +6,13 @@ import React, { PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import EditableText from '../components/EditableText';
 
 import api from '../api';
 
 import Spinner from '../components/Spinner';
 import ImageBarChart from '../components/ImageBarChart';
-import { fetchJSON, deleteItem } from '../state/fetched';
+import { fetchJSON, patchItem, deleteItem } from '../state/fetched';
 
 function saveCorrelationGroups(testId, groups) {
   return (dispatch, getState) => {
@@ -34,10 +35,21 @@ class Test extends React.Component {
     router: PropTypes.object.isRequired
   }
 
+  constructor(props: Object) {
+    super(props);
+
+    (this:any).handleSaveTestName = this.handleSaveTestName.bind(this);
+  }
+
   componentDidMount() {
     const { id } = this.props.params;
     this.props.dispatch(
       fetchJSON(`/api/tests/${parseInt(id)}`, 'test'));
+  }
+
+  handleSaveTestName(name: string) {
+    const { test, dispatch } = this.props;
+    dispatch(patchItem(`/api/tests/${test.id}`, 'test', {name}));
   }
 
   handleDelete(testId) {
@@ -102,6 +114,16 @@ class Test extends React.Component {
     );
   }
 
+  renderTestName(name, userIsOwner, modalTitle) {
+    return userIsOwner
+      ? <EditableText
+        value={name}
+        onChange={this.handleSaveTestName}
+        modalTitle={modalTitle}
+        />
+      : name;
+  }
+
   render() {
     const { user, test, isFetching } = this.props;
 
@@ -120,7 +142,7 @@ class Test extends React.Component {
                 onClick={() => this.handleDelete(test.id)}
               >Delete</Button>}
           </ButtonToolbar>
-          <h1>{test && test.name}</h1>
+          <h1>{test && this.renderTestName(test.name, userIsOwner, 'Rename Test')}</h1>
           <div>
             {test.user.name}
             {' '}

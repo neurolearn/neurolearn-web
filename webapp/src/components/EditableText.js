@@ -7,6 +7,8 @@ import { Button } from 'react-bootstrap';
 import ModalDialog from './ModalDialog';
 import InputWithSelectedText from './InputWithSelectedText';
 
+import styles from './EditableText.scss';
+
 export default class EditableText extends React.Component {
   state: {
     showModal: boolean,
@@ -89,7 +91,7 @@ export default class EditableText extends React.Component {
     const { value, modalTitle, children } = this.props;
     return (
       <span>
-        <span className="editable-text-label" onClick={this.handleTextClick}>{children || value}</span>
+        <span className={styles.root} onClick={this.handleTextClick}>{children || value}</span>
         {this.state.showModal &&
           <ModalDialog
             title={modalTitle}
