@@ -8,6 +8,12 @@ from nlweb.extensions import db as _db
 
 from .factories import UserFactory
 
+os.environ['FLASK_SECURITY_PASSWORD_HASH'] = 'bcrypt'
+os.environ['FLASK_SECURITY_PASSWORD_SALT'] = 'randomdummy'
+
+os.environ['NEUROVAULT_OAUTH_CONSUMER_KEY'] = 'dummy-key'
+os.environ['NEUROVAULT_OAUTH_CONSUMER_SECRET'] = 'dummy-secret'
+
 
 def test_env_enabled():
     return os.environ.get('ENV') == 'test'
