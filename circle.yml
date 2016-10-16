@@ -6,7 +6,7 @@ dependencies:
     - "~/download"
   override:
     - ./create_circle_venv.sh
-    - pip install requirements/dev.txt
+    - pip install -r requirements/dev.txt
 
 machine:
   python:
