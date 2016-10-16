@@ -6,6 +6,7 @@ dependencies:
     - "~/download"
   override:
     - ./create_circle_venv.sh
+    - source ~/miniconda/envs/testenv/bin/activate testenv
     - pip install -r requirements/dev.txt
 
 machine:
