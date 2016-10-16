@@ -3,17 +3,12 @@ import uuid
 import shutil
 from nlweb.models import MLModel, ModelTest
 import nv_test_data
-
-
-def fetch_jwt(testapp, user):
-    response = testapp.post_json('/auth', {'email': user.email,
-                                           'password': 'veryrandom'})
-    return str(response.json['token'])
+from flask_jwt import generate_token
 
 
 def gen_auth_header(jwt):
     auth = 'Bearer %s' % jwt
-    return {'Authorization': auth}
+    return {'Authorization': str(auth)}
 
 
 def test_unauth_access(testapp):
@@ -24,10 +19,16 @@ def test_unauth_access(testapp):
 def test_create_mlmodel(testapp, user):
     name = 'Test %s' % uuid.uuid4()
 
-    headers = gen_auth_header(fetch_jwt(testapp, user))
+    headers = gen_auth_header(generate_token(user))
+
     payload = {
         'algorithm': nv_test_data.ALGORITHM,
         'data': nv_test_data.TARGET_DATA_IMG_IDS,
+        'collections': {
+            504: {
+                'name': 'Single Subject Thermal Pain'
+            }
+        },
         'cv': {
             'type': 'kfolds',
             'value': '10'
@@ -39,7 +40,7 @@ def test_create_mlmodel(testapp, user):
         'name': name
     }
 
-    response = testapp.post_json('/models',
+    response = testapp.post_json('/api/models',
                                  payload,
                                  headers=headers)
     assert response.status_code == 201
@@ -65,7 +66,7 @@ def put_weighmap_file(model_id, name):
 
 
 def test_create_model_test(testapp, db, user):
-    headers = gen_auth_header(fetch_jwt(testapp, user))
+    headers = gen_auth_header(generate_token(user))
 
     model = create_test_mlmodel(user, {
         'duration': 549,
@@ -80,12 +81,13 @@ def test_create_model_test(testapp, db, user):
 
     payload = {
         'modelId': model.id,
+        'name': 'Model Test',
         'selectedImages': {
             504: [7513, 7516, 7573]
         }
     }
 
-    response = testapp.post_json('/tests',
+    response = testapp.post_json('/api/tests',
                                  payload,
                                  headers=headers)
     assert response.status_code == 201
