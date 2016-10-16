@@ -1,3 +1,12 @@
+# Configure CircleCI
+# https://circleci.com/docs/configuration/
+
+dependencies:
+  cache_directories:
+    - "~/download"
+  override:
+    - ./create_circle_venv.sh
+
 machine:
   python:
     version: 2.7.9
