@@ -89,19 +89,6 @@ def changepassword(email):
 
 
 @manager.command
-def test():
-    """Run the tests.
-
-    Alternative:
-    ENV=test py.test -s --verbose tests
-    ENV=test py.test -s --verbose tests/test_analysis.py
-    """
-    import pytest
-    exit_code = pytest.main([TEST_PATH, '--verbose'])
-    return exit_code
-
-
-@manager.command
 def retrain_model(pk):
     from nlweb.models import MLModel
     from nlweb import tasks
