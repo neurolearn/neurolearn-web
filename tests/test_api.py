@@ -5,11 +5,6 @@ from nlweb.models import MLModel, ModelTest
 import nv_test_data
 
 
-def test_unauth_access(testapp):
-    response = testapp.post_json('/models', expect_errors=True)
-    assert response.status_code == 401
-
-
 def fetch_jwt(testapp, user):
     response = testapp.post_json('/auth', {'email': user.email,
                                            'password': 'veryrandom'})
@@ -19,6 +14,11 @@ def fetch_jwt(testapp, user):
 def gen_auth_header(jwt):
     auth = 'Bearer %s' % jwt
     return {'Authorization': auth}
+
+
+def test_unauth_access(testapp):
+    response = testapp.post_json('/api/models', expect_errors=True)
+    assert response.status_code == 401
 
 
 def test_create_mlmodel(testapp, user):
