@@ -50,7 +50,6 @@ nibabel==2.0.1
 scipy==0.15.1
 scikit-learn==0.17.1
 nilearn==0.2.3
-matplotlib==1.4.3
 seaborn>=0.7.0
 
 git+https://github.com/ljchang/neurolearn.git@e40c2c7c4c4b59de0039adf9366eb8644b22d4b1#egg=nltools
