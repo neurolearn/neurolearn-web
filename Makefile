@@ -5,5 +5,9 @@ start-web:
 clean-pyc:
 	find . -name '*.pyc' -delete
 
-test:
+test-server:
 	ENV=test py.test -s --verbose tests
+
+test:	test-server
+
+
