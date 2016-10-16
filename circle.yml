@@ -13,4 +13,4 @@ machine:
 
 test:
   override:
-    - make test
+    - source ~/miniconda/envs/testenv/bin/activate testenv && make test
