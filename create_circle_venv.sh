@@ -29,3 +29,4 @@ conda create -n testenv --yes --quiet python numpy scipy \
   coverage matplotlib
 source activate testenv
 
+pip install -r requirements/dev.txt
