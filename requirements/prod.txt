@@ -54,4 +54,3 @@ seaborn>=0.7.0
 
 git+https://github.com/ljchang/neurolearn.git@e40c2c7c4c4b59de0039adf9366eb8644b22d4b1#egg=nltools
 
-dotenv==0.0.5
