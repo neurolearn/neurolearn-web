@@ -26,7 +26,7 @@ popd
 # Configure the conda environment and put it in the path using the
 # provided versions
 conda create -n testenv --yes --quiet python numpy scipy \
-  coverage matplotlib
+  coverage matplotlib pillow
 source activate testenv
 
 pip install -r requirements/dev.txt
