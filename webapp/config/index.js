@@ -31,7 +31,7 @@ const config = {
   // Compiler Configuration
   // ----------------------------------
   compiler_css_modules     : true,
-  compiler_devtool         : 'source-map',
+  compiler_devtool         : null, // possible values: 'source-map', 'cheap-module-source-map'
   compiler_hash_type       : 'hash',
   compiler_fail_on_warning : false,
   compiler_quiet           : false,
