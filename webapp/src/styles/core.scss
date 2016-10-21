@@ -5,9 +5,11 @@
     margin-left: 2px;
     font-family: 'Georgia, serif';
   }
+
   .app-container {
     margin-bottom: 50px;
   }
+
   .feedback-button {
     position: fixed;
     bottom: 20px;
@@ -23,6 +25,7 @@
     background-color: transparent;
     border: 2px solid #FFFFFF;
   }
+
   .btn-outline-inverse:hover,
   .btn-outline-inverse:focus,
   .btn-outline-inverse:active {
@@ -30,5 +33,9 @@
     text-shadow: none;
     background-color: #fff;
     border-color: #fff;
+  }
+
+  .app-homepage .navbar {
+    margin-bottom: 0px;
   }
 }

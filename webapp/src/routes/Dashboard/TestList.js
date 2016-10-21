@@ -123,7 +123,7 @@ class TestList extends React.Component {
     const someSelected = !some(values(selectedRows));
 
     return (
-      <div>
+      <div className="container">
         <DashboardNav>
           <Button
             disabled={someSelected}

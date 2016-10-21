@@ -4,7 +4,7 @@ import React from 'react';
 import NavItem from 'components/NavItem';
 
 const TrainModel = ({children} : {children? : any}) => (
-  <div>
+  <div className="container">
     <ul className="nav nav-wizard">
       <NavItem to="/models/new/input-data">1. Input Data</NavItem>
       <NavItem to="/models/new/training-label">2. Training Label</NavItem>

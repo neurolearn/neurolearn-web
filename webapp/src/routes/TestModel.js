@@ -121,7 +121,7 @@ class TestModel extends React.Component {
     const anySelected = this.countSelectedImages(selectedImages.images) === 0;
 
     return (
-      <div>
+      <div className="container">
         <h1 className="page-header">Test Model</h1>
         <p className="lead">Search NeuroVault collections and select images to test a model on.</p>
 

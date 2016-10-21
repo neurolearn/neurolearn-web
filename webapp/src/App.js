@@ -69,8 +69,8 @@ class App extends React.Component {
     const { router } = this.context;
 
     return (
-      <div>
-        <Navbar staticTop style={{marginBottom: 0}}>
+      <div className={router.isActive('/') ? 'app-homepage' : ''}>
+        <Navbar staticTop>
           <NavBrand><Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link></NavBrand>
           {auth.user && this.renderAuthenticatedNav()}
           <Nav>

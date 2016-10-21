@@ -16,7 +16,7 @@ function mapLevelToStyle(level): string {
 const AlertMessages = (
   { messages, dismissAlert } : { messages: Array<Message>, dismissAlert: Function}
 ) => (
-  <div>
+  <div className="container">
     {messages.map((message, index) =>
       <Alert key={index} bsStyle={mapLevelToStyle(message.level)} onDismiss={() => dismissAlert(message)}>
         {message.message}

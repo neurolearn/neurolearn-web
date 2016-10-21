@@ -128,13 +128,13 @@ class Test extends React.Component {
     const { user, test, isFetching } = this.props;
 
     if (!test || isFetching) {
-      return <div>Loading test...</div>;
+      return <div className="text-center">Loading test...</div>;
     }
 
     const userIsOwner = (test && user && test.user.id === user.id);
 
     return (
-      <div>
+      <div className="container">
         <div className="page-header">
           <ButtonToolbar className="pull-right">
             {userIsOwner &&

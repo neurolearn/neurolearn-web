@@ -48,7 +48,7 @@ export class Explore extends React.Component {
     }
 
     return (
-      <div>
+      <div className="container">
         <div className="page-header">
           <h1>Explore Neurolearn</h1>
         </div>

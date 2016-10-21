@@ -5,7 +5,7 @@ import React from 'react';
 import Footer from '../components/Footer';
 
 const FAQ = () => (
-  <div style={{paddingBottom: 50}}>
+  <div className="container" style={{paddingBottom: 50}}>
     <h1 className="page-header">Frequently Asked Questions</h1>
     <div className="row" style={{paddingBottom: 50}}>
       <div className="col-md-8">

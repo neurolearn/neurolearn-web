@@ -2,6 +2,7 @@
 
 import moment from 'moment';
 import isEmpty from 'lodash/lang/isEmpty';
+import classNames from 'classnames';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -308,7 +309,7 @@ class Model extends React.Component {
     } = this.props;
 
     if (isFetching && !(model && loadingModelId === model.id)) {
-      return <div>Loading model…</div>;
+      return <div className="text-center">Loading model…</div>;
     }
 
     if (!model) {
@@ -322,7 +323,7 @@ class Model extends React.Component {
     const userIsOwner = (model && user && model.user.id === user.id);
 
     return (
-      <div className={styles.root}>
+      <div className={classNames('container', styles.root)}>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
             {user && model.state === 'success' &&
