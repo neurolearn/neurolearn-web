@@ -70,7 +70,7 @@ class App extends React.Component {
 
     return (
       <div>
-        <Navbar staticTop>
+        <Navbar staticTop style={{marginBottom: 0}}>
           <NavBrand><Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link></NavBrand>
           {auth.user && this.renderAuthenticatedNav()}
           <Nav>
@@ -88,10 +88,11 @@ class App extends React.Component {
           </Nav>
         </Navbar>
 
-        <div className="container app-container">
+        <div>
           <AlertMessages messages={alertMessages} dismissAlert={dismissAlert} />
           {this.props.children}
         </div>
+
         <div className="feedback-button">
           <a
             className="btn btn-success"
