@@ -2,7 +2,6 @@
 import path from 'path';
 import _debug from 'debug';
 import { argv } from 'yargs';
-import ip from 'ip';
 
 const debug = _debug('app:config');
 debug('Creating default configuration.');
