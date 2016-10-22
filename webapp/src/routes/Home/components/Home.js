@@ -4,7 +4,6 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { fetchJSON } from '../../../state/fetched';
-import Footer from '../../../components/Footer';
 import { authLink } from '../../../utils';
 
 import classes from './Home.scss';
@@ -54,7 +53,7 @@ class HomePage extends React.Component {
             </p>
           </div>
         </div>
-        <div className="container" style={{paddingTop: 70, borderBottom: '1px solid #eee'}}>
+        <div className="container" style={{paddingTop: 70}}>
           <div className="row">
             <div className="col-md-6">
               <p>The basic concept is to provide an easy to use interface to allow researchers
@@ -80,49 +79,53 @@ class HomePage extends React.Component {
 
         <div className="section">
           <h2 className="section-title">Explore Neurolearn</h2>
-          <div className="container">
+          <div className="container subsection">
             <h3>Recent Models</h3>
             <div className="row">
               <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p>100 images • Ridge • Training label: avg_brightness</p>
+                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
               </div>
 
               <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p>100 images • Ridge • Training label: avg_brightness</p>
+                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
               </div>
 
               <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p>100 images • Ridge • Training label: avg_brightness</p>
+                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
               </div>
             </div>
-            <a href="" className="section-view-more">View More Models</a>
+            <div className="section-view-more light-border-bottom">
+              <a href="">View All Models</a>
+            </div>
           </div>
 
-          <div className="container">
+          <div className="container subsection">
             <h3>Recent Tests</h3>
             <div className="row">
               <div className="col-sm-4">
                 <a href="/models/66"><h4>The integration of negative affect, pain and cognitive control in the cingulate cortex</h4></a>
-                <p>3 images • 0.13 mean r</p>
+                <p className="gray">3 images • 0.13 mean r</p>
               </div>
 
               <div className="col-sm-4">
                 <a href="/models/66"><h4>Functional Specialization and Flexibility in Human Association Cortex</h4></a>
-                <p>3 images • 0.13 mean r</p>
+                <p className="gray">3 images • 0.13 mean r</p>
               </div>
 
               <div className="col-sm-4">
                 <a href="/models/66"><h4>Single Subject Thermal Pain, Functional Specialization and Flexibility in Human Association Cortex</h4></a>
-                <p>3 images • 0.13 mean r</p>
+                <p className="gray">3 images • 0.13 mean r</p>
               </div>
             </div>
-            <a href="" className="section-view-more">View More Tests</a>
+            <div className="section-view-more">
+              <a href="">View All Tests</a>
+            </div>
           </div>
 
         </div>

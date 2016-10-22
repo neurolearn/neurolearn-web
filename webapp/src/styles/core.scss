@@ -37,10 +37,28 @@
 
   .app-homepage .navbar {
     margin-bottom: 0px;
+    background-color: #fff;
+    border-bottom: 0;
   }
 
-  .section {
+  .app-homepage .navbar-brand, .app-homepage .navbar-nav>li>a {
+    color: #000;
+  }
 
+  .app-homepage h2, .app-homepage h3 {
+    font-weight: 400;
+  }
+
+  .app-homepage h3 {
+    margin-bottom: 30px;
+  }
+
+  .app-homepage .glassbrain {
+    margin-left: -4px;
+  }
+
+  .gray {
+    color: #7B7B7B;
   }
 
   .section-title {
@@ -48,12 +66,22 @@
   }
 
   .section-view-more {
-    display: block;
-    padding: 25px 0px 0px;
+    padding: 25px 0px 6px;
     text-align: center;
+  }
+
+  .section-view-more a {
     text-transform: uppercase;
     font-size: 12px;
-    color: #5C6163
+    color: #5C6163;
+  }
+
+  .subsection {
+    padding-top: 22px;
+  }
+
+  .light-border-bottom {
+    border-bottom: 1px solid #DBE5EB;
   }
 
   .homepage-footer {
