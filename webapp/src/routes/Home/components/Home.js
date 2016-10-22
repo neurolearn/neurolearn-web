@@ -76,8 +76,37 @@ class HomePage extends React.Component {
           <div className="text-center" style={{paddingTop: 20, paddingBottom: 20}}>
           {stats && <Stats stats={stats} />}
           </div>
-          <Footer />
         </div>
+
+        <div className="section">
+          <h2 className="section-title">Explore Neurolearn</h2>
+          <div className="container">
+            <h3>Recent Models</h3>
+            <div className="row">
+              <div className="col-sm-4">
+                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
+                <p>100 images • Ridge • Training label: avg_brightness</p>
+              </div>
+
+              <div className="col-sm-4">
+                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
+                <p>100 images • Ridge • Training label: avg_brightness</p>
+              </div>
+
+              <div className="col-sm-4">
+                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
+                <p>100 images • Ridge • Training label: avg_brightness</p>
+              </div>
+
+            </div>
+            <a href="" className="section-view-more">View More Models</a>
+          </div>
+        </div>
+
+        <Footer />
       </div>
     );
   }
