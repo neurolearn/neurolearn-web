@@ -7,8 +7,19 @@ import { fetchJSON } from '../../../state/fetched';
 import { authLink, pluralize } from '../../../utils';
 import { algorithmNameMap } from '../../../constants/Algorithms';
 
+import { trunc } from 'lodash';
+
 import classes from './Home.scss';
 
+const MAX_CHARS = 120;
+
+const truncate = (str) =>
+  trunc(str, {
+    length: MAX_CHARS,
+    separator: /,?\.* +/,
+    omission: '…'
+  }
+);
 
 class HomePage extends React.Component {
   static contextTypes = {
@@ -44,7 +55,7 @@ class HomePage extends React.Component {
 
     const modelList = latest && latest.models && latest.models.map(item => {
       return {
-        name: item.name,
+        name: truncate(item.name),
         url: `/models/${item.id}`,
         thumbnailUrl: `/media/${item.id}/glassbrain.png`,
         meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')} ` +
@@ -54,7 +65,7 @@ class HomePage extends React.Component {
 
     const testList = latest && latest.tests && latest.tests.map(item => {
       return {
-        name: item.name,
+        name: truncate(item.name),
         url: `/tests/${item.id}`,
         meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')} ` +
               ` • ${item.mean_correlation} mean r`
