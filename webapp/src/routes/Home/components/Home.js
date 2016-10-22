@@ -54,7 +54,7 @@ class HomePage extends React.Component {
             </p>
           </div>
         </div>
-        <div className="container" style={{paddingTop: 70}}>
+        <div className="container" style={{paddingTop: 70, borderBottom: '1px solid #eee'}}>
           <div className="row">
             <div className="col-md-6">
               <p>The basic concept is to provide an easy to use interface to allow researchers
@@ -84,29 +84,54 @@ class HomePage extends React.Component {
             <h3>Recent Models</h3>
             <div className="row">
               <div className="col-sm-4">
-                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
                 <p>100 images • Ridge • Training label: avg_brightness</p>
               </div>
 
               <div className="col-sm-4">
-                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
                 <p>100 images • Ridge • Training label: avg_brightness</p>
               </div>
 
               <div className="col-sm-4">
-                <a href="/models/66"><img src="http://localhost:3000/media/66/glassbrain.png" /></a>
+                <a href="/models/66"><img className="img-responsive" src="http://localhost:3000/media/66/glassbrain.png" /></a>
                 <a href="/models/66"><h4>Predict Image Brightness</h4></a>
                 <p>100 images • Ridge • Training label: avg_brightness</p>
               </div>
-
             </div>
             <a href="" className="section-view-more">View More Models</a>
           </div>
-        </div>
 
-        <Footer />
+          <div className="container">
+            <h3>Recent Tests</h3>
+            <div className="row">
+              <div className="col-sm-4">
+                <a href="/models/66"><h4>The integration of negative affect, pain and cognitive control in the cingulate cortex</h4></a>
+                <p>3 images • 0.13 mean r</p>
+              </div>
+
+              <div className="col-sm-4">
+                <a href="/models/66"><h4>Functional Specialization and Flexibility in Human Association Cortex</h4></a>
+                <p>3 images • 0.13 mean r</p>
+              </div>
+
+              <div className="col-sm-4">
+                <a href="/models/66"><h4>Single Subject Thermal Pain, Functional Specialization and Flexibility in Human Association Cortex</h4></a>
+                <p>3 images • 0.13 mean r</p>
+              </div>
+            </div>
+            <a href="" className="section-view-more">View More Tests</a>
+          </div>
+
+        </div>
+        <footer className="homepage-footer">
+          <div className="container">
+            <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev.</p>
+            <p>Supported by NIH award R01DA035484-02S1 and a <a href="http://neukom.dartmouth.edu/">Neukom CompX award</a>.</p>
+          </div>
+        </footer>
       </div>
     );
   }
