@@ -16,6 +16,8 @@ from ..utils import merge_two_dicts
 
 from . import not_found
 
+LATEST_COUNT = 3
+
 blueprint = Blueprint('api', __name__)
 
 user_schema = UserSchema()
@@ -43,6 +45,26 @@ def get_stats():
     tests_count = ModelTest.get_public().count()
     return jsonify(data={'models_count': models_count,
                          'tests_count': tests_count})
+
+
+@blueprint.route('/latest', methods=['GET'])
+def get_latest():
+    model_list = (
+        MLModel
+        .get_public()
+        .order_by('created desc')
+        .limit(LATEST_COUNT)
+        .all()
+    )
+    test_list = (
+        ModelTest
+        .get_public()
+        .order_by('created desc')
+        .limit(LATEST_COUNT)
+        .all()
+    )
+    return jsonify(data={'models': public_models_schema.dump(model_list).data,
+                         'tests': public_tests_schema.dump(test_list).data})
 
 
 @blueprint.route('/user', methods=['GET'])

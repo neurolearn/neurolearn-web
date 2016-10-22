@@ -8,19 +8,6 @@ import { authLink } from '../../../utils';
 
 import classes from './Home.scss';
 
-const Stats = (
-  { stats } : {
-    stats: {
-      models_count: number,
-      tests_count: number
-    }
-  }
-) => (
-  <p className="lead">
-    There are currently <Link to="/explore/models">{stats.models_count} models</Link>{' '}
-    and <Link to="/explore/tests">{stats.tests_count} tests</Link> being shared.
-  </p>
-);
 
 class HomePage extends React.Component {
   static contextTypes = {
@@ -35,59 +22,75 @@ class HomePage extends React.Component {
   componentWillMount() {
     const { dispatch } = this.props;
 
-    dispatch(fetchJSON('/api/stats', 'stats'));
+    dispatch(fetchJSON('/api/latest', 'latest'));
   }
 
   renderItemList(itemList) {
     return itemList.map(item => (
       <div className="col-sm-4">
         {item.thumbnailUrl &&
-          <a href={item.url}><img className="img-responsive glassbrain" src={item.thumbnailUrl} /></a>}
-        <a href={item.url}><h4>{item.name}</h4></a>
+          <Link to={item.url}>
+            <img className="img-responsive glassbrain" src={item.thumbnailUrl} />
+          </Link>}
+        <Link to={item.url}><h4>{item.name}</h4></Link>
         <p className="gray">{item.meta}</p>
       </div>
     ));
   }
 
   render() {
-    const { fetched: { stats } } = this.props;
-    const modelList = [
-      {
-        thumbnailUrl: '/media/66/glassbrain.png',
-        url: '/models/66',
-        name: 'Predict Image Brightness',
-        meta: '100 images • Ridge • Training label: avg_brightness'
-      },
-      {
-        thumbnailUrl: '/media/66/glassbrain.png',
-        url: '/models/66',
-        name: 'Predict Image Brightness',
-        meta: '100 images • Ridge • Training label: avg_brightness'
-      },
-      {
-        thumbnailUrl: '/media/66/glassbrain.png',
-        url: '/models/66',
-        name: 'Predict Image Brightness',
-        meta: '100 images • Ridge • Training label: avg_brightness'
-      }
-    ];
-    const testList = [
-      {
-        url: '/tests/66',
-        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-        meta: '3 images • 0.13 mean r'
-      },
-      {
-        url: '/tests/66',
-        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-        meta: '3 images • 0.13 mean r'
-      },
-      {
-        url: '/tests/66',
-        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-        meta: '3 images • 0.13 mean r'
-      }
-    ];
+    const { fetched: { latest } } = this.props;
+    const modelList = latest && latest.models && latest.models.map(item => {
+      return {
+        name: item.name,
+        url: `/models/${item.id}`,
+        thumbnailUrl: `/media/${item.id}/glassbrain.png`
+      };
+    });
+    const testList = latest && latest.tests && latest.tests.map(item => {
+      return {
+        name: item.name,
+        url: `/tests/${item.id}`
+      };
+    });
+
+    // const modelList = [
+    //   {
+    //     thumbnailUrl: '/media/66/glassbrain.png',
+    //     url: '/models/66',
+    //     name: 'Predict Image Brightness',
+    //     meta: '100 images • Ridge • Training label: avg_brightness'
+    //   },
+    //   {
+    //     thumbnailUrl: '/media/66/glassbrain.png',
+    //     url: '/models/66',
+    //     name: 'Predict Image Brightness',
+    //     meta: '100 images • Ridge • Training label: avg_brightness'
+    //   },
+    //   {
+    //     thumbnailUrl: '/media/66/glassbrain.png',
+    //     url: '/models/66',
+    //     name: 'Predict Image Brightness',
+    //     meta: '100 images • Ridge • Training label: avg_brightness'
+    //   }
+    // ];
+    // const testList = [
+    //   {
+    //     url: '/tests/66',
+    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+    //     meta: '3 images • 0.13 mean r'
+    //   },
+    //   {
+    //     url: '/tests/66',
+    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+    //     meta: '3 images • 0.13 mean r'
+    //   },
+    //   {
+    //     url: '/tests/66',
+    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+    //     meta: '3 images • 0.13 mean r'
+    //   }
+    // ];
 
     return (
       <div>
@@ -121,9 +124,6 @@ class HomePage extends React.Component {
               </p>
             </div>
           </div>
-          <div className="text-center" style={{paddingTop: 20, paddingBottom: 20}}>
-          {stats && <Stats stats={stats} />}
-          </div>
         </div>
 
         <div className="section">
@@ -131,29 +131,32 @@ class HomePage extends React.Component {
           <div className="container subsection">
             <h3>Recent Models</h3>
             <div className="row">
-              {this.renderItemList(modelList)}
+              {modelList && this.renderItemList(modelList)}
             </div>
             <div className="section-view-more light-border-bottom">
-              <a href="">View All Models</a>
+              <Link to="/explore/models">View All Models</Link>
             </div>
           </div>
 
           <div className="container subsection">
             <h3>Recent Tests</h3>
             <div className="row">
-              {this.renderItemList(testList)}
+              {testList && this.renderItemList(testList)}
             </div>
             <div className="section-view-more">
-              <a href="">View All Tests</a>
+              <Link to="/explore/tests">View All Tests</Link>
             </div>
           </div>
         </div>
         <footer className="homepage-footer">
           <div className="container">
             <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev.</p>
-            <p>Supported by NIH award R01DA035484-02S1
+            <p>
+              Supported by NIH award R01DA035484-02S1
             {' '}
-            and a <a href="http://neukom.dartmouth.edu/">Neukom CompX award</a>.
+            and a
+            {' '}
+              <a href="http://neukom.dartmouth.edu/">Neukom CompX award</a>.
             </p>
           </div>
         </footer>
