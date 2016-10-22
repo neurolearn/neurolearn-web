@@ -38,8 +38,57 @@ class HomePage extends React.Component {
     dispatch(fetchJSON('/api/stats', 'stats'));
   }
 
+  renderItemList(itemList) {
+    return itemList.map(item => (
+      <div className="col-sm-4">
+        {item.thumbnailUrl &&
+          <a href={item.url}><img className="img-responsive glassbrain" src={item.thumbnailUrl} /></a>}
+        <a href={item.url}><h4>{item.name}</h4></a>
+        <p className="gray">{item.meta}</p>
+      </div>
+    ));
+  }
+
   render() {
     const { fetched: { stats } } = this.props;
+    const modelList = [
+      {
+        thumbnailUrl: '/media/66/glassbrain.png',
+        url: '/models/66',
+        name: 'Predict Image Brightness',
+        meta: '100 images • Ridge • Training label: avg_brightness'
+      },
+      {
+        thumbnailUrl: '/media/66/glassbrain.png',
+        url: '/models/66',
+        name: 'Predict Image Brightness',
+        meta: '100 images • Ridge • Training label: avg_brightness'
+      },
+      {
+        thumbnailUrl: '/media/66/glassbrain.png',
+        url: '/models/66',
+        name: 'Predict Image Brightness',
+        meta: '100 images • Ridge • Training label: avg_brightness'
+      }
+    ];
+    const testList = [
+      {
+        url: '/tests/66',
+        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+        meta: '3 images • 0.13 mean r'
+      },
+      {
+        url: '/tests/66',
+        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+        meta: '3 images • 0.13 mean r'
+      },
+      {
+        url: '/tests/66',
+        name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
+        meta: '3 images • 0.13 mean r'
+      }
+    ];
+
     return (
       <div>
         <div className={classes.masthead}>
@@ -82,23 +131,7 @@ class HomePage extends React.Component {
           <div className="container subsection">
             <h3>Recent Models</h3>
             <div className="row">
-              <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
-                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
-              </div>
-
-              <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
-                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
-              </div>
-
-              <div className="col-sm-4">
-                <a href="/models/66"><img className="img-responsive glassbrain" src="http://localhost:3000/media/66/glassbrain.png" /></a>
-                <a href="/models/66"><h4>Predict Image Brightness</h4></a>
-                <p className="gray">100 images • Ridge • Training label: avg_brightness</p>
-              </div>
+              {this.renderItemList(modelList)}
             </div>
             <div className="section-view-more light-border-bottom">
               <a href="">View All Models</a>
@@ -108,31 +141,20 @@ class HomePage extends React.Component {
           <div className="container subsection">
             <h3>Recent Tests</h3>
             <div className="row">
-              <div className="col-sm-4">
-                <a href="/models/66"><h4>The integration of negative affect, pain and cognitive control in the cingulate cortex</h4></a>
-                <p className="gray">3 images • 0.13 mean r</p>
-              </div>
-
-              <div className="col-sm-4">
-                <a href="/models/66"><h4>Functional Specialization and Flexibility in Human Association Cortex</h4></a>
-                <p className="gray">3 images • 0.13 mean r</p>
-              </div>
-
-              <div className="col-sm-4">
-                <a href="/models/66"><h4>Single Subject Thermal Pain, Functional Specialization and Flexibility in Human Association Cortex</h4></a>
-                <p className="gray">3 images • 0.13 mean r</p>
-              </div>
+              {this.renderItemList(testList)}
             </div>
             <div className="section-view-more">
               <a href="">View All Tests</a>
             </div>
           </div>
-
         </div>
         <footer className="homepage-footer">
           <div className="container">
             <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev.</p>
-            <p>Supported by NIH award R01DA035484-02S1 and a <a href="http://neukom.dartmouth.edu/">Neukom CompX award</a>.</p>
+            <p>Supported by NIH award R01DA035484-02S1
+            {' '}
+            and a <a href="http://neukom.dartmouth.edu/">Neukom CompX award</a>.
+            </p>
           </div>
         </footer>
       </div>
