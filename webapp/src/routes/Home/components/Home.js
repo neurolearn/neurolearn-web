@@ -56,7 +56,8 @@ class HomePage extends React.Component {
       return {
         name: item.name,
         url: `/tests/${item.id}`,
-        meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')}`
+        meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')} ` +
+              ` • ${item.mean_correlation} mean r`
       };
     });
 
