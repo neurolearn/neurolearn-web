@@ -4,7 +4,8 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { fetchJSON } from '../../../state/fetched';
-import { authLink } from '../../../utils';
+import { authLink, pluralize } from '../../../utils';
+import { algorithmNameMap } from '../../../constants/Algorithms';
 
 import classes from './Home.scss';
 
@@ -40,57 +41,24 @@ class HomePage extends React.Component {
 
   render() {
     const { fetched: { latest } } = this.props;
+
     const modelList = latest && latest.models && latest.models.map(item => {
       return {
         name: item.name,
         url: `/models/${item.id}`,
-        thumbnailUrl: `/media/${item.id}/glassbrain.png`
-      };
-    });
-    const testList = latest && latest.tests && latest.tests.map(item => {
-      return {
-        name: item.name,
-        url: `/tests/${item.id}`
+        thumbnailUrl: `/media/${item.id}/glassbrain.png`,
+        meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')} ` +
+              ` • ${algorithmNameMap[item.algorithm]} • ${item.label_name}`
       };
     });
 
-    // const modelList = [
-    //   {
-    //     thumbnailUrl: '/media/66/glassbrain.png',
-    //     url: '/models/66',
-    //     name: 'Predict Image Brightness',
-    //     meta: '100 images • Ridge • Training label: avg_brightness'
-    //   },
-    //   {
-    //     thumbnailUrl: '/media/66/glassbrain.png',
-    //     url: '/models/66',
-    //     name: 'Predict Image Brightness',
-    //     meta: '100 images • Ridge • Training label: avg_brightness'
-    //   },
-    //   {
-    //     thumbnailUrl: '/media/66/glassbrain.png',
-    //     url: '/models/66',
-    //     name: 'Predict Image Brightness',
-    //     meta: '100 images • Ridge • Training label: avg_brightness'
-    //   }
-    // ];
-    // const testList = [
-    //   {
-    //     url: '/tests/66',
-    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-    //     meta: '3 images • 0.13 mean r'
-    //   },
-    //   {
-    //     url: '/tests/66',
-    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-    //     meta: '3 images • 0.13 mean r'
-    //   },
-    //   {
-    //     url: '/tests/66',
-    //     name: 'The integration of negative affect, pain and cognitive control in the cingulate cortex',
-    //     meta: '3 images • 0.13 mean r'
-    //   }
-    // ];
+    const testList = latest && latest.tests && latest.tests.map(item => {
+      return {
+        name: item.name,
+        url: `/tests/${item.id}`,
+        meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')}`
+      };
+    });
 
     return (
       <div>
