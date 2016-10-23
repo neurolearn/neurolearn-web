@@ -1,7 +1,19 @@
 :global {
+
+  $white: #fff;
+  $black: #000;
+  $gray64: #A2A2A2;
+  $gray: #7b7b7b;
+  $light_blue_gray: #dbe5eb;
+  $light_blue_gray2: #c3cbd5;
+  $blue_gray: #91a0b3;
+  $navy: #144e81;
+  $dark_navy: #060e19;
+  $browser_border_radius: 4px;
+
   .logo-beta {
     font-style: italic;
-    color: #A2A2A2;
+    color: $gray64;
     margin-left: 2px;
     font-family: 'Georgia, serif';
   }
@@ -21,32 +33,32 @@
   }
 
   .btn-outline-inverse {
-    color: #fff;
+    color: $white;
     background-color: transparent;
-    border: 2px solid #FFFFFF;
+    border: 2px solid $white;
   }
 
   .btn-outline-inverse:hover,
   .btn-outline-inverse:focus,
   .btn-outline-inverse:active {
-    color: #144e81;
+    color: $navy;
     text-shadow: none;
-    background-color: #fff;
-    border-color: #fff;
+    background-color: $white;
+    border-color: $white;
   }
 
   .app-homepage .navbar {
     margin-bottom: 0px;
-    background-color: #fff;
+    background-color: $white;
     border-bottom: 0;
   }
 
   .app-homepage .navbar-brand, .app-homepage .navbar-nav>li>a {
-    color: #000;
+    color: $black;
   }
 
   .app-homepage .navbar-brand:focus {
-    color: #000;
+    color: $black;
   }
 
   .app-homepage h2, .app-homepage h3 {
@@ -66,7 +78,7 @@
   }
 
   .gray {
-    color: #7B7B7B;
+    color: $gray;
   }
 
   .section-title {
@@ -81,7 +93,7 @@
   .section-view-more a {
     text-transform: uppercase;
     font-size: 12px;
-    color: #5C6163;
+    color: $gray;
   }
 
   .subsection {
@@ -104,27 +116,32 @@
   }
 
   .light-border-bottom {
-    border-bottom: 1px solid #DBE5EB;
+    border-bottom: 1px solid $light_blue_gray;
   }
 
-  .browser-handle {
+  .browser-title-bar {
     height: 15px;
     padding-left: 6px;
-    background-color: #dbe5eb;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    background-color: $light_blue_gray;
+    border-top-left-radius: $browser_border_radius;
+    border-top-right-radius: $browser_border_radius;
+  }
+
+  .browser-screenshot {
+    border: 1px solid $light_blue_gray;
+    border-bottom-left-radius: $browser_border_radius;
+    border-bottom-right-radius: $browser_border_radius;
   }
 
   .homepage-footer {
     padding-top: 40px;
     padding-bottom: 60px;
     margin-top: 100px;
-    color: #91A0B3;
-    background-color: #060E19;
+    color: $blue_gray;
+    background-color: $dark_navy;
   }
 
   .homepage-footer a {
-    color: #c3cbd5;
+    color: $light_blue_gray2;
   }
-
 }

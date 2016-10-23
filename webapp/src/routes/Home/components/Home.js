@@ -99,7 +99,7 @@ class HomePage extends React.Component {
                 <p className="lead">Search NeuroVault collections and select images.</p>
               </div>
               <div className="col-md-8">
-                <div className="browser-handle">
+                <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
@@ -108,7 +108,11 @@ class HomePage extends React.Component {
                     </g>
                   </svg>
                 </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={inputDataImg} />
+                <img
+                  src={inputDataImg}
+                  alt="A screenshot of the Input Data page"
+                  className="img-responsive browser-screenshot"
+                />
               </div>
             </div>
           </div>
@@ -122,7 +126,7 @@ class HomePage extends React.Component {
                 </p>
               </div>
               <div className="col-md-8 col-md-pull-4">
-                <div className="browser-handle">
+                <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
@@ -131,7 +135,11 @@ class HomePage extends React.Component {
                     </g>
                   </svg>
                 </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={trainingLabelImg} />
+                <img
+                  src={trainingLabelImg}
+                  alt="A screenshot of the Training Label page"
+                  className="img-responsive browser-screenshot"
+                />
               </div>
             </div>
           </div>
@@ -142,7 +150,7 @@ class HomePage extends React.Component {
                 <p className="lead">Pick any other set of images from NeuroVault and test the model on it.</p>
               </div>
               <div className="col-md-8">
-                <div className="browser-handle">
+                <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
@@ -151,13 +159,17 @@ class HomePage extends React.Component {
                     </g>
                   </svg>
                 </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={modelTestImg} />
+                <img
+                  src={modelTestImg}
+                  alt="A screenshot of the Model Test page"
+                  className="img-responsive browser-screenshot"
+                />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="section" style={{marginTop: 40}}>
+        <div className="section" style={{marginTop: 56}}>
           <h2 className="section-title">Explore Neurolearn</h2>
           <div className="container subsection">
             <h3>Recent Models</h3>
