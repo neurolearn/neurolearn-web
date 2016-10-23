@@ -13,7 +13,6 @@ const PROXY_URL_MAP = {
   '/api': appServerProxy,
   '/signin': appServerProxy,
   '/media': appServerProxy,
-  '/static': appServerProxy,
   '/search': elasticSearchProxy
 };
 
