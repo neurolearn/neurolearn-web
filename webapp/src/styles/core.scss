@@ -93,6 +93,10 @@
     padding-bottom: 60px
   }
 
+  .how-to .lead {
+    line-height: 1.6;
+  }
+
   h2.subsection-title {
     margin-top: 0;
     font-size: 42px;
@@ -104,7 +108,8 @@
   }
 
   .browser-handle {
-    height: 18px;
+    height: 15px;
+    padding-left: 6px;
     background-color: #dbe5eb;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;

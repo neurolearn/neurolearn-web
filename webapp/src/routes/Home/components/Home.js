@@ -95,7 +95,15 @@ class HomePage extends React.Component {
                 <p className="lead">Search NeuroVault collections and select images.</p>
               </div>
               <div className="col-md-8">
-                <div className="browser-handle"></div>
+                <div className="browser-handle">
+                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                      <circle fill="#FFF" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#FFF" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#FFF" cx="45" cy="10" r="6"></circle>
+                    </g>
+                  </svg>
+                </div>
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/input-data.png" />
               </div>
             </div>
@@ -103,7 +111,15 @@ class HomePage extends React.Component {
           <div className="container how-to">
             <div className="row">
               <div className="col-md-8">
-                <div className="browser-handle"></div>
+                <div className="browser-handle">
+                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                      <circle fill="#FFF" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#FFF" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#FFF" cx="45" cy="10" r="6"></circle>
+                    </g>
+                  </svg>
+                </div>
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/training-label.png" />
               </div>
               <div className="col-md-4">
@@ -122,8 +138,15 @@ class HomePage extends React.Component {
                 <p className="lead">Pick any other set of images from NeuroVault and test the model on it.</p>
               </div>
               <div className="col-md-8">
-                <div className="browser-handle"></div>
-
+                <div className="browser-handle">
+                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                      <circle fill="#fcfdfd" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#fcfdfd" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#fcfdfd" cx="45" cy="10" r="6"></circle>
+                    </g>
+                  </svg>
+                </div>
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/model-test.png" />
               </div>
             </div>
