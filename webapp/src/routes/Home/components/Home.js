@@ -85,28 +85,48 @@ class HomePage extends React.Component {
             </p>
           </div>
         </div>
-        <div className="container" style={{paddingTop: 70}}>
-          <div className="row">
-            <div className="col-md-6">
-              <p>The basic concept is to provide an easy to use interface to allow researchers
-                 to develop predictive brain models of psychological states by applying
-                 multivariate decoding methods to open source data publicly shared via NeuroVault.
-              </p>
-              <p>These predictive brain models can be shared with other researchers and also
-                 tested on any data available on NeuroVault.  This can be useful for assessing
-                 the sensitivity and specificity of the brain pattern to other psychological states.
-              </p>
+
+        <div className="section light-border-bottom" style={{paddingTop: 34, paddingBottom: 40}}>
+          <h2 className="section-title">How it works</h2>
+          <div className="container how-to">
+            <div className="row">
+              <div className="col-md-4">
+                <h2 className="subsection-title">Search & Select</h2>
+                <p className="lead">Search NeuroVault collections and select images.</p>
+              </div>
+              <div className="col-md-8">
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/input-data.png" />
+              </div>
             </div>
-            <div className="col-md-6">
-              <p>Ultimately, we hope that this tool will contribute to accelerating the development
-                 and validation cycle of brain-based markers of psychological states and will aid
-                 in promoting a more open and transparent study of the human mind.
-              </p>
+          </div>
+          <div className="container how-to">
+            <div className="row">
+              <div className="col-md-8">
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/training-label.png" />
+              </div>
+              <div className="col-md-4">
+                <h2 className="subsection-title">Train & <br />Cross-Validate</h2>
+                <p className="lead">
+                  Choose what you’d like to predict or classify.
+                  Run the training and see how the model performs.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="container how-to">
+            <div className="row">
+              <div className="col-md-4">
+                <h2 className="subsection-title">Test your model</h2>
+                <p className="lead">Pick any other set of images from NeuroVault and test the model on it.</p>
+              </div>
+              <div className="col-md-8">
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/model-test.png" />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="section">
+        <div className="section" style={{marginTop: 40}}>
           <h2 className="section-title">Explore Neurolearn</h2>
           <div className="container subsection">
             <h3>Recent Models</h3>
