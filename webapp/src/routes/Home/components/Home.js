@@ -95,6 +95,7 @@ class HomePage extends React.Component {
                 <p className="lead">Search NeuroVault collections and select images.</p>
               </div>
               <div className="col-md-8">
+                <div className="browser-handle"></div>
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/input-data.png" />
               </div>
             </div>
@@ -102,6 +103,7 @@ class HomePage extends React.Component {
           <div className="container how-to">
             <div className="row">
               <div className="col-md-8">
+                <div className="browser-handle"></div>
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/training-label.png" />
               </div>
               <div className="col-md-4">
@@ -120,6 +122,8 @@ class HomePage extends React.Component {
                 <p className="lead">Pick any other set of images from NeuroVault and test the model on it.</p>
               </div>
               <div className="col-md-8">
+                <div className="browser-handle"></div>
+
                 <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/model-test.png" />
               </div>
             </div>
