@@ -11,6 +11,10 @@ import { trunc } from 'lodash';
 
 import classes from './Home.scss';
 
+import inputDataImg from '../../../static/images/input-data.png';
+import trainingLabelImg from '../../../static/images/training-label.png';
+import modelTestImg from '../../../static/images/model-test.png';
+
 const MAX_CHARS = 120;
 
 const truncate = (str) =>
@@ -96,38 +100,38 @@ class HomePage extends React.Component {
               </div>
               <div className="col-md-8">
                 <div className="browser-handle">
-                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
-                      <circle fill="#FFF" cx="6" cy="10" r="6"></circle>
-                      <circle fill="#FFF" cx="25" cy="10" r="6"></circle>
-                      <circle fill="#FFF" cx="45" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="45" cy="10" r="6"></circle>
                     </g>
                   </svg>
                 </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/input-data.png" />
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={inputDataImg} />
               </div>
             </div>
           </div>
           <div className="container how-to">
             <div className="row">
-              <div className="col-md-8">
-                <div className="browser-handle">
-                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
-                      <circle fill="#FFF" cx="6" cy="10" r="6"></circle>
-                      <circle fill="#FFF" cx="25" cy="10" r="6"></circle>
-                      <circle fill="#FFF" cx="45" cy="10" r="6"></circle>
-                    </g>
-                  </svg>
-                </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/training-label.png" />
-              </div>
-              <div className="col-md-4">
-                <h2 className="subsection-title">Train & <br />Cross-Validate</h2>
+              <div className="col-md-4 col-md-push-8">
+                <h2 className="subsection-title">Train & <span className="text-nowrap">Cross-Validate</span></h2>
                 <p className="lead">
                   Choose what you’d like to predict or classify.
                   Run the training and see how the model performs.
                 </p>
+              </div>
+              <div className="col-md-8 col-md-pull-4">
+                <div className="browser-handle">
+                  <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                      <circle fill="#fff" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="45" cy="10" r="6"></circle>
+                    </g>
+                  </svg>
+                </div>
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={trainingLabelImg} />
               </div>
             </div>
           </div>
@@ -139,15 +143,15 @@ class HomePage extends React.Component {
               </div>
               <div className="col-md-8">
                 <div className="browser-handle">
-                  <svg className="dn dib-l" width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
-                      <circle fill="#fcfdfd" cx="6" cy="10" r="6"></circle>
-                      <circle fill="#fcfdfd" cx="25" cy="10" r="6"></circle>
-                      <circle fill="#fcfdfd" cx="45" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="6" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="25" cy="10" r="6"></circle>
+                      <circle fill="#fff" cx="45" cy="10" r="6"></circle>
                     </g>
                   </svg>
                 </div>
-                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src="/model-test.png" />
+                <img className="img-responsive" style={{border: '1px solid #DBE5EB'}} src={modelTestImg} />
               </div>
             </div>
           </div>
