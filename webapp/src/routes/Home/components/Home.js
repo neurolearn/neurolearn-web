@@ -82,7 +82,7 @@ class HomePage extends React.Component {
           <div className="container">
             <h1>Neurolearn</h1>
             <p className="lead">A web platform for analyzing neuroimaging data stored
-              in <a href="http://neurovault.org">NeuroVault</a> using machine-learning tools.
+              in <a target="_blank" href="http://neurovault.org">NeuroVault</a> using machine-learning tools.
             </p>
             <p className="lead">
               <a href={authLink(window.location)} className="btn btn-outline-inverse btn-lg">Sign in to start</a>
@@ -95,7 +95,7 @@ class HomePage extends React.Component {
           <div className="container how-to">
             <div className="row">
               <div className="col-md-4">
-                <h2 className="subsection-title">Search & Select</h2>
+                <h2 className="subsection-title">Search & select neuroimaging data</h2>
                 <p className="lead">Search NeuroVault collections and select images.</p>
               </div>
               <div className="col-md-8">
@@ -119,10 +119,9 @@ class HomePage extends React.Component {
           <div className="container how-to">
             <div className="row">
               <div className="col-md-4 col-md-push-8">
-                <h2 className="subsection-title">Train & <span className="text-nowrap">Cross-Validate</span></h2>
+                <h2 className="subsection-title">Train model using cross-validation</h2>
                 <p className="lead">
-                  Choose what you’d like to predict or classify.
-                  Run the training and see how the model performs.
+                  Train a brain model that can predict or classify an outcome of your choice.
                 </p>
               </div>
               <div className="col-md-8 col-md-pull-4">
@@ -147,7 +146,11 @@ class HomePage extends React.Component {
             <div className="row">
               <div className="col-md-4">
                 <h2 className="subsection-title">Test your model</h2>
-                <p className="lead">Pick any other set of images from NeuroVault and test the model on it.</p>
+                <p className="lead">
+                  Evaluate the sensitivity, specificity,
+                  and generalizability of your model using
+                  other images from NeuroVault.
+                </p>
               </div>
               <div className="col-md-8">
                 <div className="browser-title-bar">
