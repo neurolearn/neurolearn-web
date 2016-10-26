@@ -6,7 +6,8 @@ clean-pyc:
 	find . -name '*.pyc' -delete
 
 test-server:
-	createdb -O postgres nlweb_test
+	createuser -d nlweb_test
+	createdb -O nlweb_test nlweb_test
 	ENV=test py.test -s --verbose tests/test_api.py
 	dropdb nlweb_test
 

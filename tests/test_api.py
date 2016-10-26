@@ -58,10 +58,16 @@ def create_test_mlmodel(user, output_data):
 def put_weighmap_file(model_id, name):
     src_filename = os.path.join(os.path.dirname(__file__),
                                 name)
-    dest_filename = os.path.join(os.getcwd(),
-                                 'media',
+
+    media_dir = os.path.join(os.getcwd(), 'media')
+
+    dest_filename = os.path.join(media_dir,
                                  str(model_id),
                                  name)
+
+    if not os.path.exists(media_dir):
+        os.makedirs(media_dir)
+
     shutil.copyfile(src_filename, dest_filename)
 
 
@@ -70,7 +76,7 @@ def test_create_model_test(testapp, db, user):
 
     model = create_test_mlmodel(user, {
         'duration': 549,
-        'scatterplot': 'ridge_scatterplot.png ',
+        'scatterplot': 'ridge_scatterplot.png',
         'weightmap': 'ridge_weightmap.nii.gz'
     })
 
