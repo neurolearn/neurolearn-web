@@ -4,6 +4,8 @@
 dependencies:
   cache_directories:
     - "~/download"
+    - "~/.cache/pip"
+
   override:
     - ./create_circle_venv.sh
 
