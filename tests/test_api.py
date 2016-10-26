@@ -59,11 +59,9 @@ def put_weighmap_file(model_id, name):
     src_filename = os.path.join(os.path.dirname(__file__),
                                 name)
 
-    media_dir = os.path.join(os.getcwd(), 'media')
+    media_dir = os.path.join(os.getcwd(), 'media', str(model_id))
 
-    dest_filename = os.path.join(media_dir,
-                                 str(model_id),
-                                 name)
+    dest_filename = os.path.join(media_dir, name)
 
     if not os.path.exists(media_dir):
         os.makedirs(media_dir)
