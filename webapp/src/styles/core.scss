@@ -11,6 +11,9 @@
   $dark_navy: #060e19;
   $browser_border_radius: 4px;
 
+  $cta_btn_gradient_from: #f08d08;
+  $cta_btn_gradient_to: #da1515;
+
   .logo-beta {
     font-style: italic;
     color: $gray64;
@@ -133,10 +136,40 @@
     border-bottom-right-radius: $browser_border_radius;
   }
 
+  .bottom-cta {
+    border-top: 1px solid #e0e9ee;
+    padding: 50px 0;
+    text-align: center;
+    font-size: 170%;
+  }
+
+  .bottom-cta .btn {
+    margin-left: 25px;
+    padding: 13px 30px;
+    font-size: 17px;
+    font-weight: 500;
+    text-transform: uppercase;
+    border: none;
+    background-color: $cta_btn_gradient_to;
+    background-image: -moz-linear-gradient(left,$cta_btn_gradient_from,$cta_btn_gradient_to);
+    background-image: -webkit-gradient(linear,0 0,100% 0,from($cta_btn_gradient_from),to($cta_btn_gradient_to));
+    background-image: -webkit-linear-gradient(left,$cta_btn_gradient_from,$cta_btn_gradient_to);
+    background-image: -o-linear-gradient(left,$cta_btn_gradient_from,$cta_btn_gradient_to);
+    background-image: linear-gradient(to right,$cta_btn_gradient_from,$cta_btn_gradient_to);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$cta_btn_gradient_from', endColorstr='$cta_btn_gradient_to', GradientType=1);
+    background-repeat: repeat-x;
+    color: $white;
+    letter-spacing: .07em;
+  }
+
+  .bottom-cta .btn:hover {
+    background-color: $cta_btn_gradient_from;
+    background-image: none;
+  }
+
   .homepage-footer {
     padding-top: 40px;
     padding-bottom: 60px;
-    margin-top: 100px;
     color: $blue_gray;
     background-color: $dark_navy;
   }

@@ -194,6 +194,12 @@ class HomePage extends React.Component {
             </div>
           </div>
         </div>
+        <div className="section bottom-cta">
+          <div className="container">
+            <span>Ready to train a new model?</span>
+            <a href={authLink(window.location)} className="btn btn-primary btn-lg">Sign in to start</a>
+          </div>
+        </div>
         <footer className="homepage-footer">
           <div className="container">
             <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev.</p>
