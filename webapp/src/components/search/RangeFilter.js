@@ -5,9 +5,6 @@ import ReactSlider from 'react-slider';
 
 import styles from './RangeFilter.scss';
 
-const RANGE_MIN = 0;
-const RANGE_MAX = 100;
-
 export default class RangeFilter extends React.Component {
   state: {
     value?: [number, number]
@@ -15,6 +12,8 @@ export default class RangeFilter extends React.Component {
 
   static propTypes = {
     label: React.PropTypes.string,
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
     value: React.PropTypes.arrayOf(React.PropTypes.number),
     onChange: PropTypes.func
   }
@@ -58,6 +57,7 @@ export default class RangeFilter extends React.Component {
 
   render() {
     const { value } = this.state;
+    const { max, min } = this.props;
 
     return (
       <div className={styles.root}>
@@ -89,13 +89,13 @@ export default class RangeFilter extends React.Component {
           </div>
         </div>
         <div className={styles.stats}>
-          <span className="min">{RANGE_MIN}</span>
-          <span className="max pull-right">{RANGE_MAX}</span>
+          <span className="min">{min}</span>
+          <span className="max pull-right">{max}</span>
         </div>
         <ReactSlider
-          min={RANGE_MIN}
-          max={RANGE_MAX}
-          value={value || [RANGE_MIN, RANGE_MAX]}
+          min={min}
+          max={max}
+          value={value || [min, max]}
           orientation="horizontal"
           withBars
           onChange={this.handleSliderChange}
