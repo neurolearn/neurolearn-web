@@ -104,12 +104,13 @@ export default class RefineSearchResults extends React.Component {
   render() {
     const { results, filter } = this.props;
 
-    const imagesStats = results
-      ? results.aggregations.number_of_images_stats : {max: 0, min: 0};
+    if (!results) {
+      return null;
+    }
 
-    const hasDOI = results
-      ? results.aggregations.has_DOI
-      : null;
+    const imagesStats = results.aggregations.number_of_images_stats;
+
+    const hasDOI = results.aggregations.has_DOI;
 
     const termFilters = [
       {
