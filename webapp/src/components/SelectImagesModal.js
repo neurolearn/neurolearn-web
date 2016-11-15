@@ -1,9 +1,12 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
 import { Modal, Button, Input } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
 import every from 'lodash/collection/every';
+import isEmpty from 'lodash/lang/isEmpty';
 
 import { filterImagesByName } from '../utils';
 import Spinner from './Spinner';
@@ -12,13 +15,18 @@ import Events from '../utils/events';
 
 import styles from './SelectImagesModal.scss';
 
-export default class SelectImagesModal extends React.Component {
+import {
+  loadCollectionImages
+} from '../state/collectionImages';
+
+class SelectImagesModal extends React.Component {
   state: {
     filterText: string
   };
 
   static propTypes = {
     collection: PropTypes.object.isRequired,
+    collectionImages: PropTypes.object,
     selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
     onToggleList: PropTypes.func.isRequired,
@@ -32,6 +40,10 @@ export default class SelectImagesModal extends React.Component {
       filterText: ''
     };
     (this:any).handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.dispatch(loadCollectionImages(this.props.collection._source.id));
   }
 
   handleFilterChange() {
@@ -63,7 +75,6 @@ export default class SelectImagesModal extends React.Component {
         {sortBy(images, 'name').map((image) =>
           <ImageItem
             {...image}
-            key={image.url}
             checked={this.isImageSelected(image.url)}
             onChange={() => this.props.onToggle(collection, image.url)}
           />
@@ -123,8 +134,8 @@ export default class SelectImagesModal extends React.Component {
   }
 
   render() {
-    const { collection, selectedImages } = this.props;
-    const images = collection._source.images;
+    const { collection, selectedImages, collectionImages } = this.props;
+    const images = collectionImages[collection._source.id];
 
     return (
       <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
@@ -132,8 +143,9 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id="contained-modal-title-lg">Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {false && this.renderLoading()}
-            {this.renderTable(collection, images, selectedImages)}
+            {collectionImages.isFetching && this.renderLoading()}
+            {!isEmpty(images) &&
+              this.renderTable(collection, images, selectedImages)}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
@@ -143,3 +155,10 @@ export default class SelectImagesModal extends React.Component {
     );
   }
 }
+
+function select(state) {
+  return state;
+}
+
+export default connect(select)(SelectImagesModal);
+

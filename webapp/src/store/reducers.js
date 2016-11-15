@@ -7,6 +7,7 @@ import selectImagesModal from '../state/selectImagesModal';
 import search from '../state/search';
 import auth from '../state/auth';
 import selectedImages from '../state/selectedImages';
+import collectionImages from '../state/collectionImages';
 import imagesMetadata from '../state/imagesMetadata';
 import targetData from '../state/targetData';
 import subjectIdData from '../state/subjectIdData';
@@ -19,6 +20,7 @@ export const makeRootReducer = (asyncReducers: Object) => {
   return combineReducers({
     auth,
     imagesMetadata,
+    collectionImages,
     search,
     selectedImages,
     selectImagesModal,
