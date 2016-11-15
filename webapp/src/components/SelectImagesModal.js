@@ -6,6 +6,7 @@ import sortBy from 'lodash/collection/sortBy';
 import every from 'lodash/collection/every';
 
 import { filterImagesByName } from '../utils';
+import Spinner from './Spinner';
 import ImageItem from './ImageItem';
 import Events from '../utils/events';
 
@@ -71,13 +72,59 @@ export default class SelectImagesModal extends React.Component {
     );
   }
 
-  render() {
-    const { collection, selectedImages } = this.props;
-    const filteredImages = collection && filterImagesByName(this.state.filterText, collection._source.images);
+  renderLoading() {
+    return (
+      <div className="row">
+        <div className="col-md-12" >
+          <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
+          <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Loading image metadata…</div>
+        </div>
+      </div>
+    );
+  }
+
+  renderTable(collection, images, selectedImages) {
+    const filteredImages = collection && filterImagesByName(this.state.filterText, images);
 
     const allFilteredAreSelected = selectedImages && every(filteredImages, image => {
       return selectedImages[image.url];
     });
+
+    return (
+      <div className={styles.root}>
+        <Input
+          type="text"
+          placeholder="Filter Images"
+          value={this.state.filterText}
+          ref="filterText"
+          onChange={this.handleFilterChange}
+        />
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={allFilteredAreSelected}
+                  onChange={e => this.toggleList(e, filteredImages)}
+                />
+              </th>
+              <th className="col-md-4">Name</th>
+              <th className="col-md-2">Image Type</th>
+              <th>Map Type</th>
+              <th className="col-md-4"></th>
+            </tr>
+          </thead>
+          {filteredImages && this.renderImages(filteredImages)}
+        </table>
+      </div>
+    );
+  }
+
+  render() {
+    const { collection, selectedImages } = this.props;
+    const images = collection._source.images;
 
     return (
       <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
@@ -85,33 +132,8 @@ export default class SelectImagesModal extends React.Component {
           <Modal.Title id="contained-modal-title-lg">Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Input
-            type="text"
-            placeholder="Filter Images"
-            value={this.state.filterText}
-            ref="filterText"
-            onChange={this.handleFilterChange}
-          />
-          <div className={styles.root}>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      checked={allFilteredAreSelected}
-                      onChange={e => this.toggleList(e, filteredImages)}
-                    />
-                  </th>
-                  <th className="col-md-4">Name</th>
-                  <th className="col-md-2">Image Type</th>
-                  <th>Map Type</th>
-                  <th className="col-md-4"></th>
-                </tr>
-              </thead>
-              {filteredImages && this.renderImages(filteredImages)}
-            </table>
-          </div>
+            {false && this.renderLoading()}
+            {this.renderTable(collection, images, selectedImages)}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
