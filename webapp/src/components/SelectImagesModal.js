@@ -46,7 +46,8 @@ class SelectImagesModal extends React.Component {
     const { collection, collectionImages } = this.props;
 
     if (!collectionImages[collection._source.id]) {
-      this.props.dispatch(loadCollectionImages(this.props.collection._source.id));
+      const { id, number_of_images } = this.props.collection._source;
+      this.props.dispatch(loadCollectionImages(id, number_of_images));
     }
   }
 
