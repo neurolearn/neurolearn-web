@@ -37,8 +37,7 @@ export function loadCollectionImages(collectionId: number, totalImageNumber: num
 
 export default function reducer(state
 : {
-  isFetching: boolean,
-  collectionsById: {}
+  isFetching: boolean
 } = {
   isFetching: false
 }, action: Action) {

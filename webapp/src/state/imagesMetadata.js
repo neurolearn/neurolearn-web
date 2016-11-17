@@ -11,8 +11,6 @@ import union from 'lodash/array/union';
 import { createAction } from 'redux-actions';
 
 import { findColumnIndex } from '../utils';
-import api from '../api';
-import { apiError } from './alertMessages';
 import type { Action } from '.';
 
 export const RESET_IMAGES_METADATA = 'RESET_IMAGES_METADATA';
@@ -63,29 +61,21 @@ type ImageMap = {
   [collectionId: string]: {[imageUrl: string]: boolean}
 };
 
-export function loadImagesMetadata(imageMap: ImageMap) {
+export function loadImagesMetadata(selectedImagesByColId: ImageMap, collectionImages) {
   return (dispatch: Function) => {
     dispatch(requestImagesMetadata());
-    const imageMetadataPromises = Object.keys(imageMap).map(collectionId => {
-      return new Promise((resolve, reject) => {
-        api.get(`/nvproxy/api/collections/${collectionId}/images/`)
-          .then(
-            (result) => resolve([collectionId, result]),
-            error => reject([collectionId, error])
-        );
-      });
-    });
-    return Promise.all(imageMetadataPromises).then(results => {
-      const items = results.reduce((accum, r) => {
-        const [collectionId, response] = r;
+    const items = Object.keys(selectedImagesByColId).reduce((accum, collectionId) => {
+      return accum.concat(
+        setExtraProps(collectionId,
+          filterImages(
+            selectedImagesByColId[collectionId],
+            collectionImages[collectionId]
+          )
+        )
+      );
+    }, []);
 
-        return accum.concat(setExtraProps(collectionId,
-          filterImages(imageMap[collectionId],
-                       response.results)));
-      }, []);
-      dispatch(receiveImagesMetadata(items));
-    })
-    .catch(error => dispatch(apiError(error)));
+    dispatch(receiveImagesMetadata(items));
   };
 }
 

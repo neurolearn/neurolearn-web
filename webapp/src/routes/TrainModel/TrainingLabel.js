@@ -44,6 +44,7 @@ class TrainingLabel extends React.Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    collectionImages: PropTypes.object,
     selectedImages: PropTypes.object,
     imagesMetadata: PropTypes.object,
     targetData: PropTypes.object,
@@ -65,10 +66,13 @@ class TrainingLabel extends React.Component {
   }
 
   componentDidMount() {
-    const images = pick(this.props.selectedImages.images,
-                        this.countSelectedImages);
-    if (!isEmpty(Object.keys(images)) && isEmpty(this.props.imagesMetadata.data)) {
-      this.props.dispatch(loadImagesMetadata(images));
+    const { selectedImages, imagesMetadata, collectionImages } = this.props;
+    const selectedImagesByColId = pick(
+      selectedImages.images,
+      this.countSelectedImages
+    );
+    if (!isEmpty(Object.keys(selectedImagesByColId)) && isEmpty(imagesMetadata.data)) {
+      this.props.dispatch(loadImagesMetadata(selectedImagesByColId, collectionImages));
     }
   }
 
