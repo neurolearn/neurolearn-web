@@ -12,6 +12,7 @@ import { filterImagesByName } from '../utils';
 import Spinner from './Spinner';
 import ImageItem from './ImageItem';
 import Events from '../utils/events';
+import { pluralize } from '../utils';
 
 import styles from './SelectImagesModal.scss';
 
@@ -45,8 +46,8 @@ class SelectImagesModal extends React.Component {
     const { collection, collectionImages } = this.props;
 
     if (!collectionImages[collection._source.id]) {
-      const { id, number_of_images } = this.props.collection._source;
-      this.props.dispatch(loadCollectionImages(id, number_of_images));
+      const { id, number_of_images: numberOfImages } = this.props.collection._source;
+      this.props.dispatch(loadCollectionImages(id, numberOfImages));
     }
   }
 
@@ -88,12 +89,14 @@ class SelectImagesModal extends React.Component {
     );
   }
 
-  renderLoading() {
+  renderLoading(numberOfImages) {
     return (
       <div className="row">
         <div className="col-md-12" >
           <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
-          <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Loading image metadata…</div>
+          <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>
+            {`Loading data for ${numberOfImages} ${pluralize(numberOfImages, 'image', 'images')}…`}
+          </div>
         </div>
       </div>
     );
@@ -140,15 +143,17 @@ class SelectImagesModal extends React.Component {
 
   render() {
     const { collection, selectedImages, collectionImages } = this.props;
-    const images = collectionImages[collection._source.id];
-    const selected = selectedImages.images[collection._source.id];
+    const { id, number_of_images: numberOfImages } = collection._source;
+    const images = collectionImages[id];
+    const selected = selectedImages.images[id];
+
     return (
       <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-lg">Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {collectionImages.isFetching && this.renderLoading()}
+            {collectionImages.isFetching && this.renderLoading(numberOfImages)}
             {!isEmpty(images) &&
               this.renderTable(collection, images, selected)}
         </Modal.Body>
