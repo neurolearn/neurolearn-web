@@ -140,7 +140,7 @@ export default class RefineSearchResults extends React.Component {
         <div className="panel-body">
           <RangeFilter
             label="Number of images"
-            min={imagesStats.min}
+            min={0}
             max={imagesStats.max}
             value={[imagesStats.min, imagesStats.max]}
             onChange={this.handleRangeFilterChange}
