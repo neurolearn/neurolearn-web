@@ -12,7 +12,7 @@ function firstImageThumbnail(images: Array<{thumbnail: string}>): string {
 }
 
 const SearchResult = (props : { hit: Object, onClick: () => void }) => {
-  const { id, name, number_of_images, images, authors } = props.hit._source;
+  const { id, name, number_of_images: numberOfImages, sample_images: images, authors } = props.hit._source;
 
   return (
     <div className={styles.root}>
@@ -29,7 +29,7 @@ const SearchResult = (props : { hit: Object, onClick: () => void }) => {
         </div>
         <div className="images">
           <FallbackImage src={firstImageThumbnail(images)} className="img-responsive" />
-          <div className="number-of-images">{number_of_images} {pluralize(number_of_images, 'image', 'images')}</div>
+          <div className="number-of-images">{numberOfImages} {pluralize(numberOfImages, 'image', 'images')}</div>
         </div>
         <div className="button">
           <Button bsStyle="default" onClick={props.onClick}>Select Images</Button>
@@ -45,4 +45,3 @@ SearchResult.propTypes = {
 };
 
 export default SearchResult;
-
