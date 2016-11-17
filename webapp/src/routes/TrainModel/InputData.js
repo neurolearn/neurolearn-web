@@ -82,10 +82,6 @@ class InputData extends React.Component {
     return collection;
   }
 
-  getSelectedImagesInCollection(selectedImages, collectionId) {
-    return selectedImages[collectionId];
-  }
-
   countSelectedInCollection(collection) {
     if (!collection) {
       return 0;
@@ -151,9 +147,6 @@ class InputData extends React.Component {
             onToggleList={this.handleImageListToggle}
             collection={this.getCollection(
               selectImagesModal.collectionId, selectedImages.collectionsById
-            )}
-            selectedImages={this.getSelectedImagesInCollection(
-              selectedImages.images, selectImagesModal.collectionId
             )}
             onHide={this.handleHide}
           >

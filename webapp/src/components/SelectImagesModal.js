@@ -27,7 +27,6 @@ class SelectImagesModal extends React.Component {
   static propTypes = {
     collection: PropTypes.object.isRequired,
     collectionImages: PropTypes.object,
-    selectedImages: PropTypes.object,
     onToggle: PropTypes.func.isRequired,
     onToggleList: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
@@ -58,9 +57,10 @@ class SelectImagesModal extends React.Component {
   }
 
   isImageSelected(key: string) {
-    const { selectedImages } = this.props;
-    if (selectedImages) {
-      return selectedImages[key];
+    const { selectedImages, collection } = this.props;
+    const selected = selectedImages.images[collection._source.id];
+    if (selected) {
+      return selected[key];
     }
     return false;
   }
@@ -99,11 +99,11 @@ class SelectImagesModal extends React.Component {
     );
   }
 
-  renderTable(collection, images, selectedImages) {
+  renderTable(collection, images, selected) {
     const filteredImages = collection && filterImagesByName(this.state.filterText, images);
 
-    const allFilteredAreSelected = selectedImages && every(filteredImages, image => {
-      return selectedImages[image.url];
+    const allFilteredAreSelected = selected && every(filteredImages, image => {
+      return selected[image.url];
     });
 
     return (
@@ -141,7 +141,7 @@ class SelectImagesModal extends React.Component {
   render() {
     const { collection, selectedImages, collectionImages } = this.props;
     const images = collectionImages[collection._source.id];
-
+    const selected = selectedImages.images[collection._source.id];
     return (
       <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
         <Modal.Header closeButton>
@@ -150,7 +150,7 @@ class SelectImagesModal extends React.Component {
         <Modal.Body>
             {collectionImages.isFetching && this.renderLoading()}
             {!isEmpty(images) &&
-              this.renderTable(collection, images, selectedImages)}
+              this.renderTable(collection, images, selected)}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
