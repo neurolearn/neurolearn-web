@@ -39,8 +39,7 @@ def notsupported():
 @blueprint.route('/nvproxy/<path:path>')
 def neurovault_proxy(path):
     proxy_url = "http://neurovault.org/%s" % path
-
-    req = requests.get(proxy_url)
+    req = requests.get(proxy_url, params=request.args.to_dict())
 
     return Response(req.text,
                     content_type=req.headers['content-type'])
