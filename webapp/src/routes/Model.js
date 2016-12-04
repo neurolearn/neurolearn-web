@@ -196,8 +196,10 @@ class Model extends React.Component {
       <div className="text-center">
         <Button
           bsStyle="primary"
-          onClick={this.handleVisibilityToggle}><i className={visibility.iconClass}></i>
-          Make this model {visibility.status}
+          onClick={this.handleVisibilityToggle}>
+          <i className={visibility.iconClass}></i>
+          {' Make this model '}
+          {visibility.status}
         </Button>
       </div>
     );
