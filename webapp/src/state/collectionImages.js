@@ -1,9 +1,9 @@
+import 'whatwg-fetch';
+
 import range from 'lodash/utility/range';
 import type { Action } from '.';
 import { createAction } from 'redux-actions';
 import { apiError } from './alertMessages';
-
-import api from '../api';
 
 const REQUEST_CHUNK_SIZE = 100;
 
@@ -14,7 +14,13 @@ export const requestCollectionImages = createAction(REQUEST_COLLECTION_IMAGES);
 export const receiveCollectionImages = createAction(RECEIVE_COLLECTION_IMAGES);
 
 const fetchCollectionImages = (id, limit, offset) => {
-  return api.get(`/nvproxy/api/collections/${id}/images/?limit=${limit}&offset=${offset}`);
+  return fetch(
+    `http://neurovault.org/api/collections/${id}/images/?limit=${limit}&offset=${offset}`
+  ).then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+  });
 };
 
 export function loadCollectionImages(collectionId: number, totalImageNumber: number) {
