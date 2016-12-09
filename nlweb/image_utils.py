@@ -17,7 +17,9 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-BASE_NV_URL = 'http://neurovault.org'
+BASE_NEUROVAULT_URL = 'http://neurovault.org'
+API_COLLECTIONS_URL = BASE_NEUROVAULT_URL + "/api/collections"
+API_COLLECTIONS_IMAGES_URL = os.path.join(API_COLLECTIONS_URL, '%s', 'images')
 
 
 class ImageResampler(object):
@@ -96,18 +98,42 @@ def local_filepath(dirname, collection_id, filename):
     return os.path.join(dirname, "%s_%s" % (collection_id, filename))
 
 
-def fetch_collection_images(collection_id):
-    url = "%s/api/collections/%s/images/"
+def fetch_json(url):
+    log.info('Fetching %s', url)
 
-    r = requests.get(url % (BASE_NV_URL, collection_id))
-
+    r = requests.get(url)
     return r.json()
+
+
+def join_batches(batch_iterator):
+    for batch in batch_iterator:
+        for c in batch['results']:
+            yield c
+
+
+def fetch_paginated_items(url):
+    while True:
+        data = fetch_json(url)
+        next_url = data.get('next')
+        yield data
+        if next_url:
+            url = next_url
+        else:
+            break
+
+
+def fetch_collection_images(collection_id):
+    url = API_COLLECTIONS_IMAGES_URL % collection_id
+
+    pipeline = (fetch_paginated_items, join_batches)
+
+    return reduce(lambda x, y: y(x), pipeline, url)
 
 
 def fetch_collection(collection_id):
     url = "%s/api/collections/%s/"
 
-    r = requests.get(url % (BASE_NV_URL, collection_id))
+    r = requests.get(url % (BASE_NEUROVAULT_URL, collection_id))
 
     return r.json()
 
@@ -117,7 +143,7 @@ def image_media_url(image):
 
     if not media_url:
         media_url = "%s/media/images/%s/%s" % (
-            BASE_NV_URL,
+            BASE_NEUROVAULT_URL,
             image['collection_id'],
             image['filename']
         )
@@ -125,8 +151,8 @@ def image_media_url(image):
     return media_url
 
 
-def collection_to_mapping(key, collection):
-    return {item[key]: item for item in collection}
+def seq_to_dict(key, image_seq):
+    return {item[key]: item for item in image_seq}
 
 
 def collection_ids(image_list):
@@ -152,8 +178,7 @@ def download_images(client, image_list, output_dir):
 
     if not has_filenames:
         collection_images = {
-            id: collection_to_mapping('id',
-                                      fetch_collection_images(id)['results'])
+            id: seq_to_dict('id', fetch_collection_images(id))
             for id in collection_ids(image_list)
         }
 
