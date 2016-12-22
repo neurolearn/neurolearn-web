@@ -5,7 +5,7 @@ import type { Action } from '.';
 import { createAction } from 'redux-actions';
 import { apiError } from './alertMessages';
 
-const REQUEST_CHUNK_SIZE = 100;
+const REQUEST_CHUNK_SIZE = 400;
 
 const REQUEST_COLLECTION_IMAGES = 'REQUEST_COLLECTION_IMAGES';
 const RECEIVE_COLLECTION_IMAGES = 'RECEIVE_COLLECTION_IMAGES';
