@@ -8,11 +8,10 @@ import sortBy from 'lodash/collection/sortBy';
 import every from 'lodash/collection/every';
 import isEmpty from 'lodash/lang/isEmpty';
 
-import { filterImagesByName } from '../utils';
+import { filterImagesByName, pluralize } from '../utils';
 import Spinner from './Spinner';
 import ImageItem from './ImageItem';
 import Events from '../utils/events';
-import { pluralize } from '../utils';
 
 import styles from './SelectImagesModal.scss';
 
