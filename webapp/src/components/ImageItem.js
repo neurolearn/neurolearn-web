@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
+import LazyLoad from 'react-lazyload';
 import FallbackImage from './FallbackImage';
 
 const ImageItem = (
@@ -20,7 +21,9 @@ const ImageItem = (
     <td>{image_type}</td>
     <td>{map_type}</td>
     <td onClick={onChange} className="map-thumbnail">
-      <FallbackImage src={thumbnail} className="img-responsive" />
+      <LazyLoad overflow once>
+        <FallbackImage src={thumbnail} className="img-responsive" />
+      </LazyLoad>
     </td>
   </tr>
 );
