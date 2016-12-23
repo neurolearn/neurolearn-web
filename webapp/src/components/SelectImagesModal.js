@@ -79,6 +79,7 @@ class SelectImagesModal extends React.Component {
       <tbody>
         {sortBy(images, 'name').map((image) =>
           <ImageItem
+            key={image.id}
             {...image}
             checked={this.isImageSelected(image.url)}
             onChange={() => this.props.onToggle(collection, image.url)}
