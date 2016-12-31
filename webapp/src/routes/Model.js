@@ -226,12 +226,15 @@ class Model extends React.Component {
                     <div>
                       <Button
                         onClick={() => this.setState({showViewerModal: true, loadingImages: true})}
-                      >Open Interactive Viewer
+                      >
+                        Open Interactive Viewer
                       </Button>
                     </div>
                     <div>
-                      <a className="btn btn-link" href={weightmapUrl}><i className="fa fa-download"></i>
-                      Download NIfTI file</a>
+                      <a className="btn btn-link" href={weightmapUrl}>
+                        <i className="fa fa-download"></i>
+                        Download NIfTI file
+                      </a>
                     </div>
                   </td>
                 </tr>
