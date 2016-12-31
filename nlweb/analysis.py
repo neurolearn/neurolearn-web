@@ -61,8 +61,6 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
             raise ValueError(
                 "subject_id is required for a LOSO cross validation.")
 
-        cross_validation['n'] = len(image_list)
-
     extra = {}
     if algorithm in ('svr', 'svm'):
         extra = {'kernel': 'linear'}
