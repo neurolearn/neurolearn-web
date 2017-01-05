@@ -115,7 +115,7 @@ def test_model(self, model_test_id):
     image_list = []
     for collection_id, image_ids in images_by_collections.items():
         images = fetch_collection_images(collection_id)
-        images = add_filename(images['results'])
+        images = add_filename(images)
         image_list.extend(filter_selected_images(
             set(image_ids),
             images))
