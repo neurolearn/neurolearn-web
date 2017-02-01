@@ -3,6 +3,12 @@
 import os
 import time
 
+import matplotlib
+# Force matplotlib to not use an Xwindows backend.
+# Otherwise you'll get this error:
+# _tkinter.TclError: no display name and no $DISPLAY environment variable
+matplotlib.use('Agg')
+
 from nlweb.app import celery
 from nlweb import analysis
 
