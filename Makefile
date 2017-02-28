@@ -1,6 +1,6 @@
 
 start-web:
-	cd webapp && npm start
+	cd webapp && yarn start
 
 clean-pyc:
 	find . -name '*.pyc' -delete
