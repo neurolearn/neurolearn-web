@@ -101,7 +101,7 @@ class HomePage extends React.Component {
               <div className="col-md-8">
                 <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                    <g fill="none" fillRule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="25" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="45" cy="10" r="6"></circle>
@@ -127,7 +127,7 @@ class HomePage extends React.Component {
               <div className="col-md-8 col-md-pull-4">
                 <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                    <g fill="none" fillRule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="25" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="45" cy="10" r="6"></circle>
@@ -155,7 +155,7 @@ class HomePage extends React.Component {
               <div className="col-md-8">
                 <div className="browser-title-bar">
                   <svg width="123" height="12" viewBox="9 6 246 24" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" transform="translate(9 6)">
+                    <g fill="none" fillRule="evenodd" transform="translate(9 6)">
                       <circle fill="#fff" cx="6" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="25" cy="10" r="6"></circle>
                       <circle fill="#fff" cx="45" cy="10" r="6"></circle>
