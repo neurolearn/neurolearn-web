@@ -43,7 +43,7 @@ class HomePage extends React.Component {
 
   renderItemList(itemList) {
     return itemList.map(item => (
-      <div className="col-sm-4">
+      <div className="col-sm-4" key={item.id}>
         {item.thumbnailUrl &&
           <Link to={item.url}>
             <img className="img-responsive glassbrain" src={item.thumbnailUrl} />
@@ -59,6 +59,7 @@ class HomePage extends React.Component {
 
     const modelList = latest && latest.models && latest.models.map(item => {
       return {
+        id: item.id,
         name: truncate(item.name),
         url: `/models/${item.id}`,
         thumbnailUrl: `/media/${item.id}/glassbrain.png`,
@@ -69,6 +70,7 @@ class HomePage extends React.Component {
 
     const testList = latest && latest.tests && latest.tests.map(item => {
       return {
+        id: item.id,
         name: truncate(item.name),
         url: `/tests/${item.id}`,
         meta: `${item.images_count} ${pluralize(item.images_count, 'image', 'images')} ` +
