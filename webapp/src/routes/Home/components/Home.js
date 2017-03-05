@@ -32,7 +32,8 @@ class HomePage extends React.Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    fetched: PropTypes.object
+    fetched: PropTypes.object,
+    auth: PropTypes.object
   };
 
   componentWillMount() {
@@ -54,8 +55,15 @@ class HomePage extends React.Component {
     ));
   }
 
+  renderCallToActionButton(user) {
+    const classList = 'btn btn-outline-inverse btn-lg';
+    return user
+    ? <Link to="/dashboard/models" className={classList}>Go to the Dashboard</Link>
+    : <a href={authLink(window.location)} className={classList}>Sign in to start</a>;
+  }
+
   render() {
-    const { fetched: { latest } } = this.props;
+    const { fetched: { latest }, auth } = this.props;
 
     const modelList = latest && latest.models && latest.models.map(item => {
       return {
@@ -87,7 +95,7 @@ class HomePage extends React.Component {
               in <a target="_blank" href="http://neurovault.org">NeuroVault</a> using machine-learning tools.
             </p>
             <p className="lead">
-              <a href={authLink(window.location)} className="btn btn-outline-inverse btn-lg">Sign in to start</a>
+              {this.renderCallToActionButton(auth.user)}
             </p>
           </div>
         </div>
@@ -196,12 +204,14 @@ class HomePage extends React.Component {
             </div>
           </div>
         </div>
-        <div className="section bottom-cta">
-          <div className="container">
-            <span>Ready to train a new model?</span>
-            <a href={authLink(window.location)} className="btn btn-primary btn-lg">Sign in to start</a>
+        {!auth.user &&
+          <div className="section bottom-cta">
+            <div className="container">
+              <span>Ready to train a new model?</span>
+              <a href={authLink(window.location)} className="btn btn-primary btn-lg">Sign in to start</a>
+            </div>
           </div>
-        </div>
+        }
         <footer className="homepage-footer">
           <div className="container">
             <p>Created and maintained by Luke Chang, Tor Wager, and Anton Burnashev.</p>
@@ -220,7 +230,10 @@ class HomePage extends React.Component {
 }
 
 function select(state) {
-  return state;
+  return {
+    auth: state.auth,
+    fetched: state.fetched
+  };
 }
 
 export default connect(select)(HomePage);
