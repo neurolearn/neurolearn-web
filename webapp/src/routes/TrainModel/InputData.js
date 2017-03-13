@@ -38,6 +38,12 @@ class InputData extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      inputSource: 'all'
+    };
+
+    (this:any).handleSelectSourceClick = this.handleSelectSourceClick.bind(this);
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
     (this:any).handleImageToggle = this.handleImageToggle.bind(this);
     (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
@@ -48,6 +54,10 @@ class InputData extends React.Component {
     if (!this.props.search.results) {
       this.props.dispatch(loadSearchResults(inputSearchQuery('')));
     }
+  }
+
+  handleSelectSourceClick(source) {
+    this.setState({inputSource: source});
   }
 
   handleImageToggle(collectionId, imageId) {
@@ -111,8 +121,18 @@ class InputData extends React.Component {
         <h1 className="page-header">Input Data</h1>
         <ButtonToolbar style={{marginBottom: 15}}>
           <ButtonGroup bsSize="small" >
-            <Button active>All Collections</Button>
-            <Button>My Collections</Button>
+            <Button
+              active={this.state.inputSource === 'all'}
+              onClick={() => this.handleSelectSourceClick('all')}
+            >
+              All Collections
+            </Button>
+            <Button
+              active={this.state.inputSource === 'my'}
+              onClick={() => this.handleSelectSourceClick('my')}
+            >
+              My Collections
+            </Button>
           </ButtonGroup>
         </ButtonToolbar>
 
