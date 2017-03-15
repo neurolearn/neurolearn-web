@@ -44,8 +44,8 @@ class SelectImagesModal extends React.Component {
   componentDidMount() {
     const { collection, collectionImages } = this.props;
 
-    if (!collectionImages[collection._source.id]) {
-      const { id, number_of_images: numberOfImages } = this.props.collection._source;
+    if (!collectionImages[collection.id]) {
+      const { id, number_of_images: numberOfImages } = this.props.collection;
       this.props.dispatch(loadCollectionImages(id, numberOfImages));
     }
   }
@@ -58,7 +58,7 @@ class SelectImagesModal extends React.Component {
 
   isImageSelected(key: string) {
     const { selectedImages, collection } = this.props;
-    const selected = selectedImages.images[collection._source.id];
+    const selected = selectedImages.images[collection.id];
     if (selected) {
       return selected[key];
     }
@@ -143,7 +143,7 @@ class SelectImagesModal extends React.Component {
 
   render() {
     const { collection, selectedImages, collectionImages } = this.props;
-    const { id, number_of_images: numberOfImages } = collection._source;
+    const { id, number_of_images: numberOfImages } = collection;
     const images = collectionImages[id];
     const selected = selectedImages.images[id];
 
