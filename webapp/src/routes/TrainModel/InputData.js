@@ -211,7 +211,6 @@ const getSelectedCollection = (state) => {
         throw new Error('Source is empty');
       }
 
-      // Search in current search results
       collection = searchResults.hits.hits.filter(function (item) {
         return item._id === collectionId;
       })[0];
