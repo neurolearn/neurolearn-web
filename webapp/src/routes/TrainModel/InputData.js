@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router';
 import { ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
 import SearchContainer from 'components/search/SearchContainer';
+import MyCollectionsContainer from 'components/MyCollectionsContainer';
 import SelectImagesModal from 'components/SelectImagesModal';
 import SelectedCollectionList from 'components/SelectedCollectionList';
 
@@ -33,6 +34,7 @@ class InputData extends React.Component {
     search: PropTypes.object,
     selectImagesModal: PropTypes.object,
     selectedImages: PropTypes.object,
+    selectedCollection: PropTypes.object,
     dispatch: PropTypes.func.isRequired
   }
 
@@ -40,7 +42,7 @@ class InputData extends React.Component {
     super(props);
 
     this.state = {
-      inputSource: 'all'
+      inputSource: 'search'
     };
 
     (this:any).handleSelectSourceClick = this.handleSelectSourceClick.bind(this);
@@ -74,25 +76,6 @@ class InputData extends React.Component {
     this.props.dispatch(hideSelectImagesModal());
   }
 
-  getCollection(collectionId, collectionsById) {
-    const { results } = this.props.search;
-    let collection = collectionsById[collectionId];
-
-    if (collection) {
-      return collection;
-    }
-
-    if (!results) {
-      return null;
-    }
-
-    collection = results.hits.hits.filter(function (item) {
-      return item._id === collectionId;
-    })[0];
-
-    return collection;
-  }
-
   countSelectedInCollection(collection) {
     if (!collection) {
       return 0;
@@ -108,8 +91,8 @@ class InputData extends React.Component {
     0);
   }
 
-  handleCollectionClick(id) {
-    this.props.dispatch(showSelectImagesModal(id));
+  handleCollectionClick(id, source) {
+    this.props.dispatch(showSelectImagesModal({ collectionId: id, source }));
   }
 
   render() {
@@ -122,29 +105,40 @@ class InputData extends React.Component {
         <ButtonToolbar style={{marginBottom: 15}}>
           <ButtonGroup bsSize="small" >
             <Button
-              active={this.state.inputSource === 'all'}
-              onClick={() => this.handleSelectSourceClick('all')}
+              active={this.state.inputSource === 'search'}
+              onClick={() => this.handleSelectSourceClick('search')}
             >
               All Collections
             </Button>
             <Button
-              active={this.state.inputSource === 'my'}
-              onClick={() => this.handleSelectSourceClick('my')}
+              active={this.state.inputSource === 'myCollections'}
+              onClick={() => this.handleSelectSourceClick('myCollections')}
             >
               My Collections
             </Button>
           </ButtonGroup>
         </ButtonToolbar>
 
-        <p className="lead">Search NeuroVault collections and select images to create a training dataset.</p>
+        <p className="lead">
+          {this.state.inputSource === 'myCollections'
+            ? 'Select images from one or many of your collections to create a training dataset.'
+            : 'Search NeuroVault collections and select images to create a training dataset.'
+          }
+        </p>
 
         <div className="row">
           <div className="col-md-9">
-            <SearchContainer
-              {...this.props.search}
-              dispatch={this.props.dispatch}
-              onSearchResultClick={this.handleCollectionClick}
-            />
+            {this.state.inputSource === 'myCollections'
+             ? <MyCollectionsContainer
+               dispatch={this.props.dispatch}
+               onCollectionClick={this.handleCollectionClick}
+               />
+             : <SearchContainer
+               {...this.props.search}
+               dispatch={this.props.dispatch}
+               onSearchResultClick={this.handleCollectionClick}
+               />
+            }
           </div>
 
           <div className="col-md-3">
@@ -173,9 +167,7 @@ class InputData extends React.Component {
             show={selectImagesModal.display}
             onToggle={this.handleImageToggle}
             onToggleList={this.handleImageListToggle}
-            collection={this.getCollection(
-              selectImagesModal.collectionId, selectedImages.collectionsById
-            )}
+            collection={this.props.selectedCollection}
             onHide={this.handleHide}
           >
             <Link
@@ -189,4 +181,37 @@ class InputData extends React.Component {
   }
 }
 
-export default connect(state => state)(InputData);
+const getSelectedCollection = (selectImagesModal, searchResults, collectionsById) => {
+  const { collectionId, source } = selectImagesModal;
+
+  let collection = collectionsById[collectionId];
+
+  if (collection) {
+    return collection;
+  }
+
+  if (!searchResults) {
+    return null;
+  }
+
+  collection = searchResults.hits.hits.filter(function (item) {
+    return item._id === collectionId;
+  })[0];
+
+  return collection;
+};
+
+const mapStateToProps = (state) => {
+  return {
+    search: state.search,
+    selectImagesModal: state.selectImagesModal,
+    selectedImages: state.selectedImages,
+    selectedCollection: getSelectedCollection(
+      state.selectImagesModal,
+      state.search.results,
+      state.selectedImages.collectionsById
+    )
+  };
+};
+
+export default connect(mapStateToProps)(InputData);
