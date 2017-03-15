@@ -5,6 +5,7 @@ from flask import request
 from flask import jsonify, abort
 
 from flask_jwt import jwt_required, current_user
+import requests
 
 from nlweb import tasks
 from ..app import jwt_optional
@@ -17,6 +18,8 @@ from ..utils import merge_two_dicts
 from . import not_found
 
 LATEST_COUNT = 3
+MY_COLLECTIONS_URL = 'http://neurovault.org/api/my_collections/'
+
 
 blueprint = Blueprint('api', __name__)
 
@@ -81,6 +84,20 @@ def list_own_models():
 
     result = own_models_schema.dump(item_list)
     return jsonify(data=result.data)
+
+
+@blueprint.route('/user/neurovault-collections', methods=['GET'])
+@jwt_required()
+def list_neurovault_collections():
+    access_token = current_user.neurovault_account.access_token
+
+    response = requests.get(MY_COLLECTIONS_URL, headers={
+        'Authorization': 'Bearer %s' % access_token
+    })
+
+    json_response = response.json()
+
+    return jsonify(data=json_response['results'])
 
 
 @blueprint.route('/models', methods=['GET'])
