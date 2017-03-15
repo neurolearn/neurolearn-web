@@ -1,4 +1,5 @@
 /* @flow */
+import isEmpty from 'lodash/lang/isEmpty';
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -14,7 +15,10 @@ import { resetImagesMetadata } from 'state/imagesMetadata';
 
 import {
   showSelectImagesModal,
-  hideSelectImagesModal
+  hideSelectImagesModal,
+  selectCollectionSource,
+  SEARCH,
+  MY_COLLECTIONS
 } from 'state/selectImagesModal';
 
 import {
@@ -35,15 +39,12 @@ class InputData extends React.Component {
     selectImagesModal: PropTypes.object,
     selectedImages: PropTypes.object,
     selectedCollection: PropTypes.object,
+    inputSource: PropTypes.string,
     dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      inputSource: 'search'
-    };
 
     (this:any).handleSelectSourceClick = this.handleSelectSourceClick.bind(this);
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
@@ -59,7 +60,7 @@ class InputData extends React.Component {
   }
 
   handleSelectSourceClick(source) {
-    this.setState({inputSource: source});
+    this.props.dispatch(selectCollectionSource(source));
   }
 
   handleImageToggle(collectionId, imageId) {
@@ -96,7 +97,7 @@ class InputData extends React.Component {
   }
 
   render() {
-    const { selectImagesModal, selectedImages } = this.props;
+    const { selectImagesModal, selectedImages, inputSource } = this.props;
     const anySelected = this.countSelectedImages(selectedImages.images) === 0;
 
     return (
@@ -105,14 +106,14 @@ class InputData extends React.Component {
         <ButtonToolbar style={{marginBottom: 15}}>
           <ButtonGroup bsSize="small" >
             <Button
-              active={this.state.inputSource === 'search'}
-              onClick={() => this.handleSelectSourceClick('search')}
+              active={inputSource === SEARCH}
+              onClick={() => this.handleSelectSourceClick(SEARCH)}
             >
               All Collections
             </Button>
             <Button
-              active={this.state.inputSource === 'myCollections'}
-              onClick={() => this.handleSelectSourceClick('myCollections')}
+              active={inputSource === MY_COLLECTIONS}
+              onClick={() => this.handleSelectSourceClick(MY_COLLECTIONS)}
             >
               My Collections
             </Button>
@@ -120,7 +121,7 @@ class InputData extends React.Component {
         </ButtonToolbar>
 
         <p className="lead">
-          {this.state.inputSource === 'myCollections'
+          {inputSource === MY_COLLECTIONS
             ? 'Select images from one or many of your collections to create a training dataset.'
             : 'Search NeuroVault collections and select images to create a training dataset.'
           }
@@ -128,7 +129,7 @@ class InputData extends React.Component {
 
         <div className="row">
           <div className="col-md-9">
-            {this.state.inputSource === 'myCollections'
+            {inputSource === MY_COLLECTIONS
              ? <MyCollectionsContainer
                dispatch={this.props.dispatch}
                onCollectionClick={this.handleCollectionClick}
@@ -181,24 +182,55 @@ class InputData extends React.Component {
   }
 }
 
-const getSelectedCollection = (selectImagesModal, searchResults, collectionsById) => {
-  const { collectionId, source } = selectImagesModal;
+const getSelectedCollection = (state) => {
+  const {
+    selectImagesModal: { collectionId, source },
+    search: { results: searchResults },
+    selectedImages: { collectionsById }
+  } = state;
 
+  if (!collectionId) {
+    return null;
+  }
+
+  const myCollectionList = state.fetched['myCollectionList'];
+
+  // Search in stored (already selected) collections
   let collection = collectionsById[collectionId];
 
   if (collection) {
     return collection;
   }
 
-  if (!searchResults) {
-    return null;
+  // If the collection is not storead already,
+  // try to find it in a `source`
+
+  switch (source) {
+    case 'SEARCH':
+      if (!searchResults) {
+        throw new Error('Source is empty');
+      }
+
+      // Search in current search results
+      collection = searchResults.hits.hits.filter(function (item) {
+        return item._id === collectionId;
+      })[0];
+
+      return collection._source;
+
+    case 'MY_COLLECTIONS':
+      if (isEmpty(myCollectionList)) {
+        throw new Error('Source is empty');
+      }
+
+      collection = myCollectionList.filter(function (item) {
+        return item.id === collectionId;
+      })[0];
+
+      return collection;
+    default:
+      throw new Error('Undefined source');
   }
-
-  collection = searchResults.hits.hits.filter(function (item) {
-    return item._id === collectionId;
-  })[0];
-
-  return collection;
 };
 
 const mapStateToProps = (state) => {
@@ -206,11 +238,8 @@ const mapStateToProps = (state) => {
     search: state.search,
     selectImagesModal: state.selectImagesModal,
     selectedImages: state.selectedImages,
-    selectedCollection: getSelectedCollection(
-      state.selectImagesModal,
-      state.search.results,
-      state.selectedImages.collectionsById
-    )
+    selectedCollection: getSelectedCollection(state),
+    inputSource: state.selectImagesModal.source
   };
 };
 
