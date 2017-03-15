@@ -70,13 +70,15 @@ export default function reducer(state: FetchedState = initialState, action: Acti
   switch (action.type) {
     case REQUEST_DATA:
       return Object.assign({}, state, {
-        isFetching: true
+        isFetching: true,
+        [action.payload.key + '_fetchFinished']: false
       });
     case RECEIVE_DATA:
       return action.meta !== undefined
         ? Object.assign({}, state, {
           isFetching: false,
-          [action.meta.key]: action.payload.data
+          [action.meta.key]: action.payload.data,
+          [action.meta.key + '_fetchFinished']: true
         })
         : state;
     case DELETE_LOCAL_ITEMS:
