@@ -25,7 +25,7 @@ export default function reducer(state: SelectImagesModalState = initialState, ac
   switch (action.type) {
     case SHOW_SELECT_IMAGES_MODAL:
       const { collectionId, source } = action.payload;
-      return { display: true, collectionId, source };
+      return { display: true, source: source || state.source, collectionId };
 
     case HIDE_SELECT_IMAGES_MODAL:
       return Object.assign({}, state, {
