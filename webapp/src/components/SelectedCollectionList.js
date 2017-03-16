@@ -3,10 +3,8 @@
 import React, { PropTypes } from 'react';
 
 type Collection = {
-  _id: number,
-  _source: {
-    name: string
-  }
+  id: number,
+  name: string
 };
 
 export default class SelectedCollectionList extends React.Component {
@@ -28,8 +26,8 @@ export default class SelectedCollectionList extends React.Component {
 
   renderCollection(collection: Collection, count: number) {
     return (
-      <p key={collection._id}>
-        <a href="#" onClick={(e) => this.handleItemClick(e, collection._id)}>{collection._source.name}</a>
+      <p key={collection.id}>
+        <a href="#" onClick={(e) => this.handleItemClick(e, collection.id)}>{collection.name}</a>
         &nbsp;({count})
       </p>
     );
