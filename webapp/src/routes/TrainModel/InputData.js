@@ -204,9 +204,8 @@ const getSelectedCollection = (state) => {
 
   // If the collection is not storead already,
   // try to find it in a `source`
-
   switch (source) {
-    case 'SEARCH':
+    case SEARCH:
       if (!searchResults) {
         throw new Error('Source is empty');
       }
@@ -217,7 +216,7 @@ const getSelectedCollection = (state) => {
 
       return collection._source;
 
-    case 'MY_COLLECTIONS':
+    case MY_COLLECTIONS:
       if (isEmpty(myCollectionList)) {
         throw new Error('Source is empty');
       }
