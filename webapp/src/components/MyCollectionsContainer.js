@@ -2,7 +2,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 
 import SearchResult from './search/SearchResult';
 
@@ -14,7 +13,7 @@ const FETCHED_KEY = 'myCollectionList';
 
 const MyCollectionList = ({ collectionList, onCollectionClick }) => {
   return collectionList.length ? (
-    <div className={classNames(styles.root, 'top-separator')}>
+    <div className={styles.root}>
       {collectionList.map(item =>
         <SearchResult
           key={item.id}
