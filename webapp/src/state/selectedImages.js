@@ -22,8 +22,8 @@ function imageListToggle(state, collection, images, checked) {
   }, {});
 
   return update(state, {
-    images: {[collection._id]: {[state.images[collection._id] ? '$merge' : '$set']: imagesUpdate}},
-    collectionsById: {$merge: {[collection._id]: cloneDeep(collection)}}
+    images: {[collection.id]: {[state.images[collection.id] ? '$merge' : '$set']: imagesUpdate}},
+    collectionsById: {$merge: {[collection.id]: cloneDeep(collection)}}
   });
 }
 
@@ -42,8 +42,8 @@ function imageToggle(state, collection, imageId) {
   };
 
   return update(state, {
-    images: {[collection._id]: {$apply: toggle}},
-    collectionsById: {$merge: {[collection._id]: cloneDeep(collection)}}
+    images: {[collection.id]: {$apply: toggle}},
+    collectionsById: {$merge: {[collection.id]: cloneDeep(collection)}}
   });
 }
 
@@ -60,8 +60,8 @@ const initialState: SelectedImagesState = {
 export default function reducer(state: SelectedImagesState = initialState, action: Action) {
   switch (action.type) {
     case TOGGLE_IMAGE:
-      const { collectionId, imageId } = action.payload;
-      return imageToggle(state, collectionId, imageId);
+      const payload = action.payload;
+      return imageToggle(state, payload.collection, payload.imageId);
 
     case TOGGLE_IMAGE_LIST:
       const { collection, images, checked } = action.payload;

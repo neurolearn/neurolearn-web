@@ -51,6 +51,27 @@ class PrivateMixin(object):
     private = db.Column(db.Boolean(), default=False, nullable=False)
 
 
+class Connection(db.Model, TimestampMixin):
+    __tablename__ = 'connections'
+
+    NEUROVAULT = 'neurovault'
+    GOOGLE = 'google'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',
+                           foreign_keys=[user_id],
+                           backref=db.backref('connections', lazy='dynamic'))
+
+    provider_type = db.Column(db.Enum(NEUROVAULT,
+                                      GOOGLE,
+                                      name='provider_types'))
+    provider_user_id = db.Column(db.String(255))
+    access_token = db.Column(db.String(255))
+    display_name = db.Column(db.String(255))
+    profile_url = db.Column(db.String)
+
+
 class User(db.Model, UserMixin, TimestampMixin):
     __tablename__ = 'users'
 
@@ -75,26 +96,11 @@ class User(db.Model, UserMixin, TimestampMixin):
     def __unicode__(self):
         return self.email
 
-
-class Connection(db.Model, TimestampMixin):
-    __tablename__ = 'connections'
-
-    NEUROVAULT = 'neurovault'
-    GOOGLE = 'google'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User',
-                           foreign_keys=[user_id],
-                           backref=db.backref('connections', lazy='dynamic'))
-
-    provider_type = db.Column(db.Enum(NEUROVAULT,
-                                      GOOGLE,
-                                      name='provider_types'))
-    provider_user_id = db.Column(db.String(255))
-    access_token = db.Column(db.String(255))
-    display_name = db.Column(db.String(255))
-    profile_url = db.Column(db.String)
+    @property
+    def neurovault_account(self):
+        return self.connections.filter_by(
+            provider_type=Connection.NEUROVAULT
+        ).first()
 
 
 class MLModel(db.Model, TimestampMixin, SoftDelete, PrivateMixin):

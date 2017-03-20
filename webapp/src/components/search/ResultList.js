@@ -14,8 +14,8 @@ const SearchResults = (
       {results.hits.hits.map(hit =>
         <SearchResult
           key={hit._id}
-          hit={hit}
-          onClick={() => onSearchResultClick(hit._id)}
+          source={hit._source}
+          onClick={() => onSearchResultClick(hit._id, 'SEARCH')}
         />)}
     </div>
   ) : (

@@ -11,8 +11,8 @@ function firstImageThumbnail(images: Array<{thumbnail: string}>): string {
   return images.length ? images[0].thumbnail : '';
 }
 
-const SearchResult = (props : { hit: Object, onClick: () => void }) => {
-  const { id, name, number_of_images: numberOfImages, sample_images: images, authors } = props.hit._source;
+const SearchResult = (props : { source: Object, onClick: () => void }) => {
+  const { id, name, number_of_images: numberOfImages, sample_images: images, authors } = props.source;
 
   return (
     <div className={styles.root}>
@@ -28,7 +28,9 @@ const SearchResult = (props : { hit: Object, onClick: () => void }) => {
           </p>
         </div>
         <div className="images">
-          <FallbackImage src={firstImageThumbnail(images)} className="img-responsive" />
+          {images &&
+            <FallbackImage src={firstImageThumbnail(images)} className="img-responsive" />
+          }
           <div className="number-of-images">{numberOfImages} {pluralize(numberOfImages, 'image', 'images')}</div>
         </div>
         <div className="button">
@@ -40,7 +42,7 @@ const SearchResult = (props : { hit: Object, onClick: () => void }) => {
 };
 
 SearchResult.propTypes = {
-  hit: PropTypes.object,
+  source: PropTypes.object,
   onClick: PropTypes.func.isRequired
 };
 
