@@ -2,6 +2,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import SearchResult from './search/SearchResult';
 
@@ -13,7 +14,7 @@ const FETCHED_KEY = 'myCollectionList';
 
 const MyCollectionList = ({ collectionList, onCollectionClick }) => {
   return collectionList.length ? (
-    <div className={styles.root}>
+    <div className={classNames(styles.root, 'top-separator')}>
       {collectionList.map(item =>
         <SearchResult
           key={item.id}
@@ -59,12 +60,19 @@ class MyCollectionsContainer extends React.Component {
   }
 };
 
+const filterEmpty = (collections) => {
+  return collections.filter(x => x['number_of_images'] > 0);
+};
+
+const sortByPropDesc = (propName, collection) => {
+  return collection.sort((a, b) => b[propName].localeCompare(a[propName]));
+};
+
 const mapStateToProps = (state) => {
   return {
-    collectionList: state.fetched[FETCHED_KEY] || [],
+    collectionList: sortByPropDesc('modify_date', filterEmpty(state.fetched[FETCHED_KEY] || [])),
     fetchFinished: state.fetched[FETCHED_KEY + '_fetchFinished']
   };
 };
 
 export default connect(mapStateToProps)(MyCollectionsContainer);
-
