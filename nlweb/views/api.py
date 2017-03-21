@@ -15,7 +15,7 @@ from ..app import jwt_optional
 from ..models import db, MLModel, ModelTest
 
 from ..schemas import UserSchema, MLModelSchema, ModelTestSchema
-from ..utils import merge_two_dicts
+from ..utils import merge_two_dicts, request_remote_app
 
 from . import not_found
 
@@ -88,55 +88,17 @@ def list_own_models():
     return jsonify(data=result.data)
 
 
-def request_new_tokens(remote_app, refresh_token):
-    rv = remote_app.post(
-        remote_app.access_token_url,
-        data={
-            'grant_type': 'refresh_token',
-            'refresh_token': refresh_token,
-            'client_id': remote_app.consumer_key,
-            'client_secret': remote_app.consumer_secret
-        }
-    )
-
-    return rv.data
-
-
-def request_remote_app(remote_app, user, url):
-    for _ in range(2):
-        response = remote_app.get(url)
-
-        try:
-            data = response.data['results']
-            return data
-        except KeyError:
-            if response.status == 401:  # Token expired
-                neurovault_account = user.neurovault_account
-                tokens = request_new_tokens(
-                    remote_app,
-                    neurovault_account.refresh_token
-                )
-                # Update session
-                session['neurovault_oauth_token'] = (
-                    tokens['access_token'], ''
-                )
-
-                # Update connection
-                neurovault_account.access_token = tokens['access_token']
-                neurovault_account.refresh_token = tokens['refresh_token']
-                db.session.commit()
-            else:
-                raise
-
-    raise Exception("Unable to fetch remote app data")
-
-
 @blueprint.route('/user/neurovault-collections', methods=['GET'])
 @jwt_required()
 def list_neurovault_collections():
     neurovault = oauth.remote_apps['neurovault']
-
-    data = request_remote_app(neurovault, current_user, MY_COLLECTIONS_URL)
+    data = request_remote_app(
+        db=db,
+        session=session,
+        remote_app=neurovault,
+        user=current_user,
+        url=MY_COLLECTIONS_URL
+    )
 
     return jsonify(data=data)
 
