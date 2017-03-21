@@ -1,13 +1,15 @@
 from __future__ import absolute_import
 
 from flask import Blueprint
-from flask import request
+from flask import request, session
 from flask import jsonify, abort
 
 from flask_jwt import jwt_required, current_user
-import requests
 
 from nlweb import tasks
+
+from ..extensions import oauth
+
 from ..app import jwt_optional
 
 from ..models import db, MLModel, ModelTest
@@ -86,18 +88,57 @@ def list_own_models():
     return jsonify(data=result.data)
 
 
+def request_new_tokens(remote_app, refresh_token):
+    rv = remote_app.post(
+        remote_app.access_token_url,
+        data={
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token,
+            'client_id': remote_app.consumer_key,
+            'client_secret': remote_app.consumer_secret
+        }
+    )
+
+    return rv.data
+
+
+def request_remote_app(remote_app, user, url):
+    for _ in range(2):
+        response = remote_app.get(url)
+
+        try:
+            data = response.data['results']
+            return data
+        except KeyError:
+            if response.status == 401:  # Token expired
+                neurovault_account = current_user.neurovault_account
+                tokens = request_new_tokens(
+                    remote_app,
+                    neurovault_account.refresh_token
+                )
+                # Update session
+                session['neurovault_oauth_token'] = (
+                    tokens['access_token'], ''
+                )
+
+                # Update connection
+                neurovault_account.access_token = tokens['access_token']
+                neurovault_account.refresh_token = tokens['refresh_token']
+                db.session.commit()
+            else:
+                raise
+
+    raise Exception("Unable to fetch remote app data")
+
+
 @blueprint.route('/user/neurovault-collections', methods=['GET'])
 @jwt_required()
 def list_neurovault_collections():
-    access_token = current_user.neurovault_account.access_token
+    neurovault = oauth.remote_apps['neurovault']
 
-    response = requests.get(MY_COLLECTIONS_URL, headers={
-        'Authorization': 'Bearer %s' % access_token
-    })
+    data = request_remote_app(neurovault, current_user, MY_COLLECTIONS_URL)
 
-    json_response = response.json()
-
-    return jsonify(data=json_response['results'])
+    return jsonify(data=data)
 
 
 @blueprint.route('/models', methods=['GET'])
