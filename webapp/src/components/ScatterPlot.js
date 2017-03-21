@@ -3,7 +3,7 @@
 import { pluck, round } from 'lodash';
 import d3 from 'd3';
 import React, { PropTypes } from 'react';
-import ReactD3 from 'react-d3-components';
+import { ScatterPlot as ReactD3ScatterPlot } from 'react-d3-components';
 
 import styles from './ScatterPlot.scss';
 
@@ -25,7 +25,7 @@ const ScatterPlot = (props: {width: number, data: Array<{values: Object}>}) => {
 
   return (
     <div className={styles.root}>
-      <ReactD3.ScatterPlot
+      <ReactD3ScatterPlot
         xScale={xScale}
         {...props}
         tooltipHtml={tooltipScatter}
