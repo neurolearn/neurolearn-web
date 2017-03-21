@@ -111,7 +111,7 @@ def request_remote_app(remote_app, user, url):
             return data
         except KeyError:
             if response.status == 401:  # Token expired
-                neurovault_account = current_user.neurovault_account
+                neurovault_account = user.neurovault_account
                 tokens = request_new_tokens(
                     remote_app,
                     neurovault_account.refresh_token
