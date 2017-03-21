@@ -68,6 +68,8 @@ class Connection(db.Model, TimestampMixin):
                                       name='provider_types'))
     provider_user_id = db.Column(db.String(255))
     access_token = db.Column(db.String(255))
+    refresh_token = db.Column(db.String(255))
+
     display_name = db.Column(db.String(255))
     profile_url = db.Column(db.String)
 

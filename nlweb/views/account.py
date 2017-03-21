@@ -84,6 +84,7 @@ def authorized():
         db.session.commit()
 
     connection.access_token = resp['access_token']
+    connection.refresh_token = resp['refresh_token']
     db.session.commit()
 
     return render_template('authorized.html',
