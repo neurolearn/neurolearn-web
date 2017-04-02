@@ -109,7 +109,7 @@ class TestModel extends React.Component {
     e.preventDefault();
     const { router } = this.context;
     const { selectedImages } = this.props;
-    const name = values(selectedImages.collectionsById).map(c => c._source.name).join(', ');
+    const name = values(selectedImages.collectionsById).map(c => c.name).join(', ');
     this.props.dispatch(testModel(name,
                                   this.props.testModel.model.id,
                                   selectedImages.images,
