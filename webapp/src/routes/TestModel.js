@@ -90,15 +90,15 @@ class TestModel extends React.Component {
       return item._id === collectionId;
     })[0];
 
-    return collection;
+    return collection._source;
   }
 
-  handleCollectionClick(id) {
-    this.props.dispatch(showSelectImagesModal(id));
+  handleCollectionClick(id, source) {
+    this.props.dispatch(showSelectImagesModal({ collectionId: id, source }));
   }
 
-  handleImageToggle(collectionId, imageId) {
-    this.props.dispatch(toggleImage({collectionId, imageId}));
+  handleImageToggle(collection, imageId) {
+    this.props.dispatch(toggleImage({collection, imageId}));
   }
 
   handleImageListToggle(collection, images, checked) {
