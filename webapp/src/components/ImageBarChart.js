@@ -3,7 +3,7 @@
 import { sum, filter, pluck, isEmpty, every } from 'lodash';
 import update from 'react/lib/update';
 import React, { PropTypes } from 'react';
-import { Input, Button } from 'react-bootstrap';
+import { FormControl, Button } from 'react-bootstrap';
 import BarChartRowContainer from './BarChartRowContainer.js';
 import ImageLabel from './ImageLabel.js';
 import GroupLabel from './GroupLabel.js';
@@ -185,7 +185,7 @@ export default class ImageBarChart extends React.Component {
       <div className="row">
         <div className="col-md-6">
           <h2>Images</h2>
-          <Input type="text"
+          <FormControl type="text"
             placeholder="Filter Images"
             value={this.state.filterText}
             ref="filterText"
@@ -193,7 +193,7 @@ export default class ImageBarChart extends React.Component {
           />
 
           {!isEmpty(images) && this.showCheckbox()
-            ? <Input type="checkbox"
+            ? <FormControl type="checkbox"
               label={`Select ${images.length} images`}
               checked={this.isAllChecked(images)}
               onChange={e => this.toggleAll(images, e.target.checked)}

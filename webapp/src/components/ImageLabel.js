@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { PropTypes } from 'react';
-import { Input } from 'react-bootstrap';
+import { Checkbox } from 'react-bootstrap';
 
 import { neuroVaultImageURL } from '../utils';
 
@@ -18,10 +18,10 @@ const ImageLabel = (
 ) => (
   <div className={styles.root}>
     {showCheckbox &&
-      <Input
-        type="checkbox"
+      <Checkbox
         checked={isChecked(item.id)}
         onChange={e => onChange(item.id, e.target.checked)}
+        inline
       />
     }
     <div className="image-name"><a href={neuroVaultImageURL(item.id)}>{item.name}</a></div>

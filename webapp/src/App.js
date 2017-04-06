@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import AlertMessages from './components/AlertMessages';
 import { logout } from './state/auth';
 import { dismissAlert } from './state/alertMessages';
@@ -71,7 +71,11 @@ class App extends React.Component {
     return (
       <div className={router.isActive('/') ? 'app-homepage' : ''}>
         <Navbar staticTop>
-          <NavBrand><Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link></NavBrand>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link>
+            </Navbar.Brand>
+          </Navbar.Header>
           {auth.user && this.renderAuthenticatedNav()}
           <Nav>
             <LinkContainer to="/explore">
@@ -81,7 +85,7 @@ class App extends React.Component {
               <NavItem eventKey={1} active={router.isActive('/faq')}>FAQ</NavItem>
             </LinkContainer>
           </Nav>
-          <Nav right>
+          <Nav pullRight>
             {auth.user
               ? this.renderUserDropdown(auth.user)
               : this.renderLoginLink()}

@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 
 import update from 'react/lib/update';
 import { isEmpty, omit } from 'lodash';
-import { Input } from 'react-bootstrap';
+import { Checkbox } from 'react-bootstrap';
 import RangeFilter from './RangeFilter';
 import TermsFilter from './TermsFilter';
 import Events from '../../utils/events';
@@ -147,11 +147,9 @@ export default class RefineSearchResults extends React.Component {
           />
 
           {hasDOI && hasDOI.doc_count > 0 &&
-            <Input
-              type="checkbox"
-              label={`Has DOI (${hasDOI.doc_count})`}
-              onChange={this.handleHasDOIChange}
-            />
+            <Checkbox onChange={this.handleHasDOIChange}>
+              {`Has DOI (${hasDOI.doc_count})`}
+            </Checkbox>
           }
 
           {termFilters.map((tf, i) =>

@@ -3,7 +3,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { Modal, Button, Input } from 'react-bootstrap';
+import { Modal, Button, FormControl } from 'react-bootstrap';
 import sortBy from 'lodash/collection/sortBy';
 import every from 'lodash/collection/every';
 import isEmpty from 'lodash/lang/isEmpty';
@@ -111,7 +111,7 @@ class SelectImagesModal extends React.Component {
 
     return (
       <div className={styles.root}>
-        <Input
+        <FormControl
           type="text"
           placeholder="Filter Images"
           value={this.state.filterText}

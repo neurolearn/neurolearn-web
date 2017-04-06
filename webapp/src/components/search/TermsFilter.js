@@ -4,7 +4,7 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { some, omit, sortBy } from 'lodash';
 
-import { Input } from 'react-bootstrap';
+import { Checkbox } from 'react-bootstrap';
 
 import Events from '../../utils/events';
 
@@ -49,14 +49,14 @@ export default class TermsFilter extends React.Component {
 
   renderCheckboxes(terms: Array<{}>, disabled: boolean) {
     return sortBy(terms, 'key').map(term =>
-      <Input
-        type="checkbox"
+      <Checkbox
         disabled={disabled}
         checked={term.selected}
-        label={`${term.key} (${term.doc_count})`}
         key={term.key}
         onChange={(e) => this.handleChange(term.key, e)}
-      />
+      >
+        {`${term.key} (${term.doc_count})`}
+      </Checkbox>
     );
   }
 
