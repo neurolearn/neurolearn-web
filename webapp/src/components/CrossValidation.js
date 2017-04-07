@@ -25,7 +25,7 @@ const CvSummary = ({propOrder, summary} : {propOrder: string[], summary: Object}
       <tr>
       {propOrder.map(propName => {
         return summary[propName]
-        ? <th>{summaryPropsNameMap[propName]}</th>
+        ? <th key={propName}>{summaryPropsNameMap[propName]}</th>
         : false;
       })}
       </tr>
@@ -34,7 +34,7 @@ const CvSummary = ({propOrder, summary} : {propOrder: string[], summary: Object}
       <tr>
       {propOrder.map(propName => {
         return summary[propName]
-        ? <td>{formatProp(summary[propName])}</td>
+        ? <td key={propName}>{formatProp(summary[propName])}</td>
         : false;
       })}
       </tr>
