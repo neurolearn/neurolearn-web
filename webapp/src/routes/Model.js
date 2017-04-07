@@ -343,7 +343,7 @@ class Model extends React.Component {
               onAlgorithmClick={this.handleAlgorithmClick} />
             <div className="row tabs-wrapper">
               <div className="col-md-12">
-                <Tabs defaultActiveKey={1} animation={false}>
+                <Tabs defaultActiveKey={1} animation={false} id="resulting-model-and-training-data-tabs">
                   <Tab eventKey={1} title="Model">
                     {model && this.renderState(model)}
                   </Tab>
