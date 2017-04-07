@@ -101,13 +101,14 @@ class ModelList extends React.Component {
         <Column
           header={{name: 'Name', tdClassName: 'col-md-3'}}
           cell={x => [
-            <Link to={`/models/${x.id}`}>{x.name}</Link>,
+            <Link to={`/models/${x.id}`} key="link">{x.name}</Link>,
             (x.private &&
               <i
                 title="Private model"
                 className="fa fa-lock"
                 style={{marginLeft: 4, color: 'gray'}}
-                aria-hidden="true"></i>)
+                aria-hidden="true"
+                key="lock"></i>)
           ]} />
         <Column header="Status" cell={x => <TaskStateLabel state={x.state} />} />
         <Column header="Algorithm" cell={x => algorithmNameMap[x.algorithm]} />
