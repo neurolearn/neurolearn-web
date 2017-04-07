@@ -262,19 +262,12 @@ class Model extends React.Component {
   }
 
   renderModelNameWithLabel(model, userIsOwner) {
-    return userIsOwner
-      ? [
-        <EditableText
-          value={model.name}
-          onChange={this.handleSaveModelName}
-          modalTitle="Rename Model"
-        />,
-        <VisibilityLabel
-          isPrivate={model.private}
-          onClick={this.handleVisibilityLabelClick}
-        />
-      ]
-      : model.name;
+    return userIsOwner ? (
+      <div>
+        <EditableText value={model.name} onChange={this.handleSaveModelName} modalTitle="Rename Model" />
+        <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityLabelClick} />
+      </div>
+    ) : model.name;
   }
 
   renderModelDescription(description, userIsOwner) {
