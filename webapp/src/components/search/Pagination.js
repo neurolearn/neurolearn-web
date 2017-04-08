@@ -15,8 +15,8 @@ export default class SearchPagination extends React.Component {
     (this:any).handleSelect = this.handleSelect.bind(this);
   }
 
-  handleSelect(event: SyntheticEvent, selectedEvent: {eventKey: number}) {
-    this.props.onSelect(selectedEvent.eventKey);
+  handleSelect(eventKey: number) {
+    this.props.onSelect(eventKey);
   }
 
   maxButtons(totalPages: number) {
