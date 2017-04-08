@@ -31,8 +31,7 @@ class App extends React.Component {
     (this:any).handleLogout = this.handleLogout.bind(this);
   }
 
-  handleLogout(e) {
-    e.preventDefault();
+  handleLogout() {
     localStorage.removeItem(JWT_KEY_NAME);
     this.props.logout();
     this.context.router.push('/');
