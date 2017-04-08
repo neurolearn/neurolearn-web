@@ -164,11 +164,11 @@ class ModelList extends React.Component {
   }
 }
 
-function select(state) {
+const mapStateToProps = (state) => {
   return {
     items: state.fetched[FETCHED_KEY],
     auth: state.auth
   };
-}
+};
 
-export default connect(select)(ModelList);
+export default connect(mapStateToProps)(ModelList);
