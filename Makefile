@@ -1,6 +1,6 @@
 
-start-web:
-	cd webapp && yarn start
+start-client:
+	cd client && yarn start
 
 clean-pyc:
 	find . -name '*.pyc' -delete

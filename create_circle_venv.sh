@@ -28,4 +28,5 @@ popd
 conda create -n testenv --yes --quiet python
 source activate testenv
 
+cd server
 pip install -r requirements/dev.txt
