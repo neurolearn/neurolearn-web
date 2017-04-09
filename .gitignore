@@ -1,17 +1,15 @@
 *.py[cod]
 *.cfgc
 
-celerybeat-schedule.db
-celerydb.sqlite
-celeryresults.sqlite
-media
-nv_tmp
 activate-venv.sh
 fabfile.py
-cache/
 
 server/nlweb/static/app
 server/nlweb/templates/index.html
+server/media
+server/cache
+server/*.sqlite
+server/tests/.cache
 
 # dotenv
 .env
