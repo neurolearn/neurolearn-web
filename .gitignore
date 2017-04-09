@@ -10,8 +10,8 @@ activate-venv.sh
 fabfile.py
 cache/
 
-nlweb/static/app
-nlweb/templates/index.html
+server/nlweb/static/app
+server/nlweb/templates/index.html
 
 # dotenv
 .env
