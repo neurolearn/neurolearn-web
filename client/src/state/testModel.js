@@ -35,7 +35,7 @@ function listImageIds(
   );
 }
 
-function resetModelTestData(dispatch) {
+export function resetModelTestData(dispatch) {
   [resetSearch,
    resetSelectedImages,
    resetTestModel,

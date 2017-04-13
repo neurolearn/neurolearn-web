@@ -4,11 +4,13 @@ import { isEmpty, zipObject, identity, keys, pick, some, values } from 'lodash';
 import moment from 'moment';
 
 import React, { PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { fetchJSON, deleteItemList } from '../../state/fetched';
+
+import { resetModelTestData } from '../../state/testModel';
 
 import TaskStateLabel from '../../components/TaskStateLabel';
 import DashboardNav from '../../components/DashboardNav';
@@ -40,6 +42,8 @@ class TestList extends React.Component {
     this.state = {
       selectedRows: {}
     };
+
+    (this:any).handleNewTest = this.handleNewTest.bind(this);
     (this:any).handleToggleRow = this.handleToggleRow.bind(this);
     (this:any).handleToggleAll = this.handleToggleAll.bind(this);
     (this:any).handleDeleteSelected = this.handleDeleteSelected.bind(this);
@@ -56,6 +60,12 @@ class TestList extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  handleNewTest() {
+    const { router } = this.context;
+    resetModelTestData(this.props.dispatch);
+    router.push('/tests/new');
   }
 
   handleToggleRow(key, value) {
@@ -125,10 +135,20 @@ class TestList extends React.Component {
     return (
       <div className="container">
         <DashboardNav>
-          <Button
-            disabled={someSelected}
-            onClick={this.handleDeleteSelected}
-          ><i className="fa fa-trash"></i> Delete</Button>
+          <ButtonToolbar className="pull-right">
+            <Button
+              bsStyle="primary"
+              onClick={this.handleNewTest}
+            >
+              <i className="fa fa-plus"></i> New Test
+            </Button>
+            <Button
+              disabled={someSelected}
+              onClick={this.handleDeleteSelected}
+            >
+              <i className="fa fa-trash"></i> Delete
+            </Button>
+          </ButtonToolbar>
         </DashboardNav>
 
         <div className="row">
