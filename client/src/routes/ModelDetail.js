@@ -31,7 +31,7 @@ import {
 
 import { analysisTypeOfAlgorithm } from '../utils';
 
-import styles from './Model.scss';
+import styles from './ModelDetail.scss';
 
 class Model extends React.Component {
   state: {

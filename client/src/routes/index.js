@@ -9,7 +9,7 @@ import Home from './Home';
 import Explore from './Explore';
 import ModelList from './Dashboard/ModelList';
 import TestList from './Dashboard/TestList';
-import Model from './Model';
+import ModelDetail from './ModelDetail';
 import Test from './Test';
 import NewModel from './NewModel';
 import InputData from './NewModel/InputData';
@@ -63,7 +63,7 @@ export default function renderRoutes(store: Object) {
         <Route path="training-label" component={TrainingLabel} />
         <Route path="model-preferences" component={ModelPreferences} />
       </Route>
-      <Route path="/models/:id" component={Model} />
+      <Route path="/models/:id" component={ModelDetail} />
       <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
       <Route path="/tests/:id" component={Test} />
       <Route path="*" component={NotFound} />
