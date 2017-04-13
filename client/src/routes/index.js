@@ -11,10 +11,10 @@ import ModelList from './Dashboard/ModelList';
 import TestList from './Dashboard/TestList';
 import Model from './Model';
 import Test from './Test';
-import TrainModel from './TrainModel';
-import InputData from './TrainModel/InputData';
-import TrainingLabel from './TrainModel/TrainingLabel';
-import ModelPreferences from './TrainModel/ModelPreferences';
+import NewModel from './NewModel';
+import InputData from './NewModel/InputData';
+import TrainingLabel from './NewModel/TrainingLabel';
+import ModelPreferences from './NewModel/ModelPreferences';
 import TestModel from './TestModel';
 import FAQ from './FAQ';
 import NotFound from '../components/NotFound';
@@ -58,7 +58,7 @@ export default function renderRoutes(store: Object) {
         <Route path="(:itemType)" component={Explore} />
       </Route>
       <Redirect from="/models/new" to="/models/new/input-data" />
-      <Route path="/models/new" component={TrainModel} onEnter={requireAuth}>
+      <Route path="/models/new" component={NewModel} onEnter={requireAuth}>
         <Route path="input-data" component={InputData} />
         <Route path="training-label" component={TrainingLabel} />
         <Route path="model-preferences" component={ModelPreferences} />

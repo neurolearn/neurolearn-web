@@ -3,7 +3,7 @@
 import React from 'react';
 import NavItem from 'components/NavItem';
 
-const TrainModel = ({children} : {children? : any}) => (
+const NewModel = ({children} : {children? : any}) => (
   <div className="container">
     <ul className="nav nav-wizard">
       <NavItem to="/models/new/input-data">1. Input Data</NavItem>
@@ -14,8 +14,8 @@ const TrainModel = ({children} : {children? : any}) => (
   </div>
 );
 
-TrainModel.propTypes = {
+NewModel.propTypes = {
   children: React.PropTypes.node
 };
 
-export default TrainModel;
+export default NewModel;
