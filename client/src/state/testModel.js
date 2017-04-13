@@ -36,10 +36,12 @@ function listImageIds(
 }
 
 export function resetModelTestData(dispatch) {
-  [resetSearch,
-   resetSelectedImages,
-   resetTestModel,
-   hideSelectImagesModal].map(action => dispatch(action()));
+  [
+    resetSearch,
+    resetSelectedImages,
+    resetTestModel,
+    hideSelectImagesModal
+  ].map(action => dispatch(action()));
 }
 
 export function testModel(
