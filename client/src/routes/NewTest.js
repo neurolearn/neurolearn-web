@@ -4,14 +4,14 @@ import values from 'lodash/object/values';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { Button } from 'react-bootstrap';
+import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import SearchContainer from '../components/search/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 
-import { testModel } from '../state/testModel';
+import { testModel, inputNVImageId } from '../state/testModel';
 
 import {
   showSelectImagesModal,
@@ -45,6 +45,7 @@ class NewTest extends React.Component {
     super(props);
     (this:any).handleImageToggle = this.handleImageToggle.bind(this);
     (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
+    (this:any).handleNeuroVaultImageIdChange = this.handleNeuroVaultImageIdChange.bind(this);
     (this:any).handleTestModelClick = this.handleTestModelClick.bind(this);
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
   }
@@ -105,6 +106,10 @@ class NewTest extends React.Component {
     this.props.dispatch(toggleImageList({collection, images, checked}));
   }
 
+  handleNeuroVaultImageIdChange(e) {
+    this.props.dispatch(inputNVImageId(e.target.value));
+  }
+
   handleTestModelClick(e) {
     e.preventDefault();
     const { router } = this.context;
@@ -116,9 +121,16 @@ class NewTest extends React.Component {
                                   router));
   }
 
-  renderNeuroVaultImageIdInput() {
-    return (
-      <input />
+  renderInputModel(testModel) {
+    return testModel.model ? (
+      <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
+    ) : (
+      <FormControl
+        type="text"
+        placeholder="NeuroVault Image Id"
+        value={testModel.neurovaultImageId}
+        onChange={this.handleNeuroVaultImageIdChange}
+      />
     );
   }
 
@@ -149,10 +161,7 @@ class NewTest extends React.Component {
                 <h3 className="panel-title">Model</h3>
               </div>
               <div className="panel-body">
-                {testModel.model
-                  ? <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
-                  : this.renderNeuroVaultImageIdInput()
-                }
+                {this.renderInputModel(testModel)}
               </div>
             </div>
 

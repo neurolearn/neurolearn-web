@@ -13,10 +13,12 @@ import { hideSelectImagesModal } from './selectImagesModal';
 export const SET_TEST_MODEL = 'SET_TEST_MODEL';
 export const REQUEST_TEST_MODEL = 'REQUEST_TEST_MODEL';
 export const RESET_TEST_MODEL = 'RESET_TEST_MODEL';
+export const INPUT_NV_IMAGE_ID = 'INPUT_NV_IMAGE_ID';
 
 export const setTestModel = createAction(SET_TEST_MODEL);
 export const resetTestModel = createAction(RESET_TEST_MODEL);
 export const requestTestModel = createAction(REQUEST_TEST_MODEL);
+export const inputNVImageId = createAction(INPUT_NV_IMAGE_ID);
 
 function extractId(url) {
   return parseInt(url.match(/images\/(\d+)/)[1]);
@@ -89,6 +91,10 @@ export default function reducer(state: TestModelState = initialState, action: Ac
     case REQUEST_TEST_MODEL:
       return Object.assign({}, state, {
         isFetching: true
+      });
+    case INPUT_NV_IMAGE_ID:
+      return Object.assign({}, state, {
+        neurovaultImageId: action.payload
       });
     case RESET_TEST_MODEL:
       return initialState;
