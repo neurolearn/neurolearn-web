@@ -10,7 +10,7 @@ import Explore from './Explore';
 import ModelList from './Dashboard/ModelList';
 import TestList from './Dashboard/TestList';
 import ModelDetail from './ModelDetail';
-import Test from './Test';
+import TestDetail from './TestDetail';
 import NewModel from './NewModel';
 import InputData from './NewModel/InputData';
 import TrainingLabel from './NewModel/TrainingLabel';
@@ -65,7 +65,7 @@ export default function renderRoutes(store: Object) {
       </Route>
       <Route path="/models/:id" component={ModelDetail} />
       <Route path="/tests/new" component={TestModel} onEnter={requireAuth} />
-      <Route path="/tests/:id" component={Test} />
+      <Route path="/tests/:id" component={TestDetail} />
       <Route path="*" component={NotFound} />
     </Route>
   );
