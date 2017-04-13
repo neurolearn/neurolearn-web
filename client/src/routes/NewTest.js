@@ -28,7 +28,7 @@ import {
   inputSearchQuery
 } from '../state/search';
 
-class TestModel extends React.Component {
+class NewTest extends React.Component {
   static propTypes = {
     search: PropTypes.object,
     testModel: PropTypes.object,
@@ -116,6 +116,12 @@ class TestModel extends React.Component {
                                   router));
   }
 
+  renderNeuroVaultImageIdInput() {
+    return (
+      <input />
+    );
+  }
+
   render() {
     const { selectImagesModal, selectedImages, testModel, dispatch } = this.props;
     const anySelected = this.countSelectedImages(selectedImages.images) === 0;
@@ -145,7 +151,7 @@ class TestModel extends React.Component {
               <div className="panel-body">
                 {testModel.model
                   ? <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
-                  : <p>No test model has been selected.</p>
+                  : this.renderNeuroVaultImageIdInput()
                 }
               </div>
             </div>
@@ -188,4 +194,4 @@ class TestModel extends React.Component {
   }
 }
 
-export default connect(state => state)(TestModel);
+export default connect(state => state)(NewTest);
