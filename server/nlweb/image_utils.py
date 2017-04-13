@@ -133,9 +133,13 @@ def fetch_collection_images(collection_id):
 def fetch_collection(collection_id):
     url = "%s/api/collections/%s/"
 
-    r = requests.get(url % (BASE_NEUROVAULT_URL, collection_id))
+    return fetch_json(url % (BASE_NEUROVAULT_URL, collection_id))
 
-    return r.json()
+
+def fetch_image(image_id):
+    url = "%s/api/images/%s/"
+
+    return fetch_json(url % (BASE_NEUROVAULT_URL, image_id))
 
 
 def image_media_url(image):
