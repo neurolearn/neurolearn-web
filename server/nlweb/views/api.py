@@ -240,7 +240,11 @@ def get_test(pk):
 @jwt_required()
 def create_test():
     data = request.json
-    MLModel.query.get_or_404(int(data['modelId']))
+
+    model_id = data.get('modelId')
+    if model_id:
+        # Check existance
+        MLModel.query.get_or_404(int(model_id))
 
     model_test = ModelTest(state=ModelTest.STATE_QUEUED,
                            input_data=request.json,
