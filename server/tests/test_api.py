@@ -99,3 +99,24 @@ def test_create_model_test(testapp, db, user):
     assert modeltest.state == ModelTest.STATE_SUCCESS
     assert modeltest.output_data['collections'] == {
         '504': {'id': 504, 'name': 'Single Subject Thermal Pain'}}
+
+
+def test_create_neurovault_image_test(testapp, db, user):
+    headers = gen_auth_header(generate_token(user))
+
+    payload = {
+        'neurovaultImageId': 43943,
+        'name': 'Neurovault Image Test',
+        'selectedImages': {
+            504: [7513, 7516, 7573]
+        }
+    }
+
+    response = testapp.post_json('/api/tests',
+                                 payload,
+                                 headers=headers)
+    assert response.status_code == 201
+    modeltest = ModelTest.query.get(1)
+    assert modeltest.state == ModelTest.STATE_SUCCESS
+    assert modeltest.output_data['collections'] == {
+        '504': {'id': 504, 'name': 'Single Subject Thermal Pain'}}
