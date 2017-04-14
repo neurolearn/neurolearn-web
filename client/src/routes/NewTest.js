@@ -114,11 +114,18 @@ class NewTest extends React.Component {
     e.preventDefault();
     const { router } = this.context;
     const { selectedImages } = this.props;
+    const { model, neurovaultImageId } = this.props.testModel;
+
     const name = values(selectedImages.collectionsById).map(c => c.name).join(', ');
-    this.props.dispatch(testModel(name,
-                                  this.props.testModel.model.id,
-                                  selectedImages.images,
-                                  router));
+
+    const params = {
+      name,
+      modelId: model && model.id,
+      neurovaultImageId: neurovaultImageId,
+      selectedImages: selectedImages.images
+    };
+
+    this.props.dispatch(testModel(params, router));
   }
 
   renderInputModel(testModel) {

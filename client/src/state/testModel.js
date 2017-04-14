@@ -47,19 +47,20 @@ export function resetModelTestData(dispatch) {
 }
 
 export function testModel(
-  name: string,
-  modelId: number,
-  selectedImages: Object,
+  params: {
+    name: string,
+    modelId: number,
+    neurovaultImageId: number,
+    selectedImages: Object,
+  },
   router: Object
 ) {
   return (dispatch: Function, getState: Function) => {
     dispatch(requestTestModel());
 
-    const payload = {
-      selectedImages: listImageIds(selectedImages),
-      modelId,
-      name
-    };
+    const payload = Object.assign({}, params, {
+      selectedImages: listImageIds(params.selectedImages)
+    });
 
     return api.post('/api/tests', payload, getState().auth.token)
       .then(

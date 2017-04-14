@@ -183,7 +183,11 @@ class ModelTest(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
                                 cls.state == cls.STATE_SUCCESS)
 
     def model(self):
-        return MLModel.query.filter_by(id=self.input_data['modelId']).one()
+        model_id = self.input_data.get('modelId')
+        if model_id:
+            return MLModel.query.filter_by(id=self.input_data['modelId']).one()
+        else:
+            return None
 
     def __unicode__(self):
         return self.name

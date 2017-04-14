@@ -100,11 +100,14 @@ class Test extends React.Component {
 
   renderTest(test) {
     const {correlation, groups, collections} = test.output_data;
-    const { modelId } = test.input_data;
+    const { modelId, neurovaultImageId } = test.input_data;
 
     return (
       <div className="col-md-12">
-        <p>Model: <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
+        {test.model
+          ? <p>Model: <Link to={`/models/${modelId}`}>{test.model.name}</Link></p>
+          : <p>{neurovaultImageId}</p>
+        }
         <ImageBarChart images={correlation}
           groups={groups}
           collections={collections}
