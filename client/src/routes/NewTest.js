@@ -51,6 +51,12 @@ class NewTest extends React.Component {
   }
 
   componentDidMount() {
+    const neurovaultImageId = this.props.location.query['neurovault-image-id'];
+
+    if (neurovaultImageId) {
+      this.props.dispatch(inputNVImageId(neurovaultImageId));
+    }
+
     if (!this.props.search.results) {
       this.props.dispatch(loadSearchResults(inputSearchQuery('')));
     }
