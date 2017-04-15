@@ -3,6 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm.attributes import flag_modified
 
 from flask.ext.security import UserMixin, RoleMixin
 
@@ -188,6 +189,9 @@ class ModelTest(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
             return MLModel.query.filter_by(id=self.input_data['modelId']).one()
         else:
             return None
+
+    def flag_modified(self, attribute):
+        flag_modified(self, attribute)
 
     def __unicode__(self):
         return self.name

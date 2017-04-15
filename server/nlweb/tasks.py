@@ -127,6 +127,9 @@ def test_model(self, model_test_id):
         image_data = fetch_image(neurovault_image_id)
         image_file_url = image_data['file']
 
+        model_test.input_data['neurovaultImageName'] = image_data['name']
+        model_test.flag_modified('input_data')
+
         tmp_file = tempfile.NamedTemporaryFile(
             suffix=os.path.basename(image_file_url)
         )
