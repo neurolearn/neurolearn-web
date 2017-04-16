@@ -2,6 +2,7 @@
 
 import os
 import time
+import tempfile
 
 import matplotlib
 # Force matplotlib to not use an Xwindows backend.
@@ -14,7 +15,7 @@ from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
 from nlweb.image_utils import (download_images, fetch_collection,
-                               fetch_collection_images)
+                               fetch_collection_images, fetch_image)
 
 from nlweb.models import MLModel, ModelTest, db
 from nlweb.utils import pick, is_number
@@ -108,11 +109,38 @@ def test_model(self, model_test_id):
     cache = FileCache(celery.conf.FILE_CACHE_ROOT)
     client = HTTPClient(cache)
 
-    mlmodel_id = int(model_test.input_data['modelId'])
-    mlmodel = MLModel.query.get(mlmodel_id)
+    weight_map_filename = None
+    tmp_file = None
 
-    if not mlmodel:
-        raise Exception("Model #%s does not exist.", mlmodel_id)
+    model_id = model_test.input_data.get('modelId')
+    neurovault_image_id = model_test.input_data.get('neurovaultImageId')
+    if model_id:
+        mlmodel = MLModel.query.get(int(model_id))
+
+        if not mlmodel:
+            raise Exception("Model #%s does not exist.", model_id)
+
+        mlmodel_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
+        weight_map_filename = os.path.join(mlmodel_dir,
+                                           mlmodel.output_data['weightmap'])
+    elif neurovault_image_id:
+        image_data = fetch_image(neurovault_image_id)
+        image_file_url = image_data['file']
+
+        model_test.input_data['neurovaultImageName'] = image_data['name']
+        model_test.flag_modified('input_data')
+
+        tmp_file = tempfile.NamedTemporaryFile(
+            suffix=os.path.basename(image_file_url)
+        )
+
+        weight_map_filename = client.retrieve(
+            image_file_url,
+            tmp_file.name,
+            force_cache=True
+        )
+    else:
+        raise Exception("Weightmap image is missing.")
 
     images_by_collections = model_test.input_data['selectedImages']
 
@@ -132,10 +160,6 @@ def test_model(self, model_test_id):
 
     tic = time.time()
 
-    mlmodel_dir = os.path.join(celery.conf.MEDIA_ROOT, str(mlmodel.id))
-    weight_map_filename = os.path.join(mlmodel_dir,
-                                       mlmodel.output_data['weightmap'])
-
     try:
         result = analysis.apply_mask(image_list,
                                      weight_map_filename,
@@ -149,6 +173,9 @@ def test_model(self, model_test_id):
     finally:
         model_test.output_data = result
         db.session.commit()
+
+        if tmp_file:
+            tmp_file.close()
 
 
 @celery.task(bind=True)

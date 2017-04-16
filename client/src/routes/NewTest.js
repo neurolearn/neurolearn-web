@@ -4,14 +4,14 @@ import values from 'lodash/object/values';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { Button } from 'react-bootstrap';
+import { Button, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import SearchContainer from '../components/search/SearchContainer';
 import SelectImagesModal from '../components/SelectImagesModal';
 import SelectedCollectionList from '../components/SelectedCollectionList';
 
-import { testModel } from '../state/testModel';
+import { testModel, inputNVImageId } from '../state/testModel';
 
 import {
   showSelectImagesModal,
@@ -28,7 +28,7 @@ import {
   inputSearchQuery
 } from '../state/search';
 
-class TestModel extends React.Component {
+class NewTest extends React.Component {
   static propTypes = {
     search: PropTypes.object,
     testModel: PropTypes.object,
@@ -45,11 +45,18 @@ class TestModel extends React.Component {
     super(props);
     (this:any).handleImageToggle = this.handleImageToggle.bind(this);
     (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
+    (this:any).handleNeuroVaultImageIdChange = this.handleNeuroVaultImageIdChange.bind(this);
     (this:any).handleTestModelClick = this.handleTestModelClick.bind(this);
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
   }
 
   componentDidMount() {
+    const neurovaultImageId = this.props.location.query['neurovault-image-id'];
+
+    if (neurovaultImageId) {
+      this.props.dispatch(inputNVImageId(neurovaultImageId));
+    }
+
     if (!this.props.search.results) {
       this.props.dispatch(loadSearchResults(inputSearchQuery('')));
     }
@@ -105,15 +112,39 @@ class TestModel extends React.Component {
     this.props.dispatch(toggleImageList({collection, images, checked}));
   }
 
+  handleNeuroVaultImageIdChange(e) {
+    this.props.dispatch(inputNVImageId(e.target.value));
+  }
+
   handleTestModelClick(e) {
     e.preventDefault();
     const { router } = this.context;
     const { selectedImages } = this.props;
+    const { model, neurovaultImageId } = this.props.testModel;
+
     const name = values(selectedImages.collectionsById).map(c => c.name).join(', ');
-    this.props.dispatch(testModel(name,
-                                  this.props.testModel.model.id,
-                                  selectedImages.images,
-                                  router));
+
+    const params = {
+      name,
+      modelId: model && model.id,
+      neurovaultImageId: neurovaultImageId,
+      selectedImages: selectedImages.images
+    };
+
+    this.props.dispatch(testModel(params, router));
+  }
+
+  renderInputModel(testModel) {
+    return testModel.model ? (
+      <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
+    ) : (
+      <FormControl
+        type="text"
+        placeholder="NeuroVault Image Id"
+        value={testModel.neurovaultImageId}
+        onChange={this.handleNeuroVaultImageIdChange}
+      />
+    );
   }
 
   render() {
@@ -143,10 +174,7 @@ class TestModel extends React.Component {
                 <h3 className="panel-title">Model</h3>
               </div>
               <div className="panel-body">
-                {testModel.model
-                  ? <p><Link to={`/models/${testModel.model.id}`}>{testModel.model.name}</Link></p>
-                  : <p>No test model has been selected.</p>
-                }
+                {this.renderInputModel(testModel)}
               </div>
             </div>
 
@@ -188,4 +216,4 @@ class TestModel extends React.Component {
   }
 }
 
-export default connect(state => state)(TestModel);
+export default connect(state => state)(NewTest);
