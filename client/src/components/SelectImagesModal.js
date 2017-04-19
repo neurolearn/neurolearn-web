@@ -50,9 +50,9 @@ class SelectImagesModal extends React.Component {
     }
   }
 
-  handleFilterChange() {
+  handleFilterChange(e) {
     this.setState({
-      filterText: this.refs.filterText.getValue()
+      filterText: e.target.value
     });
   }
 
