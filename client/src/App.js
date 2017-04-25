@@ -38,16 +38,17 @@ class App extends React.Component {
   }
 
   renderLoginLink() {
-    return <NavItem href={authLink(window.location)}>Sign in with NeuroVault</NavItem>;
+    return (
+      <NavItem href={authLink(window.location)}>
+        Sign in with NeuroVault
+      </NavItem>
+    );
   }
 
   renderUserDropdown(user) {
     return (
       <NavDropdown id="user-account-dropdown" eventKey={1} title={user.name}>
-        <MenuItem
-          eventKey="1"
-          onSelect={this.handleLogout}
-        >Logout</MenuItem>
+        <MenuItem eventKey="1" onSelect={this.handleLogout}>Logout</MenuItem>
       </NavDropdown>
     );
   }
@@ -72,16 +73,22 @@ class App extends React.Component {
         <Navbar staticTop>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Neurolearn<sup className="logo-beta">beta</sup></Link>
+              <Link to="/">
+                Neurolearn<sup className="logo-beta">beta</sup>
+              </Link>
             </Navbar.Brand>
           </Navbar.Header>
           {auth.user && this.renderAuthenticatedNav()}
           <Nav>
             <LinkContainer to="/explore">
-              <NavItem eventKey={1} active={router.isActive('/explore')}>Explore</NavItem>
+              <NavItem eventKey={1} active={router.isActive('/explore')}>
+                Explore
+              </NavItem>
             </LinkContainer>
             <LinkContainer to="/faq">
-              <NavItem eventKey={1} active={router.isActive('/faq')}>FAQ</NavItem>
+              <NavItem eventKey={1} active={router.isActive('/faq')}>
+                FAQ
+              </NavItem>
             </LinkContainer>
           </Nav>
           <Nav pullRight>
@@ -102,7 +109,7 @@ class App extends React.Component {
             target="_blank"
             href="https://github.com/neurolearn/neurolearn-web/issues"
           >
-            <i className="fa fa-comment-o" aria-hidden="true"></i> Send feedback
+            <i className="fa fa-comment-o" aria-hidden="true" /> Send feedback
           </a>
         </div>
       </div>
@@ -112,9 +119,7 @@ class App extends React.Component {
   render() {
     const { auth } = this.props;
 
-    return auth.isFetching
-      ? null
-      : this.renderApp();
+    return auth.isFetching ? null : this.renderApp();
   }
 }
 

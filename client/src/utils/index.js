@@ -11,12 +11,8 @@ import { algorithmGroups } from '../constants/Algorithms';
 
 import type { WindowLocation } from '../types';
 
-export function pluralize(
-  n: number,
-  singular: string,
-  plural: string
-) : string {
-  return (n !== 1) ? plural : singular;
+export function pluralize(n: number, singular: string, plural: string): string {
+  return n !== 1 ? plural : singular;
 }
 
 export function getAuthToken() {
@@ -30,15 +26,15 @@ export function removeAuthToken(): void {
 function nvAuthLink(loc: WindowLocation): string {
   const { protocol, host } = loc;
   const redirectUri = `${protocol}//${host}/signin/authorized`;
-  return 'http://neurovault.org/o/authorize/?response_type=code' +
-         `&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  return (
+    'http://neurovault.org/o/authorize/?response_type=code' +
+    `&client_id=${NEUROVAULT_DEV_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}`
+  );
 }
 
 export function authLink(loc: WindowLocation): string {
   const { host } = loc;
-  return /^localhost\b/.test(host)
-      ? nvAuthLink(loc)
-      : '/signin';
+  return /^localhost\b/.test(host) ? nvAuthLink(loc) : '/signin';
 }
 
 export function filterImagesByName(text: string, images: Array<Object>) {
@@ -66,7 +62,10 @@ export function pickColumn(data: Array<Array<string | number>>, index: number) {
   return data.map(row => row[index]);
 }
 
-export function pickColumns(data: Array<Array<string | number>>, columnNames: Array<string>) {
+export function pickColumns(
+  data: Array<Array<string | number>>,
+  columnNames: Array<string>
+) {
   const indexes = columnNames.map(name => findColumnIndex(data, name));
   return data.map(row => indexes.map(index => row[index]));
 }
@@ -74,7 +73,9 @@ export function pickColumns(data: Array<Array<string | number>>, columnNames: Ar
 // Thanks, jQuery
 function isNumeric(obj) {
   const type = typeof obj;
-  return (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj));
+  return (
+    (type === 'number' || type === 'string') && !isNaN(obj - parseFloat(obj))
+  );
 }
 
 export function guessType(values: mixed[]): string {
@@ -98,18 +99,21 @@ export function isBinaryCollection<T>(values: T[]): boolean {
   return true;
 }
 
-export function getColumnsFromArray(data: Array<Array<string | number>>): Array<Object> {
+export function getColumnsFromArray(
+  data: Array<Array<string | number>>
+): Array<Object> {
   return data[0].map((column, i) => {
     const values = columnValues(data, i);
     return {
-      'name': column,
-      'values': values
+      name: column,
+      values: values
     };
   });
 }
 
 export function findColumnIndex(
-  tableData: Array<Array<string | number>>, colName: string
+  tableData: Array<Array<string | number>>,
+  colName: string
 ): number {
   return findIndex(tableData[0], col => col === colName);
 }
@@ -118,7 +122,10 @@ export function analysisTypeOfAlgorithm(algorithm: string) {
   return findKey(algorithmGroups, x => x.indexOf(algorithm) > -1);
 }
 
-export function getFieldData(data: Array<Array<string | number>>, fieldName: string) {
+export function getFieldData(
+  data: Array<Array<string | number>>,
+  fieldName: string
+) {
   const idIndex = findColumnIndex(data, 'id');
   const collectionIdIndex = findColumnIndex(data, 'collection_id');
   const nameIndex = findColumnIndex(data, 'name');
@@ -129,10 +136,10 @@ export function getFieldData(data: Array<Array<string | number>>, fieldName: str
     .filter(row => row[idIndex] && row[collectionIdIndex])
     .map(row => {
       return {
-        'id': row[idIndex],
-        'target': row[fieldIndex],
-        'collection_id': row[collectionIdIndex],
-        'name': row[nameIndex]
+        id: row[idIndex],
+        target: row[fieldIndex],
+        collection_id: row[collectionIdIndex],
+        name: row[nameIndex]
       };
     });
 
@@ -144,4 +151,3 @@ export function getFieldData(data: Array<Array<string | number>>, fieldName: str
     data: fieldData
   };
 }
-
