@@ -151,3 +151,7 @@ export function getFieldData(
     data: fieldData
   };
 }
+
+export function extractPrivateId(collectionUrl: string) {
+  return collectionUrl.match(/collections\/(\w+)\/?$/)[1];
+}

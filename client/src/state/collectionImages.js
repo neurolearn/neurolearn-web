@@ -25,17 +25,19 @@ const fetchCollectionImages = (id, limit, offset) => {
 
 export function loadCollectionImages(
   collectionId: number,
-  totalImageNumber: number
+  totalImageNumber: number,
+  privateId: string | boolean
 ) {
   return (dispatch: Function) => {
-    dispatch(requestCollectionImages(collectionId));
+    const fetchId = privateId || collectionId;
+    dispatch(requestCollectionImages(fetchId));
 
     const promises = range(
       0,
       totalImageNumber,
       REQUEST_CHUNK_SIZE
     ).map(offset => {
-      return fetchCollectionImages(collectionId, REQUEST_CHUNK_SIZE, offset);
+      return fetchCollectionImages(fetchId, REQUEST_CHUNK_SIZE, offset);
     });
 
     return Promise.all(promises)

@@ -8,7 +8,7 @@ import sortBy from 'lodash/collection/sortBy';
 import every from 'lodash/collection/every';
 import isEmpty from 'lodash/lang/isEmpty';
 
-import { filterImagesByName, pluralize } from '../utils';
+import { filterImagesByName, pluralize, extractPrivateId } from '../utils';
 import Spinner from './Spinner';
 import ImageItem from './ImageItem';
 import Events from '../utils/events';
@@ -43,8 +43,11 @@ class SelectImagesModal extends React.Component {
     const { collection, collectionImages } = this.props;
 
     if (!collectionImages[collection.id]) {
-      const { id, number_of_images: numberOfImages } = this.props.collection;
-      this.props.dispatch(loadCollectionImages(id, numberOfImages));
+      const { id, url, number_of_images: numberOfImages, private: isPrivate } = this.props.collection;
+
+      const privateId = isPrivate && extractPrivateId(url);
+
+      this.props.dispatch(loadCollectionImages(id, numberOfImages, privateId));
     }
   }
 
