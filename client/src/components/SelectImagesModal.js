@@ -15,9 +15,7 @@ import Events from '../utils/events';
 
 import styles from './SelectImagesModal.scss';
 
-import {
-  loadCollectionImages
-} from '../state/collectionImages';
+import { loadCollectionImages } from '../state/collectionImages';
 
 class SelectImagesModal extends React.Component {
   state: {
@@ -31,14 +29,14 @@ class SelectImagesModal extends React.Component {
     onToggleList: PropTypes.func.isRequired,
     onHide: PropTypes.func.isRequired,
     children: React.PropTypes.node
-  }
+  };
 
   constructor(props: Object) {
     super(props);
     this.state = {
       filterText: ''
     };
-    (this:any).handleFilterChange = this.handleFilterChange.bind(this);
+    (this: any).handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   componentDidMount() {
@@ -73,18 +71,18 @@ class SelectImagesModal extends React.Component {
     );
   }
 
-  renderImages(images: Array<{url: string}>) {
+  renderImages(images: Array<{ url: string }>) {
     const { collection } = this.props;
     return (
       <tbody>
-        {sortBy(images, 'name').map((image) =>
+        {sortBy(images, 'name').map(image => (
           <ImageItem
             key={image.id}
             {...image}
             checked={this.isImageSelected(image.url)}
             onChange={() => this.props.onToggle(collection, image.url)}
           />
-        )}
+        ))}
       </tbody>
     );
   }
@@ -92,9 +90,11 @@ class SelectImagesModal extends React.Component {
   renderLoading(numberOfImages) {
     return (
       <div className="row">
-        <div className="col-md-12" >
-          <div style={{'paddingTop': 30, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
-          <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>
+        <div className="col-md-12">
+          <div style={{ paddingTop: 30, height: 30 }}>
+            <Spinner opts={{ position: 'relative' }} />
+          </div>
+          <div style={{ color: 'gray', margin: 40, textAlign: 'center' }}>
             {`Loading data for ${numberOfImages} ${pluralize(numberOfImages, 'image', 'images')}…`}
           </div>
         </div>
@@ -103,11 +103,14 @@ class SelectImagesModal extends React.Component {
   }
 
   renderTable(collection, images, selected) {
-    const filteredImages = collection && filterImagesByName(this.state.filterText, images);
+    const filteredImages =
+      collection && filterImagesByName(this.state.filterText, images);
 
-    const allFilteredAreSelected = selected && every(filteredImages, image => {
-      return selected[image.url];
-    });
+    const allFilteredAreSelected =
+      selected &&
+      every(filteredImages, image => {
+        return selected[image.url];
+      });
 
     return (
       <div className={styles.root}>
@@ -132,7 +135,7 @@ class SelectImagesModal extends React.Component {
               <th className="col-md-4">Name</th>
               <th className="col-md-2">Image Type</th>
               <th>Map Type</th>
-              <th className="col-md-4"></th>
+              <th className="col-md-4" />
             </tr>
           </thead>
           {filteredImages && this.renderImages(filteredImages)}
@@ -148,14 +151,17 @@ class SelectImagesModal extends React.Component {
     const selected = selectedImages.images[id];
 
     return (
-      <Modal {...this.props} bsSize="large" aria-labelledby="contained-modal-title-lg">
+      <Modal
+        {...this.props}
+        bsSize="large"
+        aria-labelledby="contained-modal-title-lg"
+      >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-lg">Select Images</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {collectionImages.isFetching && this.renderLoading(numberOfImages)}
-            {!isEmpty(images) &&
-              this.renderTable(collection, images, selected)}
+          {collectionImages.isFetching && this.renderLoading(numberOfImages)}
+          {!isEmpty(images) && this.renderTable(collection, images, selected)}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>
@@ -171,4 +177,3 @@ function select(state) {
 }
 
 export default connect(select)(SelectImagesModal);
-

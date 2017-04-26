@@ -23,33 +23,46 @@ const fetchCollectionImages = (id, limit, offset) => {
   });
 };
 
-export function loadCollectionImages(collectionId: number, totalImageNumber: number) {
+export function loadCollectionImages(
+  collectionId: number,
+  totalImageNumber: number
+) {
   return (dispatch: Function) => {
     dispatch(requestCollectionImages(collectionId));
 
-    const promises = range(0, totalImageNumber, REQUEST_CHUNK_SIZE).map(offset => {
+    const promises = range(
+      0,
+      totalImageNumber,
+      REQUEST_CHUNK_SIZE
+    ).map(offset => {
       return fetchCollectionImages(collectionId, REQUEST_CHUNK_SIZE, offset);
     });
 
-    return Promise.all(promises).then(results => {
-      const items = results.reduce((accum, r) => accum.concat(r.results), []);
-      dispatch(receiveCollectionImages({
-        id: collectionId, items: items
-      }));
-    })
-    .catch(error => dispatch(apiError(error)));
+    return Promise.all(promises)
+      .then(results => {
+        const items = results.reduce((accum, r) => accum.concat(r.results), []);
+        dispatch(
+          receiveCollectionImages({
+            id: collectionId,
+            items: items
+          })
+        );
+      })
+      .catch(error => dispatch(apiError(error)));
   };
 }
 
-export default function reducer(state
-: {
-  isFetching: boolean
-} = {
-  isFetching: false
-}, action: Action) {
+export default function reducer(
+  state: {
+    isFetching: boolean
+  } = {
+    isFetching: false
+  },
+  action: Action
+) {
   switch (action.type) {
     case REQUEST_COLLECTION_IMAGES:
-      return {...state, isFetching: true};
+      return { ...state, isFetching: true };
 
     case RECEIVE_COLLECTION_IMAGES: {
       const { id, items } = action.payload;
