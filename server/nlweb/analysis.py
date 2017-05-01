@@ -120,7 +120,7 @@ def set_correlation(correlation_array, image_list):
     result = []
     for index, r in enumerate(correlation_array):
         image = image_list[index]
-        result.append({'r': r,
+        result.append({'r': float(r),
                        'id': image['id'],
                        'thumbnail': image['thumbnail'],
                        'collection_id': image['collection_id'],
