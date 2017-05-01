@@ -19,7 +19,11 @@ export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
 
 const requestSearchResults = createAction(REQUEST_SEARCH_RESULTS);
-const receiveSearchResults = createAction(RECEIVE_SEARCH_RESULTS);
+const receiveSearchResults = createAction(
+  RECEIVE_SEARCH_RESULTS,
+  null,
+  (payload, initial) => initial
+);
 
 export const inputSearchQuery = createAction(INPUT_SEARCH_QUERY);
 export const selectSearchOffset = createAction(SELECT_SEARCH_OFFSET);
@@ -100,20 +104,20 @@ function prepareSearchParams(state) {
   };
 }
 
-function fetchSearchResults(dispatch, state) {
+function fetchSearchResults(dispatch, state, initial = false) {
   const searchParams = prepareSearchParams(state);
   return api.post('/search', searchParams).then(
-    result => dispatch(receiveSearchResults(result))
+    result => dispatch(receiveSearchResults(result, initial))
   );
 }
 
 const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
 
-export function loadSearchResults(action: Action) {
+export function loadSearchResults(action: Action, initial = false) {
   return (dispatch: Function, getState: Function) => {
     dispatch(requestSearchResults());
     dispatch(action);
-    return debouncedFetchSearchResults(dispatch, getState().search);
+    return debouncedFetchSearchResults(dispatch, getState().search, initial);
   };
 }
 
@@ -130,6 +134,7 @@ const initialState: SearchState = {
   query: '',
   filter: {},
   from: 0,
+  maxNumberOfImages: null,
   sort: DEFAULT_SEARCH_SORT
 };
 
@@ -140,10 +145,10 @@ export default function reducer(state: SearchState = initialState, action: Actio
         isFetching: true
       });
     case RECEIVE_SEARCH_RESULTS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        results: action.payload
-      });
+      const newState = action.meta ?
+        {isFetching: false, results: action.payload,  maxNumberOfImages: action.payload.aggregations['number_of_images_stats'].max } :
+        {isFetching: false, results: action.payload };
+      return Object.assign({}, state, newState);
     case INPUT_SEARCH_QUERY:
       return Object.assign({}, state, {
         query: action.payload,

@@ -51,7 +51,10 @@ class InputData extends React.Component {
 
   componentDidMount() {
     if (!this.props.search.results) {
-      this.props.dispatch(loadSearchResults(inputSearchQuery('')));
+      this.props.dispatch(
+        loadSearchResults(inputSearchQuery(''),
+        true
+      ));
     }
   }
 

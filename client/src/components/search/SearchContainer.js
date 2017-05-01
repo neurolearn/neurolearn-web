@@ -34,6 +34,7 @@ export default class SearchContainer extends React.Component {
     results: PropTypes.object,
     from: PropTypes.number,
     sort: PropTypes.string,
+    maxNumberOfImages: PropTypes.number,
     onSearchResultClick: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
   };
@@ -76,7 +77,14 @@ export default class SearchContainer extends React.Component {
   }
 
   render() {
-    const { isFetching, results, filter, query, sort } = this.props;
+    const {
+      isFetching,
+      results,
+      maxNumberOfImages,
+      filter,
+      query,
+      sort
+    } = this.props;
 
     return (
       <div className={styles.root}>
@@ -85,6 +93,7 @@ export default class SearchContainer extends React.Component {
             <RefineSearchResults
               results={results}
               filter={filter}
+              maxNumberOfImages={maxNumberOfImages}
               onChange={this.handleFilterChange}
             />
           </div>
