@@ -36,20 +36,20 @@ function sortOption(sortType) {
 }
 
 function combineFilters(filters) {
-  return {'and': values(filters)};
+  return { and: values(filters) };
 }
 
 function prepareSearchParams(state) {
   const query = state.query
     ? {
-      'multi_match': {
-        'type': 'phrase_prefix',
-        'query': state.query,
-        'max_expansions': 50,
-        'slop': 10,
-        'fields': ['name', 'authors', 'description']
+        multi_match: {
+          type: 'phrase_prefix',
+          query: state.query,
+          max_expansions: 50,
+          slop: 10,
+          fields: ['name', 'authors', 'description']
+        }
       }
-    }
     : undefined;
 
   const filter = !isEmpty(state.filter)
@@ -57,35 +57,35 @@ function prepareSearchParams(state) {
     : undefined;
 
   const aggs = {
-    'number_of_images_stats': {
-      'stats': {
-        'field': 'number_of_images'
+    number_of_images_stats: {
+      stats: {
+        field: 'number_of_images'
       }
     },
 
-    'image_map_types': {
-      'terms': {
-        'field': 'image_map_types'
+    image_map_types: {
+      terms: {
+        field: 'image_map_types'
       }
     },
-    'image_image_types': {
-      'terms': {
-        'field': 'image_image_types'
+    image_image_types: {
+      terms: {
+        field: 'image_image_types'
       }
     },
-    'image_modalities': {
-      'terms': {
-        'field': 'image_modalities'
+    image_modalities: {
+      terms: {
+        field: 'image_modalities'
       }
     },
-    'image_analysis_levels': {
-      'terms': {
-        'field': 'image_analysis_levels'
+    image_analysis_levels: {
+      terms: {
+        field: 'image_analysis_levels'
       }
     },
-    'has_DOI': {
-      'filter': {
-        'exists': {'field': 'DOI'}
+    has_DOI: {
+      filter: {
+        exists: { field: 'DOI' }
       }
     }
   };
@@ -106,9 +106,9 @@ function prepareSearchParams(state) {
 
 function fetchSearchResults(dispatch, state, initial = false) {
   const searchParams = prepareSearchParams(state);
-  return api.post('/search', searchParams).then(
-    result => dispatch(receiveSearchResults(result, initial))
-  );
+  return api
+    .post('/search', searchParams)
+    .then(result => dispatch(receiveSearchResults(result, initial)));
 }
 
 const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
@@ -138,16 +138,24 @@ const initialState: SearchState = {
   sort: DEFAULT_SEARCH_SORT
 };
 
-export default function reducer(state: SearchState = initialState, action: Action) {
+export default function reducer(
+  state: SearchState = initialState,
+  action: Action
+) {
   switch (action.type) {
     case REQUEST_SEARCH_RESULTS:
       return Object.assign({}, state, {
         isFetching: true
       });
     case RECEIVE_SEARCH_RESULTS:
-      const newState = action.meta ?
-        {isFetching: false, results: action.payload,  maxNumberOfImages: action.payload.aggregations['number_of_images_stats'].max } :
-        {isFetching: false, results: action.payload };
+      const newState = action.meta
+        ? {
+            isFetching: false,
+            results: action.payload,
+            maxNumberOfImages: action.payload.aggregations
+              .number_of_images_stats.max
+          }
+        : { isFetching: false, results: action.payload };
       return Object.assign({}, state, newState);
     case INPUT_SEARCH_QUERY:
       return Object.assign({}, state, {
@@ -174,4 +182,3 @@ export default function reducer(state: SearchState = initialState, action: Actio
       return state;
   }
 }
-
