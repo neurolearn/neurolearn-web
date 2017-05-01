@@ -34,15 +34,18 @@ export default class SearchContainer extends React.Component {
     results: PropTypes.object,
     from: PropTypes.number,
     sort: PropTypes.string,
+    maxNumberOfImages: PropTypes.number,
     onSearchResultClick: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props: Object) {
     super(props);
 
     (this:any).handleFilterChange = this.handleFilterChange.bind(this);
-    (this:any).handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    (this:any).handleSearchInputChange = this.handleSearchInputChange.bind(
+      this
+    );
     (this:any).handleSortSelect = this.handleSortSelect.bind(this);
     (this:any).handlePageSelect = this.handlePageSelect.bind(this);
   }
@@ -60,8 +63,9 @@ export default class SearchContainer extends React.Component {
       return;
     }
 
-    this.props.dispatch(loadSearchResults(selectSearchOffset(
-      (page - 1) * RESULTS_PER_PAGE)));
+    this.props.dispatch(
+      loadSearchResults(selectSearchOffset((page - 1) * RESULTS_PER_PAGE))
+    );
   }
 
   handleFilterChange(filter: Object) {
@@ -73,7 +77,14 @@ export default class SearchContainer extends React.Component {
   }
 
   render() {
-    const { isFetching, results, filter, query, sort } = this.props;
+    const {
+      isFetching,
+      results,
+      maxNumberOfImages,
+      filter,
+      query,
+      sort
+    } = this.props;
 
     return (
       <div className={styles.root}>
@@ -82,6 +93,7 @@ export default class SearchContainer extends React.Component {
             <RefineSearchResults
               results={results}
               filter={filter}
+              maxNumberOfImages={maxNumberOfImages}
               onChange={this.handleFilterChange}
             />
           </div>
@@ -95,7 +107,9 @@ export default class SearchContainer extends React.Component {
                   onChange={this.handleSearchInputChange}
                 />
                 <div className="search-meta clearfix">
-                  <div className="pull-left HitsCount">Found {this.totalHits(results)} collections</div>
+                  <div className="pull-left HitsCount">
+                    Found {this.totalHits(results)} collections
+                  </div>
                   <div className="pull-right">
                     <SortSearchResults
                       sortType={sort}
@@ -109,15 +123,17 @@ export default class SearchContainer extends React.Component {
                       results={results}
                       onSearchResultClick={this.props.onSearchResultClick}
                     />}
-                  {isFetching && <div className="overlay"></div>}
+                  {isFetching && <div className="overlay" />}
                 </div>
                 {this.totalHits(results) > RESULTS_PER_PAGE
-                  ? (
-                  <Pagination
-                    totalPages={totalPages(this.totalHits(results), RESULTS_PER_PAGE)}
-                    activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
-                    onSelect={this.handlePageSelect}
-                  />)
+                  ? <Pagination
+                      totalPages={totalPages(
+                        this.totalHits(results),
+                        RESULTS_PER_PAGE
+                      )}
+                      activePage={activePage(this.props.from, RESULTS_PER_PAGE)}
+                      onSelect={this.handlePageSelect}
+                    />
                   : false}
               </div>
             </div>

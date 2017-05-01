@@ -42,6 +42,7 @@ export default class RefineSearchResults extends React.Component {
   static propTypes = {
     filter: PropTypes.object,
     results: PropTypes.object,
+    maxNumberOfImages: PropTypes.number,
     onChange: PropTypes.func
   }
 
@@ -102,7 +103,7 @@ export default class RefineSearchResults extends React.Component {
   }
 
   render() {
-    const { results, filter } = this.props;
+    const { results, filter, maxNumberOfImages } = this.props;
 
     if (!results) {
       return null;
@@ -141,7 +142,7 @@ export default class RefineSearchResults extends React.Component {
           <RangeFilter
             label="Number of images"
             min={0}
-            max={imagesStats.max}
+            max={maxNumberOfImages}
             value={[imagesStats.min, imagesStats.max]}
             onChange={this.handleRangeFilterChange}
           />

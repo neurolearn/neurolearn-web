@@ -21,15 +21,9 @@ import {
   MY_COLLECTIONS
 } from 'state/selectImagesModal';
 
-import {
-  toggleImage,
-  toggleImageList
-} from 'state/selectedImages';
+import { toggleImage, toggleImageList } from 'state/selectedImages';
 
-import {
-  loadSearchResults,
-  inputSearchQuery
-} from 'state/search';
+import { loadSearchResults, inputSearchQuery } from 'state/search';
 
 import styles from './InputData.scss';
 
@@ -41,12 +35,14 @@ class InputData extends React.Component {
     selectedCollection: PropTypes.object,
     inputSource: PropTypes.string,
     dispatch: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
 
-    (this:any).handleSelectSourceClick = this.handleSelectSourceClick.bind(this);
+    (this:any).handleSelectSourceClick = this.handleSelectSourceClick.bind(
+      this
+    );
     (this:any).handleCollectionClick = this.handleCollectionClick.bind(this);
     (this:any).handleImageToggle = this.handleImageToggle.bind(this);
     (this:any).handleImageListToggle = this.handleImageListToggle.bind(this);
@@ -55,7 +51,10 @@ class InputData extends React.Component {
 
   componentDidMount() {
     if (!this.props.search.results) {
-      this.props.dispatch(loadSearchResults(inputSearchQuery('')));
+      this.props.dispatch(
+        loadSearchResults(inputSearchQuery(''),
+        true
+      ));
     }
   }
 
@@ -64,12 +63,12 @@ class InputData extends React.Component {
   }
 
   handleImageToggle(collection, imageId) {
-    this.props.dispatch(toggleImage({collection, imageId}));
+    this.props.dispatch(toggleImage({ collection, imageId }));
     this.props.dispatch(resetImagesMetadata());
   }
 
   handleImageListToggle(collection, images, checked) {
-    this.props.dispatch(toggleImageList({collection, images, checked}));
+    this.props.dispatch(toggleImageList({ collection, images, checked }));
     this.props.dispatch(resetImagesMetadata());
   }
 
@@ -81,15 +80,18 @@ class InputData extends React.Component {
     if (!collection) {
       return 0;
     }
-    return Object.keys(collection).reduce((accum, key) =>
-      collection[key] ? accum + 1 : accum,
-    0);
+    return Object.keys(collection).reduce(
+      (accum, key) => (collection[key] ? accum + 1 : accum),
+      0
+    );
   }
 
   countSelectedImages(selectedImages) {
-    return Object.keys(selectedImages).reduce((accum, key) =>
-      this.countSelectedInCollection(selectedImages[key]) + accum,
-    0);
+    return Object.keys(selectedImages).reduce(
+      (accum, key) =>
+        this.countSelectedInCollection(selectedImages[key]) + accum,
+      0
+    );
   }
 
   handleCollectionClick(id, source) {
@@ -103,8 +105,8 @@ class InputData extends React.Component {
     return (
       <div className={styles.root}>
         <h1 className="page-header">Input Data</h1>
-        <ButtonToolbar style={{marginBottom: 15}}>
-          <ButtonGroup bsSize="small" >
+        <ButtonToolbar style={{ marginBottom: 15 }}>
+          <ButtonGroup bsSize="small">
             <Button
               active={inputSource === SEARCH}
               onClick={() => this.handleSelectSourceClick(SEARCH)}
@@ -123,23 +125,21 @@ class InputData extends React.Component {
         <p className="lead">
           {inputSource === MY_COLLECTIONS
             ? 'Select images from one or many of your collections to create a training dataset.'
-            : 'Search NeuroVault collections and select images to create a training dataset.'
-          }
+            : 'Search NeuroVault collections and select images to create a training dataset.'}
         </p>
 
         <div className="row">
           <div className="col-md-9">
             {inputSource === MY_COLLECTIONS
-             ? <MyCollectionsContainer
-               dispatch={this.props.dispatch}
-               onCollectionClick={this.handleCollectionClick}
-               />
-             : <SearchContainer
-               {...this.props.search}
-               dispatch={this.props.dispatch}
-               onSearchResultClick={this.handleCollectionClick}
-               />
-            }
+              ? <MyCollectionsContainer
+                  dispatch={this.props.dispatch}
+                  onCollectionClick={this.handleCollectionClick}
+                />
+              : <SearchContainer
+                  {...this.props.search}
+                  dispatch={this.props.dispatch}
+                  onSearchResultClick={this.handleCollectionClick}
+                />}
           </div>
 
           <div className="col-md-3">
@@ -147,18 +147,25 @@ class InputData extends React.Component {
               <div className="panel-heading">
                 <h3 className="panel-title">Selected Images</h3>
               </div>
-              <div className={classNames('panel-body', anySelected && 'empty-dataset')}>
+              <div
+                className={classNames(
+                  'panel-body',
+                  anySelected && 'empty-dataset'
+                )}
+              >
                 {anySelected
                   ? <p>Training dataset is empty.</p>
                   : <SelectedCollectionList
-                    selectedImages={selectedImages}
-                    onItemClick={this.handleCollectionClick}
-                    />
-                }
+                      selectedImages={selectedImages}
+                      onItemClick={this.handleCollectionClick}
+                    />}
                 <Link
                   disabled={anySelected}
                   className="btn btn-primary btn-block continue-button"
-                  to="/models/new/training-label">Continue to Training Label</Link>
+                  to="/models/new/training-label"
+                >
+                  Continue to Training Label
+                </Link>
               </div>
             </div>
           </div>
@@ -174,15 +181,17 @@ class InputData extends React.Component {
             <Link
               disabled={anySelected}
               className="btn btn-primary continue-button"
-              to="/models/new/training-label">Continue to Training Label</Link>
-          </SelectImagesModal>
-        }
+              to="/models/new/training-label"
+            >
+              Continue to Training Label
+            </Link>
+          </SelectImagesModal>}
       </div>
     );
   }
 }
 
-const getSelectedCollection = (state) => {
+const getSelectedCollection = state => {
   const {
     selectImagesModal: { collectionId, source },
     search: { results: searchResults },
@@ -210,7 +219,7 @@ const getSelectedCollection = (state) => {
         throw new Error('Source is empty');
       }
 
-      collection = searchResults.hits.hits.filter(function (item) {
+      collection = searchResults.hits.hits.filter(function(item) {
         return item._id === collectionId;
       })[0];
 
@@ -221,7 +230,7 @@ const getSelectedCollection = (state) => {
         throw new Error('Source is empty');
       }
 
-      collection = myCollectionList.filter(function (item) {
+      collection = myCollectionList.filter(function(item) {
         return item.id === collectionId;
       })[0];
 
@@ -231,7 +240,7 @@ const getSelectedCollection = (state) => {
   }
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     search: state.search,
     selectImagesModal: state.selectImagesModal,

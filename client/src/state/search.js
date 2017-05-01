@@ -19,7 +19,11 @@ export const SELECT_SORT_TYPE = 'SELECT_SORT_TYPE';
 export const RESET_SEARCH = 'RESET_SEARCH';
 
 const requestSearchResults = createAction(REQUEST_SEARCH_RESULTS);
-const receiveSearchResults = createAction(RECEIVE_SEARCH_RESULTS);
+const receiveSearchResults = createAction(
+  RECEIVE_SEARCH_RESULTS,
+  null,
+  (payload, initial) => initial
+);
 
 export const inputSearchQuery = createAction(INPUT_SEARCH_QUERY);
 export const selectSearchOffset = createAction(SELECT_SEARCH_OFFSET);
@@ -32,20 +36,20 @@ function sortOption(sortType) {
 }
 
 function combineFilters(filters) {
-  return {'and': values(filters)};
+  return { and: values(filters) };
 }
 
 function prepareSearchParams(state) {
   const query = state.query
     ? {
-      'multi_match': {
-        'type': 'phrase_prefix',
-        'query': state.query,
-        'max_expansions': 50,
-        'slop': 10,
-        'fields': ['name', 'authors', 'description']
+        multi_match: {
+          type: 'phrase_prefix',
+          query: state.query,
+          max_expansions: 50,
+          slop: 10,
+          fields: ['name', 'authors', 'description']
+        }
       }
-    }
     : undefined;
 
   const filter = !isEmpty(state.filter)
@@ -53,35 +57,35 @@ function prepareSearchParams(state) {
     : undefined;
 
   const aggs = {
-    'number_of_images_stats': {
-      'stats': {
-        'field': 'number_of_images'
+    number_of_images_stats: {
+      stats: {
+        field: 'number_of_images'
       }
     },
 
-    'image_map_types': {
-      'terms': {
-        'field': 'image_map_types'
+    image_map_types: {
+      terms: {
+        field: 'image_map_types'
       }
     },
-    'image_image_types': {
-      'terms': {
-        'field': 'image_image_types'
+    image_image_types: {
+      terms: {
+        field: 'image_image_types'
       }
     },
-    'image_modalities': {
-      'terms': {
-        'field': 'image_modalities'
+    image_modalities: {
+      terms: {
+        field: 'image_modalities'
       }
     },
-    'image_analysis_levels': {
-      'terms': {
-        'field': 'image_analysis_levels'
+    image_analysis_levels: {
+      terms: {
+        field: 'image_analysis_levels'
       }
     },
-    'has_DOI': {
-      'filter': {
-        'exists': {'field': 'DOI'}
+    has_DOI: {
+      filter: {
+        exists: { field: 'DOI' }
       }
     }
   };
@@ -100,20 +104,20 @@ function prepareSearchParams(state) {
   };
 }
 
-function fetchSearchResults(dispatch, state) {
+function fetchSearchResults(dispatch, state, initial = false) {
   const searchParams = prepareSearchParams(state);
-  return api.post('/search', searchParams).then(
-    result => dispatch(receiveSearchResults(result))
-  );
+  return api
+    .post('/search', searchParams)
+    .then(result => dispatch(receiveSearchResults(result, initial)));
 }
 
 const debouncedFetchSearchResults = debounce(fetchSearchResults, 300);
 
-export function loadSearchResults(action: Action) {
+export function loadSearchResults(action: Action, initial = false) {
   return (dispatch: Function, getState: Function) => {
     dispatch(requestSearchResults());
     dispatch(action);
-    return debouncedFetchSearchResults(dispatch, getState().search);
+    return debouncedFetchSearchResults(dispatch, getState().search, initial);
   };
 }
 
@@ -130,20 +134,29 @@ const initialState: SearchState = {
   query: '',
   filter: {},
   from: 0,
+  maxNumberOfImages: null,
   sort: DEFAULT_SEARCH_SORT
 };
 
-export default function reducer(state: SearchState = initialState, action: Action) {
+export default function reducer(
+  state: SearchState = initialState,
+  action: Action
+) {
   switch (action.type) {
     case REQUEST_SEARCH_RESULTS:
       return Object.assign({}, state, {
         isFetching: true
       });
     case RECEIVE_SEARCH_RESULTS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        results: action.payload
-      });
+      const newState = action.meta
+        ? {
+            isFetching: false,
+            results: action.payload,
+            maxNumberOfImages: action.payload.aggregations
+              .number_of_images_stats.max
+          }
+        : { isFetching: false, results: action.payload };
+      return Object.assign({}, state, newState);
     case INPUT_SEARCH_QUERY:
       return Object.assign({}, state, {
         query: action.payload,
@@ -169,4 +182,3 @@ export default function reducer(state: SearchState = initialState, action: Actio
       return state;
   }
 }
-
