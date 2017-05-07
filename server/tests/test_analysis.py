@@ -4,7 +4,9 @@ import nibabel as nib
 from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
-from nlweb.image_utils import (download_images, resample_images)
+from nlweb.image_utils import (
+    download_images, download_image, resample_images
+)
 
 from .nv_test_data import TARGET_DATA_IMG_IDS
 
@@ -29,6 +31,36 @@ def test_train_model(tmpdir):
     # cv = {'type': 'loso'}
 
     result = analysis.train_model(image_list, algorithm, cv, output_dir)
+    filename = '%s_weightmap.nii.gz' % algorithm
+
+    assert result['weightmap'] == filename
+
+    sample_img = nib.load(os.path.join(os.path.dirname(__file__), filename))
+    result_img = nib.load(os.path.join(output_dir, filename))
+
+    compare_image_files(sample_img, result_img)
+
+
+def test_masked_train_model(tmpdir):
+    algorithm = 'ridge'
+    mask_image_id = 18650
+    output_dir = str(tmpdir)
+
+    cache = FileCache('cache')
+    client = HTTPClient(cache)
+
+    image_list = download_images(client, TARGET_DATA_IMG_IDS,
+                                 output_dir)
+
+    cv = {'type': 'kfolds', 'n_folds': 10}
+
+    mask_filepath = download_image(client, mask_image_id, output_dir)
+
+    result = analysis.train_model(
+        image_list, algorithm, cv, output_dir,
+        file_path_key='original_file',
+        mask=mask_filepath)
+
     filename = '%s_weightmap.nii.gz' % algorithm
 
     assert result['weightmap'] == filename
