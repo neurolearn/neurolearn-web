@@ -167,6 +167,30 @@ def media_url_from_collection(collection_images, image):
     return collection_images[image['collection_id']][image['id']]['file']
 
 
+def download_image(client, image_id, output_dir):
+    """
+    :param client: An instance of nlweb.HTTPClient
+    :param image_id: Id of an image to download
+    """
+    dirname = os.path.join(output_dir, 'original')
+    try:
+        os.makedirs(dirname)
+    except (IOError, OSError):
+        pass
+
+    image_details = fetch_image(image_id)
+
+    media_url = image_details['file']
+    media_filepath = client.retrieve(
+        media_url,
+        local_filepath(dirname,
+                       image_details['collection_id'],
+                       os.path.basename(media_url)),
+        force_cache=True)
+
+    return media_filepath
+
+
 def download_images(client, image_list, output_dir):
     """
     :param client: An instance of nlweb.HTTPClient

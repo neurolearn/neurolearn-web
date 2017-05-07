@@ -36,7 +36,7 @@ def get_summary(output):
 
 
 def train_model(image_list, algorithm, cross_validation, output_dir,
-                file_path_key='resampled_file'):
+                file_path_key='resampled_file', mask=None):
     """
     :param image_list: A list of dictionaries of the form
         {
@@ -79,6 +79,11 @@ def train_model(image_list, algorithm, cross_validation, output_dir,
     file_path_list = [item[file_path_key] for item in image_list]
 
     dat = Brain_Data(data=file_path_list, Y=Y)
+
+    if mask:
+        log.info('Applying a mask')
+        nifti_mask = nb.load(mask)
+        dat = dat.apply_mask(nifti_mask)
 
     output = dat.predict(algorithm=algorithm,
                          cv_dict=cross_validation,
