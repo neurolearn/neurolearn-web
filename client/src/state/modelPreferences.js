@@ -17,6 +17,7 @@ import { resetSubjectIdData } from './subjectIdData';
 
 export const INPUT_MODEL_NAME = 'INPUT_MODEL_NAME';
 export const INPUT_DESCRIPTION = 'INPUT_DESCRIPTION';
+export const INPUT_MASKID = 'INPUT_MASKID';
 export const INPUT_KFOLD_PARAM = 'INPUT_KFOLD_PARAM';
 export const SELECT_CV_TYPE = 'SELECT_CV_TYPE';
 export const SET_PRIVATE = 'SET_PRIVATE';
@@ -28,6 +29,7 @@ export const SET_KFOLD_USE_SUBJECT_IDS = 'SET_KFOLD_USE_SUBJECT_IDS';
 
 export const inputModelName = createAction(INPUT_MODEL_NAME);
 export const inputDescription = createAction(INPUT_DESCRIPTION);
+export const inputMaskId = createAction(INPUT_MASKID);
 export const inputKfoldParam = createAction(INPUT_KFOLD_PARAM);
 export const selectCVType = createAction(SELECT_CV_TYPE);
 export const setPrivate = createAction(SET_PRIVATE);
@@ -55,6 +57,7 @@ export function trainModel(name: string,
                            targetData: Object,
                            collections: Object,
                            crossValidation: Object,
+                           mask: Object,
                            router: Object) {
   return (dispatch: Function) => {
     dispatch(requestModelTraining());
@@ -64,6 +67,7 @@ export function trainModel(name: string,
       'label': targetData.field,
       'cv': crossValidation,
       'private': isPrivate,
+      mask,
       collections,
       algorithm,
       description,
@@ -108,6 +112,7 @@ const initialState : ModelPreferencesState = {
   description: '',
   algorithm: '',
   cvType: '',
+  maskId: '',
   kfoldsParam: '',
   losoParam: '',
   private: false,
@@ -124,6 +129,10 @@ export default function reducer(state: ModelPreferencesState = initialState, act
     case INPUT_DESCRIPTION:
       return Object.assign({}, state, {
         description: action.payload
+      });
+    case INPUT_MASKID:
+      return Object.assign({}, state, {
+        maskId: action.payload
       });
     case INPUT_KFOLD_PARAM:
       return Object.assign({}, state, {

@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import {
   inputModelName,
   inputDescription,
+  inputMaskId,
   inputKfoldParam,
   setPrivate,
   selectCVType,
@@ -109,6 +110,7 @@ class ModelPreferences extends React.Component {
 
     const { collectionsById, targetData, subjectIdData } = this.props;
     const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+    const mask = prefs.maskId && { id: prefs.maskId };
 
     const errors = validate(cv, subjectIdData, this.props.modelPreferences);
 
@@ -122,7 +124,6 @@ class ModelPreferences extends React.Component {
       data: zipWith(targetData.data, subjectIdData.data,
         (accumulator, value) => Object.assign({}, accumulator, {subject_id: value.target}))
     };
-
     this.props.dispatch(trainModel(prefs.modelName,
                                    prefs.description,
                                    prefs.private,
@@ -130,6 +131,7 @@ class ModelPreferences extends React.Component {
                                    targetWithSubjectId,
                                    collectionsById,
                                    cv,
+                                   mask,
                                    router));
   }
 
@@ -219,6 +221,23 @@ class ModelPreferences extends React.Component {
                 label=""
                 className="form-control"
               />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className={classNames('form-group',
+                                       'col-md-6',
+                                       errors.maskId && 'has-error')}>
+              <label className="control-label">Mask <span style={{color: 'gray'}}>(optional)</span></label>
+              <input type="text"
+                value={modelPreferences.maskId}
+                onChange={this.genHandler('maskId', inputMaskId)}
+                ref="maskId"
+                label=""
+                placeholder="NeuroVault Image Id"
+                className="form-control"
+              />
+              {this.renderError(errors.maskId)}
             </div>
           </div>
 
