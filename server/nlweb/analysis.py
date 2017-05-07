@@ -132,9 +132,6 @@ def apply_mask(image_list, weight_map_filename,
                file_path_key='resampled_file'):
     tic = time.time()  # Start Timer
 
-    log.info("Elapsed: %.2f seconds", (time.time() - tic))  # Stop timer
-    tic = time.time()  # Start Timer
-
     weight_map = nb.load(weight_map_filename)
     file_path_list = [item[file_path_key] for item in image_list]
 
