@@ -161,7 +161,7 @@ def test_model(self, model_test_id):
     tic = time.time()
 
     try:
-        result = analysis.apply_mask(image_list,
+        result = analysis.similarity(image_list,
                                      weight_map_filename,
                                      file_path_key='original_file')
         result['collections'] = collections

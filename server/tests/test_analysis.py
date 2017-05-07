@@ -57,7 +57,7 @@ def test_model_test(tmpdir):
 
     image_list = resample_images(cache, image_list, output_dir)
 
-    pexpc = analysis.apply_mask(image_list, weight_map_filename)
+    pexpc = analysis.similarity(image_list, weight_map_filename)
 
     sample_pexpc = {
         'correlation': [

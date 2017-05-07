@@ -128,7 +128,7 @@ def set_correlation(correlation_array, image_list):
     return result
 
 
-def apply_mask(image_list, weight_map_filename,
+def similarity(image_list, weight_map_filename,
                file_path_key='resampled_file'):
     tic = time.time()  # Start Timer
 
