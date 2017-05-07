@@ -14,8 +14,13 @@ from nlweb.app import celery
 from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
-from nlweb.image_utils import (download_images, fetch_collection,
-                               fetch_collection_images, fetch_image)
+from nlweb.image_utils import (
+    download_image,
+    download_images,
+    fetch_collection,
+    fetch_collection_images,
+    fetch_image
+)
 
 from nlweb.models import MLModel, ModelTest, db
 from nlweb.utils import pick, is_number
@@ -51,6 +56,11 @@ def train_model(self, mlmodel_id):
 
     image_list = download_images(client, target_data, output_dir)
 
+    mask = (download_image(client,
+                           mlmodel.input_data['mask']['id'],
+                           output_dir)
+            if mlmodel.input_data.get('mask') else None)
+
     mlmodel.training_state = MLModel.STATE_SUCCESS
 
     tic = time.time()
@@ -62,6 +72,7 @@ def train_model(self, mlmodel_id):
             image_list=image_list,
             algorithm=algorithm,
             cross_validation=mlmodel.input_data['cv'],
+            mask=mask,
             output_dir=output_dir,
             file_path_key='original_file'
         )
