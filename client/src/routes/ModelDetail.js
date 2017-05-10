@@ -26,10 +26,7 @@ import Events from '../utils/events';
 
 import { retrainModelWith } from '../state/modelPreferences';
 
-import {
-  algorithmGroups,
-  algorithmNameMap
-} from '../constants/Algorithms';
+import { algorithmGroups, algorithmNameMap } from '../constants/Algorithms';
 
 import { analysisTypeOfAlgorithm, neuroVaultImageURL } from '../utils';
 
@@ -51,11 +48,11 @@ class Model extends React.Component {
     isFetching: PropTypes.bool.isRequired,
     isNotFound: PropTypes.bool,
     dispatch: PropTypes.func.isRequired
-  }
+  };
 
   static contextTypes = {
     router: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props: Object) {
     super(props);
@@ -68,7 +65,9 @@ class Model extends React.Component {
     };
 
     (this:any).handleAlgorithmClick = this.handleAlgorithmClick.bind(this);
-    (this:any).handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(this);
+    (this:any).handleVisibilityLabelClick = this.handleVisibilityLabelClick.bind(
+      this
+    );
     (this:any).handleVisibilityToggle = this.handleVisibilityToggle.bind(this);
     (this:any).handleChangeAlgorithm = this.handleChangeAlgorithm.bind(this);
     (this:any).handleSaveModelName = this.handleSaveModelName.bind(this);
@@ -77,7 +76,7 @@ class Model extends React.Component {
   }
 
   componentDidMount() {
-    const {dispatch, params: { id }} = this.props;
+    const { dispatch, params: { id } } = this.props;
     dispatch(fetchJSON(`/api/models/${parseInt(id)}`, 'model'));
   }
 
@@ -85,9 +84,11 @@ class Model extends React.Component {
     const { router } = this.context;
     const { dispatch } = this.props;
 
-    dispatch(deleteItem(`/api/models/${modelId}`,
-      () => router.push('/dashboard/models')
-    ));
+    dispatch(
+      deleteItem(`/api/models/${modelId}`, () =>
+        router.push('/dashboard/models')
+      )
+    );
   }
 
   handleTestModel(model) {
@@ -110,20 +111,22 @@ class Model extends React.Component {
 
   handleSaveModelName(name: string) {
     const { model, dispatch } = this.props;
-    dispatch(patchItem(`/api/models/${model.id}`, 'model', {name}));
+    dispatch(patchItem(`/api/models/${model.id}`, 'model', { name }));
   }
 
   handleSaveDescription(description) {
     const { model, dispatch } = this.props;
-    dispatch(patchItem(`/api/models/${model.id}`, 'model', {description}));
+    dispatch(patchItem(`/api/models/${model.id}`, 'model', { description }));
   }
 
   handleVisibilityToggle() {
     const { model, dispatch } = this.props;
     const newValue = !model.private;
 
-    dispatch(patchItem(`/api/models/${model.id}`, 'model', {'private': newValue}));
-    this.setState({showModal: undefined});
+    dispatch(
+      patchItem(`/api/models/${model.id}`, 'model', { private: newValue })
+    );
+    this.setState({ showModal: undefined });
   }
 
   handleChangeAlgorithm(e: SyntheticEvent) {
@@ -135,10 +138,10 @@ class Model extends React.Component {
     const { model, dispatch } = this.props;
     const { router } = this.context;
 
-    dispatch(retrainModelWith(
-      model.id,
-      {algorithm},
-      () => router.push('/dashboard/models'))
+    dispatch(
+      retrainModelWith(model.id, { algorithm }, () =>
+        router.push('/dashboard/models')
+      )
     );
   }
 
@@ -158,16 +161,20 @@ class Model extends React.Component {
 
   renderProgress() {
     return (
-      <div className="col-md-12" >
-        <div style={{'paddingTop': 65, 'height': 30}}><Spinner opts={{position: 'relative'}} /></div>
-        <div style={{'color': 'gray', 'margin': 40, 'textAlign': 'center'}}>Model training is in progress…</div>
+      <div className="col-md-12">
+        <div style={{ paddingTop: 65, height: 30 }}>
+          <Spinner opts={{ position: 'relative' }} />
+        </div>
+        <div style={{ color: 'gray', margin: 40, textAlign: 'center' }}>
+          Model training is in progress…
+        </div>
       </div>
     );
   }
 
   renderFailure(model) {
     return (
-      <div className="col-md-12" style={{padding: 20}}>
+      <div className="col-md-12" style={{ padding: 20 }}>
         <div className="alert alert-danger">
           <h4>Training Failed</h4>
           {model.output_data.error}
@@ -178,8 +185,10 @@ class Model extends React.Component {
 
   renderAlgorithmSelection(algorithm) {
     const analysisType = analysisTypeOfAlgorithm(algorithm);
-    const items = algorithmGroups[analysisType].map(
-      type => ({value: type, name: algorithmNameMap[type]}));
+    const items = algorithmGroups[analysisType].map(type => ({
+      value: type,
+      name: algorithmNameMap[type]
+    }));
     return (
       <RadioGroup
         items={items}
@@ -196,10 +205,8 @@ class Model extends React.Component {
 
     return (
       <div className="text-center">
-        <Button
-          bsStyle="primary"
-          onClick={this.handleVisibilityToggle}>
-          <i className={visibility.iconClass}></i>
+        <Button bsStyle="primary" onClick={this.handleVisibilityToggle}>
+          <i className={visibility.iconClass} />
           {' Make this model '}
           {visibility.status}
         </Button>
@@ -222,19 +229,27 @@ class Model extends React.Component {
               <tbody>
                 <tr>
                   <td className="col-md-6">
-                    <img style={{marginTop: 15}} src={`/media/${model.id}/${glassbrain}`} className="img-responsive" />
+                    <img
+                      style={{ marginTop: 15 }}
+                      src={`/media/${model.id}/${glassbrain}`}
+                      className="img-responsive"
+                    />
                   </td>
-                  <td className="col-md-6" style={{textAlign: 'center'}}>
+                  <td className="col-md-6" style={{ textAlign: 'center' }}>
                     <div>
                       <Button
-                        onClick={() => this.setState({showViewerModal: true, loadingImages: true})}
+                        onClick={() =>
+                          this.setState({
+                            showViewerModal: true,
+                            loadingImages: true
+                          })}
                       >
                         Open Interactive Viewer
                       </Button>
                     </div>
                     <div>
                       <a className="btn btn-link" href={weightmapUrl}>
-                        <i className="fa fa-download"></i>
+                        <i className="fa fa-download" />
                         Download NIfTI file
                       </a>
                     </div>
@@ -247,40 +262,57 @@ class Model extends React.Component {
 
         {cv &&
           <div className="row weightmap">
-            <div className="col-md-12" style={{marginTop: 20}}>
-              {CrossValidation({modelId: model.id, label, cv, summary, stats, roc_plot})}
+            <div className="col-md-12" style={{ marginTop: 20 }}>
+              {CrossValidation({
+                modelId: model.id,
+                label,
+                cv,
+                summary,
+                stats,
+                roc_plot
+              })}
             </div>
           </div>}
 
         {this.state.showViewerModal &&
-          <ImageViewerModal weightmapUrl={weightmapUrl}
+          <ImageViewerModal
+            weightmapUrl={weightmapUrl}
             loadingImages={this.state.loadingImages}
-            onHide={() => this.setState({showViewerModal: false})}
-            onImagesLoaded={() => this.setState({loadingImages: false})}
-          />
-        }
+            onHide={() => this.setState({ showViewerModal: false })}
+            onImagesLoaded={() => this.setState({ loadingImages: false })}
+          />}
       </div>
     );
   }
 
   renderModelNameWithLabel(model, userIsOwner) {
-    return userIsOwner ? (
-      <div>
-        <EditableText value={model.name} onChange={this.handleSaveModelName} modalTitle="Rename Model" />
-        <VisibilityLabel isPrivate={model.private} onClick={this.handleVisibilityLabelClick} />
-      </div>
-    ) : model.name;
+    return userIsOwner
+      ? <div>
+          <EditableText
+            value={model.name}
+            onChange={this.handleSaveModelName}
+            modalTitle="Rename Model"
+          />
+          <VisibilityLabel
+            isPrivate={model.private}
+            onClick={this.handleVisibilityLabelClick}
+          />
+        </div>
+      : model.name;
   }
 
   renderModelDescription(description, userIsOwner) {
     return userIsOwner
-        ? <EditableText
+      ? <EditableText
           allowBlank
           value={description}
           onChange={this.handleSaveDescription}
           modalTitle="Edit Description"
-          >{description || <em style={{color: '#777'}}>Edit the description…</em>}</EditableText>
-        : description;
+        >
+          {description ||
+            <em style={{ color: '#777' }}>Edit the description…</em>}
+        </EditableText>
+      : description;
   }
 
   renderModelMeta(model, userIsOwner) {
@@ -291,9 +323,11 @@ class Model extends React.Component {
         <p>
           {model.user.name}
           {' '}
-          <span style={{color: 'gray'}}>created</span>
+          <span style={{ color: 'gray' }}>created</span>
           {' '}
-          <time style={{color: 'gray'}} className="datetime">{moment(model.created).fromNow()}</time>
+          <time style={{ color: 'gray' }} className="datetime">
+            {moment(model.created).fromNow()}
+          </time>
         </p>
       </div>
     );
@@ -320,33 +354,46 @@ class Model extends React.Component {
       }
     }
 
-    const userIsOwner = (model && user && model.user.id === user.id);
-    const mask = (model && model.input_data.mask);
+    const userIsOwner = model && user && model.user.id === user.id;
+    const mask = model && model.input_data.mask;
 
     return (
       <div className={classNames('container', styles.root)}>
         <div className="page-header">
           <ButtonToolbar className="pull-right">
-            {user && model.state === 'success' &&
-              <Button bsStyle="primary"
+            {user &&
+              model.state === 'success' &&
+              <Button
+                bsStyle="primary"
                 onClick={() => this.handleTestModel(model)}
-              >Test Model</Button>}
+              >
+                Test Model
+              </Button>}
             {userIsOwner &&
-              <Button bsStyle="danger"
+              <Button
+                bsStyle="danger"
                 onClick={() => this.handleDelete(model.id)}
-              >Delete</Button>}
+              >
+                Delete
+              </Button>}
           </ButtonToolbar>
           {this.renderModelMeta(model, userIsOwner)}
         </div>
 
         <div className="row">
           <div className="col-sm-8">
-            <ModelOverview model={model}
+            <ModelOverview
+              model={model}
               user={user}
-              onAlgorithmClick={this.handleAlgorithmClick} />
+              onAlgorithmClick={this.handleAlgorithmClick}
+            />
             <div className="row tabs-wrapper">
               <div className="col-md-12">
-                <Tabs defaultActiveKey={1} animation={false} id="resulting-model-and-training-data-tabs">
+                <Tabs
+                  defaultActiveKey={1}
+                  animation={false}
+                  id="resulting-model-and-training-data-tabs"
+                >
                   <Tab eventKey={1} title="Model">
                     {model && this.renderState(model)}
                   </Tab>
@@ -355,12 +402,13 @@ class Model extends React.Component {
                   </Tab>
                   {mask &&
                     <Tab eventKey={3} title="Mask">
-                      <div style={{paddingTop: 15}}>
+                      <div style={{ paddingTop: 15 }}>
                         <FallbackImage src={mask.thumbnail} />
-                        <p><a href={neuroVaultImageURL(mask.id)}>{mask.name}</a></p>
+                        <p>
+                          <a href={neuroVaultImageURL(mask.id)}>{mask.name}</a>
+                        </p>
                       </div>
-                    </Tab>
-                  }
+                    </Tab>}
                 </Tabs>
               </div>
             </div>
@@ -373,19 +421,28 @@ class Model extends React.Component {
           </div>
         </div>
         {this.state.showModal === 'visibility' &&
-          <ModalDialog title="Change Model Visibility"
+          <ModalDialog
+            title="Change Model Visibility"
             body={this.renderVisibilityToggle(model)}
-            onHide={() => this.setState({showModal: undefined})}
+            onHide={() => this.setState({ showModal: undefined })}
           />}
         {this.state.showModal === 'algorithm' &&
-          <ModalDialog title="Edit Algorithm"
+          <ModalDialog
+            title="Edit Algorithm"
             body={this.renderAlgorithmSelection(model.algorithm)}
             actionButton={
-              <Button bsStyle="primary"
-                disabled={!this.state.algorithm || (model.algorithm === this.state.algorithm)}
+              <Button
+                bsStyle="primary"
+                disabled={
+                  !this.state.algorithm ||
+                    model.algorithm === this.state.algorithm
+                }
                 onClick={this.handleSaveAndRetrain}
-              >Save & Re-train the model</Button>}
-            onHide={() => this.setState({showModal: undefined})}
+              >
+                Save & Re-train the model
+              </Button>
+            }
+            onHide={() => this.setState({ showModal: undefined })}
           />}
       </div>
     );
