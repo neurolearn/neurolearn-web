@@ -71,10 +71,10 @@ def train_model(self, mlmodel_id):
 
     image_list = download_images(client, target_data, output_dir)
 
-    mask_image_id = mlmodel.input_data.get('mask', {}).get('id')
-    if mask_image_id:
+    mask_image_param = mlmodel.input_data.get('mask')
+    if mask_image_param:
         mask_details, mask_filepath = retrieve_mask(
-            client, mask_image_id, output_dir)
+            client, mask_image_param['id'], output_dir)
         save_mask_details(mlmodel, mask_details)
     else:
         mask_filepath = None
