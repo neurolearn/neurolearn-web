@@ -40,6 +40,21 @@ def save_roc_figure(roc, algorithm, output_dir):
     return filename
 
 
+def retrieve_mask(client, mask_image_id, output_dir):
+    mask_details = fetch_image(mask_image_id)
+    local_filepath = download_image(
+        client, mask_details, output_dir)
+    return mask_details, local_filepath
+
+
+def save_mask_details(mlmodel, mask_details):
+    mask = mlmodel.input_data['mask']
+    mask['name'] = mask_details['name']
+    mask['thumbnail'] = mask_details['thumbnail']
+    mlmodel.flag_modified('input_data')
+    db.session.commit()
+
+
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
@@ -56,10 +71,13 @@ def train_model(self, mlmodel_id):
 
     image_list = download_images(client, target_data, output_dir)
 
-    mask = (download_image(client,
-                           mlmodel.input_data['mask']['id'],
-                           output_dir)
-            if mlmodel.input_data.get('mask') else None)
+    mask_image_id = mlmodel.input_data.get('mask', {}).get('id')
+    if mask_image_id:
+        mask_details, mask_filepath = retrieve_mask(
+            client, mask_image_id, output_dir)
+        save_mask_details(mlmodel, mask_details)
+    else:
+        mask_filepath = None
 
     mlmodel.training_state = MLModel.STATE_SUCCESS
 
@@ -72,7 +90,7 @@ def train_model(self, mlmodel_id):
             image_list=image_list,
             algorithm=algorithm,
             cross_validation=mlmodel.input_data['cv'],
-            mask=mask,
+            mask=mask_filepath,
             output_dir=output_dir,
             file_path_key='original_file'
         )

@@ -167,7 +167,7 @@ def media_url_from_collection(collection_images, image):
     return collection_images[image['collection_id']][image['id']]['file']
 
 
-def download_image(client, image_id, output_dir):
+def download_image(client, image_details, output_dir):
     """
     :param client: An instance of nlweb.HTTPClient
     :param image_id: Id of an image to download
@@ -177,8 +177,6 @@ def download_image(client, image_id, output_dir):
         os.makedirs(dirname)
     except (IOError, OSError):
         pass
-
-    image_details = fetch_image(image_id)
 
     media_url = image_details['file']
     media_filepath = client.retrieve(
