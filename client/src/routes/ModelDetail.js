@@ -19,6 +19,8 @@ import RadioGroup from '../components/RadioGroup';
 import ModalDialog from '../components/ModalDialog';
 import VisibilityLabel from '../components/VisibilityLabel';
 import EditableText from '../components/EditableText';
+import FallbackImage from '../components/FallbackImage';
+
 import NotFound from '../components/NotFound';
 import Events from '../utils/events';
 
@@ -29,7 +31,7 @@ import {
   algorithmNameMap
 } from '../constants/Algorithms';
 
-import { analysisTypeOfAlgorithm } from '../utils';
+import { analysisTypeOfAlgorithm, neuroVaultImageURL } from '../utils';
 
 import styles from './ModelDetail.scss';
 
@@ -319,6 +321,7 @@ class Model extends React.Component {
     }
 
     const userIsOwner = (model && user && model.user.id === user.id);
+    const mask = (model && model.input_data.mask);
 
     return (
       <div className={classNames('container', styles.root)}>
@@ -350,6 +353,14 @@ class Model extends React.Component {
                   <Tab eventKey={2} title="Training Data">
                     <ModelTrainingData inputData={model.input_data} />
                   </Tab>
+                  {mask &&
+                    <Tab eventKey={3} title="Mask">
+                      <div style={{paddingTop: 15}}>
+                        <FallbackImage src={mask.thumbnail} />
+                        <p><a href={neuroVaultImageURL(mask.id)}>{mask.name}</a></p>
+                      </div>
+                    </Tab>
+                  }
                 </Tabs>
               </div>
             </div>
