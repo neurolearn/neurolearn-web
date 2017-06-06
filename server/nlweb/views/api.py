@@ -90,14 +90,6 @@ def list_own_models():
     return jsonify(data=result.data)
 
 
-def _add_private_property(collection):
-    return dict(
-        # Public collection urls use numeric id
-        private=not re.search(r'/\d+/?$', collection['url']),
-        **collection
-    )
-
-
 @blueprint.route('/user/neurovault-collections', methods=['GET'])
 @jwt_required()
 def list_neurovault_collections():
@@ -110,7 +102,7 @@ def list_neurovault_collections():
         url=MY_COLLECTIONS_URL
     )
 
-    return jsonify(data=map(_add_private_property, data))
+    return jsonify(data=data)
 
 
 @blueprint.route('/models', methods=['GET'])
