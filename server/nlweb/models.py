@@ -146,6 +146,9 @@ class MLModel(db.Model, TimestampMixin, SoftDelete, PrivateMixin):
             ModelTest.deleted == None
         ).order_by('created desc').all()
 
+    def flag_modified(self, attribute):
+        flag_modified(self, attribute)
+
     def __unicode__(self):
         return self.name
 

@@ -14,8 +14,13 @@ from nlweb.app import celery
 from nlweb import analysis
 
 from nlweb.httpclient import HTTPClient, FileCache
-from nlweb.image_utils import (download_images, fetch_collection,
-                               fetch_collection_images, fetch_image)
+from nlweb.image_utils import (
+    download_image,
+    download_images,
+    fetch_collection,
+    fetch_collection_images,
+    fetch_image
+)
 
 from nlweb.models import MLModel, ModelTest, db
 from nlweb.utils import pick, is_number
@@ -35,6 +40,21 @@ def save_roc_figure(roc, algorithm, output_dir):
     return filename
 
 
+def retrieve_mask(client, mask_image_id, output_dir):
+    mask_details = fetch_image(mask_image_id)
+    local_filepath = download_image(
+        client, mask_details, output_dir)
+    return mask_details, local_filepath
+
+
+def save_mask_details(mlmodel, mask_details):
+    mask = mlmodel.input_data['mask']
+    mask['name'] = mask_details['name']
+    mask['thumbnail'] = mask_details['thumbnail']
+    mlmodel.flag_modified('input_data')
+    db.session.commit()
+
+
 @celery.task(bind=True)
 def train_model(self, mlmodel_id):
     mlmodel = MLModel.query.get(mlmodel_id)
@@ -51,6 +71,14 @@ def train_model(self, mlmodel_id):
 
     image_list = download_images(client, target_data, output_dir)
 
+    mask_image_param = mlmodel.input_data.get('mask')
+    if mask_image_param:
+        mask_details, mask_filepath = retrieve_mask(
+            client, mask_image_param['id'], output_dir)
+        save_mask_details(mlmodel, mask_details)
+    else:
+        mask_filepath = None
+
     mlmodel.training_state = MLModel.STATE_SUCCESS
 
     tic = time.time()
@@ -62,6 +90,7 @@ def train_model(self, mlmodel_id):
             image_list=image_list,
             algorithm=algorithm,
             cross_validation=mlmodel.input_data['cv'],
+            mask=mask_filepath,
             output_dir=output_dir,
             file_path_key='original_file'
         )
@@ -161,7 +190,7 @@ def test_model(self, model_test_id):
     tic = time.time()
 
     try:
-        result = analysis.apply_mask(image_list,
+        result = analysis.similarity(image_list,
                                      weight_map_filename,
                                      file_path_key='original_file')
         result['collections'] = collections

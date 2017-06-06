@@ -48,6 +48,41 @@ def test_create_mlmodel(testapp, user):
     assert model.training_state == MLModel.STATE_SUCCESS
 
 
+def test_create_masked_mlmodel(testapp, user):
+    name = 'Test %s' % uuid.uuid4()
+
+    headers = gen_auth_header(generate_token(user))
+
+    payload = {
+        'algorithm': nv_test_data.ALGORITHM,
+        'data': nv_test_data.TARGET_DATA_IMG_IDS,
+        'collections': {
+            504: {
+                'name': 'Single Subject Thermal Pain'
+            }
+        },
+        'cv': {
+            'type': 'kfolds',
+            'value': '10'
+        },
+        'label': {
+            'name': 'PainLevel',
+            'index': 13
+        },
+        'mask': {
+            'id': 18650
+        },
+        'name': name
+    }
+
+    response = testapp.post_json('/api/models',
+                                 payload,
+                                 headers=headers)
+    assert response.status_code == 201
+    model = MLModel.query.filter_by(name=name).first()
+    assert model.training_state == MLModel.STATE_SUCCESS
+
+
 def create_test_mlmodel(user, output_data):
     return MLModel(training_state=MLModel.STATE_QUEUED,
                    output_data=output_data,

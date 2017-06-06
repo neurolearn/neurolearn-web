@@ -6,10 +6,7 @@ import classNames from 'classnames';
 
 import SelectTargetColumn from 'components/SelectTargetColumn';
 
-import {
-  algorithmGroups,
-  algorithmNameMap
-} from 'constants/Algorithms';
+import { algorithmGroups, algorithmNameMap } from 'constants/Algorithms';
 
 import CVTypes from 'constants/CrossValidationTypes';
 
@@ -17,6 +14,7 @@ import { connect } from 'react-redux';
 import {
   inputModelName,
   inputDescription,
+  inputMaskId,
   inputKfoldParam,
   setPrivate,
   selectCVType,
@@ -30,9 +28,7 @@ import {
   deleteImagesMetadataColumn
 } from 'state/imagesMetadata';
 
-import {
-  setSubjectIdData
-} from 'state/subjectIdData';
+import { setSubjectIdData } from 'state/subjectIdData';
 
 function validate(cv, subjectIdData, modelPreferences) {
   const errors = {};
@@ -54,9 +50,11 @@ function validate(cv, subjectIdData, modelPreferences) {
     errors.loso = 'Subject ID is required for this type of cross validation.';
   }
 
-  if (cv.type === CVTypes.kfolds &&
-      modelPreferences.kfoldUseSubjectIDs &&
-      subjectIdData.field.index === null) {
+  if (
+    cv.type === CVTypes.kfolds &&
+    modelPreferences.kfoldUseSubjectIDs &&
+    subjectIdData.field.index === null
+  ) {
     errors.kfoldSubjectId = 'Subject ID is required.';
   }
 
@@ -90,12 +88,18 @@ class ModelPreferences extends React.Component {
 
     (this:any).handleAlgorithmChange = this.handleAlgorithmChange.bind(this);
     (this:any).handleCVTypeChange = this.handleCVTypeChange.bind(this);
-    (this:any).handleAccessLevelChange = this.handleAccessLevelChange.bind(this);
+    (this:any).handleAccessLevelChange = this.handleAccessLevelChange.bind(
+      this
+    );
     (this:any).handleSubmit = this.handleSubmit.bind(this);
     (this:any).handleColumnSave = this.handleColumnSave.bind(this);
     (this:any).handleColumnDelete = this.handleColumnDelete.bind(this);
-    (this:any).handleSubjectIdSelection = this.handleSubjectIdSelection.bind(this);
-    (this:any).handleKfoldUseSubjectIdsClick = this.handleKfoldUseSubjectIdsClick.bind(this);
+    (this:any).handleSubjectIdSelection = this.handleSubjectIdSelection.bind(
+      this
+    );
+    (this:any).handleKfoldUseSubjectIdsClick = this.handleKfoldUseSubjectIdsClick.bind(
+      this
+    );
   }
 
   handleSubmit(e) {
@@ -108,29 +112,38 @@ class ModelPreferences extends React.Component {
     } = this.props;
 
     const { collectionsById, targetData, subjectIdData } = this.props;
-    const cv = cvType && {type: cvType, 'value': this.props.modelPreferences[cvType + 'Param']};
+    const cv = cvType && {
+      type: cvType,
+      value: this.props.modelPreferences[cvType + 'Param']
+    };
+    const mask = prefs.maskId && { id: prefs.maskId };
 
     const errors = validate(cv, subjectIdData, this.props.modelPreferences);
 
     if (!isEmpty(errors)) {
-      this.setState({errors});
+      this.setState({ errors });
       return;
     }
 
     const targetWithSubjectId = {
       field: targetData.field,
-      data: zipWith(targetData.data, subjectIdData.data,
-        (accumulator, value) => Object.assign({}, accumulator, {subject_id: value.target}))
+      data: zipWith(targetData.data, subjectIdData.data, (accumulator, value) =>
+        Object.assign({}, accumulator, { subject_id: value.target })
+      )
     };
-
-    this.props.dispatch(trainModel(prefs.modelName,
-                                   prefs.description,
-                                   prefs.private,
-                                   prefs.algorithm,
-                                   targetWithSubjectId,
-                                   collectionsById,
-                                   cv,
-                                   router));
+    this.props.dispatch(
+      trainModel(
+        prefs.modelName,
+        prefs.description,
+        prefs.private,
+        prefs.algorithm,
+        targetWithSubjectId,
+        collectionsById,
+        cv,
+        mask,
+        router
+      )
+    );
   }
 
   genHandler(refName, action) {
@@ -162,7 +175,7 @@ class ModelPreferences extends React.Component {
   }
 
   handleColumnSave(name: string, values) {
-    this.props.dispatch(saveImagesMetadataColumn({name, values}));
+    this.props.dispatch(saveImagesMetadataColumn({ name, values }));
   }
 
   handleColumnDelete(name: string) {
@@ -194,11 +207,16 @@ class ModelPreferences extends React.Component {
         <h1 className="page-header">Model Preferences</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="row">
-            <div className={classNames('form-group',
-                                       'col-md-6',
-                                       errors.modelName && 'has-error')}>
+            <div
+              className={classNames(
+                'form-group',
+                'col-md-6',
+                errors.modelName && 'has-error'
+              )}
+            >
               <label className="control-label">Model Name</label>
-              <input type="text"
+              <input
+                type="text"
                 value={modelPreferences.modelName}
                 onChange={this.genHandler('modelName', inputModelName)}
                 ref="modelName"
@@ -210,7 +228,9 @@ class ModelPreferences extends React.Component {
           </div>
           <div className="row">
             <div className="form-group col-md-6">
-              <label>Description <span style={{color: 'gray'}}>(optional)</span></label>
+              <label>
+                Description <span style={{ color: 'gray' }}>(optional)</span>
+              </label>
               <textarea
                 type="textarea"
                 value={modelPreferences.description}
@@ -219,6 +239,30 @@ class ModelPreferences extends React.Component {
                 label=""
                 className="form-control"
               />
+            </div>
+          </div>
+
+          <div className="row">
+            <div
+              className={classNames(
+                'form-group',
+                'col-md-6',
+                errors.maskId && 'has-error'
+              )}
+            >
+              <label className="control-label">
+                Mask <span style={{ color: 'gray' }}>(optional)</span>
+              </label>
+              <input
+                type="text"
+                value={modelPreferences.maskId}
+                onChange={this.genHandler('maskId', inputMaskId)}
+                ref="maskId"
+                label=""
+                placeholder="NeuroVault Image Id"
+                className="form-control"
+              />
+              {this.renderError(errors.maskId)}
             </div>
           </div>
 
@@ -248,10 +292,14 @@ class ModelPreferences extends React.Component {
             </div>
           </div>
 
-          <div className={classNames('form-group',
-                                     errors.algorithm && 'has-error')}>
+          <div
+            className={classNames(
+              'form-group',
+              errors.algorithm && 'has-error'
+            )}
+          >
             <label className="control-label">Algorithm</label>
-            {algorithmGroups[modelPreferences.analysisType].map(type =>
+            {algorithmGroups[modelPreferences.analysisType].map(type => (
               <div className="radio" key={type}>
                 <label>
                   <input
@@ -263,7 +311,7 @@ class ModelPreferences extends React.Component {
                   {algorithmNameMap[type]}
                 </label>
               </div>
-            )}
+            ))}
             {this.renderError(errors.algorithm)}
           </div>
           <div className="form-group">
@@ -296,20 +344,33 @@ class ModelPreferences extends React.Component {
               </label>
             </div>
 
-            <div className={classNames('well',
-                                       (modelPreferences.cvType !== CVTypes.kfolds) && 'hide')}>
+            <div
+              className={classNames(
+                'well',
+                modelPreferences.cvType !== CVTypes.kfolds && 'hide'
+              )}
+            >
               <fieldset>
                 <div className="row">
-                  <div className={classNames('form-group',
-                                             'col-md-6',
-                                             errors.kfoldsParam && 'has-error')}>
+                  <div
+                    className={classNames(
+                      'form-group',
+                      'col-md-6',
+                      errors.kfoldsParam && 'has-error'
+                    )}
+                  >
 
-                    <label className="control-label">Number of Divisions (k)</label>
+                    <label className="control-label">
+                      Number of Divisions (k)
+                    </label>
                     <div>
                       <input
                         type="text"
                         ref="kfoldsParam"
-                        onChange={this.genHandler('kfoldsParam', inputKfoldParam)}
+                        onChange={this.genHandler(
+                          'kfoldsParam',
+                          inputKfoldParam
+                        )}
                         value={modelPreferences.kfoldsParam}
                         className="form-control"
                       />
@@ -323,13 +384,21 @@ class ModelPreferences extends React.Component {
                       type="checkbox"
                       checked={modelPreferences.kfoldUseSubjectIDs}
                       onChange={this.handleKfoldUseSubjectIdsClick}
-                    /> Use Subject IDs
+                    />
+                    {' '}
+                    Use Subject IDs
                   </label>
                 </div>
-                <div className={classNames('form-group',
-                                           !modelPreferences.kfoldUseSubjectIDs && 'hide',
-                                           errors.kfoldSubjectId && 'has-error')}>
-                  <label className="control-label">Select the row with Subject IDs</label>
+                <div
+                  className={classNames(
+                    'form-group',
+                    !modelPreferences.kfoldUseSubjectIDs && 'hide',
+                    errors.kfoldSubjectId && 'has-error'
+                  )}
+                >
+                  <label className="control-label">
+                    Select the row with Subject IDs
+                  </label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                   {this.renderError(errors.kfoldSubjectId)}
                 </div>
@@ -348,10 +417,22 @@ class ModelPreferences extends React.Component {
                 Leave One Subject Out
               </label>
             </div>
-            <div className={classNames('well', (modelPreferences.cvType !== CVTypes.loso) && 'hide')}>
+            <div
+              className={classNames(
+                'well',
+                modelPreferences.cvType !== CVTypes.loso && 'hide'
+              )}
+            >
               <fieldset>
-                <div className={classNames('form-group', errors.loso && 'has-error')}>
-                  <label className="control-label">Select the row with Subject IDs</label>
+                <div
+                  className={classNames(
+                    'form-group',
+                    errors.loso && 'has-error'
+                  )}
+                >
+                  <label className="control-label">
+                    Select the row with Subject IDs
+                  </label>
                   {this.renderSelectTargetColumn(imagesData, subjectIdData)}
                   {this.renderError(errors.loso)}
                 </div>
@@ -363,7 +444,9 @@ class ModelPreferences extends React.Component {
             type="submit"
             className="btn btn-primary"
             disabled={modelPreferences.isFetching}
-          >{modelPreferences.isFetching ? 'Please wait…' : 'Train Model'}</button>
+          >
+            {modelPreferences.isFetching ? 'Please wait…' : 'Train Model'}
+          </button>
         </form>
       </div>
     );
@@ -380,7 +463,8 @@ function select(state) {
     subjectIdData: state.subjectIdData,
     modelPreferences: state.modelPreferences,
     collectionsById: elasticEntitiesToObjects(
-      state.selectedImages.collectionsById),
+      state.selectedImages.collectionsById
+    ),
     imagesData: state.imagesMetadata.data
   };
 }
