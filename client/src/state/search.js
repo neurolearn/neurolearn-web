@@ -87,6 +87,11 @@ function prepareSearchParams(state) {
       filter: {
         exists: { field: 'DOI' }
       }
+    },
+    has_metadata: {
+      terms: {
+        field: 'has_metadata'
+      }
     }
   };
 
