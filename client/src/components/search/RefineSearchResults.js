@@ -50,6 +50,7 @@ export default class RefineSearchResults extends React.Component {
     super(props);
     (this:any).handleRangeFilterChange = this.handleRangeFilterChange.bind(this);
     (this:any).handleHasDOIChange = this.handleHasDOIChange.bind(this);
+    (this:any).handleHasMetadataChange = this.handleHasMetadataChange.bind(this);
   }
 
   handleRangeFilterChange(value: [number, number]) {
@@ -102,6 +103,22 @@ export default class RefineSearchResults extends React.Component {
     this.props.onChange(newFilter);
   }
 
+  handleHasMetadataChange(e: SyntheticEvent) {
+    const { filter } = this.props;
+    const { checked } = Events.target(e, HTMLInputElement);
+    const clause = {
+      'term': {
+        'has_metadata': true
+      }
+    };
+
+    const newFilter = checked
+      ? setFilter('has_metadata', filter, clause)
+      : unsetFilter('has_metadata', filter);
+
+    this.props.onChange(newFilter);
+  }
+
   render() {
     const { results, filter, maxNumberOfImages } = this.props;
 
@@ -112,6 +129,7 @@ export default class RefineSearchResults extends React.Component {
     const imagesStats = results.aggregations.number_of_images_stats;
 
     const hasDOI = results.aggregations.has_DOI;
+    const hasMetadata = getBuckets(results, 'has_metadata').filter(bucket => bucket.key === 'T')[0];
 
     const termFilters = [
       {
@@ -150,6 +168,11 @@ export default class RefineSearchResults extends React.Component {
           {hasDOI && hasDOI.doc_count > 0 &&
             <Checkbox onChange={this.handleHasDOIChange}>
               {`Has DOI (${hasDOI.doc_count})`}
+            </Checkbox>
+          }
+          {hasMetadata && hasMetadata.doc_count > 0 &&
+            <Checkbox onChange={this.handleHasMetadataChange}>
+              {`Has Image Metadata (${hasMetadata.doc_count})`}
             </Checkbox>
           }
 
