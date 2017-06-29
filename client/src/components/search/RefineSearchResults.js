@@ -129,7 +129,7 @@ export default class RefineSearchResults extends React.Component {
     const imagesStats = results.aggregations.number_of_images_stats;
 
     const hasDOI = results.aggregations.has_DOI;
-    const hasMetadata = getBuckets(results, 'has_metadata').filter(bucket => bucket.key === 'T')[0];
+    const hasMetadata = getBuckets(results, 'has_metadata').filter(bucket => bucket.key === 1)[0];
 
     const termFilters = [
       {
