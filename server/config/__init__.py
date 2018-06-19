@@ -39,10 +39,10 @@ class Configuration(object):
         'neurovault': {
             'consumer_key': os.getenv('NEUROVAULT_OAUTH_CONSUMER_KEY'),
             'consumer_secret': os.getenv('NEUROVAULT_OAUTH_CONSUMER_SECRET'),
-            'base_url': 'http://neurovault.org/',
+            'base_url': 'https://neurovault.org/',
             'request_token_url': None,
             'access_token_method': 'POST',
-            'access_token_url': 'http://neurovault.org/o/token/',
-            'authorize_url': 'http://neurovault.org/o/authorize/'
+            'access_token_url': 'https://neurovault.org/o/token/',
+            'authorize_url': 'https://neurovault.org/o/authorize/'
         }
     }
