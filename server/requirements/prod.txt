@@ -20,7 +20,7 @@ Flask-Failsafe==0.2
 Flask-SQLAlchemy==2.0
 
 # API
-marshmallow==2.5.0
+marshmallow==2.15.1
 
 # Migrations
 Flask-Migrate==1.7.0
