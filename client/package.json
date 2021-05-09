@@ -103,7 +103,7 @@
     "koa-convert": "^1.2.0",
     "koa-proxy": "^0.6.0",
     "koa-static": "^3.0.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.21",
     "moment": "^2.14.1",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
