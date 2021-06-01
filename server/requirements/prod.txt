@@ -41,7 +41,7 @@ celery==3.1.18
 opbeat==3.2.1
 
 requests==2.20.0
-urllib3==1.14
+urllib3==1.26.5
 ujson==1.35
 lockfile==0.12.2
 
