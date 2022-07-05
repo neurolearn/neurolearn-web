@@ -42,7 +42,7 @@ opbeat==3.2.1
 
 requests==2.20.0
 urllib3==1.14
-ujson==1.35
+ujson==5.4.0
 lockfile==0.12.2
 
 numpy==1.11.2
