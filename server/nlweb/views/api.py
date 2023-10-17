@@ -246,7 +246,7 @@ def create_test():
 
     model_id = data.get('modelId')
     if model_id:
-        # Check existance
+        # Check existence
         MLModel.query.get_or_404(int(model_id))
 
     model_test = ModelTest(state=ModelTest.STATE_QUEUED,
