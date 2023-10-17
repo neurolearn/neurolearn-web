@@ -14,7 +14,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   const enhancers = [];
   if (__DEBUG__) {
-    // Disbale devtools
+    // Disable devtools
     // const devToolsExtension = window.devToolsExtension;
     // if (typeof devToolsExtension === 'function') {
     //   enhancers.push(devToolsExtension());

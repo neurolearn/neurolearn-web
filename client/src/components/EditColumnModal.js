@@ -82,7 +82,7 @@ export default class EditColumnModal extends React.Component {
               ref={c => this._editableGrid = c}
             />
           </div>
-          {/* A div below fixes Handsontable issue with Copy & Paste in a Boostrap modal dialog */}
+          {/* A div below fixes Handsontable issue with Copy & Paste in a Bootstrap modal dialog */}
           <div id="CopyPasteDiv" style={{position: 'fixed', top: -10000, left: -10000}}>
             <textarea
               className="copyPaste"
